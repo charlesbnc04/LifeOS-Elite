@@ -1,160 +1,149 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full transition-colors duration-500">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LifeOS Excellence - Market Leader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>LifeOS Elite - Intelligence Stratégique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        executive: '#3b82f6',
-                        darkBg: '#050505',
-                        darkCard: '#111111',
-                        lightBg: '#f8fafc',
-                        lightCard: '#ffffff'
-                    }
+                    colors: { executive: '#3b82f6' }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .bento-card { border: 1px solid rgba(128,128,128,0.1); border-radius: 2rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .dark .bento-card { background: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .light .bento-card { background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .grid-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
-        .day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 1rem; font-size: 0.75rem; border: 1px solid rgba(128,128,128,0.1); transition: all 0.2s; }
-        .day.active { background: #3b82f6; color: white !important; border: none; font-weight: bold; transform: scale(1.05); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; transition: background 0.5s ease; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .light .glass { background: rgba(0, 0, 0, 0.02); border: 1px solid rgba(0, 0, 0, 0.05); }
+        .bento-card { border-radius: 2.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .grid-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.6rem; }
+        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 1.2rem; font-size: 0.8rem; font-weight: 500; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .day.active { background: #3b82f6; color: white !important; transform: scale(1.1); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); border: none; }
+        .loading-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
-<body class="dark h-full bg-darkBg text-white dark:text-zinc-100 light:text-zinc-900 light:bg-lightBg">
+<body class="dark bg-[#050505] text-white light:bg-[#fcfcfc] light:text-zinc-900 min-h-full">
 
-    <div id="settingsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-        <div class="bento-card p-8 w-80 space-y-6">
-            <h2 class="text-xl font-bold italic">RÉGLAGES SYSTÈME</h2>
-            <div class="space-y-4">
+    <div id="setMod" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
+        <div class="glass bento-card p-10 w-96 space-y-8 shadow-2xl">
+            <h2 class="text-2xl font-black tracking-tighter italic italic">SYSTEM_CONFIG</h2>
+            <div class="space-y-6">
                 <div>
-                    <label class="text-[10px] uppercase tracking-widest opacity-50 block mb-2">Thème Visuel</label>
-                    <button onclick="toggleTheme()" class="w-full bg-blue-600 p-3 rounded-xl font-bold text-xs uppercase">Switch Mode</button>
+                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 block mb-3">Interface Theme</label>
+                    <button onclick="toggleTheme()" class="w-full py-4 rounded-2xl bg-executive text-white font-bold text-xs uppercase tracking-widest">Toggle Light/Dark</button>
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase tracking-widest opacity-50 block mb-2">Langue</label>
-                    <select onchange="changeLang(this.value)" class="w-full bg-zinc-800 p-3 rounded-xl text-xs border-none outline-none">
-                        <option value="fr">Français</option>
-                        <option value="en">English</option>
+                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 block mb-3">Global Language</label>
+                    <select id="langSel" onchange="updateLang()" class="w-full py-4 px-4 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 outline-none font-semibold text-sm">
+                        <option value="fr">Français (FR)</option>
+                        <option value="en">English (US)</option>
                     </select>
                 </div>
             </div>
-            <button onclick="closeSettings()" class="text-xs opacity-50 hover:opacity-100 underline pt-4">Fermer</button>
+            <button onclick="closeSettings()" class="w-full text-center text-xs opacity-30 hover:opacity-100 transition-opacity pt-4">Exit Settings</button>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto p-6 md:p-12 space-y-8">
-        <header class="flex justify-between items-end">
-            <div>
-                <h1 class="text-4xl font-black tracking-tighter italic">LIFE<span class="text-blue-600">OS</span></h1>
-                <p class="text-[10px] uppercase tracking-[0.3em] opacity-40 font-semibold mt-1">Market Leader Edition / V2.0</p>
+    <main class="max-w-7xl mx-auto px-6 py-12 md:px-12 space-y-12">
+        <nav class="flex justify-between items-center">
+            <div class="group cursor-pointer">
+                <h1 class="text-3xl font-black italic tracking-tighter leading-none">LIFE<span class="text-executive">OS</span></h1>
+                <p class="text-[9px] uppercase tracking-[0.4em] font-extrabold opacity-30 mt-1">Market Leader / v2.1</p>
             </div>
-            <button onclick="openSettings()" class="opacity-30 hover:opacity-100 transition-opacity">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                </svg>
+            <button onclick="openSettings()" class="p-3 rounded-full glass hover:scale-110 transition-transform">
+                <svg class="w-5 h-5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
             </button>
-        </header>
+        </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-5 space-y-8">
-                <div class="bento-card p-10">
-                    <h2 id="labelFlux" class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-6">Capture de Flux</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-20 leading-relaxed" rows="5" placeholder="Écrivez votre chaos ici..."></textarea>
-                    <button onclick="traiter()" id="btnAction" class="w-full mt-10 bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl transition-all uppercase tracking-tighter text-lg shadow-lg shadow-blue-600/20">Traiter l'info</button>
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div class="lg:col-span-5 space-y-10">
+                <div class="glass bento-card p-10 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <span id="txtFlux" class="text-[10px] font-black uppercase tracking-[0.2em] text-executive">Capture de Flux</span>
+                        <span class="w-2 h-2 rounded-full bg-executive shadow-[0_0_10px_#3b82f6]"></span>
+                    </div>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-10 leading-snug min-h-[200px]" placeholder="Déchargez votre esprit ici..."></textarea>
+                    <button onclick="traiter()" id="btnGo" class="w-full mt-10 py-6 rounded-[1.8rem] bg-executive hover:bg-blue-500 text-white font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95">Traiter la Stratégie</button>
                 </div>
 
-                <div id="recoCard" class="bento-card p-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
-                    <h2 id="labelReco" class="text-purple-500 font-bold text-[10px] uppercase tracking-widest mb-3">Recommandation Stratégique</h2>
-                    <p id="recoTxt" class="text-sm font-light leading-relaxed">Prêt pour l'analyse de vos patterns en cours...</p>
+                <div id="recoZone" class="glass bento-card p-10 opacity-30 transition-opacity duration-1000">
+                    <h3 id="txtReco" class="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500 mb-4">Conseil Stratégique</h3>
+                    <p id="recoTxt" class="text-sm font-medium leading-relaxed opacity-70 italic">En attente de données pour générer une recommandation personnalisée...</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 bento-card p-10 flex flex-col justify-between">
+            <div class="lg:col-span-7 glass bento-card p-12 flex flex-col justify-between shadow-2xl">
                 <div>
-                    <div class="flex justify-between items-center mb-10">
-                        <h2 id="labelCal" class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Calendrier Stratégique Mensuel</h2>
-                        <span class="text-[10px] font-bold opacity-30 uppercase tracking-widest">Décembre 2025</span>
+                    <div class="flex justify-between items-end mb-12">
+                        <h2 id="txtCal" class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Planification Mensuelle</h2>
+                        <div class="text-right">
+                            <span class="text-2xl font-black italic tracking-tighter leading-none block">DÉCEMBRE</span>
+                            <span class="text-[10px] opacity-30 font-bold uppercase tracking-widest">2025</span>
+                        </div>
                     </div>
-
-                    <div class="grid grid-cols-7 gap-2 mb-4 opacity-30 text-[9px] font-black text-center uppercase">
+                    
+                    <div class="grid grid-cols-7 gap-2 mb-6 opacity-20 text-[9px] font-black text-center uppercase tracking-widest">
                         <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
                     </div>
-                    <div class="grid-calendar" id="calendar"></div>
+                    <div id="calendar" class="grid-calendar"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-10 mt-12 pt-10 border-t border-zinc-800/50">
-                    <div>
-                        <h3 id="labelPrio" class="text-red-500 font-bold text-[10px] uppercase tracking-widest mb-4">Priorités</h3>
-                        <div id="prioList" class="text-sm font-light opacity-60 leading-relaxed">---</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 pt-12 border-t border-white/5">
+                    <div class="space-y-4">
+                        <h4 id="txtPrio" class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">Urgences Vitales</h4>
+                        <div id="prioList" class="text-sm font-semibold opacity-60 min-h-[50px]">---</div>
                     </div>
-                    <div>
-                        <h3 id="labelLog" class="text-green-500 font-bold text-[10px] uppercase tracking-widest mb-4">Logistique</h3>
-                        <div id="logList" class="text-sm font-light opacity-60 leading-relaxed">---</div>
+                    <div class="space-y-4">
+                        <h4 id="txtLog" class="text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Logistique Requise</h4>
+                        <div id="logList" class="text-sm font-semibold opacity-60 min-h-[50px]">---</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
-        // INIT CALENDRIER
+        // Init Calendar
         const cal = document.getElementById('calendar');
         for(let i=1; i<=31; i++) {
             const d = document.createElement('div');
-            d.className = 'day text-zinc-500 bg-zinc-400/5';
-            d.id = 'day-' + i;
-            d.innerText = i;
+            d.className = 'day bg-white/[0.02] dark:bg-white/[0.03] text-zinc-500';
+            d.id = 'day-' + i; d.innerText = i;
             cal.appendChild(d);
         }
 
-        // PARAMÈTRES & LANGUES
-        let currentLang = 'fr';
-        const dict = {
-            fr: { flux: "Capture de Flux", reco: "Recommandation Stratégique", cal: "Calendrier Stratégique", prio: "Priorités", log: "Logistique", btn: "Traiter l'info", wait: "Analyse en cours..." },
-            en: { flux: "Brain Dump", reco: "Strategic Advice", cal: "Strategic Calendar", prio: "Priorities", log: "Logistics", btn: "Process Info", wait: "Analyzing..." }
+        // Translation & Logic
+        let lang = 'fr';
+        const ui = {
+            fr: { flux: "Capture de Flux", reco: "Conseil Stratégique", cal: "Planification Mensuelle", prio: "Urgences Vitales", log: "Logistique Requise", btn: "Traiter la Stratégie", wait: "IA en cours...", error: "Erreur Système : Vérifiez vos crédits." },
+            en: { flux: "Neural Ingestion", reco: "Strategic Advisory", cal: "Monthly Roadmap", prio: "Critical Path", log: "Required Logistics", btn: "Execute Strategy", wait: "Processing...", error: "System Error: Check Credits." }
         };
 
-        function openSettings() { document.getElementById('settingsModal').classList.remove('hidden'); }
-        function closeSettings() { document.getElementById('settingsModal').classList.add('hidden'); }
-        
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-            document.body.classList.toggle('light');
-            const isDark = document.body.classList.contains('dark');
-            document.body.style.backgroundColor = isDark ? '#050505' : '#f8fafc';
-            document.body.style.color = isDark ? '#fff' : '#000';
+        function openSettings() { document.getElementById('setMod').classList.remove('hidden'); }
+        function closeSettings() { document.getElementById('setMod').classList.add('hidden'); }
+        function toggleTheme() { document.body.classList.toggle('dark'); document.body.classList.toggle('light'); }
+        function updateLang() {
+            lang = document.getElementById('langSel').value;
+            document.getElementById('txtFlux').innerText = ui[lang].flux;
+            document.getElementById('txtReco').innerText = ui[lang].reco;
+            document.getElementById('txtCal').innerText = ui[lang].cal;
+            document.getElementById('txtPrio').innerText = ui[lang].prio;
+            document.getElementById('txtLog').innerText = ui[lang].log;
+            document.getElementById('btnGo').innerText = ui[lang].btn;
         }
 
-        function changeLang(val) {
-            currentLang = val;
-            document.getElementById('labelFlux').innerText = dict[val].flux;
-            document.getElementById('labelReco').innerText = dict[val].reco;
-            document.getElementById('labelCal').innerText = dict[val].cal;
-            document.getElementById('labelPrio').innerText = dict[val].prio;
-            document.getElementById('labelLog').innerText = dict[val].log;
-            document.getElementById('btnAction').innerText = dict[val].btn;
-        }
-
-        // LOGIQUE IA
         async function traiter() {
             const input = document.getElementById('userInput').value;
-            const btn = document.getElementById('btnAction');
+            const btn = document.getElementById('btnGo');
             if(!input) return;
 
-            btn.innerText = dict[currentLang].wait;
-            btn.disabled = true;
+            btn.innerText = ui[lang].wait; btn.classList.add('loading-pulse'); btn.disabled = true;
 
             try {
                 const response = await fetch('/api/chat', {
@@ -162,32 +151,32 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Réponds UNIQUEMENT en JSON avec : { 'prio': '...', 'log': ['...'], 'reco': '...', 'days': [1, 2] }"},
+                            {role: "system", content: "Expert en productivité. Analyse le texte et réponds UNIQUEMENT en JSON: { 'prio': 'court et impactant', 'log': ['item1', 'item2'], 'reco': 'une phrase de coach de haut niveau', 'days': [1, 2] }"},
                             {role: "user", content: input}
                         ]
                     })
                 });
 
                 const data = await response.json();
-                const res = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, ""));
+                let content = data.choices[0].message.content;
+                // Nettoyage JSON pour éviter les erreurs d'analyse (Image 39)
+                content = content.replace(/```json|```/g, "").trim();
+                const res = JSON.parse(content);
 
                 document.getElementById('prioList').innerText = res.prio;
                 document.getElementById('logList').innerHTML = res.log.map(i => `• ${i}`).join('<br>');
                 document.getElementById('recoTxt').innerText = res.reco;
-                document.getElementById('recoCard').style.opacity = "1";
-                document.getElementById('recoCard').style.filter = "grayscale(0)";
+                document.getElementById('recoZone').classList.remove('opacity-30');
 
                 document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
                 res.days.forEach(day => {
                     const el = document.getElementById('day-' + day);
                     if(el) el.classList.add('active');
                 });
-
             } catch (e) {
-                alert("Erreur de connexion avec l'IA.");
+                console.error(e); alert(ui[lang].error);
             } finally {
-                btn.innerText = dict[currentLang].btn;
-                btn.disabled = false;
+                btn.innerText = ui[lang].btn; btn.classList.remove('loading-pulse'); btn.disabled = false;
             }
         }
     </script>
