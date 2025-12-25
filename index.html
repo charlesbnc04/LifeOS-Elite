@@ -2,65 +2,76 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Elite - Assistant Proactif</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>LifeOS Elite V3.5 - Final Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background: #050505; color: white; -webkit-font-smoothing: antialiased; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem; }
-        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 1rem; font-size: 0.75rem; background: rgba(255,255,255,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .day.active { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); transform: scale(1.1); border: none; }
-        .suggestion-card { background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.1) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 1.5rem; margin-top: 1rem; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem; }
+        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 1.2rem; font-size: 0.75rem; background: rgba(255,255,255,0.02); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .day.active { background: #3b82f6; color: white; box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); transform: scale(1.1); border: none; z-index: 10; }
+        .day.today { border: 2px solid #3b82f6; color: #3b82f6; font-weight: bold; }
+        .suggestion-card { background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.1) 100%); border: 1px solid rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; transition: transform 0.3s; }
+        .suggestion-card:hover { transform: translateY(-5px); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 min-h-full">
+<body class="p-4 md:p-12 min-h-full">
 
-    <main class="max-w-7xl mx-auto space-y-8">
-        <header class="flex justify-between items-end">
+    <main class="max-w-7xl mx-auto space-y-10">
+        <header class="flex justify-between items-center">
             <div>
-                <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-                <p class="text-[10px] uppercase tracking-[0.4em] opacity-30 font-bold">Assistant Personnel Prédictif / V3.0</p>
+                <h1 class="text-4xl font-black italic tracking-tighter leading-none">LIFE<span class="text-blue-500">OS</span></h1>
+                <p class="text-[9px] uppercase tracking-[0.5em] opacity-30 font-bold mt-2">Elite Strategic Assistant / Final Build</p>
             </div>
-            <div class="flex gap-4">
-                <button onclick="clearMemory()" class="text-[9px] uppercase opacity-20 hover:opacity-100 transition-opacity">Réinitialiser Mémoire</button>
+            <div class="flex items-center gap-6">
+                <button onclick="exportPlan()" class="text-[10px] uppercase font-bold text-blue-400 hover:text-white transition-colors">Exporter Plan</button>
+                <button onclick="clearMemory()" class="text-[10px] uppercase opacity-20 hover:opacity-100 transition-opacity">Reset</button>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-5 space-y-6">
-                <div class="glass p-8">
-                    <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-widest mb-4">Neural Input</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-xl font-light placeholder:opacity-10" rows="5" placeholder="Décrivez votre journée ou vos blocages..."></textarea>
-                    <button onclick="analyser()" id="btnMain" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black uppercase text-sm tracking-tighter shadow-xl transition-all active:scale-95">Synchroniser l'Assistant</button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div class="lg:col-span-5 space-y-8">
+                <div class="glass p-10 relative">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em]">Neural Input</h2>
+                        <button id="voiceBtn" onclick="startVoice()" class="p-2 rounded-full hover:bg-white/5 transition-colors">
+                            <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                        </button>
+                    </div>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-10 leading-relaxed" rows="5" placeholder="Parlez ou écrivez votre flux..."></textarea>
+                    <button onclick="analyser()" id="btnMain" class="w-full mt-10 bg-blue-600 hover:bg-blue-500 py-6 rounded-3xl font-black uppercase text-sm tracking-[0.1em] shadow-2xl shadow-blue-500/20 transition-all active:scale-95">Exécuter la Stratégie</button>
                 </div>
 
-                <div id="proactiveZone" class="hidden">
-                    <div class="glass p-8 border-purple-500/20">
-                        <h2 class="text-purple-500 font-bold text-[10px] uppercase tracking-widest mb-4 italic">⚡ Assistant Proactif</h2>
-                        <div id="suggestionsList" class="space-y-4">
-                            </div>
-                    </div>
+                <div id="proactiveZone" class="hidden space-y-4 animate-in fade-in duration-1000">
+                    <h2 class="text-purple-500 font-bold text-[10px] uppercase tracking-widest italic ml-4">⚡ Intelligence Proactive</h2>
+                    <div id="suggestionsList" class="space-y-4"></div>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass p-10 flex flex-col justify-between">
+            <div class="lg:col-span-7 glass p-12 flex flex-col justify-between shadow-2xl">
                 <div>
-                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest mb-8">Roadmap Stratégique Mensuelle</h2>
-                    <div class="grid grid-cols-7 gap-2 opacity-20 text-[9px] font-black text-center mb-4 uppercase">
+                    <div class="flex justify-between items-end mb-10">
+                        <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em]">Roadmap Mensuelle</h2>
+                        <span class="text-2xl font-black italic tracking-tighter opacity-80 uppercase">Décembre 2025</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-7 gap-3 opacity-20 text-[9px] font-black text-center mb-6 uppercase tracking-widest">
                         <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
                     </div>
-                    <div id="calendar" class="grid grid-cols-7 gap-2"></div>
+                    <div id="calendar" class="grid grid-cols-7 gap-3"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-8 mt-12 pt-8 border-t border-white/5">
-                    <div>
-                        <h3 class="text-red-500 font-bold text-[10px] uppercase tracking-widest mb-4">Focus Urgent</h3>
-                        <div id="prioList" class="text-sm font-medium opacity-60">---</div>
+                <div class="grid grid-cols-2 gap-12 mt-20 pt-10 border-t border-white/5">
+                    <div class="space-y-4">
+                        <h3 class="text-red-500 font-bold text-[10px] uppercase tracking-[0.2em]">Urgences</h3>
+                        <div id="prioList" class="text-sm font-semibold opacity-50 min-h-[60px] leading-relaxed">---</div>
                     </div>
-                    <div>
-                        <h3 class="text-green-500 font-bold text-[10px] uppercase tracking-widest mb-4">Automatisations & Courses</h3>
-                        <div id="logList" class="text-sm font-medium opacity-60">---</div>
+                    <div class="space-y-4">
+                        <h3 class="text-green-500 font-bold text-[10px] uppercase tracking-[0.2em]">Logistique</h3>
+                        <div id="logList" class="text-sm font-semibold opacity-50 min-h-[60px] leading-relaxed">---</div>
                     </div>
                 </div>
             </div>
@@ -70,27 +81,46 @@
     <script>
         // Init Calendrier
         const cal = document.getElementById('calendar');
+        const today = new Date().getDate();
         for(let i=1; i<=31; i++) {
             const d = document.createElement('div');
-            d.className = 'day'; d.id = 'day-' + i; d.innerText = i;
+            d.className = 'day' + (i === today ? ' today' : '');
+            d.id = 'day-' + i; d.innerText = i;
             cal.appendChild(d);
         }
 
-        // Système de Mémoire (LocalStorage)
+        // Reconnaissance Vocale
+        function startVoice() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("Microphone non supporté sur ce navigateur.");
+            const rec = new SpeechRecognition();
+            rec.lang = 'fr-FR';
+            rec.start();
+            document.getElementById('voiceBtn').classList.add('animate-pulse', 'text-red-500');
+            rec.onresult = (e) => {
+                document.getElementById('userInput').value = e.results[0][0].transcript;
+                document.getElementById('voiceBtn').classList.remove('animate-pulse', 'text-red-500');
+            };
+        }
+
+        // Export Plan
+        function exportPlan() {
+            const prio = document.getElementById('prioList').innerText;
+            const log = document.getElementById('logList').innerText;
+            const content = `STRATÉGIE LIFEOS - ${new Date().toLocaleDateString()}\n\nURGENCES :\n${prio}\n\nLOGISTIQUE :\n${log}`;
+            const blob = new Blob([content], {type: 'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Plan_Strategique_${today}.txt`;
+            a.click();
+        }
+
+        // Mémoire & IA
         function saveToMemory(txt) {
             let history = JSON.parse(localStorage.getItem('lifeos_history') || "[]");
             history.push({ date: new Date().toISOString(), text: txt });
-            if(history.length > 10) history.shift(); // Garde les 10 derniers
+            if(history.length > 10) history.shift();
             localStorage.setItem('lifeos_history', JSON.stringify(history));
-        }
-
-        function getMemory() {
-            return localStorage.getItem('lifeos_history') || "[]";
-        }
-
-        function clearMemory() {
-            localStorage.removeItem('lifeos_history');
-            location.reload();
         }
 
         async function analyser() {
@@ -98,10 +128,8 @@
             const btn = document.getElementById('btnMain');
             if(!input) return;
 
-            btn.innerText = "IA EN SYNCHRONISATION...";
-            btn.disabled = true;
-
-            const historyContext = getMemory();
+            btn.innerText = "ALGORITHME EN COURS..."; btn.disabled = true;
+            const history = localStorage.getItem('lifeos_history') || "[]";
             saveToMemory(input);
 
             try {
@@ -110,15 +138,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: `Tu es un assistant personnel d'élite. Tu as accès à l'historique récent de l'utilisateur : ${historyContext}. 
-                            Analyse le présent et suggère des optimisations basées sur ses habitudes. 
-                            Réponds UNIQUEMENT en JSON : {
-                                "prio": "urgence du moment",
-                                "log": ["courses/logistique"],
-                                "days": [1, 2],
-                                "suggestions": ["Astuce gain de temps 1", "Suggestion d'habitude 2"],
-                                "recommandation": "Le conseil proactif principal"
-                            }`},
+                            {role: "system", content: `Expert en productivité. Historique: ${history}. Réponds UNIQUEMENT en JSON: { "prio": "...", "log": [], "days": [], "suggestions": [], "reco": "..." }`},
                             {role: "user", content: input}
                         ]
                     })
@@ -127,22 +147,19 @@
                 const data = await response.json();
                 const res = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, ""));
 
-                // Mise à jour de l'interface
                 document.getElementById('prioList').innerText = res.prio;
                 document.getElementById('logList').innerHTML = res.log.map(i => `• ${i}`).join('<br>');
                 
-                // Affichage des suggestions proactives
                 const sugZone = document.getElementById('proactiveZone');
                 const sugList = document.getElementById('suggestionsList');
                 sugZone.classList.remove('hidden');
                 sugList.innerHTML = res.suggestions.map(s => `
                     <div class="suggestion-card">
-                        <p class="text-xs font-semibold text-purple-300 mb-1">💡 OPTIMISATION</p>
-                        <p class="text-sm opacity-80">${s}</p>
+                        <p class="text-[9px] font-black text-purple-400 uppercase tracking-widest mb-2">Neural Insight</p>
+                        <p class="text-sm opacity-80 leading-relaxed">${s}</p>
                     </div>
                 `).join('');
 
-                // Calendrier
                 document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
                 res.days.forEach(day => {
                     const el = document.getElementById('day-' + day);
@@ -150,10 +167,9 @@
                 });
 
             } catch (e) {
-                alert("Erreur d'analyse. Vérifiez votre clé.");
+                alert("Erreur Système : Vérifiez vos crédits.");
             } finally {
-                btn.innerText = "Synchroniser l'Assistant";
-                btn.disabled = false;
+                btn.innerText = "Exécuter la Stratégie"; btn.disabled = false;
             }
         }
     </script>
