@@ -3,262 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V20 - Ultimate Integration</title>
+    <title>LifeOS Sovereign V21 - Aura Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #010101; color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(50px); background: rgba(255,255,255,0.02); }
-        .glass-dark { border-radius: 2rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #010101; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        @keyframes pulse-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 50% { box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.2); } }
-        .active-sync { animation: pulse-blue 2s infinite; border-color: #3b82f6 !important; }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(60px); background: rgba(255,255,255,0.02); }
+        .glass-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.5rem; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        .glass-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(59, 130, 246, 0.5); transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2); }
         
-        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); position: relative; }
-        .day:hover { transform: scale(1.1) translateY(-5px); background: rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
-        .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.05); }
+        @keyframes strike { 0% { width: 0; } 100% { width: 100%; } }
+        .strikethrough { position: relative; color: rgba(255,255,255,0.2); }
+        .strikethrough::after { content: ''; position: absolute; left: 0; top: 50%; height: 1px; background: #3b82f6; animation: strike 0.3s ease-out forwards; }
+
+        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; font-weight: 800; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+        .btn-premium:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        .custom-check { appearance: none; width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; transition: 0.3s; position: relative; }
+        .custom-check:checked { background: #3b82f6; border-color: #3b82f6; }
+        .custom-check:checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 12px; font-weight: bold; }
         
-        .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 10px; }
-        .water-progress { transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1); background: linear-gradient(90deg, #3b82f6, #06b6d4); }
-        
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .day:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .day-today { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2)); border: 1px solid #3b82f6 !important; font-weight: 800; }
     </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen">
 
-    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <aside class="lg:col-span-3 space-y-6">
-            <div class="glass p-8 space-y-8">
-                <div>
-                    <h1 class="text-4xl font-black italic tracking-tighter italic">LIFE<span class="text-blue-500">OS</span></h1>
-                    <p id="clock" class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-bold mt-2"></p>
-                </div>
+        <aside class="lg:col-span-4 space-y-6">
+            <div class="glass p-10 space-y-8">
+                <header>
+                    <h1 class="text-5xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
+                    <p id="clock" class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-bold mt-4"></p>
+                </header>
 
                 <div class="space-y-4">
-                    <h3 class="text-[9px] font-black uppercase tracking-widest text-blue-400 italic">Neural Sync Engines</h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <button onclick="sync('gmail')" class="glass-dark p-4 flex items-center justify-between hover:bg-white/5 transition-all group">
-                            <span class="text-xs font-bold opacity-60 group-hover:opacity-100">Gmail Analysis</span>
-                            <span class="text-xs">📧</span>
-                        </button>
-                        <button onclick="sync('calendar')" class="glass-dark p-4 flex items-center justify-between hover:bg-white/5 transition-all group">
-                            <span class="text-xs font-bold opacity-60 group-hover:opacity-100">Google Calendar</span>
-                            <span class="text-xs">📅</span>
-                        </button>
-                        <div class="glass-dark p-4 flex items-center justify-between opacity-30 cursor-not-allowed">
-                            <span class="text-xs font-bold">iCal / PDF Sync</span>
-                            <span class="text-xs">🖇️</span>
-                        </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-400">Neural Input</span>
+                        <button onclick="toggleVoice()" id="voiceBtn" class="text-xl hover:scale-125 transition-transform">🎤</button>
                     </div>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light min-h-[120px]" placeholder="Parlez à votre système..."></textarea>
+                    <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-5 rounded-2xl uppercase text-[10px] tracking-[0.3em]">Analyser le flux</button>
                 </div>
 
-                <div class="space-y-4 pt-4 border-t border-white/5">
-                    <h3 class="text-[9px] font-black uppercase tracking-widest text-purple-400 italic">Recovery & Sleep</h3>
-                    <div class="glass-dark p-5 space-y-2">
-                        <p class="text-[10px] opacity-40 font-bold">Heure de réveil idéale</p>
-                        <p id="sleepAdvice" class="text-xl font-black italic">07:30</p>
-                        <p class="text-[8px] opacity-30 font-bold uppercase">Basé sur vos cycles circadiens</p>
+                <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-8">
+                    <div class="text-center">
+                        <p class="text-[8px] font-black opacity-30 uppercase">Efficacité</p>
+                        <p id="score" class="text-3xl font-black text-blue-500 italic">0%</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="glass p-8 space-y-6">
-                <div class="flex justify-between items-end">
-                    <h3 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest italic">Bio-Performance</h3>
-                    <span id="score" class="text-4xl font-black italic text-blue-500">0%</span>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center text-[10px] font-bold">
-                        <span>HYDRO</span>
-                        <span class="text-blue-400"><span id="waterCount">0</span>/3L</span>
-                    </div>
-                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div id="waterBar" class="water-progress h-full w-0"></div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="addWater(0.5)" class="flex-1 py-3 glass-dark text-[10px] font-black hover:bg-blue-600/20 transition-all">+0.5L</button>
-                        <button onclick="resetWater()" class="px-4 py-3 glass-dark opacity-20 hover:opacity-100 transition-all">↻</button>
+                    <div class="text-center border-l border-white/5">
+                        <p class="text-[8px] font-black opacity-30 uppercase">Hydratation</p>
+                        <p class="text-3xl font-black text-cyan-400 italic"><span id="waterCount">0</span>L</p>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <main class="lg:col-span-5 space-y-6">
-            <div class="glass p-10 relative overflow-hidden active-sync">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-[0.3em] italic">Neural Logic Center V20</h2>
-                    <div class="flex items-center gap-4">
-                        <div id="pomodoroDisplay" class="hidden flex items-center gap-3 bg-red-600/10 px-4 py-2 rounded-full border border-red-600/20">
-                            <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
-                            <span id="timerText" class="text-xs font-mono font-black text-red-500">25:00</span>
-                        </div>
-                        <button onclick="toggleVoice()" id="voiceBtn" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-all">🎤</button>
-                    </div>
-                </div>
-                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-10 min-h-[150px]" placeholder="Dictez votre planning ou votre état..."></textarea>
-                <button onclick="traiter()" id="btnMain" class="w-full bg-blue-600 hover:bg-blue-500 py-7 rounded-[2rem] uppercase text-[11px] font-black tracking-[0.4em] transition-all shadow-2xl shadow-blue-900/40">Optimiser ma Souveraineté</button>
-            </div>
-
-            <div id="coachCard" class="glass p-8 opacity-40 transition-all duration-1000">
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <h3 class="text-purple-500 font-black text-[10px] uppercase italic tracking-widest">Neural Academy</h3>
-                        <p id="coachTitle" class="text-xs font-bold mt-1 opacity-50 italic">Analyse en attente...</p>
-                    </div>
-                    <a id="ytLink" target="_blank" class="hidden bg-red-600 hover:bg-red-500 text-[9px] font-black px-4 py-2 rounded-xl uppercase transition-all shadow-lg shadow-red-900/20">Solution Vidéo 🎬</a>
-                </div>
-                <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed"></p>
-            </div>
-        </main>
-
-        <section class="lg:col-span-4 glass p-10 space-y-8 shadow-2xl">
-            <div class="flex justify-between items-center">
-                <h2 id="currentMonth" class="font-black text-2xl tracking-tighter italic uppercase underline decoration-blue-500 decoration-4 underline-offset-8">Roadmap</h2>
-                <div class="text-right">
-                    <p class="text-[8px] font-black opacity-30 uppercase tracking-[0.2em]">Saison</p>
-                    <p class="text-[10px] font-bold italic">Hiver 2025</p>
+        <main class="lg:col-span-8 glass p-10">
+            <div class="flex justify-between items-center mb-10">
+                <h2 id="currentMonth" class="text-2xl font-black tracking-tighter italic uppercase underline decoration-blue-500 underline-offset-8">Roadmap</h2>
+                <div class="flex gap-4">
+                    <button onclick="addWater(0.5)" class="glass px-6 py-2 text-[10px] font-black hover:bg-blue-600/20 transition-all">+ EAU</button>
                 </div>
             </div>
             
-            <div id="calendar" class="grid grid-cols-7 gap-3"></div>
-
-            <div class="pt-8 border-t border-white/5 space-y-6">
-                <div>
-                    <h4 class="text-red-500 font-black text-[9px] uppercase tracking-widest mb-3 italic">Urgences Détectées</h4>
-                    <div id="prioList" class="text-xs font-bold italic opacity-40 bg-white/5 p-4 rounded-2xl">Aucune menace.</div>
-                </div>
-                <div>
-                    <h4 class="text-blue-400 font-black text-[9px] uppercase tracking-widest mb-3 italic">Optimisation Temporelle</h4>
-                    <div id="timeTip" class="text-xs font-bold italic opacity-40 bg-white/5 p-4 rounded-2xl">Prêt pour l'action.</div>
+            <div id="calendar" class="grid grid-cols-7 gap-4"></div>
+            
+            <div id="coachCard" class="mt-10 p-8 glass-card hidden">
+                <div class="flex justify-between items-start">
+                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed max-w-md"></p>
+                    <a id="ytLink" target="_blank" class="hidden bg-red-600 px-4 py-2 rounded-xl text-[9px] font-black uppercase">Solution 🎬</a>
                 </div>
             </div>
-        </section>
+        </main>
     </div>
 
     <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/95 backdrop-blur-3xl">
-        <div class="glass p-12 max-w-xl w-full space-y-8 relative border-white/10">
-            <div class="flex justify-between items-start">
+        <div class="glass p-12 max-w-2xl w-full space-y-10 relative overflow-hidden">
+            <div class="flex justify-between items-center">
                 <h2 id="modalDate" class="text-4xl font-black tracking-tighter italic text-blue-500 capitalize">Date</h2>
-                <button onclick="closeDay()" class="text-zinc-600 hover:text-white transition-colors">✕</button>
+                <button onclick="closeDay()" class="text-3xl opacity-20 hover:opacity-100 transition-opacity">✕</button>
             </div>
-            <div class="relative">
-                <input type="text" id="newTaskInput" placeholder="Assigner une mission..." class="w-full bg-white/5 p-6 rounded-[2rem] outline-none border border-white/10 text-sm focus:border-blue-500/50 transition-all">
-                <button onclick="addTaskManually()" class="absolute right-3 top-3 bg-blue-600 hover:bg-blue-500 w-12 h-12 rounded-2xl font-black transition-all">+</button>
+
+            <div class="relative group">
+                <input type="text" id="newTaskInput" placeholder="Ajouter une mission..." class="w-full bg-white/5 p-6 rounded-2xl outline-none border border-white/10 text-lg focus:border-blue-500/50 transition-all">
+                <button onclick="addTaskManually()" class="absolute right-3 top-3 bg-blue-600 hover:bg-blue-500 w-12 h-12 rounded-xl font-black transition-all">+</button>
             </div>
-            <div id="taskList" class="space-y-3 max-h-[450px] overflow-y-auto pr-2"></div>
+
+            <div id="taskList" class="space-y-4 max-h-[450px] overflow-y-auto pr-4 custom-scroll"></div>
         </div>
     </div>
 
     <script>
+        let db = JSON.parse(localStorage.getItem('lifeos_v21_db') || "{}");
+        let health = { water: 0, lastDate: new Date().toDateString() };
         const now = new Date();
         const todayNum = now.getDate();
-        const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-        
-        let db = JSON.parse(localStorage.getItem('lifeos_v20_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v20_health') || '{"water":0, "sport":0, "date":null}');
         let currentDayOpen = null;
-        let pomodoroInterval = null;
 
-        // Init
-        document.getElementById('currentMonth').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
         document.getElementById('clock').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+        document.getElementById('currentMonth').innerText = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(now);
 
-        // --- SYNC EMULATOR ---
-        function sync(type) {
-            const btn = event.currentTarget;
-            btn.classList.add('active-sync');
-            btn.querySelector('span').innerText = "Synchronisation...";
-            setTimeout(() => {
-                btn.classList.remove('active-sync');
-                btn.querySelector('span').innerText = type === 'gmail' ? "Gmail Synced" : "Calendar Synced";
-                alert(`L'IA a scanné vos ${type} et mis à jour votre Roadmap.`);
-            }, 1500);
-        }
-
-        // --- POMODORO ---
-        function startFocus() {
-            clearInterval(pomodoroInterval);
-            document.getElementById('pomodoroDisplay').classList.remove('hidden');
-            let timeLeft = 25 * 60;
-            pomodoroInterval = setInterval(() => {
-                timeLeft--;
-                const m = Math.floor(timeLeft/60);
-                const s = timeLeft%60;
-                document.getElementById('timerText').innerText = `${m}:${s.toString().padStart(2,'0')}`;
-                if(timeLeft <= 0) { clearInterval(pomodoroInterval); document.getElementById('pomodoroDisplay').classList.add('hidden'); }
-            }, 1000);
-        }
-
-        // --- VOICE ---
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const rec = Speech ? new Speech() : null;
-        let isRec = false;
-        function toggleVoice() {
-            if(!rec) return;
-            isRec = !isRec;
-            isRec ? (document.getElementById('voiceBtn').classList.add('bg-blue-600'), rec.start()) : (document.getElementById('voiceBtn').classList.remove('bg-blue-600'), rec.stop());
-        }
-        if(rec) rec.onresult = (e) => { document.getElementById('userInput').value += e.results[0][0].transcript; toggleVoice(); };
-
-        // --- HEALTH & RECOVERY ---
-        function updateHealth() {
-            document.getElementById('waterCount').innerText = health.water;
-            document.getElementById('waterBar').style.width = (health.water/3*100) + "%";
-            const hScore = (health.water/3*25) + (health.sport*10);
-            
-            // Calcul Sommeil (Exemple simple : réveil 8h après coucher minuit)
-            const tasksToday = db[todayNum] || [];
-            const hasEarlyTask = tasksToday.some(t => t.text.toLowerCase().includes('matin') || t.text.toLowerCase().includes('8h') || t.text.toLowerCase().includes('9h'));
-            document.getElementById('sleepAdvice').innerText = hasEarlyTask ? "06:45" : "07:30";
-            
-            let total=0, done=0;
-            Object.values(db).forEach(day => day.forEach(t => { total++; if(t.done) done++; }));
-            const tScore = total ? (done/total*65) : 0;
-            document.getElementById('score').innerText = Math.round(hScore + tScore) + "%";
-            buildCal();
-        }
-        function addWater(n) { health.water = Math.min(3, health.water + n); saveHealth(); }
-        function resetWater() { health.water = 0; saveHealth(); }
-        function saveHealth() { health.date = new Date().toDateString(); localStorage.setItem('lifeos_v20_health', JSON.stringify(health)); updateHealth(); }
-
-        // --- CALENDAR & TASKS ---
         function buildCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            let total=0, done=0;
+
             for(let i=1; i<=daysInMonth; i++) {
                 const tasks = db[i] || [];
                 const allDone = tasks.length > 0 && tasks.every(t => t.done);
                 const d = document.createElement('div');
-                d.className = `day ${i === todayNum ? 'day-today' : ''} ${tasks.length > 0 && !allDone && i < todayNum ? 'border-red-500/50' : ''}`;
+                d.className = `day ${i === todayNum ? 'day-today' : ''}`;
                 d.innerHTML = `<span>${i}</span>`;
+                
                 if(tasks.length) {
                     const dot = document.createElement('div');
-                    dot.className = `status-dot ${allDone ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-red-500 shadow-[0_0_10px_#ef4444]'}`;
+                    dot.className = `w-1.5 h-1.5 rounded-full mt-1 ${allDone ? 'bg-green-500' : 'bg-red-500'}`;
                     d.appendChild(dot);
+                    total++; if(allDone) done++;
                 }
                 d.onclick = () => showDay(i);
                 cal.appendChild(d);
             }
+            document.getElementById('score').innerText = total ? Math.round(done/total*100) + "%" : "0%";
         }
 
         function showDay(day) {
             currentDayOpen = day;
             const tasks = db[day] || [];
-            document.getElementById('modalDate').innerText = `${day} ${monthNames[now.getMonth()]}`;
-            document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
-                <div class="flex flex-col p-6 glass-dark border-white/5 group hover:border-blue-500/30 transition-all">
-                    <div class="flex items-center justify-between gap-4">
-                        <input type="text" value="${t.text}" onchange="editTask(${day},${i},this.value)" class="bg-transparent outline-none w-full ${t.done ? 'line-through opacity-20' : 'font-bold text-sm'}">
-                        <div class="flex items-center gap-4">
-                            ${!t.done ? `<button onclick="startFocus()" class="text-[9px] font-black text-blue-500 hover:underline">FOCUS</button>` : ''}
-                            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="w-5 h-5 accent-blue-500 cursor-pointer">
-                            <button onclick="delTask(${day},${i})" class="text-red-500 opacity-0 group-hover:opacity-100 transition-all">✕</button>
+            document.getElementById('modalDate').innerText = `${day} ${new Intl.DateTimeFormat('fr-FR', { month: 'long' }).format(now)}`;
+            
+            document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
+                <div class="glass-card p-6 flex items-center justify-between group">
+                    <div class="flex items-center gap-6 w-full">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})" class="custom-check">
+                        <div class="flex flex-col">
+                            <span class="text-lg font-bold transition-all ${t.done ? 'strikethrough opacity-30' : 'opacity-90'}">${t.text}</span>
+                            ${!t.done && t.text.toLowerCase().includes('vitamine') ? '<span class="text-[9px] text-blue-400 font-black mt-1">🛒 RECOMMANDATION : NUTRI&CO</span>' : ''}
                         </div>
                     </div>
+                    <button onclick="delTask(${day}, ${idx})" class="opacity-0 group-hover:opacity-100 text-red-500 p-2 hover:bg-red-500/10 rounded-lg transition-all">✕</button>
                 </div>
-            `).join('') : '<p class="text-center py-10 opacity-10 italic">Aucune directive pour ce cycle.</p>';
+            `).join('') : '<p class="text-center py-20 opacity-20 italic">Aucune mission pour aujourd\'hui.</p>';
+            
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
@@ -268,43 +158,38 @@
             db[currentDayOpen] = [...(db[currentDayOpen] || []), {text: val, done: false}];
             save(); document.getElementById('newTaskInput').value = '';
         }
-        function editTask(d,i,t) { db[d][i].text = t; save(); }
-        function delTask(d,i) { db[d].splice(i,1); save(); }
-        function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); }
-        function save() { localStorage.setItem('lifeos_v20_db', JSON.stringify(db)); showDay(currentDayOpen); updateHealth(); }
+
+        function toggleTask(d, i) { db[d][i].done = !db[d][i].done; save(); }
+        function delTask(d, i) { db[d].splice(i, 1); save(); }
+        function save() { localStorage.setItem('lifeos_v21_db', JSON.stringify(db)); buildCal(); showDay(currentDayOpen); }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        document.getElementById('newTaskInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') addTaskManually(); });
+        function addWater(v) { health.water += v; document.getElementById('waterCount').innerText = health.water; }
 
         async function traiter() {
             const input = document.getElementById('userInput').value;
             if(!input) return;
             const btn = document.getElementById('btnMain');
-            btn.innerText = "ALGORITHME EN COURS..."; btn.disabled = true;
+            btn.innerText = "ALGORITHME..."; btn.disabled = true;
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        messages: [
-                            {role: "system", content: "Expert Souveraineté. JSON STRICT: { 'coach': 'conseil', 'yt_search': 'sujet', 'time': 'astuce', 'prio': 'urgence', 'schedule': [{'day': N, 'tasks':['...']}] }"},
-                            {role: "user", content: input}
-                        ]
+                        messages: [{role: "system", content: "Expert. JSON STRICT: { 'coach': '...', 'yt_search': '...', 'schedule': [{'day': N, 'tasks':['...']}] }"}, {role: "user", content: input}]
                     })
                 });
                 const data = await response.json();
                 const res = JSON.parse(data.choices[0].message.content.trim().match(/\{.*\}/s)[0]);
-                document.getElementById('coachCard').classList.remove('opacity-40');
+                document.getElementById('coachCard').classList.remove('hidden');
                 document.getElementById('coachTxt').innerText = res.coach;
-                document.getElementById('timeTip').innerText = res.time;
-                document.getElementById('prioList').innerText = res.prio;
-                if(res.yt_search) { const yt = document.getElementById('ytLink'); yt.classList.remove('hidden'); yt.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(res.yt_search)}`; }
+                if(res.yt_search) { document.getElementById('ytLink').classList.remove('hidden'); document.getElementById('ytLink').href = `https://youtube.com/results?search_query=${res.yt_search}`; }
                 res.schedule.forEach(s => { db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; });
                 save();
-            } catch (e) { alert("Analyse interrompue."); }
-            finally { btn.innerText = "Optimiser ma Souveraineté"; btn.disabled = false; }
+            } catch (e) { alert("Erreur IA"); }
+            finally { btn.innerText = "Analyser le flux"; btn.disabled = false; }
         }
 
-        updateHealth();
+        buildCal();
     </script>
 </body>
 </html>
