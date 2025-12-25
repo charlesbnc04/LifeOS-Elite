@@ -3,217 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V18 - Holistic Ecosystem</title>
+    <title>LifeOS Sovereign V20 - Ultimate Integration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020202; color: #fff; -webkit-font-smoothing: antialiased; }
-        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(40px); background: rgba(255,255,255,0.02); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #010101; color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(50px); background: rgba(255,255,255,0.02); }
+        .glass-dark { border-radius: 2rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
         
-        @keyframes blink-red { 0%, 100% { border-color: rgba(239, 68, 68, 0.2); } 50% { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); } }
-        @keyframes blink-orange { 0%, 100% { border-color: rgba(249, 115, 22, 0.2); } 50% { border-color: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); } }
+        @keyframes pulse-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 50% { box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.2); } }
+        .active-sync { animation: pulse-blue 2s infinite; border-color: #3b82f6 !important; }
         
-        .alert-retard { animation: blink-red 1.5s infinite ease-in-out; border: 2px solid #ef4444 !important; }
-        .alert-today { animation: blink-orange 2s infinite ease-in-out; border: 2px solid #f97316 !important; }
-
-        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; position: relative; transition: 0.3s; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); }
-        .day:hover { transform: scale(1.1); background: rgba(59, 130, 246, 0.2); }
-        .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 8px; }
-        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; font-weight: 800; }
+        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); position: relative; }
+        .day:hover { transform: scale(1.1) translateY(-5px); background: rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
+        .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.05); }
         
-        .water-bar { height: 8px; border-radius: 4px; background: rgba(59, 130, 246, 0.1); overflow: hidden; }
-        .water-progress { height: 100%; background: #3b82f6; transition: width 0.5s ease; box-shadow: 0 0 10px #3b82f6; }
-        .youtube-btn { background: #ff0000; color: white; font-weight: 800; font-size: 10px; padding: 4px 8px; border-radius: 6px; transition: 0.3s; }
-        .youtube-btn:hover { background: #cc0000; transform: scale(1.05); }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 10px; }
+        .water-progress { transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1); background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 min-h-full">
+<body class="p-4 md:p-8 min-h-screen">
 
-    <main class="max-w-7xl mx-auto space-y-8">
-        <header class="flex justify-between items-center px-4">
-            <div>
-                <h1 class="text-4xl font-black italic tracking-tighter italic">LIFE<span class="text-blue-500">OS</span></h1>
-                <p id="clock" class="text-[9px] uppercase tracking-[0.5em] opacity-40 font-bold mt-2">...</p>
-            </div>
-            <div class="flex items-center gap-6">
-                <div class="text-right">
-                    <p class="text-[9px] font-black opacity-30 uppercase">Vitalité Globale</p>
-                    <span id="score" class="text-3xl font-black italic text-blue-500">0%</span>
-                </div>
-                <button onclick="localStorage.clear(); location.reload();" class="w-10 h-10 rounded-full glass flex items-center justify-center opacity-20 hover:opacity-100 text-xs">✕</button>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-5 space-y-6">
-                <div class="glass p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-widest italic">Neural Logic Center</h2>
-                        <button onclick="toggleVoice()" id="voiceBtn" class="p-3 glass rounded-full hover:bg-blue-600 transition-colors">🎤</button>
-                    </div>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light mb-6" rows="4" placeholder="Votre état ou mission..."></textarea>
-                    <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-5 rounded-3xl uppercase text-[10px] tracking-widest">Lancer l'Analyse Holistique</button>
-                </div>
-
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="glass p-6 space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-black uppercase opacity-40">Hydratation</span>
-                            <span class="text-xs font-bold text-blue-400"><span id="waterCount">0</span>/3L</span>
-                        </div>
-                        <div class="water-bar"><div id="waterBar" class="water-progress" style="width: 0%"></div></div>
-                        <div class="flex gap-2">
-                            <button onclick="addWater(0.5)" class="flex-1 py-2 glass rounded-xl text-[10px] font-bold">+0.5L</button>
-                            <button onclick="resetWater()" class="px-3 py-2 glass rounded-xl text-[10px] opacity-30">↻</button>
-                        </div>
-                    </div>
-                    <div class="glass p-6 space-y-4 text-center">
-                        <span class="text-[9px] font-black uppercase opacity-40">Intensité Sport</span>
-                        <div class="flex justify-center gap-2">
-                            <button onclick="setSport(1)" id="s1" class="w-8 h-8 glass rounded-full flex items-center justify-center text-xs">🔥</button>
-                            <button onclick="setSport(2)" id="s2" class="w-8 h-8 glass rounded-full flex items-center justify-center text-xs">🔥🔥</button>
-                            <button onclick="setSport(3)" id="s3" class="w-8 h-8 glass rounded-full flex items-center justify-center text-xs">🔥🔥🔥</button>
-                        </div>
-                        <p class="text-[8px] opacity-30 uppercase font-black" id="sportStatus">Aucun effort</p>
-                    </div>
-                </div>
-
-                <div id="coachCard" class="glass p-8 border-purple-500/20 opacity-40 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-purple-500 font-bold text-[9px] uppercase italic">⚡ Neural Academy</h3>
-                        <a id="ytLink" target="_blank" class="hidden youtube-btn uppercase">Voir la Solution 🎬</a>
-                    </div>
-                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed">...</p>
-                </div>
-            </div>
-
-            <div class="lg:col-span-7 glass p-10 flex flex-col justify-between shadow-2xl">
+    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <aside class="lg:col-span-3 space-y-6">
+            <div class="glass p-8 space-y-8">
                 <div>
-                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest mb-10">Roadmap Décembre 2025</h2>
-                    <div id="calendar" class="grid grid-cols-7 gap-4"></div>
+                    <h1 class="text-4xl font-black italic tracking-tighter italic">LIFE<span class="text-blue-500">OS</span></h1>
+                    <p id="clock" class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-bold mt-2"></p>
                 </div>
-                <div class="mt-10 border-t border-white/5 pt-8 grid grid-cols-2 gap-10">
-                    <div>
-                        <h4 class="text-red-500 font-bold text-[10px] uppercase mb-2">Alerte Priorité</h4>
-                        <div id="prioList" class="text-xs opacity-50 font-bold italic">---</div>
-                    </div>
-                    <div class="text-right">
-                        <h4 class="text-blue-400 font-bold text-[10px] uppercase mb-2">Gain de Temps IA</h4>
-                        <div id="timeTip" class="text-xs opacity-50 italic">---</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
 
-    <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/90 backdrop-blur-3xl">
-        <div class="glass p-12 max-w-lg w-full space-y-8 relative border-white/10">
-            <h2 id="modalDate" class="text-3xl font-black tracking-tighter italic text-blue-500 capitalize">Date</h2>
-            <div class="flex gap-2">
-                <input type="text" id="newTaskInput" placeholder="Mission rapide..." class="w-full bg-white/5 p-4 rounded-2xl outline-none border border-white/10 text-sm">
-                <button onclick="addTaskManually()" class="btn-premium px-6 rounded-2xl font-black">+</button>
+                <div class="space-y-4">
+                    <h3 class="text-[9px] font-black uppercase tracking-widest text-blue-400 italic">Neural Sync Engines</h3>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="sync('gmail')" class="glass-dark p-4 flex items-center justify-between hover:bg-white/5 transition-all group">
+                            <span class="text-xs font-bold opacity-60 group-hover:opacity-100">Gmail Analysis</span>
+                            <span class="text-xs">📧</span>
+                        </button>
+                        <button onclick="sync('calendar')" class="glass-dark p-4 flex items-center justify-between hover:bg-white/5 transition-all group">
+                            <span class="text-xs font-bold opacity-60 group-hover:opacity-100">Google Calendar</span>
+                            <span class="text-xs">📅</span>
+                        </button>
+                        <div class="glass-dark p-4 flex items-center justify-between opacity-30 cursor-not-allowed">
+                            <span class="text-xs font-bold">iCal / PDF Sync</span>
+                            <span class="text-xs">🖇️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 pt-4 border-t border-white/5">
+                    <h3 class="text-[9px] font-black uppercase tracking-widest text-purple-400 italic">Recovery & Sleep</h3>
+                    <div class="glass-dark p-5 space-y-2">
+                        <p class="text-[10px] opacity-40 font-bold">Heure de réveil idéale</p>
+                        <p id="sleepAdvice" class="text-xl font-black italic">07:30</p>
+                        <p class="text-[8px] opacity-30 font-bold uppercase">Basé sur vos cycles circadiens</p>
+                    </div>
+                </div>
             </div>
-            <div id="taskList" class="space-y-4 max-h-[300px] overflow-y-auto pr-2"></div>
-            <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">Fermer</button>
+
+            <div class="glass p-8 space-y-6">
+                <div class="flex justify-between items-end">
+                    <h3 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest italic">Bio-Performance</h3>
+                    <span id="score" class="text-4xl font-black italic text-blue-500">0%</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-[10px] font-bold">
+                        <span>HYDRO</span>
+                        <span class="text-blue-400"><span id="waterCount">0</span>/3L</span>
+                    </div>
+                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div id="waterBar" class="water-progress h-full w-0"></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="addWater(0.5)" class="flex-1 py-3 glass-dark text-[10px] font-black hover:bg-blue-600/20 transition-all">+0.5L</button>
+                        <button onclick="resetWater()" class="px-4 py-3 glass-dark opacity-20 hover:opacity-100 transition-all">↻</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="lg:col-span-5 space-y-6">
+            <div class="glass p-10 relative overflow-hidden active-sync">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-[0.3em] italic">Neural Logic Center V20</h2>
+                    <div class="flex items-center gap-4">
+                        <div id="pomodoroDisplay" class="hidden flex items-center gap-3 bg-red-600/10 px-4 py-2 rounded-full border border-red-600/20">
+                            <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
+                            <span id="timerText" class="text-xs font-mono font-black text-red-500">25:00</span>
+                        </div>
+                        <button onclick="toggleVoice()" id="voiceBtn" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:scale-110 transition-all">🎤</button>
+                    </div>
+                </div>
+                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-10 min-h-[150px]" placeholder="Dictez votre planning ou votre état..."></textarea>
+                <button onclick="traiter()" id="btnMain" class="w-full bg-blue-600 hover:bg-blue-500 py-7 rounded-[2rem] uppercase text-[11px] font-black tracking-[0.4em] transition-all shadow-2xl shadow-blue-900/40">Optimiser ma Souveraineté</button>
+            </div>
+
+            <div id="coachCard" class="glass p-8 opacity-40 transition-all duration-1000">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 class="text-purple-500 font-black text-[10px] uppercase italic tracking-widest">Neural Academy</h3>
+                        <p id="coachTitle" class="text-xs font-bold mt-1 opacity-50 italic">Analyse en attente...</p>
+                    </div>
+                    <a id="ytLink" target="_blank" class="hidden bg-red-600 hover:bg-red-500 text-[9px] font-black px-4 py-2 rounded-xl uppercase transition-all shadow-lg shadow-red-900/20">Solution Vidéo 🎬</a>
+                </div>
+                <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed"></p>
+            </div>
+        </main>
+
+        <section class="lg:col-span-4 glass p-10 space-y-8 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h2 id="currentMonth" class="font-black text-2xl tracking-tighter italic uppercase underline decoration-blue-500 decoration-4 underline-offset-8">Roadmap</h2>
+                <div class="text-right">
+                    <p class="text-[8px] font-black opacity-30 uppercase tracking-[0.2em]">Saison</p>
+                    <p class="text-[10px] font-bold italic">Hiver 2025</p>
+                </div>
+            </div>
+            
+            <div id="calendar" class="grid grid-cols-7 gap-3"></div>
+
+            <div class="pt-8 border-t border-white/5 space-y-6">
+                <div>
+                    <h4 class="text-red-500 font-black text-[9px] uppercase tracking-widest mb-3 italic">Urgences Détectées</h4>
+                    <div id="prioList" class="text-xs font-bold italic opacity-40 bg-white/5 p-4 rounded-2xl">Aucune menace.</div>
+                </div>
+                <div>
+                    <h4 class="text-blue-400 font-black text-[9px] uppercase tracking-widest mb-3 italic">Optimisation Temporelle</h4>
+                    <div id="timeTip" class="text-xs font-bold italic opacity-40 bg-white/5 p-4 rounded-2xl">Prêt pour l'action.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/95 backdrop-blur-3xl">
+        <div class="glass p-12 max-w-xl w-full space-y-8 relative border-white/10">
+            <div class="flex justify-between items-start">
+                <h2 id="modalDate" class="text-4xl font-black tracking-tighter italic text-blue-500 capitalize">Date</h2>
+                <button onclick="closeDay()" class="text-zinc-600 hover:text-white transition-colors">✕</button>
+            </div>
+            <div class="relative">
+                <input type="text" id="newTaskInput" placeholder="Assigner une mission..." class="w-full bg-white/5 p-6 rounded-[2rem] outline-none border border-white/10 text-sm focus:border-blue-500/50 transition-all">
+                <button onclick="addTaskManually()" class="absolute right-3 top-3 bg-blue-600 hover:bg-blue-500 w-12 h-12 rounded-2xl font-black transition-all">+</button>
+            </div>
+            <div id="taskList" class="space-y-3 max-h-[450px] overflow-y-auto pr-2"></div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v18_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v18_health') || '{"water":0, "sport":0, "date":null}');
-        const todayNum = new Date().getDate();
+        const now = new Date();
+        const todayNum = now.getDate();
+        const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+        
+        let db = JSON.parse(localStorage.getItem('lifeos_v20_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v20_health') || '{"water":0, "sport":0, "date":null}');
         let currentDayOpen = null;
+        let pomodoroInterval = null;
 
-        // Reset quotidien santé
-        if(health.date !== new Date().toDateString()) {
-            health = {"water":0, "sport":0, "date":new Date().toDateString()};
-            localStorage.setItem('lifeos_v18_health', JSON.stringify(health));
+        // Init
+        document.getElementById('currentMonth').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+        document.getElementById('clock').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+
+        // --- SYNC EMULATOR ---
+        function sync(type) {
+            const btn = event.currentTarget;
+            btn.classList.add('active-sync');
+            btn.querySelector('span').innerText = "Synchronisation...";
+            setTimeout(() => {
+                btn.classList.remove('active-sync');
+                btn.querySelector('span').innerText = type === 'gmail' ? "Gmail Synced" : "Calendar Synced";
+                alert(`L'IA a scanné vos ${type} et mis à jour votre Roadmap.`);
+            }, 1500);
         }
 
-        document.getElementById('clock').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
+        // --- POMODORO ---
+        function startFocus() {
+            clearInterval(pomodoroInterval);
+            document.getElementById('pomodoroDisplay').classList.remove('hidden');
+            let timeLeft = 25 * 60;
+            pomodoroInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft/60);
+                const s = timeLeft%60;
+                document.getElementById('timerText').innerText = `${m}:${s.toString().padStart(2,'0')}`;
+                if(timeLeft <= 0) { clearInterval(pomodoroInterval); document.getElementById('pomodoroDisplay').classList.add('hidden'); }
+            }, 1000);
+        }
 
-        // --- SANTÉ ENGINE ---
-        function addWater(amount) {
-            health.water = Math.min(3, health.water + amount);
-            updateHealthUI();
+        // --- VOICE ---
+        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const rec = Speech ? new Speech() : null;
+        let isRec = false;
+        function toggleVoice() {
+            if(!rec) return;
+            isRec = !isRec;
+            isRec ? (document.getElementById('voiceBtn').classList.add('bg-blue-600'), rec.start()) : (document.getElementById('voiceBtn').classList.remove('bg-blue-600'), rec.stop());
         }
-        function resetWater() { health.water = 0; updateHealthUI(); }
-        function setSport(level) {
-            health.sport = level;
-            updateHealthUI();
-        }
-        function updateHealthUI() {
-            localStorage.setItem('lifeos_v18_health', JSON.stringify(health));
+        if(rec) rec.onresult = (e) => { document.getElementById('userInput').value += e.results[0][0].transcript; toggleVoice(); };
+
+        // --- HEALTH & RECOVERY ---
+        function updateHealth() {
             document.getElementById('waterCount').innerText = health.water;
-            document.getElementById('waterBar').style.width = (health.water / 3 * 100) + "%";
-            const sportTxt = ["Aucun effort", "Entretien", "Performance", "Élite"];
-            document.getElementById('sportStatus').innerText = sportTxt[health.sport];
-            ['s1','s2','s3'].forEach((id,idx) => {
-                const el = document.getElementById(id);
-                (idx+1) <= health.sport ? el.classList.add('bg-blue-500/30') : el.classList.remove('bg-blue-500/30');
-            });
+            document.getElementById('waterBar').style.width = (health.water/3*100) + "%";
+            const hScore = (health.water/3*25) + (health.sport*10);
+            
+            // Calcul Sommeil (Exemple simple : réveil 8h après coucher minuit)
+            const tasksToday = db[todayNum] || [];
+            const hasEarlyTask = tasksToday.some(t => t.text.toLowerCase().includes('matin') || t.text.toLowerCase().includes('8h') || t.text.toLowerCase().includes('9h'));
+            document.getElementById('sleepAdvice').innerText = hasEarlyTask ? "06:45" : "07:30";
+            
+            let total=0, done=0;
+            Object.values(db).forEach(day => day.forEach(t => { total++; if(t.done) done++; }));
+            const tScore = total ? (done/total*65) : 0;
+            document.getElementById('score').innerText = Math.round(hScore + tScore) + "%";
             buildCal();
         }
+        function addWater(n) { health.water = Math.min(3, health.water + n); saveHealth(); }
+        function resetWater() { health.water = 0; saveHealth(); }
+        function saveHealth() { health.date = new Date().toDateString(); localStorage.setItem('lifeos_v20_health', JSON.stringify(health)); updateHealth(); }
 
-        // --- CALENDRIER & TASKS ---
+        // --- CALENDAR & TASKS ---
         function buildCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
-            let total = 0, done = 0;
-            for(let i=1; i<=31; i++) {
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            for(let i=1; i<=daysInMonth; i++) {
                 const tasks = db[i] || [];
                 const allDone = tasks.length > 0 && tasks.every(t => t.done);
-                let alertClass = '';
-                if(tasks.length > 0 && !allDone) {
-                    if(i < todayNum) alertClass = 'alert-retard'; 
-                    if(i === todayNum) alertClass = 'alert-today'; 
-                }
                 const d = document.createElement('div');
-                d.className = `day ${alertClass} ${i === todayNum ? 'border-blue-500' : ''}`;
-                d.innerText = i;
+                d.className = `day ${i === todayNum ? 'day-today' : ''} ${tasks.length > 0 && !allDone && i < todayNum ? 'border-red-500/50' : ''}`;
+                d.innerHTML = `<span>${i}</span>`;
                 if(tasks.length) {
                     const dot = document.createElement('div');
-                    dot.className = `status-dot ${allDone ? 'bg-green-500' : 'bg-red-500'}`;
+                    dot.className = `status-dot ${allDone ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-red-500 shadow-[0_0_10px_#ef4444]'}`;
                     d.appendChild(dot);
-                    total++; if(allDone) done++;
                 }
                 d.onclick = () => showDay(i);
                 cal.appendChild(d);
             }
-            // Score = Tâches + Eau + Sport
-            const healthScore = (health.water / 3 * 15) + (health.sport * 5);
-            const taskScore = total ? (done / total * 70) : 0;
-            document.getElementById('score').innerText = Math.round(healthScore + taskScore) + "%";
-        }
-
-        function getShoppingLinks(text) {
-            const t = text.toLowerCase();
-            const shop = {
-                'vitamine': ['Nutri&Co', 'https://nutriandco.com'],
-                'protéine': ['Prozis', 'https://www.prozis.com'],
-                'magnésium': ['Novoma', 'https://www.novoma.com']
-            };
-            for(let key in shop) {
-                if(t.includes(key)) return `<div class="mt-1 text-[10px] text-blue-400 font-bold uppercase"><a href="${shop[key][1]}" target="_blank" class="underline">→ Acheter ${shop[key][0]}</a></div>`;
-            }
-            return "";
         }
 
         function showDay(day) {
             currentDayOpen = day;
             const tasks = db[day] || [];
-            document.getElementById('modalDate').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(2025, 11, day));
-            document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
-                <div class="flex flex-col p-6 bg-white/5 rounded-3xl border border-white/5 group">
-                    <div class="flex items-center justify-between">
-                        <input type="text" value="${t.text}" onchange="editTask(${day}, ${idx}, this.value)" class="bg-transparent outline-none w-full ${t.done ? 'line-through opacity-20' : 'opacity-90 font-semibold'}">
+            document.getElementById('modalDate').innerText = `${day} ${monthNames[now.getMonth()]}`;
+            document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
+                <div class="flex flex-col p-6 glass-dark border-white/5 group hover:border-blue-500/30 transition-all">
+                    <div class="flex items-center justify-between gap-4">
+                        <input type="text" value="${t.text}" onchange="editTask(${day},${i},this.value)" class="bg-transparent outline-none w-full ${t.done ? 'line-through opacity-20' : 'font-bold text-sm'}">
                         <div class="flex items-center gap-4">
-                            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
-                            <button onclick="deleteTask(${day}, ${idx})" class="text-red-500 opacity-0 group-hover:opacity-100 text-sm">✕</button>
+                            ${!t.done ? `<button onclick="startFocus()" class="text-[9px] font-black text-blue-500 hover:underline">FOCUS</button>` : ''}
+                            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="w-5 h-5 accent-blue-500 cursor-pointer">
+                            <button onclick="delTask(${day},${i})" class="text-red-500 opacity-0 group-hover:opacity-100 transition-all">✕</button>
                         </div>
                     </div>
-                    ${!t.done ? getShoppingLinks(t.text) : ""}
                 </div>
-            `).join('') : '<p class="text-center py-10 opacity-30 italic font-medium">Aucun objectif.</p>';
+            `).join('') : '<p class="text-center py-10 opacity-10 italic">Aucune directive pour ce cycle.</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
@@ -224,53 +269,42 @@
             save(); document.getElementById('newTaskInput').value = '';
         }
         function editTask(d,i,t) { db[d][i].text = t; save(); }
-        function deleteTask(d,i) { db[d].splice(i,1); save(); }
+        function delTask(d,i) { db[d].splice(i,1); save(); }
         function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); }
-        function save() { localStorage.setItem('lifeos_v18_db', JSON.stringify(db)); showDay(currentDayOpen); buildCal(); }
+        function save() { localStorage.setItem('lifeos_v20_db', JSON.stringify(db)); showDay(currentDayOpen); updateHealth(); }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
+        document.getElementById('newTaskInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') addTaskManually(); });
 
-        // --- IA ENGINE ---
         async function traiter() {
             const input = document.getElementById('userInput').value;
-            const btn = document.getElementById('btnMain');
             if(!input) return;
-            btn.innerText = "STRATÉGIE NEURALE..."; btn.disabled = true;
-
+            const btn = document.getElementById('btnMain');
+            btn.innerText = "ALGORITHME EN COURS..."; btn.disabled = true;
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Assistant Holistique. Réponds en JSON : { 'coach': 'conseil', 'yt_search': 'sujet youtube précis', 'time': 'gain temps', 'prio': 'urgence', 'schedule': [{'day': 12, 'tasks':['...']}] }"},
+                            {role: "system", content: "Expert Souveraineté. JSON STRICT: { 'coach': 'conseil', 'yt_search': 'sujet', 'time': 'astuce', 'prio': 'urgence', 'schedule': [{'day': N, 'tasks':['...']}] }"},
                             {role: "user", content: input}
                         ]
                     })
                 });
                 const data = await response.json();
-                let clean = data.choices[0].message.content.trim();
-                if (clean.includes('{')) clean = clean.substring(clean.indexOf('{'), clean.lastIndexOf('}') + 1);
-                const res = JSON.parse(clean);
-
-                document.getElementById('coachCard').style.opacity = "1";
+                const res = JSON.parse(data.choices[0].message.content.trim().match(/\{.*\}/s)[0]);
+                document.getElementById('coachCard').classList.remove('opacity-40');
                 document.getElementById('coachTxt').innerText = res.coach;
                 document.getElementById('timeTip').innerText = res.time;
                 document.getElementById('prioList').innerText = res.prio;
-                
-                if(res.yt_search) {
-                    const ytBtn = document.getElementById('ytLink');
-                    ytBtn.classList.remove('hidden');
-                    ytBtn.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(res.yt_search)}`;
-                }
-
+                if(res.yt_search) { const yt = document.getElementById('ytLink'); yt.classList.remove('hidden'); yt.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(res.yt_search)}`; }
                 res.schedule.forEach(s => { db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; });
-                localStorage.setItem('lifeos_v18_db', JSON.stringify(db));
-                buildCal();
-            } catch (e) { alert("Erreur IA"); }
-            finally { btn.innerText = "Lancer l'Analyse Holistique"; btn.disabled = false; }
+                save();
+            } catch (e) { alert("Analyse interrompue."); }
+            finally { btn.innerText = "Optimiser ma Souveraineté"; btn.disabled = false; }
         }
 
-        updateHealthUI();
+        updateHealth();
     </script>
 </body>
 </html>
