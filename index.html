@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>LifeOS Elite - Test Connexion</title>
+</head>
+<body class="bg-black text-white p-10">
+    <div class="max-w-xl mx-auto space-y-6">
+        <h1 class="text-2xl font-bold">LifeOS <span class="text-blue-500">Elite</span></h1>
+        <div class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800">
+            <textarea id="msg" class="w-full bg-transparent outline-none" placeholder="Tapez 'Bonjour'..."></textarea>
+            <button onclick="tester()" id="btn" class="w-full mt-4 bg-blue-600 p-3 rounded-xl font-bold">TESTER LES 10 EUROS</button>
+        </div>
+        <div id="status" class="text-zinc-500 text-sm italic">Prêt pour le test...</div>
+    </div>
+    <script>
+        async function tester() {
+            const btn = document.getElementById('btn');
+            const status = document.getElementById('status');
+            btn.innerText = "CONNEXION EN COURS...";
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: [{role: "user", content: "Dis moi OK si tu me reçois"}] })
+                });
+                const data = await response.json();
+                status.innerText = "RÉPONSE IA : " + data.choices[0].message.content;
+            } catch (e) {
+                status.innerText = "ERREUR : La connexion a échoué.";
+            } finally { btn.innerText = "TESTER LES 10 EUROS"; }
+        }
+    </script>
+</body>
+</html>
