@@ -2,128 +2,113 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Elite V6.1 - Système Stable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS Ultimate - Espace Privé</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #050505; color: white; -webkit-font-smoothing: antialiased; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem; }
-        .day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 1.2rem; font-size: 0.75rem; background: rgba(255,255,255,0.02); cursor: pointer; transition: all 0.3s ease; position: relative; }
-        .day:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
-        .day.today { border: 2px solid #3b82f6; color: #3b82f6; font-weight: 800; }
-        .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 8px; }
-        .dot-red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
-        .dot-green { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
-        .modal-glass { background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.1); border-radius: 3rem; }
+        body { font-family: 'Inter', sans-serif; transition: all 0.5s ease; }
+        .dark { background: #050505; color: #fff; }
+        .light { background: #f8fafc; color: #0f172a; }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(20px); }
+        .dark .glass { background: rgba(255,255,255,0.02); }
+        .light .glass { background: rgba(0,0,0,0.02); }
+        .day { aspect-ratio: 1; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; cursor: pointer; position: relative; }
+        .status-dot { width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 5px; }
     </style>
 </head>
-<body class="p-4 md:p-12 min-h-full">
+<body class="dark min-h-full p-4 md:p-10">
 
-    <div id="dayModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-        <div class="modal-glass p-10 max-w-lg w-full shadow-2xl space-y-8">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h2 id="modalDate" class="text-3xl font-black tracking-tighter capitalize text-blue-500">Date</h2>
-                    <p class="text-[10px] uppercase tracking-[0.4em] opacity-40 font-bold mt-2 italic">Checklist Quotidienne</p>
-                </div>
-                <button onclick="closeDay()" class="opacity-30 hover:opacity-100 text-3xl">&times;</button>
+    <div id="settings" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+        <div class="glass p-10 w-96 space-y-6">
+            <h2 class="text-xl font-bold italic">PARAMÈTRES SYSTÈME</h2>
+            <div class="space-y-4">
+                <button onclick="toggleTheme()" class="w-full py-3 bg-blue-600 rounded-xl font-bold">MODE CLAIR / SOMBRE</button>
+                <select id="lang" class="w-full py-3 bg-white/10 rounded-xl px-4 outline-none">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
             </div>
-            <div id="taskList" class="space-y-4 max-h-[350px] overflow-y-auto pr-2 text-sm"></div>
-            <button onclick="closeDay()" class="w-full py-5 bg-blue-600 hover:bg-blue-500 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all">Enregistrer & Fermer</button>
+            <button onclick="closeSettings()" class="w-full opacity-50 text-xs underline">Quitter</button>
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto space-y-12">
-        <header class="flex justify-between items-end">
+    <main class="max-w-7xl mx-auto space-y-10">
+        <header class="flex justify-between items-center">
             <div>
-                <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-                <p class="text-[9px] uppercase tracking-[0.5em] opacity-30 font-bold mt-2 italic">Elite Strategic Manager / V6.1 Stable</p>
+                <h1 class="text-3xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
+                <p class="text-[9px] uppercase tracking-[0.4em] opacity-40 font-bold">Utilisateur : Session Privée</p>
             </div>
-            <button onclick="localStorage.clear(); location.reload();" class="text-[9px] uppercase opacity-20 hover:opacity-100 font-bold">Réinitialiser</button>
+            <div class="flex gap-4">
+                <button onclick="openSettings()" class="p-3 glass hover:scale-110 transition-transform">⚙️</button>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div class="lg:col-span-5 space-y-10">
-                <div class="glass p-10">
-                    <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-widest mb-6 tracking-[0.2em]">Flux de Conscience</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-10 leading-relaxed" rows="6" placeholder="Qu'est-ce qui vous préoccupe ?"></textarea>
-                    <button onclick="traiter()" id="btnMain" class="w-full mt-10 bg-blue-600 hover:bg-blue-500 py-6 rounded-3xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-blue-600/20">Lancer l'Analyse IA</button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass p-8">
+                    <h2 class="text-blue-500 font-bold text-[10px] uppercase mb-4">Neural Ingestion</h2>
+                    <textarea id="input" class="w-full bg-transparent outline-none text-xl font-light" rows="5" placeholder="Comment vous sentez-vous ? Que manque-t-il ?"></textarea>
+                    <button onclick="analyser()" id="btn" class="w-full mt-6 bg-blue-600 py-4 rounded-2xl font-black uppercase text-xs">Synchroniser</button>
                 </div>
-                <div id="aiReco" class="glass p-10 opacity-30 transition-opacity">
-                    <h2 class="text-purple-500 font-bold text-[10px] uppercase tracking-widest mb-4 italic">Priorisation</h2>
-                    <p id="recoTxt" class="text-sm font-medium opacity-80 leading-relaxed italic">En attente d'analyse...</p>
+
+                <div id="insights" class="hidden space-y-4 animate-pulse-slow">
+                    <div class="glass p-6 border-purple-500/20">
+                        <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-2 italic">⚡ Coach Neural</h3>
+                        <p id="coachTxt" class="text-sm italic opacity-80"></p>
+                    </div>
+                    <div class="glass p-6 border-green-500/20">
+                        <h3 class="text-green-500 font-bold text-[9px] uppercase mb-2">🛒 Logistique Maison</h3>
+                        <div id="shopList" class="text-sm opacity-80"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass p-10">
-                <div class="flex justify-between items-center mb-12">
-                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Calendrier de Décembre</h2>
+            <div class="lg:col-span-7 glass p-10 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-zinc-500 font-bold text-[10px] uppercase">Roadmap Stratégique</h2>
+                        <button class="text-[9px] bg-white/5 px-3 py-1 rounded-full opacity-50 hover:opacity-100">Lien Email : Connecté</button>
+                    </div>
+                    <div id="calendar" class="grid grid-cols-7 gap-2"></div>
                 </div>
-                <div class="grid grid-cols-7 gap-3 mb-6 opacity-20 text-[9px] font-black text-center uppercase tracking-widest">
-                    <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+
+                <div class="mt-12 pt-8 border-t border-white/5">
+                    <h3 class="text-red-500 font-bold text-[10px] uppercase mb-4 tracking-widest">Focus Urgent</h3>
+                    <div id="prioList" class="text-sm opacity-60">---</div>
                 </div>
-                <div id="calendar" class="grid grid-cols-7 gap-4"></div>
             </div>
         </div>
     </main>
 
     <script>
         const cal = document.getElementById('calendar');
-        let database = JSON.parse(localStorage.getItem('lifeos_final_db') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v7_db') || "{}");
 
-        function getRealDate(day) {
-            const date = new Date(2025, 11, day); // Décembre 2025
-            return new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
-        }
-
-        function buildCalendar() {
+        function buildCal() {
             cal.innerHTML = '';
             for(let i=1; i<=31; i++) {
-                const dayBox = document.createElement('div');
-                const tasks = database[i] || [];
-                dayBox.className = `day ${i === new Date().getDate() ? 'today' : ''}`;
-                dayBox.innerHTML = `<span>${i}</span>`;
-                
-                if(tasks.length > 0) {
-                    const allDone = tasks.every(t => t.done === true);
-                    const dot = document.createElement('div');
-                    dot.className = `status-dot ${allDone ? 'dot-green' : 'dot-red'}`;
-                    dayBox.appendChild(dot);
+                const tasks = db[i] || [];
+                const d = document.createElement('div');
+                d.className = `day ${tasks.length ? 'bg-blue-500/10' : 'bg-white/5'}`;
+                d.innerText = i;
+                if(tasks.length) {
+                    const allDone = tasks.every(t => t.done);
+                    d.innerHTML += `<div class="status-dot ${allDone ? 'bg-green-500' : 'bg-red-500'}"></div>`;
                 }
-                dayBox.onclick = () => showDay(i);
-                cal.appendChild(dayBox);
+                cal.appendChild(d);
             }
         }
 
-        function showDay(day) {
-            const tasks = database[day] || [];
-            document.getElementById('modalDate').innerText = getRealDate(day);
-            const listContainer = document.getElementById('taskList');
-            listContainer.innerHTML = tasks.length > 0 ? tasks.map((t, idx) => `
-                <div class="flex items-center justify-between p-5 bg-white/5 rounded-3xl border border-white/5">
-                    <span class="${t.done ? 'line-through opacity-20' : 'opacity-80'}">${t.text}</span>
-                    <input type="checkbox" class="w-6 h-6 rounded-lg accent-blue-600" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
-                </div>
-            `).join('') : '<p class="opacity-30 italic text-center py-10">Rien de prévu.</p>';
-            document.getElementById('dayModal').classList.remove('hidden');
-        }
+        function toggleTheme() { document.body.classList.toggle('light'); document.body.classList.toggle('dark'); }
+        function openSettings() { document.getElementById('settings').classList.remove('hidden'); }
+        function closeSettings() { document.getElementById('settings').classList.add('hidden'); }
 
-        function toggleTask(day, idx) {
-            database[day][idx].done = !database[day][idx].done;
-            localStorage.setItem('lifeos_final_db', JSON.stringify(database));
-            showDay(day); 
-            buildCalendar(); 
-        }
-
-        function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-
-        async function traiter() {
-            const input = document.getElementById('userInput').value;
-            const btn = document.getElementById('btnMain');
-            if(!input) return;
-
-            btn.innerText = "CALCUL IA..."; btn.disabled = true;
+        async function analyser() {
+            const txt = document.getElementById('input').value;
+            const btn = document.getElementById('btn');
+            btn.innerText = "IA PROCESSING..."; btn.disabled = true;
 
             try {
                 const response = await fetch('/api/chat', {
@@ -131,31 +116,26 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Réponds UNIQUEMENT en JSON : { 'reco': '...', 'schedule': [ {'day': 26, 'tasks': ['...']} ] }"},
-                            {role: "user", content: input}
+                            {role: "system", content: "Tu es un coach et assistant. Analyse les sentiments et besoins. Réponds UNIQUEMENT en JSON : { 'reco': 'conseil santé/sport précis', 'shopping': ['item1'], 'schedule': [{'day': 12, 'tasks':['...']}], 'prio': '...' }"},
+                            {role: "user", content: txt}
                         ]
                     })
                 });
-
                 const data = await response.json();
                 const res = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, ""));
 
-                res.schedule.forEach(item => {
-                    const newTasks = item.tasks.map(t => ({ text: t, done: false }));
-                    database[item.day] = [...(database[item.day] || []), ...newTasks];
-                });
+                document.getElementById('insights').classList.remove('hidden');
+                document.getElementById('coachTxt').innerText = res.reco;
+                document.getElementById('shopList').innerHTML = res.shopping.map(i => `• ${i}`).join('<br>');
+                document.getElementById('prioList').innerText = res.prio;
 
-                localStorage.setItem('lifeos_final_db', JSON.stringify(database));
-                document.getElementById('recoTxt').innerText = res.reco;
-                document.getElementById('aiReco').style.opacity = "1";
-                buildCalendar();
-            } catch (e) {
-                alert("Erreur Système : Réessayez avec un texte plus court.");
-            } finally {
-                btn.innerText = "Lancer l'Analyse IA"; btn.disabled = false;
-            }
+                res.schedule.forEach(s => { db[s.day] = s.tasks.map(t => ({text: t, done: false})); });
+                localStorage.setItem('lifeos_v7_db', JSON.stringify(db));
+                buildCal();
+            } catch (e) { alert("Erreur de synchronisation."); }
+            finally { btn.innerText = "Synchroniser"; btn.disabled = false; }
         }
-        buildCalendar();
+        buildCal();
     </script>
 </body>
 </html>
