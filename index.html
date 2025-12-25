@@ -2,34 +2,112 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>LifeOS Elite - Test Connexion</title>
+    <title>LifeOS Elite - Market Leader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #050505; color: white; }
+        .bento-card { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; transition: all 0.3s; }
+        .grid-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 0.8rem; background: rgba(255,255,255,0.03); font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.05); }
+        .day.active { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); border: none; }
+    </style>
 </head>
-<body class="bg-black text-white p-10">
-    <div class="max-w-xl mx-auto space-y-6">
-        <h1 class="text-2xl font-bold">LifeOS <span class="text-blue-500">Elite</span></h1>
-        <div class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800">
-            <textarea id="msg" class="w-full bg-transparent outline-none" placeholder="Tapez 'Bonjour'..."></textarea>
-            <button onclick="tester()" id="btn" class="w-full mt-4 bg-blue-600 p-3 rounded-xl font-bold">TESTER LES 10 EUROS</button>
+<body class="p-4 md:p-10">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span> <span class="text-xs opacity-50 block not-italic font-medium">ELITE EDITION / V2.0</span></h1>
+            <div class="text-right text-xs opacity-40 uppercase tracking-widest">Décembre 2025</div>
         </div>
-        <div id="status" class="text-zinc-500 text-sm italic">Prêt pour le test...</div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bento-card p-8">
+                    <h2 class="text-blue-500 font-bold text-xs uppercase tracking-widest mb-4">Capture de Flux</h2>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-xl font-light placeholder:opacity-20" rows="6" placeholder="Quoi de neuf aujourd'hui ?"></textarea>
+                    <button onclick="traiter()" id="mainBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition-all uppercase tracking-tighter">Analyser & Stratégiser</button>
+                </div>
+                
+                <div id="reco" class="bento-card p-8 opacity-50">
+                    <h2 class="text-purple-500 font-bold text-xs uppercase tracking-widest mb-2">Recommandation</h2>
+                    <p id="recoTxt" class="text-sm font-light">En attente d'analyse...</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 bento-card p-8">
+                <h2 class="text-zinc-500 font-bold text-xs uppercase tracking-widest mb-6 text-center">Calendrier Stratégique Mensuel</h2>
+                <div class="grid-calendar" id="calendar">
+                    </div>
+
+                <div class="grid grid-cols-2 gap-6 mt-12">
+                    <div>
+                        <h3 class="text-red-500 font-bold text-[10px] uppercase tracking-widest mb-3">Priorités Imminentes</h3>
+                        <div id="prioList" class="space-y-2 text-sm font-light opacity-80">---</div>
+                    </div>
+                    <div>
+                        <h3 class="text-green-500 font-bold text-[10px] uppercase tracking-widest mb-3">Logistique & Courses</h3>
+                        <div id="logList" class="space-y-2 text-sm font-light opacity-80">---</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <script>
-        async function tester() {
-            const btn = document.getElementById('btn');
-            const status = document.getElementById('status');
-            btn.innerText = "CONNEXION EN COURS...";
+        // Générer le calendrier
+        const cal = document.getElementById('calendar');
+        for(let i=1; i<=31; i++) {
+            const d = document.createElement('div');
+            d.className = 'day';
+            d.id = 'day-' + i;
+            d.innerText = i;
+            cal.appendChild(d);
+        }
+
+        async function traiter() {
+            const input = document.getElementById('userInput').value;
+            const btn = document.getElementById('mainBtn');
+            if(!input) return;
+
+            btn.innerText = "ALGORITHME EN COURS...";
+            btn.disabled = true;
+
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: [{role: "user", content: "Dis moi OK si tu me reçois"}] })
+                    body: JSON.stringify({
+                        messages: [
+                            {role: "system", content: "Tu es un assistant stratégique. Réponds UNIQUEMENT en JSON avec : { 'prio': 'string court', 'log': ['item1', 'item2'], 'reco': 'conseil court', 'days': [nombres des jours actifs] }"},
+                            {role: "user", content: input}
+                        ]
+                    })
                 });
+
                 const data = await response.json();
-                status.innerText = "RÉPONSE IA : " + data.choices[0].message.content;
+                const cleanJson = data.choices[0].message.content.replace(/```json|```/g, "");
+                const res = JSON.parse(cleanJson);
+
+                // Update UI
+                document.getElementById('prioList').innerText = res.prio;
+                document.getElementById('logList').innerHTML = res.log.map(i => `• ${i}`).join('<br>');
+                document.getElementById('recoTxt').innerText = res.reco;
+                document.getElementById('reco').style.opacity = "1";
+
+                // Update Calendar
+                document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+                res.days.forEach(day => {
+                    const el = document.getElementById('day-' + day);
+                    if(el) el.classList.add('active');
+                });
+
             } catch (e) {
-                status.innerText = "ERREUR : La connexion a échoué.";
-            } finally { btn.innerText = "TESTER LES 10 EUROS"; }
+                alert("Erreur d'analyse. Vérifie tes crédits OpenRouter.");
+            } finally {
+                btn.innerText = "Analyser & Stratégiser";
+                btn.disabled = false;
+            }
         }
     </script>
 </body>
