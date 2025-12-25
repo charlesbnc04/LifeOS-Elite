@@ -2,148 +2,107 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Elite - Intelligence Stratégique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS Elite - Assistant Proactif</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { executive: '#3b82f6' }
-                }
-            }
-        }
-    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; transition: background 0.5s ease; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .light .glass { background: rgba(0, 0, 0, 0.02); border: 1px solid rgba(0, 0, 0, 0.05); }
-        .bento-card { border-radius: 2.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .grid-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.6rem; }
-        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 1.2rem; font-size: 0.8rem; font-weight: 500; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .day.active { background: #3b82f6; color: white !important; transform: scale(1.1); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); border: none; }
-        .loading-pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #050505; color: white; -webkit-font-smoothing: antialiased; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem; }
+        .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 1rem; font-size: 0.75rem; background: rgba(255,255,255,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .day.active { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); transform: scale(1.1); border: none; }
+        .suggestion-card { background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.1) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 1.5rem; margin-top: 1rem; }
     </style>
 </head>
-<body class="dark bg-[#050505] text-white light:bg-[#fcfcfc] light:text-zinc-900 min-h-full">
+<body class="p-4 md:p-10 min-h-full">
 
-    <div id="setMod" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
-        <div class="glass bento-card p-10 w-96 space-y-8 shadow-2xl">
-            <h2 class="text-2xl font-black tracking-tighter italic italic">SYSTEM_CONFIG</h2>
-            <div class="space-y-6">
-                <div>
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 block mb-3">Interface Theme</label>
-                    <button onclick="toggleTheme()" class="w-full py-4 rounded-2xl bg-executive text-white font-bold text-xs uppercase tracking-widest">Toggle Light/Dark</button>
-                </div>
-                <div>
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 block mb-3">Global Language</label>
-                    <select id="langSel" onchange="updateLang()" class="w-full py-4 px-4 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 outline-none font-semibold text-sm">
-                        <option value="fr">Français (FR)</option>
-                        <option value="en">English (US)</option>
-                    </select>
-                </div>
+    <main class="max-w-7xl mx-auto space-y-8">
+        <header class="flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
+                <p class="text-[10px] uppercase tracking-[0.4em] opacity-30 font-bold">Assistant Personnel Prédictif / V3.0</p>
             </div>
-            <button onclick="closeSettings()" class="w-full text-center text-xs opacity-30 hover:opacity-100 transition-opacity pt-4">Exit Settings</button>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto px-6 py-12 md:px-12 space-y-12">
-        <nav class="flex justify-between items-center">
-            <div class="group cursor-pointer">
-                <h1 class="text-3xl font-black italic tracking-tighter leading-none">LIFE<span class="text-executive">OS</span></h1>
-                <p class="text-[9px] uppercase tracking-[0.4em] font-extrabold opacity-30 mt-1">Market Leader / v2.1</p>
+            <div class="flex gap-4">
+                <button onclick="clearMemory()" class="text-[9px] uppercase opacity-20 hover:opacity-100 transition-opacity">Réinitialiser Mémoire</button>
             </div>
-            <button onclick="openSettings()" class="p-3 rounded-full glass hover:scale-110 transition-transform">
-                <svg class="w-5 h-5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            </button>
-        </nav>
+        </header>
 
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-5 space-y-10">
-                <div class="glass bento-card p-10 relative overflow-hidden">
-                    <div class="flex items-center justify-between mb-8">
-                        <span id="txtFlux" class="text-[10px] font-black uppercase tracking-[0.2em] text-executive">Capture de Flux</span>
-                        <span class="w-2 h-2 rounded-full bg-executive shadow-[0_0_10px_#3b82f6]"></span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass p-8">
+                    <h2 class="text-blue-500 font-bold text-[10px] uppercase tracking-widest mb-4">Neural Input</h2>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-xl font-light placeholder:opacity-10" rows="5" placeholder="Décrivez votre journée ou vos blocages..."></textarea>
+                    <button onclick="analyser()" id="btnMain" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black uppercase text-sm tracking-tighter shadow-xl transition-all active:scale-95">Synchroniser l'Assistant</button>
+                </div>
+
+                <div id="proactiveZone" class="hidden">
+                    <div class="glass p-8 border-purple-500/20">
+                        <h2 class="text-purple-500 font-bold text-[10px] uppercase tracking-widest mb-4 italic">⚡ Assistant Proactif</h2>
+                        <div id="suggestionsList" class="space-y-4">
+                            </div>
                     </div>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-10 leading-snug min-h-[200px]" placeholder="Déchargez votre esprit ici..."></textarea>
-                    <button onclick="traiter()" id="btnGo" class="w-full mt-10 py-6 rounded-[1.8rem] bg-executive hover:bg-blue-500 text-white font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95">Traiter la Stratégie</button>
-                </div>
-
-                <div id="recoZone" class="glass bento-card p-10 opacity-30 transition-opacity duration-1000">
-                    <h3 id="txtReco" class="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500 mb-4">Conseil Stratégique</h3>
-                    <p id="recoTxt" class="text-sm font-medium leading-relaxed opacity-70 italic">En attente de données pour générer une recommandation personnalisée...</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass bento-card p-12 flex flex-col justify-between shadow-2xl">
+            <div class="lg:col-span-7 glass p-10 flex flex-col justify-between">
                 <div>
-                    <div class="flex justify-between items-end mb-12">
-                        <h2 id="txtCal" class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Planification Mensuelle</h2>
-                        <div class="text-right">
-                            <span class="text-2xl font-black italic tracking-tighter leading-none block">DÉCEMBRE</span>
-                            <span class="text-[10px] opacity-30 font-bold uppercase tracking-widest">2025</span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-7 gap-2 mb-6 opacity-20 text-[9px] font-black text-center uppercase tracking-widest">
+                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest mb-8">Roadmap Stratégique Mensuelle</h2>
+                    <div class="grid grid-cols-7 gap-2 opacity-20 text-[9px] font-black text-center mb-4 uppercase">
                         <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
                     </div>
-                    <div id="calendar" class="grid-calendar"></div>
+                    <div id="calendar" class="grid grid-cols-7 gap-2"></div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 pt-12 border-t border-white/5">
-                    <div class="space-y-4">
-                        <h4 id="txtPrio" class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">Urgences Vitales</h4>
-                        <div id="prioList" class="text-sm font-semibold opacity-60 min-h-[50px]">---</div>
+                <div class="grid grid-cols-2 gap-8 mt-12 pt-8 border-t border-white/5">
+                    <div>
+                        <h3 class="text-red-500 font-bold text-[10px] uppercase tracking-widest mb-4">Focus Urgent</h3>
+                        <div id="prioList" class="text-sm font-medium opacity-60">---</div>
                     </div>
-                    <div class="space-y-4">
-                        <h4 id="txtLog" class="text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Logistique Requise</h4>
-                        <div id="logList" class="text-sm font-semibold opacity-60 min-h-[50px]">---</div>
+                    <div>
+                        <h3 class="text-green-500 font-bold text-[10px] uppercase tracking-widest mb-4">Automatisations & Courses</h3>
+                        <div id="logList" class="text-sm font-medium opacity-60">---</div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
     <script>
-        // Init Calendar
+        // Init Calendrier
         const cal = document.getElementById('calendar');
         for(let i=1; i<=31; i++) {
             const d = document.createElement('div');
-            d.className = 'day bg-white/[0.02] dark:bg-white/[0.03] text-zinc-500';
-            d.id = 'day-' + i; d.innerText = i;
+            d.className = 'day'; d.id = 'day-' + i; d.innerText = i;
             cal.appendChild(d);
         }
 
-        // Translation & Logic
-        let lang = 'fr';
-        const ui = {
-            fr: { flux: "Capture de Flux", reco: "Conseil Stratégique", cal: "Planification Mensuelle", prio: "Urgences Vitales", log: "Logistique Requise", btn: "Traiter la Stratégie", wait: "IA en cours...", error: "Erreur Système : Vérifiez vos crédits." },
-            en: { flux: "Neural Ingestion", reco: "Strategic Advisory", cal: "Monthly Roadmap", prio: "Critical Path", log: "Required Logistics", btn: "Execute Strategy", wait: "Processing...", error: "System Error: Check Credits." }
-        };
-
-        function openSettings() { document.getElementById('setMod').classList.remove('hidden'); }
-        function closeSettings() { document.getElementById('setMod').classList.add('hidden'); }
-        function toggleTheme() { document.body.classList.toggle('dark'); document.body.classList.toggle('light'); }
-        function updateLang() {
-            lang = document.getElementById('langSel').value;
-            document.getElementById('txtFlux').innerText = ui[lang].flux;
-            document.getElementById('txtReco').innerText = ui[lang].reco;
-            document.getElementById('txtCal').innerText = ui[lang].cal;
-            document.getElementById('txtPrio').innerText = ui[lang].prio;
-            document.getElementById('txtLog').innerText = ui[lang].log;
-            document.getElementById('btnGo').innerText = ui[lang].btn;
+        // Système de Mémoire (LocalStorage)
+        function saveToMemory(txt) {
+            let history = JSON.parse(localStorage.getItem('lifeos_history') || "[]");
+            history.push({ date: new Date().toISOString(), text: txt });
+            if(history.length > 10) history.shift(); // Garde les 10 derniers
+            localStorage.setItem('lifeos_history', JSON.stringify(history));
         }
 
-        async function traiter() {
+        function getMemory() {
+            return localStorage.getItem('lifeos_history') || "[]";
+        }
+
+        function clearMemory() {
+            localStorage.removeItem('lifeos_history');
+            location.reload();
+        }
+
+        async function analyser() {
             const input = document.getElementById('userInput').value;
-            const btn = document.getElementById('btnGo');
+            const btn = document.getElementById('btnMain');
             if(!input) return;
 
-            btn.innerText = ui[lang].wait; btn.classList.add('loading-pulse'); btn.disabled = true;
+            btn.innerText = "IA EN SYNCHRONISATION...";
+            btn.disabled = true;
+
+            const historyContext = getMemory();
+            saveToMemory(input);
 
             try {
                 const response = await fetch('/api/chat', {
@@ -151,32 +110,50 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Expert en productivité. Analyse le texte et réponds UNIQUEMENT en JSON: { 'prio': 'court et impactant', 'log': ['item1', 'item2'], 'reco': 'une phrase de coach de haut niveau', 'days': [1, 2] }"},
+                            {role: "system", content: `Tu es un assistant personnel d'élite. Tu as accès à l'historique récent de l'utilisateur : ${historyContext}. 
+                            Analyse le présent et suggère des optimisations basées sur ses habitudes. 
+                            Réponds UNIQUEMENT en JSON : {
+                                "prio": "urgence du moment",
+                                "log": ["courses/logistique"],
+                                "days": [1, 2],
+                                "suggestions": ["Astuce gain de temps 1", "Suggestion d'habitude 2"],
+                                "recommandation": "Le conseil proactif principal"
+                            }`},
                             {role: "user", content: input}
                         ]
                     })
                 });
 
                 const data = await response.json();
-                let content = data.choices[0].message.content;
-                // Nettoyage JSON pour éviter les erreurs d'analyse (Image 39)
-                content = content.replace(/```json|```/g, "").trim();
-                const res = JSON.parse(content);
+                const res = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, ""));
 
+                // Mise à jour de l'interface
                 document.getElementById('prioList').innerText = res.prio;
                 document.getElementById('logList').innerHTML = res.log.map(i => `• ${i}`).join('<br>');
-                document.getElementById('recoTxt').innerText = res.reco;
-                document.getElementById('recoZone').classList.remove('opacity-30');
+                
+                // Affichage des suggestions proactives
+                const sugZone = document.getElementById('proactiveZone');
+                const sugList = document.getElementById('suggestionsList');
+                sugZone.classList.remove('hidden');
+                sugList.innerHTML = res.suggestions.map(s => `
+                    <div class="suggestion-card">
+                        <p class="text-xs font-semibold text-purple-300 mb-1">💡 OPTIMISATION</p>
+                        <p class="text-sm opacity-80">${s}</p>
+                    </div>
+                `).join('');
 
+                // Calendrier
                 document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
                 res.days.forEach(day => {
                     const el = document.getElementById('day-' + day);
                     if(el) el.classList.add('active');
                 });
+
             } catch (e) {
-                console.error(e); alert(ui[lang].error);
+                alert("Erreur d'analyse. Vérifiez votre clé.");
             } finally {
-                btn.innerText = ui[lang].btn; btn.classList.remove('loading-pulse'); btn.disabled = false;
+                btn.innerText = "Synchroniser l'Assistant";
+                btn.disabled = false;
             }
         }
     </script>
