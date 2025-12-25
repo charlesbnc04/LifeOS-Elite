@@ -3,101 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign Ultimate - V12.0</title>
+    <title>LifeOS Sovereign - V12.1 Alerte Système</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.4s ease; -webkit-font-smoothing: antialiased; }
-        .dark { background: #020202; color: #fff; }
-        .light { background: #f8fafc; color: #0f172a; }
-        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(30px); }
-        .dark .glass { background: rgba(255,255,255,0.03); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020202; color: #fff; -webkit-font-smoothing: antialiased; }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(30px); background: rgba(255,255,255,0.03); }
         
-        /* ANIMATION CLIGNOTEMENT ROUGE */
-        @keyframes soft-blink {
-            0% { border-color: rgba(239, 68, 68, 0.2); box-shadow: 0 0 5px rgba(239, 68, 68, 0.1); }
-            50% { border-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
-            100% { border-color: rgba(239, 68, 68, 0.2); box-shadow: 0 0 5px rgba(239, 68, 68, 0.1); }
+        /* ANIMATIONS DE CLIGNOTEMENT */
+        @keyframes blink-red {
+            0%, 100% { border-color: rgba(239, 68, 68, 0.2); box-shadow: 0 0 5px rgba(239, 68, 68, 0.1); }
+            50% { border-color: rgba(239, 68, 68, 1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
         }
-        .blink-red { animation: soft-blink 2s infinite ease-in-out; border: 2px solid #ef4444 !important; }
+        @keyframes blink-orange {
+            0%, 100% { border-color: rgba(249, 115, 22, 0.2); box-shadow: 0 0 5px rgba(249, 115, 22, 0.1); }
+            50% { border-color: rgba(249, 115, 22, 1); box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); }
+        }
+        .alert-retard { animation: blink-red 1.5s infinite ease-in-out; border: 2px solid #ef4444 !important; }
+        .alert-today { animation: blink-orange 2s infinite ease-in-out; border: 2px solid #f97316 !important; }
 
         .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; position: relative; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid transparent; }
-        .day:hover { transform: scale(1.1); background: #3b82f6; }
+        .day:hover { transform: scale(1.1); background: rgba(59, 130, 246, 0.2); }
         .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 8px; }
-        .btn-gradient { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; }
-        .btn-gradient:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; }
         input[type="checkbox"] { width: 1.4rem; height: 1.4rem; border-radius: 0.5rem; accent-color: #3b82f6; cursor: pointer; }
     </style>
 </head>
-<body class="dark min-h-full p-4 md:p-10">
+<body class="p-4 md:p-10 min-h-full">
 
     <div id="authModal" class="fixed inset-0 z-[300] flex items-center justify-center bg-black/95 backdrop-blur-2xl">
         <div class="glass p-12 w-full max-w-md text-center space-y-8">
             <h1 class="text-4xl font-extrabold italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-            <input type="text" id="usernameInput" placeholder="Identifiant Souverain" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/10 text-center text-xl">
-            <button onclick="login()" class="w-full btn-gradient py-5 rounded-2xl font-black uppercase text-xs tracking-widest">Initialiser la Session</button>
+            <input type="text" id="usernameInput" placeholder="Identifiant" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/10 text-center">
+            <button onclick="login()" class="w-full btn-premium py-5 rounded-2xl font-black uppercase text-xs tracking-widest">Initialiser</button>
         </div>
     </div>
 
     <main id="mainApp" class="hidden max-w-7xl mx-auto space-y-12">
-        <header class="flex justify-between items-center px-4">
-            <div class="flex items-center gap-6">
-                <div id="avatar" class="w-14 h-14 rounded-full btn-gradient flex items-center justify-center font-black text-2xl italic">U</div>
-                <h2 id="greeting" class="text-2xl font-black italic tracking-tighter italic">HELLO, USER</h2>
-            </div>
-            <button onclick="localStorage.clear(); location.reload();" class="p-4 glass text-[9px] font-black opacity-30">RESET</button>
+        <header class="flex justify-between items-center">
+            <h1 class="text-3xl font-black italic italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
+            <button onclick="localStorage.clear(); location.reload();" class="opacity-20 text-[10px] font-bold uppercase">Reset Système</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-5 space-y-8">
                 <div class="glass p-10 space-y-6">
-                    <h3 class="text-blue-500 font-bold text-[10px] uppercase tracking-widest">Neural Flux Ingestion</h3>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="Décrivez votre chaos..."></textarea>
-                    <button onclick="traiter()" id="btnMain" class="w-full btn-gradient py-6 rounded-3xl font-black uppercase text-[10px] tracking-widest">Analyser & Optimiser</button>
+                    <h3 class="text-blue-500 font-bold text-[10px] uppercase">Neural Ingestion</h3>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light" rows="5" placeholder="Votre flux..."></textarea>
+                    <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-6 rounded-3xl font-black uppercase text-xs">Analyser</button>
                 </div>
                 <div id="coachCard" class="glass p-8 border-purple-500/20 opacity-30">
-                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-4 italic tracking-widest">⚡ Neural Coach</h3>
-                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed">Attente de diagnostic...</p>
+                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-2">⚡ Coach</h3>
+                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed"></p>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass p-10 flex flex-col justify-between shadow-2xl">
-                <div>
-                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em] mb-12">Roadmap Tactique</h2>
-                    <div id="calendar" class="grid grid-cols-7 gap-4"></div>
-                </div>
-                <div class="mt-16 pt-10 border-t border-white/5 grid grid-cols-2 gap-10">
-                    <div>
-                        <h4 class="text-red-500 font-bold text-[10px] uppercase mb-3">Priorité Critique</h4>
-                        <p id="prioList" class="text-sm font-bold opacity-70 italic">---</p>
-                    </div>
-                    <div>
-                        <h4 class="text-blue-400 font-bold text-[10px] uppercase mb-3">Gain de Temps</h4>
-                        <p id="timeTip" class="text-xs font-semibold opacity-90 italic">---</p>
+            <div class="lg:col-span-7 glass p-10">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Roadmap Décembre</h2>
+                    <div class="flex gap-4 text-[8px] font-bold uppercase tracking-tighter">
+                        <span class="text-orange-500">● Aujourd'hui</span>
+                        <span class="text-red-500">● Retard</span>
                     </div>
                 </div>
-                <div class="mt-6 flex justify-between items-center bg-white/5 p-6 rounded-3xl">
-                    <span class="text-[9px] uppercase font-black opacity-30 tracking-widest text-blue-500">Score de Performance : <span id="score" class="text-2xl ml-2">0%</span></span>
-                </div>
+                <div id="calendar" class="grid grid-cols-7 gap-4"></div>
             </div>
         </div>
     </main>
 
     <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
-        <div class="glass p-12 max-w-lg w-full space-y-8 border-white/10">
-            <h2 id="modalDate" class="text-3xl font-black tracking-tighter italic">Date</h2>
+        <div class="glass p-12 max-w-lg w-full space-y-8">
+            <h2 id="modalDate" class="text-3xl font-black tracking-tighter capitalize">Date</h2>
             <div id="taskList" class="space-y-4"></div>
             
             <div id="vitaminRecos" class="hidden p-6 bg-blue-500/10 rounded-[2rem] border border-blue-500/20">
-                <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">🛒 Recommandations Experts (Vitamines)</p>
+                <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3 italic">🛒 Sites recommandés</p>
                 <div class="flex flex-col gap-2 text-xs font-bold">
-                    <a href="https://nutriandco.com" target="_blank" class="text-white hover:text-blue-400 transition-colors">→ Nutri&Co (Qualité Française)</a>
-                    <a href="https://www.novoma.com" target="_blank" class="text-white hover:text-blue-400 transition-colors">→ Novoma (Bio-disponibilité élevée)</a>
-                    <a href="https://www.sunday.fr" target="_blank" class="text-white hover:text-blue-400 transition-colors">→ Sunday Natural (Pureté absolue)</a>
+                    <a href="https://nutriandco.com" target="_blank" class="hover:text-blue-400 transition-colors">→ Nutri&Co</a>
+                    <a href="https://www.novoma.com" target="_blank" class="hover:text-blue-400 transition-colors">→ Novoma</a>
                 </div>
             </div>
-
-            <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black uppercase text-[10px] tracking-widest">Enregistrer</button>
+            <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black uppercase text-[10px]">Fermer</button>
         </div>
     </div>
 
@@ -116,40 +102,38 @@
         if(user) {
             document.getElementById('authModal').style.display = 'none';
             document.getElementById('mainApp').classList.remove('hidden');
-            document.getElementById('greeting').innerText = `ACCESS_GRANTED // ${user.toUpperCase()}`;
         }
 
         function buildCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
-            let total = 0, doneCount = 0;
             for(let i=1; i<=31; i++) {
                 const tasks = db[i] || [];
                 const d = document.createElement('div');
                 const allDone = tasks.length > 0 && tasks.every(t => t.done);
                 
-                // LOGIQUE CLIGNOTEMENT ROUGE
-                let isBlinking = (i === todayNum && tasks.length > 0 && !allDone);
-                
-                d.className = `day ${i === todayNum ? 'border-2 border-blue-500' : ''} ${tasks.length ? 'bg-blue-500/10' : ''} ${isBlinking ? 'blink-red' : ''}`;
+                // LOGIQUE D'ALERTE DYNAMIQUE
+                let alertClass = '';
+                if(tasks.length > 0 && !allDone) {
+                    if(i < todayNum) alertClass = 'alert-retard'; // Rouge si passé
+                    if(i === todayNum) alertClass = 'alert-today'; // Orange si aujourd'hui
+                }
+
+                d.className = `day ${alertClass} ${i === todayNum ? 'border-zinc-500' : ''}`;
                 d.innerText = i;
                 
                 if(tasks.length) {
                     const dot = document.createElement('div');
                     dot.className = `status-dot ${allDone ? 'bg-green-500' : 'bg-red-500'}`;
                     d.appendChild(dot);
-                    total++; if(allDone) doneCount++;
                 }
                 d.onclick = () => showDay(i);
                 cal.appendChild(d);
             }
-            document.getElementById('score').innerText = total ? Math.round((doneCount/total)*100) + "%" : "0%";
         }
 
         function showDay(day) {
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(2025, 11, day));
-            
-            // Affichage des tâches
             document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
                 <div class="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5">
                     <span class="${t.done ? 'line-through opacity-20' : 'opacity-80 font-medium'}">${t.text}</span>
@@ -157,15 +141,8 @@
                 </div>
             `).join('') : '<p class="text-center py-10 opacity-30 italic">Rien de planifié.</p>';
 
-            // LOGIQUE RECOMMANDATION VITAMINES
             const hasVitamins = tasks.some(t => t.text.toLowerCase().includes('vitamine'));
-            const recoDiv = document.getElementById('vitaminRecos');
-            if(hasVitamins) {
-                recoDiv.classList.remove('hidden');
-            } else {
-                recoDiv.classList.add('hidden');
-            }
-
+            document.getElementById('vitaminRecos').className = hasVitamins ? 'block p-6 bg-blue-500/10 rounded-[2rem] border border-blue-500/20' : 'hidden';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
@@ -182,33 +159,26 @@
             const btn = document.getElementById('btnMain');
             if(!input) return;
             btn.innerText = "IA NEURAL SYNC..."; btn.disabled = true;
-
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Expert High-Performance. Réponds UNIQUEMENT en JSON : { 'coach': 'conseil santé/mental', 'shop': ['items'], 'time': 'gain de temps', 'prio': 'urgence', 'schedule': [{'day': 12, 'tasks':['...']}] }"},
+                            {role: "system", content: "Expert. Réponds UNIQUEMENT en JSON : { 'coach': '...', 'schedule': [{'day': 12, 'tasks':['...']}] }"},
                             {role: "user", content: input}
                         ]
                     })
                 });
                 const data = await response.json();
                 const res = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, ""));
-
                 document.getElementById('coachCard').style.opacity = "1";
                 document.getElementById('coachTxt').innerText = res.coach;
-                document.getElementById('prioList').innerText = res.prio;
-                document.getElementById('timeTip').innerText = res.time;
-
-                res.schedule.forEach(s => { 
-                    db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; 
-                });
+                res.schedule.forEach(s => { db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; });
                 localStorage.setItem('lifeos_v12_db', JSON.stringify(db));
                 buildCal();
             } catch (e) { alert("Erreur IA"); }
-            finally { btn.innerText = "Analyser & Optimiser"; btn.disabled = false; }
+            finally { btn.innerText = "Analyser"; btn.disabled = false; }
         }
         buildCal();
     </script>
