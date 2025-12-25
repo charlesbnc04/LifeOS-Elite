@@ -3,105 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign - Espace Privé</title>
+    <title>LifeOS Sovereign V9 - Réveil Stratégique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.5s ease; -webkit-font-smoothing: antialiased; }
         .dark { background: #000; color: #fff; }
         .light { background: #fdfdfd; color: #111; }
-        .glass { border-radius: 2rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(40px); transition: all 0.4s ease; }
-        .dark .glass { background: rgba(255,255,255,0.03); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .light .glass { background: rgba(0,0,0,0.02); box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
-        .day { aspect-ratio: 1; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.7rem; cursor: pointer; position: relative; border: 1px solid transparent; }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(40px); }
+        .dark .glass { background: rgba(255,255,255,0.03); }
+        .light .glass { background: rgba(0,0,0,0.02); }
+        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; position: relative; border: 1px solid transparent; transition: all 0.3s; }
         .day:hover { transform: scale(1.1); background: rgba(59, 130, 246, 0.1); }
-        .status-dot { width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 8px; }
+        .day.today { border: 2px solid #3b82f6; font-weight: 800; color: #3b82f6; }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 8px; }
         .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: all 0.3s; }
-        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
-        input[type="checkbox"] { width: 1.2rem; height: 1.2rem; border-radius: 0.4rem; accent-color: #3b82f6; cursor: pointer; }
+        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4); }
+        .wake-up-modal { background: rgba(0,0,0,0.9); backdrop-filter: blur(50px); border: 1px solid rgba(59, 130, 246, 0.2); }
     </style>
 </head>
 <body class="dark min-h-full p-4 md:p-8">
 
-    <div id="authModal" class="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl transition-all">
-        <div class="glass p-12 w-full max-w-md text-center space-y-8 border-white/10">
+    <div id="authModal" class="fixed inset-0 z-[300] flex items-center justify-center bg-black backdrop-blur-3xl transition-all">
+        <div class="glass p-12 w-full max-w-md text-center space-y-8">
             <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-            <p class="text-sm opacity-50 uppercase tracking-[0.3em]">Initialisation de l'Espace Souverain</p>
-            <div class="space-y-4">
-                <input type="text" id="username" placeholder="Nom d'utilisateur" class="w-full bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500 transition-colors">
-                <button onclick="login()" class="w-full btn-premium py-4 rounded-2xl font-black uppercase text-xs tracking-widest">Accéder à mon espace</button>
+            <input type="text" id="username" placeholder="Identifiant Souverain" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/10 text-center text-xl font-light">
+            <button onclick="login()" class="w-full btn-premium py-5 rounded-2xl font-black uppercase text-xs tracking-widest">Initialiser la Session</button>
+        </div>
+    </div>
+
+    <div id="wakeUpModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/90">
+        <div class="glass wake-up-modal p-12 max-w-lg w-full text-center space-y-8 animate-in zoom-in duration-500">
+            <div class="space-y-2">
+                <p class="text-blue-500 font-black text-[10px] uppercase tracking-[0.5em]">Morning Briefing</p>
+                <h2 class="text-4xl font-black italic tracking-tighter" id="wakeUpTitle">BONJOUR, USER</h2>
             </div>
-            <p class="text-[9px] opacity-20 uppercase tracking-widest">Données cryptées localement (Sovereign Privacy)</p>
+            <div class="p-8 bg-blue-600/10 rounded-[2.5rem] border border-blue-500/20">
+                <p class="text-[9px] uppercase font-bold opacity-40 mb-3 tracking-widest text-red-500">Mission Priorité Zéro (Hardest Task)</p>
+                <p id="hardestTask" class="text-xl font-light leading-relaxed italic">"Identifiez votre chaos pour que je puisse définir votre mission."</p>
+            </div>
+            <button onclick="closeWakeUp()" class="w-full btn-premium py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest">J'accepte le défi</button>
         </div>
     </div>
 
     <div id="dayModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
         <div class="glass p-10 max-w-lg w-full space-y-8">
             <div class="flex justify-between items-start">
-                <div>
-                    <h2 id="modalDate" class="text-3xl font-black capitalize tracking-tighter">Date</h2>
-                    <p class="text-[9px] uppercase tracking-[0.4em] text-blue-500 font-bold mt-2">Détails de l'Analyse</p>
-                </div>
-                <button onclick="closeDay()" class="opacity-30 hover:opacity-100 text-3xl">&times;</button>
+                <h2 id="modalDate" class="text-3xl font-black capitalize tracking-tighter">Date</h2>
+                <button onclick="closeDay()" class="opacity-30 text-3xl">&times;</button>
             </div>
             <div id="taskList" class="space-y-4 max-h-[300px] overflow-y-auto pr-2"></div>
-            <button onclick="closeDay()" class="w-full py-5 bg-blue-600 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">Mettre à jour mon état</button>
+            <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black uppercase text-[10px] tracking-widest">Enregistrer & Fermer</button>
         </div>
     </div>
 
-    <main id="mainApp" class="hidden max-w-7xl mx-auto space-y-10 animate-in fade-in duration-1000">
+    <main id="mainApp" class="hidden max-w-7xl mx-auto space-y-12">
         <header class="flex justify-between items-center px-4">
             <div class="flex items-center gap-6">
-                <div class="w-12 h-12 rounded-full btn-premium flex items-center justify-center font-black text-xl italic" id="avatar">U</div>
+                <div class="w-14 h-14 rounded-full btn-premium flex items-center justify-center font-black text-2xl italic shadow-lg" id="avatar">U</div>
                 <div>
-                    <h2 class="text-xl font-bold italic tracking-tighter" id="greeting">BIENVENUE, USER</h2>
-                    <p class="text-[9px] uppercase tracking-[0.4em] opacity-30 font-black">Status : Système Optimal</p>
+                    <h2 class="text-2xl font-black italic tracking-tighter" id="greeting">SOVEREIGN_ACCESS</h2>
+                    <p class="text-[9px] uppercase tracking-[0.4em] opacity-30 font-black" id="liveDate">25 DÉCEMBRE 2025</p>
                 </div>
             </div>
-            <div class="flex gap-4">
-                <button onclick="toggleTheme()" class="p-3 glass hover:scale-110 transition-transform text-xs">🌓</button>
-                <button onclick="logout()" class="p-3 glass hover:bg-red-500/10 transition-colors text-xs opacity-50">Sortir</button>
-            </div>
+            <button onclick="logout()" class="p-4 glass hover:bg-red-500/10 transition-colors text-[9px] font-black uppercase opacity-30">Reset Session</button>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-4 space-y-8">
                 <div class="glass p-10">
                     <h2 class="text-blue-500 font-bold text-[10px] uppercase mb-6 tracking-[0.2em]">Neural Flux Ingestion</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light placeholder:opacity-5 leading-relaxed" rows="5" placeholder="Écrivez votre chaos..."></textarea>
-                    <button onclick="traiter()" id="btnMain" class="w-full mt-8 btn-premium py-5 rounded-3xl font-black uppercase text-[10px] tracking-[0.2em]">Exécuter la Stratégie</button>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="Déchargez votre esprit..."></textarea>
+                    <button onclick="traiter()" id="btnMain" class="w-full mt-8 btn-premium py-6 rounded-3xl font-black uppercase text-[10px] tracking-[0.2em]">Traiter la Stratégie</button>
                 </div>
 
-                <div id="coachCard" class="glass p-8 border-purple-500/20 opacity-30">
-                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-4 italic">⚡ Coach Neural (Psychologie & Sport)</h3>
-                    <p id="coachTxt" class="text-sm italic leading-relaxed opacity-80">En attente d'analyse émotionnelle...</p>
-                </div>
-
-                <div id="shopCard" class="glass p-8 border-green-500/20 opacity-30">
-                    <h3 class="text-green-500 font-bold text-[9px] uppercase mb-4 tracking-[0.2em]">🛒 Logistique Maison</h3>
-                    <div id="shopList" class="text-sm opacity-70 space-y-1">---</div>
+                <div id="coachCard" class="glass p-10 border-purple-500/20 opacity-40">
+                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-4 italic tracking-widest">Conseil de Performance</h3>
+                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed">En attente de données...</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-8 glass p-10 flex flex-col justify-between">
+            <div class="lg:col-span-8 glass p-12 flex flex-col justify-between shadow-2xl">
                 <div>
                     <div class="flex justify-between items-center mb-10">
-                        <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em]">Roadmap Tactique Mensuelle</h2>
-                        <div class="text-[10px] font-black opacity-30 uppercase tracking-widest">Décembre 2025</div>
-                    </div>
-                    <div class="grid grid-cols-7 gap-3 mb-6 opacity-20 text-[9px] font-black text-center uppercase tracking-widest">
-                        <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+                        <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em]">Roadmap Mensuelle</h2>
                     </div>
                     <div id="calendar" class="grid grid-cols-7 gap-4"></div>
                 </div>
 
-                <div class="mt-16 pt-10 border-t border-white/5 flex flex-col md:flex-row gap-10">
-                    <div class="flex-1">
-                        <h4 class="text-red-500 font-bold text-[10px] uppercase mb-4">Focus Urgent</h4>
-                        <div id="prioList" class="text-sm opacity-50 leading-relaxed font-semibold italic">---</div>
+                <div class="mt-16 pt-10 border-t border-white/5 flex justify-between items-center">
+                    <div>
+                        <h4 class="text-red-500 font-bold text-[10px] uppercase mb-2">Focus Urgent</h4>
+                        <div id="prioList" class="text-sm opacity-50 font-semibold">---</div>
                     </div>
-                    <div class="w-full md:w-48 p-4 bg-white/5 rounded-2xl flex items-center justify-center text-center">
-                        <p class="text-[9px] uppercase opacity-30 font-bold tracking-widest">Score du mois<br><span class="text-2xl text-blue-500 font-black" id="score">0%</span></p>
+                    <div class="text-right">
+                        <p class="text-[9px] uppercase opacity-30 font-bold mb-1">Efficacité</p>
+                        <span class="text-4xl text-blue-500 font-black italic" id="score">0%</span>
                     </div>
                 </div>
             </div>
@@ -110,23 +107,45 @@
 
     <script>
         const cal = document.getElementById('calendar');
-        let db = JSON.parse(localStorage.getItem('lifeos_v8_db') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v9_db') || "{}");
         let currentUser = localStorage.getItem('lifeos_user');
+        const todayNum = new Date().getDate();
 
         function login() {
             const name = document.getElementById('username').value;
             if(!name) return;
             localStorage.setItem('lifeos_user', name);
-            location.reload();
+            showWakeUp(name);
+        }
+
+        function showWakeUp(name) {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('wakeUpModal').classList.remove('hidden');
+            document.getElementById('wakeUpTitle').innerText = `BONJOUR, ${name.toUpperCase()}`;
+            
+            // Chercher la tâche la plus dure du jour actuel
+            const todayTasks = db[todayNum] || [];
+            const hardest = todayTasks.length > 0 ? todayTasks[0].text : "Aucun défi majeur détecté. Prenez de l'avance !";
+            document.getElementById('hardestTask').innerText = `"${hardest}"`;
+        }
+
+        function closeWakeUp() {
+            document.getElementById('wakeUpModal').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            initApp();
         }
 
         function logout() { localStorage.clear(); location.reload(); }
 
-        if(currentUser) {
-            document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            document.getElementById('greeting').innerText = `BIENVENUE, ${currentUser.toUpperCase()}`;
+        function initApp() {
+            if(!currentUser) return;
+            document.getElementById('greeting').innerText = `ACCESS_GRANTED // ${currentUser.toUpperCase()}`;
             document.getElementById('avatar').innerText = currentUser[0].toUpperCase();
+            buildCal();
+        }
+
+        if(currentUser) {
+            showWakeUp(currentUser);
         }
 
         function buildCal() {
@@ -135,12 +154,12 @@
             for(let i=1; i<=31; i++) {
                 const tasks = db[i] || [];
                 const d = document.createElement('div');
-                d.className = `day ${tasks.length ? 'bg-blue-500/5' : 'bg-white/[0.02]'}`;
+                d.className = `day ${i === todayNum ? 'today' : ''} ${tasks.length ? 'bg-blue-500/5' : ''}`;
                 d.innerText = i;
                 if(tasks.length) {
                     const allDone = tasks.every(t => t.done);
                     const dot = document.createElement('div');
-                    dot.className = `status-dot ${allDone ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`;
+                    dot.className = `status-dot ${allDone ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-red-500 shadow-[0_0_10px_#ef4444]'}`;
                     d.appendChild(dot);
                     total++; if(allDone) done++;
                 }
@@ -155,28 +174,27 @@
             document.getElementById('modalDate').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(2025, 11, day));
             const list = document.getElementById('taskList');
             list.innerHTML = tasks.length ? tasks.map((t, idx) => `
-                <div class="flex items-center justify-between p-5 bg-white/5 rounded-[1.5rem] border border-white/5">
-                    <span class="${t.done ? 'line-through opacity-20 text-blue-400' : 'opacity-80 font-medium'}">${t.text}</span>
-                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
+                <div class="flex items-center justify-between p-6 bg-white/5 rounded-[2rem] border border-white/5">
+                    <span class="${t.done ? 'line-through opacity-20' : 'opacity-80 font-medium'}">${t.text}</span>
+                    <input type="checkbox" class="w-6 h-6 rounded-xl accent-blue-600" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
                 </div>
-            `).join('') : '<p class="opacity-30 italic text-center py-10">Aucune mission stratégique.</p>';
+            `).join('') : '<p class="opacity-30 italic text-center py-10">Repos stratégique.</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
         function toggleTask(day, idx) {
             db[day][idx].done = !db[day][idx].done;
-            localStorage.setItem('lifeos_v8_db', JSON.stringify(db));
+            localStorage.setItem('lifeos_v9_db', JSON.stringify(db));
             showDay(day); buildCal();
         }
 
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        function toggleTheme() { document.body.classList.toggle('light'); document.body.classList.toggle('dark'); }
 
         async function traiter() {
             const input = document.getElementById('userInput').value;
             const btn = document.getElementById('btnMain');
             if(!input) return;
-            btn.innerText = "IA NEURAL PROCESSING..."; btn.disabled = true;
+            btn.innerText = "PROCESSING..."; btn.disabled = true;
 
             try {
                 const response = await fetch('/api/chat', {
@@ -184,7 +202,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: "Expert en coaching et logistique. Analyse le chaos et les sentiments. Réponds UNIQUEMENT en JSON : { 'coach': 'conseil santé/mental précis', 'shopping': ['piles', 'lait'], 'prio': 'urgence', 'schedule': [{'day': 12, 'tasks':['...']}] }"},
+                            {role: "system", content: "Assistant d'élite. Réponds en JSON : { 'coach': 'conseil', 'prio': 'urgence', 'schedule': [{'day': 12, 'tasks':['...']}] }"},
                             {role: "user", content: input}
                         ]
                     })
@@ -194,17 +212,14 @@
 
                 document.getElementById('coachCard').style.opacity = "1";
                 document.getElementById('coachTxt').innerText = res.coach;
-                document.getElementById('shopCard').style.opacity = "1";
-                document.getElementById('shopList').innerHTML = res.shopping.map(s => `• ${s}`).join('<br>');
                 document.getElementById('prioList').innerText = res.prio;
 
                 res.schedule.forEach(s => { db[s.day] = s.tasks.map(t => ({text: t, done: false})); });
-                localStorage.setItem('lifeos_v8_db', JSON.stringify(db));
+                localStorage.setItem('lifeos_v9_db', JSON.stringify(db));
                 buildCal();
             } catch (e) { alert("Erreur IA"); }
-            finally { btn.innerText = "Exécuter la Stratégie"; btn.disabled = false; }
+            finally { btn.innerText = "Traiter la Stratégie"; btn.disabled = false; }
         }
-        buildCal();
     </script>
 </body>
 </html>
