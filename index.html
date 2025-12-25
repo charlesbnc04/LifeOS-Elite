@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V15 - Intelligence Totale</title>
+    <title>LifeOS Sovereign V16 - Control Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -38,7 +38,7 @@
             <div class="lg:col-span-5 space-y-8">
                 <div class="glass p-10">
                     <h2 class="text-blue-500 font-bold text-[10px] uppercase mb-6 tracking-widest">Neural Logic Center</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="Match demain ? Achat vitamines ?"></textarea>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="IA : Match demain ?"></textarea>
                     <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-6 rounded-3xl uppercase text-xs">Exécuter l'Intelligence IA</button>
                 </div>
                 <div id="coachCard" class="glass p-8 opacity-40">
@@ -65,19 +65,25 @@
     </main>
 
     <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/90 backdrop-blur-3xl">
-        <div class="glass p-12 max-w-lg w-full space-y-8 border-white/10">
+        <div class="glass p-12 max-w-lg w-full space-y-8 border-white/10 relative">
             <h2 id="modalDate" class="text-3xl font-black tracking-tighter capitalize text-blue-500 italic">Date</h2>
-            <div id="taskList" class="space-y-4"></div>
+            
+            <div class="flex gap-2">
+                <input type="text" id="newTaskInput" placeholder="Ajouter une tâche rapidement..." class="w-full bg-white/5 p-4 rounded-2xl outline-none border border-white/10">
+                <button onclick="addTaskManually()" class="btn-premium px-6 rounded-2xl font-black">+</button>
+            </div>
+
+            <div id="taskList" class="space-y-4 max-h-[300px] overflow-y-auto pr-2"></div>
             <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black uppercase text-[10px]">Fermer</button>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v15_db') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v16_db') || "{}");
         const todayDate = new Date();
         const todayNum = todayDate.getDate();
+        let currentDayOpen = null;
 
-        // Affichage de l'horloge
         document.getElementById('clock').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(todayDate);
 
         function buildCal() {
@@ -106,35 +112,30 @@
             document.getElementById('score').innerText = total ? Math.round((done/total)*100) + "%" : "0%";
         }
 
-        // FONCTION DE SUGGESTION SHOPPING INLINE
         function getShoppingLinks(text) {
             const t = text.toLowerCase();
             let links = [];
             if(t.includes('vitamine') || t.includes('magnésium') || t.includes('fer')) {
-                links = [
-                    { name: 'Nutri&Co', url: 'https://nutriandco.com' },
-                    { name: 'Novoma', url: 'https://www.novoma.com' }
-                ];
+                links = [ { name: 'Nutri&Co', url: 'https://nutriandco.com' }, { name: 'Novoma', url: 'https://www.novoma.com' } ];
             } else if(t.includes('protéine') || t.includes('poudre')) {
-                links = [
-                    { name: 'Prozis', url: 'https://www.prozis.com' },
-                    { name: 'MyProtein', url: 'https://www.myprotein.fr' }
-                ];
+                links = [ { name: 'Prozis', url: 'https://www.prozis.com' }, { name: 'MyProtein', url: 'https://www.myprotein.fr' } ];
             }
             if(links.length === 0) return "";
-            return `<div class="mt-1 text-[10px] text-blue-400 font-bold opacity-80">
-                Acheter : ${links.map(l => `<a href="${l.url}" target="_blank" class="underline mr-2">→ ${l.name}</a>`).join('')}
-            </div>`;
+            return `<div class="mt-1 text-[10px] text-blue-400 font-bold opacity-80">Acheter : ${links.map(l => `<a href="${l.url}" target="_blank" class="underline mr-2">→ ${l.name}</a>`).join('')}</div>`;
         }
 
         function showDay(day) {
+            currentDayOpen = day;
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(2025, 11, day));
             document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
-                <div class="flex flex-col p-6 bg-white/5 rounded-3xl border border-white/5">
+                <div class="flex flex-col p-6 bg-white/5 rounded-3xl border border-white/5 relative group">
                     <div class="flex items-center justify-between">
-                        <span class="${t.done ? 'line-through opacity-20' : 'opacity-90 font-semibold'}">${t.text}</span>
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
+                        <input type="text" value="${t.text}" onchange="editTask(${day}, ${idx}, this.value)" class="bg-transparent outline-none w-full ${t.done ? 'line-through opacity-20' : 'opacity-90 font-semibold'}">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
+                            <button onclick="deleteTask(${day}, ${idx})" class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-sm font-bold">✕</button>
+                        </div>
                     </div>
                     ${!t.done ? getShoppingLinks(t.text) : ""}
                 </div>
@@ -142,29 +143,50 @@
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
-        function toggleTask(day, idx) {
-            db[day][idx].done = !db[day][idx].done;
-            localStorage.setItem('lifeos_v15_db', JSON.stringify(db));
-            showDay(day); buildCal();
+        function addTaskManually() {
+            const input = document.getElementById('newTaskInput');
+            if(!input.value || !currentDayOpen) return;
+            db[currentDayOpen] = [...(db[currentDayOpen] || []), { text: input.value, done: false }];
+            saveAndRefresh();
+            input.value = '';
         }
 
-        function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
+        function editTask(day, idx, newText) {
+            db[day][idx].text = newText;
+            saveAndRefresh();
+        }
+
+        function deleteTask(day, idx) {
+            db[day].splice(idx, 1);
+            saveAndRefresh();
+        }
+
+        function toggleTask(day, idx) {
+            db[day][idx].done = !db[day][idx].done;
+            saveAndRefresh();
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('lifeos_v16_db', JSON.stringify(db));
+            showDay(currentDayOpen);
+            buildCal();
+        }
+
+        function closeDay() { document.getElementById('dayModal').classList.add('hidden'); currentDayOpen = null; }
 
         async function traiter() {
             const input = document.getElementById('userInput').value;
             const btn = document.getElementById('btnMain');
             if(!input) return;
             btn.innerText = "IA THINKING..."; btn.disabled = true;
-
             const realDateStr = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
-
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: `Expert. Date actuelle: ${realDateStr}. Aujourd'hui est le jour numéro ${todayNum}. Calcule demain comme ${todayNum + 1}. Réponds UNIQUEMENT en JSON : { "coach": "...", "schedule": [{"day": N, "tasks":["..."]}] }`},
+                            {role: "system", content: `Expert. Date: ${realDateStr}. Today is day ${todayNum}. Tomorrow is ${todayNum + 1}. JSON only: { "coach": "...", "schedule": [{"day": N, "tasks":["..."]}] }`},
                             {role: "user", content: input}
                         ]
                     })
@@ -173,16 +195,14 @@
                 let clean = data.choices[0].message.content.trim();
                 if (clean.includes('{')) { clean = clean.substring(clean.indexOf('{'), clean.lastIndexOf('}') + 1); }
                 const res = JSON.parse(clean);
-                
                 document.getElementById('coachCard').style.opacity = "1";
                 document.getElementById('coachTxt').innerText = res.coach;
-                
                 res.schedule.forEach(s => { 
                     db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; 
                 });
-                localStorage.setItem('lifeos_v15_db', JSON.stringify(db));
+                localStorage.setItem('lifeos_v16_db', JSON.stringify(db));
                 buildCal();
-            } catch (e) { alert("Erreur de synchronisation IA."); }
+            } catch (e) { alert("Erreur IA"); }
             finally { btn.innerText = "Exécuter l'Intelligence IA"; btn.disabled = false; }
         }
         buildCal();
