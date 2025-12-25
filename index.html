@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V14 - Robustesse Totale</title>
+    <title>LifeOS Sovereign V15 - Intelligence Totale</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020202; color: #fff; -webkit-font-smoothing: antialiased; }
-        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(30px); background: rgba(255,255,255,0.02); }
+        .glass { border-radius: 2.5rem; border: 1px solid rgba(128,128,128,0.1); backdrop-filter: blur(40px); background: rgba(255,255,255,0.02); }
         
-        @keyframes blink-red { 0%, 100% { border-color: rgba(239, 68, 68, 0.2); box-shadow: 0 0 5px rgba(239, 68, 68, 0.1); } 50% { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); } }
-        @keyframes blink-orange { 0%, 100% { border-color: rgba(249, 115, 22, 0.2); box-shadow: 0 0 5px rgba(249, 115, 22, 0.1); } 50% { border-color: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); } }
+        @keyframes blink-red { 0%, 100% { border-color: rgba(239, 68, 68, 0.2); } 50% { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); } }
+        @keyframes blink-orange { 0%, 100% { border-color: rgba(249, 115, 22, 0.2); } 50% { border-color: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); } }
         
         .alert-retard { animation: blink-red 1.5s infinite ease-in-out; border: 2px solid #ef4444 !important; }
         .alert-today { animation: blink-orange 2s infinite ease-in-out; border: 2px solid #f97316 !important; }
@@ -19,69 +19,70 @@
         .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; position: relative; transition: 0.3s; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); }
         .day:hover { transform: scale(1.1); background: rgba(59, 130, 246, 0.2); }
         .status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 8px; }
-        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; }
+        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); transition: 0.3s; font-weight: 800; }
         input[type="checkbox"] { width: 1.4rem; height: 1.4rem; border-radius: 0.5rem; accent-color: #3b82f6; cursor: pointer; }
     </style>
 </head>
 <body class="p-4 md:p-10 min-h-full">
 
-    <main id="mainApp" class="max-w-7xl mx-auto space-y-12">
-        <header class="flex justify-between items-end px-4">
+    <main class="max-w-7xl mx-auto space-y-12">
+        <header class="flex justify-between items-center px-4">
             <div>
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-                <p id="clock" class="text-[9px] uppercase tracking-[0.5em] opacity-40 font-bold mt-2 italic">Chargement...</p>
+                <p id="clock" class="text-[9px] uppercase tracking-[0.5em] opacity-40 font-bold mt-2">Initialisation du temps...</p>
             </div>
-            <button onclick="localStorage.clear(); location.reload();" class="text-[9px] font-bold opacity-20 hover:opacity-100 uppercase">Purger Données</button>
+            <button onclick="localStorage.clear(); location.reload();" class="text-[9px] font-bold opacity-20 hover:opacity-100 uppercase">Purger le Système</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-5 space-y-8">
                 <div class="glass p-10">
-                    <h2 class="text-blue-500 font-bold text-[10px] uppercase mb-6 tracking-widest">Neural Input</h2>
-                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="Saisissez vos tâches..."></textarea>
-                    <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-6 rounded-3xl font-black uppercase text-xs">Mettre à jour la Roadmap</button>
+                    <h2 class="text-blue-500 font-bold text-[10px] uppercase mb-6 tracking-widest">Neural Logic Center</h2>
+                    <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light leading-relaxed" rows="5" placeholder="Match demain ? Achat vitamines ?"></textarea>
+                    <button onclick="traiter()" id="btnMain" class="w-full btn-premium py-6 rounded-3xl uppercase text-xs">Exécuter l'Intelligence IA</button>
                 </div>
-                <div id="coachCard" class="glass p-8 opacity-30">
-                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-2">⚡ Coach Neural</h3>
-                    <p id="coachTxt" class="text-sm italic opacity-80">En attente...</p>
+                <div id="coachCard" class="glass p-8 opacity-40">
+                    <h3 class="text-purple-500 font-bold text-[9px] uppercase mb-2 italic">⚡ Diagnostic de Performance</h3>
+                    <p id="coachTxt" class="text-sm italic opacity-80 leading-relaxed">Prêt pour l'analyse...</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass p-10">
+            <div class="lg:col-span-7 glass p-10 shadow-2xl">
                 <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Contrôle Tactique Mensuel</h2>
+                    <h2 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Décembre 2025</h2>
+                    <div class="flex gap-4 text-[8px] font-black uppercase tracking-widest">
+                        <span class="text-orange-500">● Focus</span>
+                        <span class="text-red-500">● Alerte Retard</span>
+                    </div>
                 </div>
                 <div id="calendar" class="grid grid-cols-7 gap-4"></div>
+                <div class="mt-10 flex justify-between items-center border-t border-white/5 pt-6">
+                    <span class="text-[9px] uppercase font-black opacity-30 tracking-widest">Score d'Efficacité</span>
+                    <span id="score" class="text-3xl font-black italic text-blue-500">0%</span>
+                </div>
             </div>
         </div>
     </main>
 
-    <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
+    <div id="dayModal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/90 backdrop-blur-3xl">
         <div class="glass p-12 max-w-lg w-full space-y-8 border-white/10">
-            <h2 id="modalDate" class="text-3xl font-black tracking-tighter capitalize text-blue-500">Date</h2>
+            <h2 id="modalDate" class="text-3xl font-black tracking-tighter capitalize text-blue-500 italic">Date</h2>
             <div id="taskList" class="space-y-4"></div>
-            
-            <div id="recoLinks" class="hidden p-6 bg-blue-500/10 rounded-[2rem] border border-blue-500/20">
-                <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">🛒 Recommandations d'achats (Nutrition)</p>
-                <div class="flex flex-col gap-2 text-xs font-bold">
-                    <a href="https://www.prozis.com" target="_blank" class="hover:text-blue-400">→ Prozis (Leader Nutrition Sportive)</a>
-                    <a href="https://www.myprotein.fr" target="_blank" class="hover:text-blue-400">→ MyProtein (Incontournable)</a>
-                    <a href="https://nutriandco.com" target="_blank" class="hover:text-blue-400">→ Nutri&Co (Qualité Française)</a>
-                </div>
-            </div>
             <button onclick="closeDay()" class="w-full py-5 bg-white/5 rounded-2xl font-black uppercase text-[10px]">Fermer</button>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v14_db') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v15_db') || "{}");
         const todayDate = new Date();
         const todayNum = todayDate.getDate();
 
+        // Affichage de l'horloge
         document.getElementById('clock').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(todayDate);
 
         function buildCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
+            let total = 0, done = 0;
             for(let i=1; i<=31; i++) {
                 const tasks = db[i] || [];
                 const allDone = tasks.length > 0 && tasks.every(t => t.done);
@@ -91,39 +92,59 @@
                     if(i === todayNum) alertClass = 'alert-today'; 
                 }
                 const d = document.createElement('div');
-                d.className = `day ${alertClass} ${i === todayNum ? 'border-blue-500' : ''}`;
+                d.className = `day ${alertClass} ${i === todayNum ? 'border-blue-600' : ''}`;
                 d.innerText = i;
                 if(tasks.length) {
                     const dot = document.createElement('div');
                     dot.className = `status-dot ${allDone ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`;
                     d.appendChild(dot);
+                    total++; if(allDone) done++;
                 }
                 d.onclick = () => showDay(i);
                 cal.appendChild(d);
             }
+            document.getElementById('score').innerText = total ? Math.round((done/total)*100) + "%" : "0%";
+        }
+
+        // FONCTION DE SUGGESTION SHOPPING INLINE
+        function getShoppingLinks(text) {
+            const t = text.toLowerCase();
+            let links = [];
+            if(t.includes('vitamine') || t.includes('magnésium') || t.includes('fer')) {
+                links = [
+                    { name: 'Nutri&Co', url: 'https://nutriandco.com' },
+                    { name: 'Novoma', url: 'https://www.novoma.com' }
+                ];
+            } else if(t.includes('protéine') || t.includes('poudre')) {
+                links = [
+                    { name: 'Prozis', url: 'https://www.prozis.com' },
+                    { name: 'MyProtein', url: 'https://www.myprotein.fr' }
+                ];
+            }
+            if(links.length === 0) return "";
+            return `<div class="mt-1 text-[10px] text-blue-400 font-bold opacity-80">
+                Acheter : ${links.map(l => `<a href="${l.url}" target="_blank" class="underline mr-2">→ ${l.name}</a>`).join('')}
+            </div>`;
         }
 
         function showDay(day) {
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(2025, 11, day));
             document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
-                <div class="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5">
-                    <span class="${t.done ? 'line-through opacity-20' : 'opacity-80 font-medium'}">${t.text}</span>
-                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
+                <div class="flex flex-col p-6 bg-white/5 rounded-3xl border border-white/5">
+                    <div class="flex items-center justify-between">
+                        <span class="${t.done ? 'line-through opacity-20' : 'opacity-90 font-semibold'}">${t.text}</span>
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day}, ${idx})">
+                    </div>
+                    ${!t.done ? getShoppingLinks(t.text) : ""}
                 </div>
-            `).join('') : '<p class="text-center py-10 opacity-30 italic">Libre.</p>';
-
-            // DÉTECTION PRODUITS NUTRITION (Vitamines et Protéines)
-            const triggers = ['vitamine', 'protéine', 'supplément', 'magnésium', 'fer'];
-            const hasNutrition = tasks.some(t => triggers.some(word => t.text.toLowerCase().includes(word)));
-            document.getElementById('recoLinks').className = hasNutrition ? 'block p-6 bg-blue-500/10 rounded-[2rem] border border-blue-500/20' : 'hidden';
-            
+            `).join('') : '<p class="text-center py-10 opacity-30 italic font-medium">Libre.</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
         function toggleTask(day, idx) {
             db[day][idx].done = !db[day][idx].done;
-            localStorage.setItem('lifeos_v14_db', JSON.stringify(db));
+            localStorage.setItem('lifeos_v15_db', JSON.stringify(db));
             showDay(day); buildCal();
         }
 
@@ -133,9 +154,9 @@
             const input = document.getElementById('userInput').value;
             const btn = document.getElementById('btnMain');
             if(!input) return;
-            btn.innerText = "SYNCHRONISATION..."; btn.disabled = true;
+            btn.innerText = "IA THINKING..."; btn.disabled = true;
 
-            const realToday = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+            const realDateStr = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
 
             try {
                 const response = await fetch('/api/chat', {
@@ -143,35 +164,26 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
-                            {role: "system", content: `Expert. Date actuelle: ${realToday}. "Ce soir" = jour actuel (${todayNum}). Réponds UNIQUEMENT en JSON : { "coach": "...", "schedule": [{"day": ${todayNum}, "tasks":["..."]}] }`},
+                            {role: "system", content: `Expert. Date actuelle: ${realDateStr}. Aujourd'hui est le jour numéro ${todayNum}. Calcule demain comme ${todayNum + 1}. Réponds UNIQUEMENT en JSON : { "coach": "...", "schedule": [{"day": N, "tasks":["..."]}] }`},
                             {role: "user", content: input}
                         ]
                     })
                 });
                 const data = await response.json();
+                let clean = data.choices[0].message.content.trim();
+                if (clean.includes('{')) { clean = clean.substring(clean.indexOf('{'), clean.lastIndexOf('}') + 1); }
+                const res = JSON.parse(clean);
                 
-                // NETTOYAGE AGRESSIF DU JSON (Pour éviter de rester bloqué)
-                let cleanJson = data.choices[0].message.content.trim();
-                if (cleanJson.includes('{')) {
-                    cleanJson = cleanJson.substring(cleanJson.indexOf('{'), cleanJson.lastIndexOf('}') + 1);
-                }
-                
-                const res = JSON.parse(cleanJson);
                 document.getElementById('coachCard').style.opacity = "1";
                 document.getElementById('coachTxt').innerText = res.coach;
                 
                 res.schedule.forEach(s => { 
                     db[s.day] = [...(db[s.day] || []), ...s.tasks.map(t => ({text: t, done: false}))]; 
                 });
-                
-                localStorage.setItem('lifeos_v14_db', JSON.stringify(db));
+                localStorage.setItem('lifeos_v15_db', JSON.stringify(db));
                 buildCal();
-            } catch (e) { 
-                console.error(e);
-                alert("Erreur d'analyse. Assurez-vous d'avoir des crédits OpenRouter."); 
-            } finally {
-                btn.innerText = "Mettre à jour la Roadmap"; btn.disabled = false;
-            }
+            } catch (e) { alert("Erreur de synchronisation IA."); }
+            finally { btn.innerText = "Exécuter l'Intelligence IA"; btn.disabled = false; }
         }
         buildCal();
     </script>
