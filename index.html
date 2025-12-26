@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V40 - Visionary</title>
+    <title>LifeOS Sovereign V41 - Infinite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -36,27 +36,22 @@
         }
         .glass-card:hover { background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); }
 
+        /* SHOP CARD SPECIAL STYLE */
+        .shop-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .primary-btn:hover { transform: scale(1.02); }
 
         .video-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 6px 12px;
-            border-radius: 8px;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white;
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px;
+            transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer;
         }
         .video-btn:hover { background: white; color: black; transform: scale(1.05); }
 
-        /* Calendar */
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(255,255,255,0.1); border-color: white; }
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
@@ -65,7 +60,6 @@
 
         .water-progress { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         
-        /* Flash animation */
         @keyframes highlight { 0% { background-color: rgba(59, 130, 246, 0.3); } 100% { background-color: transparent; } }
         .updated-flash { animation: highlight 1s ease-out; }
     </style>
@@ -139,6 +133,15 @@
                         <button id="btnRoutineM" class="video-btn">▶ Lancer Séance</button>
                     </div>
 
+                    <div class="glass-card shop-card p-6 flex items-center gap-6">
+                        <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-bold uppercase text-green-400 mb-1">Bio-Optimisation (Recommandations)</p>
+                            <p id="hudSupplements" class="text-sm font-bold text-white">Analyse...</p>
+                        </div>
+                        <div class="text-[10px] bg-white/10 px-3 py-1 rounded-full opacity-60">Panier Santé</div>
+                    </div>
+
                     <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="lunchColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
                         <div class="flex-1 pl-4">
@@ -201,44 +204,72 @@
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v40_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v40_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v40_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v41_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v41_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v41_health') || '{"water":0}');
         
         const now = new Date();
         const todayNum = now.getDate();
         const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
         let selectedDay = todayNum;
 
+        // --- DATABASE INFINIE (12-15 Plats par catégorie) ---
         const mealsDB = {
             sport: {
-                lunch: [{m:"Pâtes + Poulet + Brocolis", r:"Recharge glucidique"}, {m:"Riz + Steak + Haricots", r:"Protéines musculaires"}, {m:"Wrap Thon Complet", r:"Énergie rapide"}],
-                dinner: [{m:"Omelette + Patates Douces", r:"Récupération alcaline"}, {m:"Cabillaud + Purée", r:"Digestion facile"}, {m:"Bowl Quinoa Dinde", r:"Reconstruction"}]
+                lunch: [
+                    {m:"Pâtes + Poulet + Brocolis", r:"Classique Efficace"}, {m:"Riz + Steak + Haricots", r:"Force & Fer"}, {m:"Wrap Thon Complet (x2)", r:"Rapide & Protéiné"},
+                    {m:"Risotto Poulet Champignons", r:"Glucides Crémeux"}, {m:"Semoule + Boeuf mijoté", r:"Recharge Glycogène"}, {m:"Gnocchis + Dinde + Pesto", r:"Densité Calorique"},
+                    {m:"Burrito Bowl (Riz/Haricots/Boeuf)", r:"Complet"}, {m:"Club Sandwich Poulet/Oeuf", r:"Transportable"}, {m:"Purée + Saucisse Volaille", r:"Digestibilité"},
+                    {m:"Quinoa + Crevettes + Pois", r:"Protéine maigre"}, {m:"Pâtes Carbonara (Légère)", r:"Plaisir Énergétique"}, {m:"Riz Cantonais Maison", r:"Complet"}
+                ],
+                dinner: [
+                    {m:"Omelette + Patates Douces", r:"Alcalinisant"}, {m:"Cabillaud + Purée", r:"Réparation Nuit"}, {m:"Bowl Quinoa Dinde", r:"Léger & Nourrissant"},
+                    {m:"Wok Poulet Nouilles", r:"Recharge"}, {m:"Steak Soja + Lentilles", r:"Protéine Végétale"}, {m:"Sardines + Pommes Vapeur", r:"Omega 3 + Glucides"},
+                    {m:"Avocat + Oeufs Mollets + Pain", r:"Bons Lipides"}, {m:"Soupe Pâtes + Fromage", r:"Réconfort"}, {m:"Hachis Parmentier", r:"Reconstruction"},
+                    {m:"Pizza Maison Pâte Fine", r:"Glucides Plaisir"}, {m:"Curry Pois Chiches", r:"Végétal"}, {m:"Saumon + Riz + Epinards", r:"Anti-inflammatoire"}
+                ]
             },
             focus: {
-                lunch: [{m:"Saumon + Épinards", r:"Omega-3 Cerveau"}, {m:"Salade Avocat Crevettes", r:"Bons gras cognitifs"}, {m:"Lentilles + Tofu", r:"Énergie stable"}],
-                dinner: [{m:"Soupe Légumes", r:"Sommeil léger"}, {m:"Dinde + Haricots", r:"Protéines nuit"}, {m:"Wok Légumes", r:"Vitamines"}]
+                lunch: [
+                    {m:"Saumon + Épinards + Riz", r:"Omega-3 Cerveau"}, {m:"Salade Avocat Crevettes", r:"Lipides Cognitifs"}, {m:"Lentilles + Tofu Fumé", r:"Stabilité Glycémie"},
+                    {m:"Maquereau + Tomates", r:"Focus Intense"}, {m:"Bowl Falafel + Houmous", r:"Énergie Végétale"}, {m:"Carpaccio + Roquette", r:"Légèreté"},
+                    {m:"Sushi / Sashimi (12pc)", r:"Propre & Frais"}, {m:"Tartare de Saumon", r:"Cru & Vitaminé"}, {m:"Salade Niçoise", r:"Complet"},
+                    {m:"Poulet + Légumes Wok", r:"Sans lourdeur"}, {m:"Ceviche Poisson", r:"Boost Minéral"}, {m:"Omelette Epinards", r:"Fer & Protéine"}
+                ],
+                dinner: [
+                    {m:"Soupe Légumes + Dinde", r:"Sommeil Profond"}, {m:"Dinde + Haricots Verts", r:"Tryptophane"}, {m:"Wok Légumes + Cajou", r:"Magnésium"},
+                    {m:"Velouté Asperges + Oeuf", r:"Detox"}, {m:"Filet de Colin + Courgettes", r:"Zéro lourdeur"}, {m:"Salade Grecque", r:"Fraîcheur"},
+                    {m:"Ratatouille + Riz Complet", r:"Fibres"}, {m:"Papillote Poisson", r:"Vapeur"}, {m:"Poêlée Champignons", r:"Léger"},
+                    {m:"Gaspacho + Tartines", r:"Hydratation"}, {m:"Fromage Blanc + Fruits", r:"Protéine Lente"}, {m:"Bouillon de Volaille", r:"Minéraux"}
+                ]
             },
-            diet: {
-                lunch: [{m:"Grande Salade + Oeuf", r:"Satiété volume"}, {m:"Blanc Poulet + Ratatouille", r:"Protéine pure"}, {m:"Poisson blanc + Courgettes", r:"Léger"}],
-                dinner: [{m:"Velouté Potiron", r:"Hydratation"}, {m:"Salade Grecque", r:"Fraîcheur"}, {m:"Vapeur Légumes", r:"Detox"}]
+            diet: { // Mode Standard / Diet
+                lunch: [
+                    {m:"Grande Salade + Oeuf", r:"Volume Satiété"}, {m:"Blanc Poulet + Ratatouille", r:"Propre"}, {m:"Poisson + Courgettes", r:"Hypocalorique"},
+                    {m:"Chili Sin Carne", r:"Fibres"}, {m:"Couscous Légumes", r:"Volume"}, {m:"Rôti de Porc + Petits Pois", r:"Classique"},
+                    {m:"Lasagnes Aubergines", r:"Low Carb"}, {m:"Wrap Poulet Crudités", r:"Équilibré"}, {m:"Taboulé Libanais", r:"Fraîcheur"},
+                    {m:"Quiche sans pâte", r:"Léger"}, {m:"Curry Chou-fleur", r:"Épices Métabolisme"}, {m:"Steak Haché + Haricots", r:"Simple"}
+                ],
+                dinner: [
+                    {m:"Velouté Potiron", r:"Eau & Fibres"}, {m:"Salade Endives Noix", r:"Léger"}, {m:"Vapeur Brocolis + Jambon", r:"Detox"},
+                    {m:"Gratin Chou-fleur", r:"Confort Léger"}, {m:"Soupe Miso + Tofu", r:"Fermentation"}, {m:"Tomates Farcies (Légères)", r:"Gout"},
+                    {m:"Fondue de Poireaux", r:"Diurétique"}, {m:"Purée Carottes + Oeuf", r:"Douceur"}, {m:"Salade Tomate Moza", r:"Classique"},
+                    {m:"Artichaut Vinaigrette", r:"Temps de repas"}, {m:"Asperges + Sauce Yaourt", r:"Drainant"}, {m:"Bouillon Légumes", r:"Jeûne partiel"}
+                ]
             }
         };
 
-        // --- NEW: VIDEO ROUTINE DB ---
         const routinesDB = {
-            sport: { 
-                m: { label: "Mobilité Articulaire (10min)", query: "mobility routine for athletes follow along" },
-                e: { label: "Automassage / Foam Rolling", query: "foam rolling recovery routine follow along" }
-            },
-            focus: { 
-                m: { label: "Méditation Focus (10min)", query: "guided meditation for focus 10 min" },
-                e: { label: "Étirements Cou/Dos", query: "neck and back pain relief exercises desk job" }
-            },
-            diet: { 
-                m: { label: "Yoga Réveil Matin", query: "morning yoga full body stretch 15 min" },
-                e: { label: "Respiration Profonde", query: "deep breathing exercises for relaxation" }
-            }
+            sport: { m: { label: "Mobilité Articulaire (10min)", query: "mobility routine for athletes follow along" }, e: { label: "Automassage / Foam Rolling", query: "foam rolling recovery routine follow along" } },
+            focus: { m: { label: "Méditation Focus (10min)", query: "guided meditation for focus 10 min" }, e: { label: "Étirements Cou/Dos", query: "neck and back pain relief exercises desk job" } },
+            diet: { m: { label: "Yoga Réveil Matin", query: "morning yoga full body stretch 15 min" }, e: { label: "Respiration Profonde", query: "deep breathing exercises for relaxation" } }
+        };
+
+        // --- NEW: SMART SHOP RECOMMENDATIONS ---
+        const supplementsDB = {
+            sport: "⚡ Magnésium, Whey Isolate, Créatine, Rouleau de massage.",
+            focus: "🧠 Omega-3 (EPA/DHA), Vitamine D3, Thé Vert Matcha.",
+            diet: "🌿 Multivitamines, Probiotiques, Spiruline, Thé Détox."
         };
 
         function renderHUD() {
@@ -251,48 +282,49 @@
             const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
             
             let mode = 'diet';
-            if (txt.includes('sport') || txt.includes('crossfit') || txt.includes('match')) mode = 'sport';
-            else if (txt.includes('réunion') || txt.includes('bureau') || txt.includes('projet')) mode = 'focus';
+            if (txt.includes('sport') || txt.includes('crossfit') || txt.includes('match') || txt.includes('run')) mode = 'sport';
+            else if (txt.includes('réunion') || txt.includes('bureau') || txt.includes('projet') || txt.includes('travail')) mode = 'focus';
 
-            // TITRES & COULEURS
             const titles = {sport: "Mode Haute Énergie", focus: "Mode Deep Focus", diet: "Mode Vitalité"};
             const colors = {sport: "text-orange-500", focus: "text-purple-500", diet: "text-green-500"};
             const icons = {sport: "🔥", focus: "🧠", diet: "🌿"};
+            
             document.getElementById('contextTitle').innerText = titles[mode];
             document.getElementById('contextTitle').className = `text-xl font-bold ${colors[mode]}`;
             document.querySelector('#contextBanner span').innerText = icons[mode];
 
-            // TDEE
+            // Update Supplements (NEW V41)
+            document.getElementById('hudSupplements').innerText = supplementsDB[mode];
+
             let bmr = (10 * profile.weight) + (6.25 * profile.height) - (5 * profile.age) + (profile.sex==='male'?5:-161);
             let activity = mode === 'sport' ? 1.7 : (mode === 'focus' ? 1.3 : 1.2);
             const tdee = Math.round(bmr * activity);
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
 
-            // REPAS
-            const rot = (selectedDay + now.getMonth()) % 3;
+            // Meal Selection (Infinite Rotation Logic)
+            // Utilise le jour ET le mois pour un index unique
+            const arraySize = mealsDB[mode].lunch.length;
+            const rot = (selectedDay + now.getMonth()) % arraySize;
+            
             const l = mealsDB[mode].lunch[rot];
             const d = mealsDB[mode].dinner[rot];
+
             document.getElementById('hudLunch').innerText = l.m;
             document.getElementById('lunchReason').innerText = l.r;
             document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
             document.getElementById('lunchColorBar').className = mode === 'sport' ? "w-full md:w-2 bg-orange-500 h-2 md:h-auto" : (mode === 'focus' ? "w-full md:w-2 bg-purple-500 h-2 md:h-auto" : "w-full md:w-2 bg-green-500 h-2 md:h-auto");
+
             document.getElementById('hudDinner').innerText = d.m;
             document.getElementById('dinnerReason').innerText = d.r;
             document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
             document.getElementById('dinnerColorBar').className = mode === 'sport' ? "w-full md:w-2 bg-orange-500 h-2 md:h-auto" : (mode === 'focus' ? "w-full md:w-2 bg-purple-500 h-2 md:h-auto" : "w-full md:w-2 bg-green-500 h-2 md:h-auto");
 
-            // --- ROUTINES VIDÉOS INTELLIGENTES (NEW V40) ---
             const r = routinesDB[mode];
-            
-            // Matin
             document.getElementById('hudRoutineM').innerText = r.m.label;
             document.getElementById('btnRoutineM').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.m.query)}`, '_blank');
-            
-            // Soir
             document.getElementById('hudRoutineE').innerText = r.e.label;
             document.getElementById('btnRoutineE').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.e.query)}`, '_blank');
 
-            // TACHES
             const tBox = document.getElementById('hudTasks');
             tBox.innerHTML = tasks.length ? tasks.map((t, i) => `
                 <div class="glass-card p-4 flex items-center gap-4 group hover:bg-white/5 transition-colors">
@@ -302,8 +334,6 @@
                 </div>`).join('') : `<div class="p-6 text-center border border-dashed border-white/10 rounded-2xl"><p class="text-sm opacity-30 italic">Aucune tâche.</p></div>`;
 
             updateWaterUI(mode);
-            
-            // Flash Animation
             const main = document.getElementById('main-hud');
             main.classList.remove('updated-flash');
             void main.offsetWidth; main.classList.add('updated-flash');
@@ -347,12 +377,7 @@
 
         function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
         function delTask(d,i){db[d].splice(i,1); save();}
-        function save(){
-            localStorage.setItem('lifeos_v40_db',JSON.stringify(db)); 
-            localStorage.setItem('lifeos_v40_profile',JSON.stringify(profile)); 
-            localStorage.setItem('lifeos_v40_health',JSON.stringify(health)); 
-            renderCal(); renderHUD();
-        }
+        function save(){localStorage.setItem('lifeos_v41_db',JSON.stringify(db)); localStorage.setItem('lifeos_v41_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v41_health',JSON.stringify(health)); renderCal(); renderHUD();}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
         function saveProfile(){ 
             profile.weight=document.getElementById('inputWeight').value||80; 
