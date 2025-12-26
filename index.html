@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V70 - Essence (Patched)</title>
+    <title>LifeOS Sovereign V71 - Sync Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -105,7 +105,30 @@
     </div>
 
     <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
+    
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
+        <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative">
+            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
+            <h2 class="text-xl font-bold mb-6">Profil & Données</h2>
+            
+            <div class="space-y-3 mb-6 border-b border-white/10 pb-6">
+                <input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)">
+                <input type="number" id="inputHeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Taille (cm)">
+                <div class="flex gap-2">
+                    <input type="number" id="inputAge" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Âge">
+                    <select id="inputSex" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm"><option value="male">Homme</option><option value="female">Femme</option></select>
+                </div>
+                <button onclick="saveProfile()" class="primary-btn w-full py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest">Enregistrer Profil</button>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-[9px] font-bold uppercase text-zinc-500 tracking-widest mb-2">Synchronisation Appareils</p>
+                <button onclick="copyDataToClipboard()" class="w-full bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/50 py-3 rounded-xl text-[10px] font-bold text-blue-200 transition-colors flex items-center justify-center gap-2">📤 COPIER MA DATA</button>
+                <button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors flex items-center justify-center gap-2">📥 IMPORTER / COLLER</button>
+                <p class="text-[9px] text-zinc-600 italic mt-2">Copiez le code sur l'appareil A, envoyez-le, puis collez-le sur l'appareil B.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // INIT
@@ -150,15 +173,12 @@
             // 1. Dictionary Priority
             const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "tennis":"Tennis", "gym":"Gym", "réunion":"Réunion", "meeting":"Meeting", "point":"Point", "dentiste":"Dentiste", "médecin":"Médecin", "docteur":"Médecin", "déjeuner":"Déjeuner", "dîner":"Dîner", "repas":"Repas", "apéro":"Apéro", "courses":"Courses", "shopping":"Shopping", "anniversaire":"Anniv", "fête":"Fête", "lessive":"Lessive", "ménage":"Ménage" };
             for(let k in dict) { if(lower.includes(k)) return dict[k]; }
-
             // 2. Terminator Cleaning
             let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
             const junk = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "durée", "pendant", "de", "à partir", "heures", "heure", "grosse", "match", "séance", "rendez-vous", "rdv", "le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers", "j'ai", "il faut", "je dois", "aller", "faire", "voir", "prendre", "récupérer", "manger", "déjeuner", "et", "ou"];
             let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
-            
             // 3. Keep Capitalized Word if possible
             if(words.length === 0) return "Tâche";
-            // Return first word capitalized
             return words[0].charAt(0).toUpperCase() + words[0].slice(1);
         }
 
@@ -177,23 +197,15 @@
             for (const [dayName, dayIndex] of Object.entries(daysMap)) { if (lower.includes(dayName)) { targetDayOfWeek = dayIndex; break; } }
             if (targetDayOfWeek !== -1) { const currentDayOfWeek = now.getDay(); let diff = targetDayOfWeek - currentDayOfWeek; if (diff < 0) diff += 7; d = todayNum + diff; } 
             else { if (lower.includes('demain')) d = todayNum + 1; if (lower.includes('après-demain')) d = todayNum + 2; }
-
-            const parsed = parseInput(text);
-            const cl = cleanTaskText(text); 
-            
-            // CONFLICT ALERT V69+
+            const parsed = parseInput(text); const cl = cleanTaskText(text); 
+            // CONFLICT ALERT
             if(d === selectedDay) {
                 let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60;
                 let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
-                if (tStart < dinnerEnd && tEnd > dinnerMin) {
-                    document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`;
-                    document.getElementById('conflictAlertBox').classList.remove('hidden');
-                }
+                if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); }
             }
-
             const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60;
             const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-
             db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }];
         }
 
@@ -205,91 +217,49 @@
                 document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
                 document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
                 document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-
                 const tasks = db[selectedDay] || [];
                 let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
                 tasks.forEach(t => {
                     const fl = (t.fullText||"").toLowerCase();
                     if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
                     if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
-                    if (t.time) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const startMin = h*60 + m;
-                        const dur = t.duration || 60; 
-                        occupiedSlots.push({start: startMin, end: startMin + dur});
-                    }
+                    if (t.time) { const [h, m] = t.time.split(':').map(Number); const startMin = h*60 + m; const dur = t.duration || 60; occupiedSlots.push({start: startMin, end: startMin + dur}); }
                 });
                 if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|projet|travail/i))) mode = 'focus';
-
                 if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
-
                 const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
                 document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
                 document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
                 document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
-
                 let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
                 let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
                 document.getElementById('calTarget').innerText = `${tdee} kcal`;
                 document.getElementById('hudSupplements').innerText = suppsDB[mode];
-
                 const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
                 let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
                 let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
                 const rM = ROUTINES[mode].m[rIndex]; const rE = ROUTINES[mode].e[rIndex];
-
                 let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
-                occupiedSlots.forEach(slot => {
-                    if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) {
-                        dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60;
-                    }
-                });
+                occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) { dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60; } });
                 const lunchTime = `${Math.floor(lunchMin/60).toString().padStart(2,'0')}:${(lunchMin%60).toString().padStart(2,'0')}`;
                 const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-
-                if (mode === 'sport' && sportTaskTime) {
-                    const [h, m] = sportTaskTime.split(':').map(Number);
-                    if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); }
-                }
-                if (importantEventTime) {
-                    const [h, m] = importantEventTime.split(':').map(Number);
-                    let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
-                    injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
-                    if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; }
-                }
-
+                if (mode === 'sport' && sportTaskTime) { const [h, m] = sportTaskTime.split(':').map(Number); if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); } }
+                if (importantEventTime) { const [h, m] = importantEventTime.split(':').map(Number); let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; } injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" }); if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; } }
                 let stream = [];
                 stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
                 stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
                 stream.push(...injectedItems);
                 stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
                 stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-
                 tasks.forEach((t, i) => {
-                    let fl = (t.fullText||"").toLowerCase();
-                    let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
-                    let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
-                    let accent = 'accent-task'; let dot = 'dot-task';
-                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
-                    if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-                    let displayContent = t.shortText;
-                    if(t.duration > 0) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const endMin = h*60 + m + t.duration;
-                        const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60;
-                        displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`;
-                    }
+                    let fl = (t.fullText||"").toLowerCase(); let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i); let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/); let accent = 'accent-task'; let dot = 'dot-task';
+                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; } if(isUrgent) { accent='accent-important'; dot='dot-important'; }
+                    let displayContent = t.shortText; if(t.duration > 0) { const [h, m] = t.time.split(':').map(Number); const endMin = h*60 + m + t.duration; const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60; displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`; }
                     stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
                 });
-
                 stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
-
                 const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes();
-                const currentTimeVal = currentHour * 60 + currentMin;
-                const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
-                let liveLineInserted = false;
-
+                const currentHour = now.getHours(); const currentMin = now.getMinutes(); const currentTimeVal = currentHour * 60 + currentMin; const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`; let liveLineInserted = false;
                 container.innerHTML = stream.map(item => {
                     const [h, m] = item.time.split(':').map(Number); const itemTimeVal = h * 60 + m;
                     let html = '';
@@ -301,7 +271,6 @@
                     else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
                     return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
                 }).join('');
-
                 if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
                 updateWaterUI(mode);
             } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur.</p>`; }
@@ -316,23 +285,63 @@
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
         function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
-        function setMusic(p){musicProvider=p;updateMusicUI();save();}
-        function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>{const btn=document.getElementById(`btn-${p}`); if(btn) btn.classList.remove('border-green-500','border-purple-500','border-red-500')}); }
         function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        // CORRECTION HERE: Linked correct function
         function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
-        function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
-        function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        function exportData(){const data={db,profile,health,musicProvider,manualMeals};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};save();alert("Restauré !");};reader.readAsText(file);}
+        
+        // --- NEW SYNC & PROFILE FEATURES ---
+        function openProfile(){
+            document.getElementById('inputWeight').value = profile.weight;
+            document.getElementById('inputHeight').value = profile.height;
+            document.getElementById('inputAge').value = profile.age;
+            document.getElementById('inputSex').value = profile.sex;
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function saveProfile(){
+            profile.weight=document.getElementById('inputWeight').value||80; 
+            profile.height=document.getElementById('inputHeight').value||180; 
+            profile.age=document.getElementById('inputAge').value||30; 
+            profile.sex=document.getElementById('inputSex').value; 
+            save();
+            alert("Profil sauvegardé ! Les calories cibles ont été mises à jour.");
+        }
+
+        function copyDataToClipboard() {
+            const syncData = { db, profile, health, manualMeals, musicProvider };
+            const str = JSON.stringify(syncData);
+            if(navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(str).then(() => alert("✅ Données copiées !\nEnvoyez-les maintenant sur votre autre appareil.")).catch(() => prompt("Copiez ce texte manuellement :", str));
+            } else {
+                prompt("Copiez ce texte manuellement (Ctrl+A, Ctrl+C) :", str);
+            }
+        }
+
+        function importDataFromClipboard() {
+            const str = prompt("Collez le code de synchronisation ici :");
+            if(str) {
+                try {
+                    const data = JSON.parse(str);
+                    if(!data.db || !data.profile) throw new Error("Format invalide");
+                    db = data.db; profile = data.profile; health = data.health || {water:0}; manualMeals = data.manualMeals || {}; musicProvider = data.musicProvider || 'spotify';
+                    localStorage.setItem('lifeos_v70_db', JSON.stringify(db));
+                    localStorage.setItem('lifeos_v70_profile', JSON.stringify(profile));
+                    localStorage.setItem('lifeos_v70_health', JSON.stringify(health));
+                    localStorage.setItem('lifeos_v70_manual_meals', JSON.stringify(manualMeals));
+                    localStorage.setItem('lifeos_music', musicProvider);
+                    alert("✅ Synchronisation réussie !");
+                    location.reload();
+                } catch(e) { alert("❌ Erreur : Code invalide."); }
+            }
+        }
+
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
         function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
-        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
+        renderCal(); renderHUD(); checkHabits();
     </script>
 </body>
 </html>
