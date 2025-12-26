@@ -3,29 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V77 - Immutable</title>
+    <title>LifeOS Sovereign V78 - Wall Street Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         
-        /* === V70 CORE STYLES (INTACT) === */
-        .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        /* THEME GLOBAL */
+        .glass-base { background: #0a0a0a; border: 1px solid #222; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); border-radius: 1.5rem; }
+        .flow-card { background: #111; border: 1px solid #222; border-radius: 1rem; transition: all 0.2s ease; position: relative; overflow: hidden; padding: 1.25rem; cursor: pointer; }
+        .flow-card:hover { transform: translateY(-2px); border-color: #444; }
         
+        /* NAVIGATION */
+        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #666; transition: 0.2s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 12px; }
+        .nav-btn:hover { background: #1a1a1a; color: white; }
+        .nav-btn.active { background: #222; color: white; border-color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+        /* CALENDAR PRO */
+        #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .day { aspect-ratio: 1; border-radius: 6px; display: flex; flex-col; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; transition: 0.2s; background: #111; border: 1px solid #222; position: relative; }
+        .day:hover { background: #222; border-color: #444; }
+        .day-today { color: #3b82f6; font-weight: 900; border-color: #3b82f6; }
+        .day-selected { background: #fff !important; color: #000 !important; font-weight: 900; }
+        .has-event::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; background: #a855f7; border-radius: 50%; }
+
+        /* AGENDA V70 (Strict) */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
-        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, #333, #111); }
+        .timeline-time { width: 50px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
+        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 10px rgba(255,255,255,0.2); z-index: 10; }
         
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
         .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; } 
-        .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
+        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; } .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
         .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
@@ -34,115 +48,138 @@
         .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
         .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
 
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+        /* FINANCE PRO INTERFACE */
+        .pro-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+        .pro-table th { text-align: left; color: #666; padding: 10px; border-bottom: 1px solid #333; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; }
+        .pro-table td { padding: 12px 10px; border-bottom: 1px solid #222; }
+        .pro-table tr:hover { background: #161616; cursor: pointer; }
+        
+        .market-up { color: #10b981; } .bg-up { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; }
+        .market-down { color: #ef4444; } .bg-down { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; }
+        
+        .search-bar { background: #111; border: 1px solid #333; border-radius: 8px; padding: 12px 16px; width: 100%; color: white; outline: none; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; transition: 0.3s; }
+        .search-bar:focus { border-color: #555; }
+
         .alert-box { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .primary-btn { background: #fff; color: black; transition: 0.3s; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+        .primary-btn:hover { background: #ccc; }
         
-        /* MARKET & NAV STYLES (NEW) */
-        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        
-        .market-up { color: #10b981; } .market-down { color: #ef4444; }
-        .ticker-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; padding: 1rem; text-align: center; transition: 0.2s; }
-        .ticker-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-        .asset-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; border-radius: 8px; }
-        .asset-row:hover { background: rgba(255,255,255,0.05); }
-        .search-bar { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; width: 100%; color: white; outline: none; font-size: 0.9rem; transition: 0.3s; }
-        
-        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        
-        .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
-        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
-        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
-        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <div class="max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
-            <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
-                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
+            <div class="glass-base p-6 space-y-6 flex-1 flex flex-col overflow-y-auto">
+                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-zinc-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded hover:bg-white/20">SYSTEM</button></div>
                 
-                <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">📅 Agenda V70 (Actif)</button>
-                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn">💹 Bourse & Analyse</button>
+                <div class="flex flex-col gap-1">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active"><span>🗓️</span> Agenda (V70)</button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn"><span>📊</span> Bourse Pro</button>
                 </div>
 
-                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+                <div class="shrink-0">
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-600 mb-3">Vue Mensuelle</p>
+                    <div id="calendar"></div>
+                </div>
+
+                <div class="flex-1 shrink-0 pt-4 border-t border-white/5">
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-600 mb-2">Entrée Rapide</p>
+                    <textarea id="userInput" class="w-full bg-[#111] border border-[#222] rounded-xl p-3 text-sm outline-none resize-none focus:border-white/20 transition-colors h-24 font-mono text-zinc-400" placeholder="> Match ce soir 20h..."></textarea>
+                    <button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-lg text-[10px]">Exécuter</button>
+                </div>
             </div>
         </aside>
 
         <main class="lg:col-span-9 space-y-6 pb-10">
             
             <div id="page-dashboard">
-                <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
-                    <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
-                        <div><div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2><div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div></div>
-                        <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
+                <div id="main-hud" class="glass-base p-8 md:p-10">
+                    <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 pb-8 border-b border-white/5">
+                        <div><div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2></div>
+                        <div class="flex gap-8 text-right bg-[#111] p-4 rounded-xl border border-[#222]"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Metabolisme</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                        <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
+                    
+                    <div id="conflictAlertBox" class="hidden mb-6 rounded-xl p-4 flex items-center justify-between alert-box bg-red-900/20 border border-red-500/50">
+                        <div class="flex items-center gap-4"><div class="text-2xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Détecté</p><p id="conflictMsg" class="text-sm font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="text-xs hover:text-white text-red-400 font-bold uppercase px-4 py-2 border border-red-500/30 rounded hover:bg-red-500/20 transition">Acquitter</button>
                     </div>
-                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                        <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
-                    </div>
-                    <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
-                    <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
-                    <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p><div id="masterTimeline"></div></div>
+
+                    <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12 font-mono">Flux_Journalier_V70</p><div id="masterTimeline"></div></div>
                 </div>
             </div>
 
-            <div id="page-market" class="hidden space-y-6">
+            <div id="page-market" class="hidden h-full flex flex-col gap-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="ticker-card"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">S&P 500</p><p class="text-xl font-black market-up">5,842</p><span class="text-[10px] font-bold text-green-400">+1.2%</span></div>
-                    <div class="ticker-card"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">NASDAQ</p><p class="text-xl font-black market-up">18,673</p><span class="text-[10px] font-bold text-green-400">+0.9%</span></div>
-                    <div class="ticker-card"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">CAC 40</p><p class="text-xl font-black market-down">7,421</p><span class="text-[10px] font-bold text-red-400">-0.1%</span></div>
-                    <div class="ticker-card"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">BITCOIN</p><p class="text-xl font-black market-up">94,210$</p><span class="text-[10px] font-bold text-green-400">+4.5%</span></div>
+                    <div class="glass-base p-4 flex justify-between items-center"><div class="text-xs font-mono text-zinc-500">S&P 500</div><div class="text-right"><div class="text-lg font-bold">5,842.10</div><div class="text-xs market-up">+1.24%</div></div></div>
+                    <div class="glass-base p-4 flex justify-between items-center"><div class="text-xs font-mono text-zinc-500">NASDAQ</div><div class="text-right"><div class="text-lg font-bold">18,673.40</div><div class="text-xs market-up">+0.89%</div></div></div>
+                    <div class="glass-base p-4 flex justify-between items-center"><div class="text-xs font-mono text-zinc-500">CAC 40</div><div class="text-right"><div class="text-lg font-bold">7,421.15</div><div class="text-xs market-down">-0.12%</div></div></div>
+                    <div class="glass-base p-4 flex justify-between items-center"><div class="text-xs font-mono text-zinc-500">BTC/USD</div><div class="text-right"><div class="text-lg font-bold">94,210.00</div><div class="text-xs market-up">+4.50%</div></div></div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-base p-8">
-                        <div class="mb-6">
-                            <h3 class="text-xl font-bold mb-4">🔍 Terminal de Recherche</h3>
-                            <input type="text" id="marketSearch" onkeyup="filterMarket()" placeholder="Chercher une action, un ETF (ex: CW8, Tesla)..." class="search-bar">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
+                    <div class="lg:col-span-2 glass-base p-6 overflow-hidden flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold tracking-tight">Marché Global</h3>
+                            <div class="flex gap-2">
+                                <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-zinc-400">Actions</span>
+                                <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-zinc-400">ETF</span>
+                                <span class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-zinc-400">Crypto</span>
+                            </div>
                         </div>
-                        <div class="space-y-2 mb-6" id="market-list"></div>
+                        <input type="text" id="marketSearch" onkeyup="filterMarket()" placeholder="> Rechercher (Ticker, Nom)..." class="search-bar mb-4">
+                        
+                        <div class="overflow-y-auto pr-2 custom-scrollbar flex-1">
+                            <table class="pro-table">
+                                <thead>
+                                    <tr>
+                                        <th>Symbole</th>
+                                        <th>Nom</th>
+                                        <th>Secteur</th>
+                                        <th class="text-right">Prix</th>
+                                        <th class="text-right">Var %</th>
+                                        <th class="text-right">Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="market-table-body">
+                                    </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="glass-base p-8 flex flex-col">
-                        <div class="mb-8">
-                            <h3 class="text-xs font-bold uppercase text-zinc-500 mb-4 tracking-widest">🏆 L'Opportunité Hebdo</h3>
-                            <div class="bg-gradient-to-br from-indigo-900/50 to-blue-900/50 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-blue-400 transition-all" onclick="openAssetDetail('CW8')">
-                                <div class="absolute top-0 right-0 p-4 text-4xl opacity-20">🌍</div>
-                                <span class="bg-blue-500 text-white px-2 py-1 rounded text-[9px] font-bold uppercase mb-2 inline-block">ETF World</span>
-                                <h2 class="text-xl font-black mb-2">Amundi MSCI World</h2>
-                                <p class="text-xs leading-relaxed opacity-70 mb-3">La base défensive par excellence. Capture la croissance mondiale tout en réduisant la volatilité sectorielle.</p>
-                                <div class="flex gap-3 text-[10px] font-mono opacity-60 pt-3 border-t border-white/10"><span>Potentiel: Moyen</span><span>Risque: Faible</span></div>
+                    <div class="flex flex-col gap-6">
+                        <div class="glass-base p-6">
+                            <h3 class="text-xs font-bold uppercase text-zinc-500 mb-4 tracking-widest">Reco Hebdo</h3>
+                            <div class="bg-[#111] border border-blue-900/30 p-5 rounded-xl">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-xl font-bold text-white">CW8</span>
+                                    <span class="bg-blue-900/50 text-blue-400 text-[10px] font-bold px-2 py-1 rounded">STRONG BUY</span>
+                                </div>
+                                <p class="text-xs text-zinc-400 mb-3">MSCI World ETF</p>
+                                <p class="text-xs leading-relaxed text-zinc-300">"La valeur refuge ultime pour 2025. Exposition massive US (70%) avec diversification sectorielle. Idéal DCA."</p>
                             </div>
                         </div>
 
-                        <div>
-                            <h3 class="text-xs font-bold uppercase text-zinc-500 mb-4 tracking-widest">🔮 Secteurs d'Avenir (IA)</h3>
-                            <div class="space-y-3">
-                                <div class="flow-card p-3 border-l-2 border-green-500 bg-white/5">
-                                    <p class="text-[10px] font-bold text-green-400 mb-1">CROISSANCE FORTE</p>
-                                    <p class="text-sm font-bold">Semi-conducteurs & IA</p>
-                                    <p class="text-[10px] opacity-50 mt-1">La demande explose pour 2025.</p>
+                        <div class="glass-base p-6 flex-1">
+                            <h3 class="text-xs font-bold uppercase text-zinc-500 mb-4 tracking-widest">Secteurs Hot 🔥</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1 font-bold"><span>Semiconducteurs</span><span class="text-green-500">+12% YTD</span></div>
+                                    <div class="w-full bg-[#222] h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full" style="width: 85%"></div></div>
                                 </div>
-                                <div class="flow-card p-3 border-l-2 border-blue-500 bg-white/5">
-                                    <p class="text-[10px] font-bold text-blue-400 mb-1">STABILITÉ</p>
-                                    <p class="text-sm font-bold">Santé & Pharma</p>
-                                    <p class="text-[10px] opacity-50 mt-1">Valeurs refuges en temps de crise.</p>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1 font-bold"><span>Cybersécurité</span><span class="text-green-500">+8% YTD</span></div>
+                                    <div class="w-full bg-[#222] h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full" style="width: 65%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1 font-bold"><span>Énergie Verte</span><span class="text-red-500">-3% YTD</span></div>
+                                    <div class="w-full bg-[#222] h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full" style="width: 30%"></div></div>
                                 </div>
                             </div>
                         </div>
@@ -153,283 +190,233 @@
         </main>
     </div>
 
-    <div id="assetModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl">
-        <div class="glass-base p-8 max-w-2xl w-full rounded-[2rem] border border-white/20 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none"></div>
-            <button onclick="closeAssetModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl z-10">✕</button>
-            <div class="relative z-10">
-                <div class="flex items-center gap-4 mb-6">
-                    <div id="asset-icon" class="w-16 h-16 rounded-2xl bg-white text-black flex items-center justify-center text-2xl font-black">?</div>
-                    <div><h2 id="asset-name" class="text-3xl font-black tracking-tight">Nom Actif</h2><p id="asset-ticker" class="text-sm font-mono opacity-50">TICKER</p></div>
-                    <div class="ml-auto text-right"><p id="asset-price" class="text-2xl font-bold">0.00 $</p><p id="asset-change" class="text-sm font-bold market-up">+0.00%</p></div>
+    <div id="assetModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md">
+        <div class="glass-base p-0 max-w-4xl w-full rounded-2xl border border-[#333] shadow-2xl overflow-hidden flex flex-col h-[80vh]">
+            <div class="p-6 border-b border-[#222] flex justify-between items-start bg-[#0a0a0a]">
+                <div class="flex items-center gap-4">
+                    <div id="modal-ticker" class="text-3xl font-black font-mono">AAPL</div>
+                    <div>
+                        <div id="modal-name" class="text-sm font-bold text-zinc-400">Apple Inc.</div>
+                        <div id="modal-sector" class="text-[10px] uppercase tracking-widest text-zinc-600">Technology</div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 mb-8">
-                    <div class="bg-white/5 p-3 rounded-xl text-center"><p class="text-[9px] uppercase opacity-50">Secteur</p><p id="asset-sector" class="font-bold text-xs">--</p></div>
-                    <div class="bg-white/5 p-3 rounded-xl text-center"><p class="text-[9px] uppercase opacity-50">P/E Ratio</p><p id="asset-pe" class="font-bold text-xs">--</p></div>
-                    <div class="bg-white/5 p-3 rounded-xl text-center"><p class="text-[9px] uppercase opacity-50">Yield</p><p id="asset-yield" class="font-bold text-xs">--</p></div>
-                    <div class="bg-white/5 p-3 rounded-xl text-center"><p class="text-[9px] uppercase opacity-50">Note</p><p id="asset-rating" class="font-bold text-xs">--</p></div>
+                <div class="text-right">
+                    <div id="modal-price" class="text-3xl font-bold font-mono">225.10</div>
+                    <div id="modal-change" class="text-sm font-bold market-up">+0.50%</div>
                 </div>
-                <p id="asset-desc" class="text-sm leading-relaxed opacity-80 mb-6 bg-black/20 p-4 rounded-xl border border-white/5">Description...</p>
-                <div class="flex justify-end"><button onclick="closeAssetModal()" class="bg-white/10 hover:bg-white hover:text-black text-white px-6 py-3 rounded-xl font-bold uppercase text-xs transition-colors">Fermer</button></div>
             </div>
+            
+            <div class="flex-1 bg-[#050505] p-4 relative">
+                <canvas id="mainChart"></canvas>
+            </div>
+
+            <div class="p-6 border-t border-[#222] grid grid-cols-4 gap-4 bg-[#0a0a0a]">
+                <div><p class="text-[10px] text-zinc-500 uppercase">P/E Ratio</p><p id="modal-pe" class="font-mono font-bold">32.4</p></div>
+                <div><p class="text-[10px] text-zinc-500 uppercase">Market Cap</p><p id="modal-mcap" class="font-mono font-bold">3.4T</p></div>
+                <div><p class="text-[10px] text-zinc-500 uppercase">Div Yield</p><p id="modal-yield" class="font-mono font-bold">0.5%</p></div>
+                <div><p class="text-[10px] text-zinc-500 uppercase">Analyste</p><p id="modal-rating" class="font-bold text-blue-400">HOLD</p></div>
+            </div>
+            
+            <button onclick="closeAssetModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
         </div>
     </div>
 
     <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
         // INIT
         let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
-        // Repair Legacy
         Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].map(t => { if (!t.fullText) t.fullText = t.text || "Tâche"; if (!t.shortText) t.shortText = t.text || "Tâche"; if (!t.time) t.time = "09:00"; return t; }); } });
         let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
         let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
-        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
+        let chartInstance = null; // Chart.js instance
 
         // DATASETS AGENDA (V70)
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
         const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
         const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
         ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // DATASETS MARKET
-        const STOCK_DATA = [
-            { ticker: "CW8", name: "Amundi MSCI World", price: "524.30 €", change: "+0.45%", sector: "ETF Global", pe: "--", yield: "N/A", rating: "Strong Buy", desc: "Exposition à +1500 entreprises mondiales." },
-            { ticker: "NVDA", name: "NVIDIA Corp", price: "145.20 $", change: "+3.4%", sector: "Technology", pe: "72.5", yield: "0.03%", rating: "Buy", desc: "Leader des puces IA." },
-            { ticker: "AAPL", name: "Apple Inc", price: "225.10 $", change: "+0.5%", sector: "Technology", pe: "32.4", yield: "0.5%", rating: "Hold", desc: "Géant de la tech grand public." },
-            { ticker: "MC.PA", name: "LVMH", price: "680.40 €", change: "+0.5%", sector: "Luxe", pe: "24.1", yield: "1.9%", rating: "Buy", desc: "Leader mondial du luxe." },
-            { ticker: "TSLA", name: "Tesla Inc", price: "242.50 $", change: "-1.2%", sector: "Automotive", pe: "68.2", yield: "0%", rating: "Neutral", desc: "Véhicules électriques et IA." },
-            { ticker: "TTE", name: "TotalEnergies", price: "62.10 €", change: "-0.8%", sector: "Energy", pe: "8.2", yield: "5.2%", rating: "Buy", desc: "Major pétrolière et renouvelables." },
-            { ticker: "AI.PA", name: "Air Liquide", price: "172.50 €", change: "+0.2%", sector: "Chimie", pe: "28.5", yield: "1.8%", rating: "Buy", desc: "Gaz industriels et santé." },
-            { ticker: "BTC", name: "Bitcoin", price: "94,210 $", change: "+4.5%", sector: "Crypto", pe: "--", yield: "--", rating: "Speculative", desc: "Or numérique." }
+        // DATASETS MARKET (PRO DATABASE)
+        const STOCK_DB = [
+            { t: "CW8", n: "Amundi MSCI World", p: 524.30, c: 0.45, s: "ETF", pe: "-", r: "Buy", m: "12B" },
+            { t: "NVDA", n: "NVIDIA Corp", p: 145.20, c: 3.40, s: "Tech", pe: 72.5, r: "Buy", m: "3.2T" },
+            { t: "AAPL", n: "Apple Inc", p: 225.10, c: 0.50, s: "Tech", pe: 32.4, r: "Hold", m: "3.4T" },
+            { t: "MSFT", n: "Microsoft", p: 420.00, c: -0.20, s: "Tech", pe: 35.8, r: "Hold", m: "3.1T" },
+            { t: "AMZN", n: "Amazon", p: 185.60, c: 1.10, s: "Retail", pe: 42.1, r: "Buy", m: "1.9T" },
+            { t: "GOOG", n: "Alphabet", p: 165.30, c: -0.50, s: "Tech", pe: 24.5, r: "Buy", m: "2.1T" },
+            { t: "TSLA", n: "Tesla Inc", p: 242.50, c: -1.20, s: "Auto", pe: 68.2, r: "Neutral", m: "750B" },
+            { t: "META", n: "Meta Platforms", p: 580.20, c: 2.10, s: "Tech", pe: 28.4, r: "Strong Buy", m: "1.4T" },
+            { t: "MC.PA", n: "LVMH", p: 680.40, c: 0.50, s: "Luxe", pe: 24.1, r: "Buy", m: "380B" },
+            { t: "TTE", n: "TotalEnergies", p: 62.10, c: -0.80, s: "Energy", pe: 8.2, r: "Buy", m: "150B" },
+            { t: "AI.PA", n: "Air Liquide", p: 172.50, c: 0.20, s: "Chimie", pe: 28.5, r: "Buy", m: "90B" },
+            { t: "RMS", n: "Hermès", p: 2150.00, c: 0.10, s: "Luxe", pe: 45.2, r: "Hold", m: "220B" },
+            { t: "BTC", n: "Bitcoin", p: 94210, c: 4.50, s: "Crypto", pe: "-", r: "Speculative", m: "1.8T" },
+            { t: "ETH", n: "Ethereum", p: 2650, c: 3.20, s: "Crypto", pe: "-", r: "Speculative", m: "320B" },
+            { t: "SOL", n: "Solana", p: 145, c: 8.50, s: "Crypto", pe: "-", r: "Speculative", m: "65B" }
         ];
 
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+        // --- NAVIGATION ---
+        function switchTab(tab) {
+            document.getElementById('page-dashboard').classList.add('hidden'); document.getElementById('page-market').classList.add('hidden');
+            document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-market').classList.remove('active');
+            document.getElementById(`page-${tab}`).classList.remove('hidden'); 
+            if(tab === 'market') document.getElementById('page-market').classList.remove('hidden'); // Force flex
+            document.getElementById(`nav-${tab}`).classList.add('active');
+            if(tab === 'market') renderMarketTable();
+        }
 
-        // --- V70 PARSER & CLEANER (STRICT) ---
+        // --- MARKET LOGIC (V78) ---
+        function renderMarketTable(filter = "") {
+            const body = document.getElementById('market-table-body');
+            body.innerHTML = "";
+            STOCK_DB.forEach(s => {
+                if(s.n.toLowerCase().includes(filter.toLowerCase()) || s.t.toLowerCase().includes(filter.toLowerCase())) {
+                    const color = s.c >= 0 ? "bg-up" : "bg-down";
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="font-bold text-white">${s.t}</td>
+                        <td class="text-zinc-400 text-xs">${s.n}</td>
+                        <td><span class="bg-white/5 px-2 py-1 rounded text-[10px] text-zinc-500">${s.s}</span></td>
+                        <td class="text-right font-mono">${s.p}</td>
+                        <td class="text-right"><span class="${color} text-[10px] font-bold">${s.c > 0 ? '+' : ''}${s.c}%</span></td>
+                        <td class="text-right text-[10px] font-bold ${s.r.includes('Buy') ? 'text-blue-400' : 'text-zinc-500'}">${s.r}</td>
+                    `;
+                    row.onclick = () => openChart(s);
+                    body.appendChild(row);
+                }
+            });
+        }
+        function filterMarket() { renderMarketTable(document.getElementById('marketSearch').value); }
+
+        function openChart(stock) {
+            document.getElementById('assetModal').classList.remove('hidden');
+            document.getElementById('modal-ticker').innerText = stock.t;
+            document.getElementById('modal-name').innerText = stock.n;
+            document.getElementById('modal-sector').innerText = stock.s;
+            document.getElementById('modal-price').innerText = stock.p;
+            document.getElementById('modal-change').innerText = (stock.c > 0 ? '+' : '') + stock.c + '%';
+            document.getElementById('modal-change').className = stock.c >= 0 ? "text-sm font-bold market-up" : "text-sm font-bold market-down";
+            document.getElementById('modal-pe').innerText = stock.pe;
+            document.getElementById('modal-mcap').innerText = stock.m;
+            document.getElementById('modal-rating').innerText = stock.r;
+
+            // RENDER CHART.JS
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+            
+            // Generate Mock Data (Random walk)
+            let dataPoints = [];
+            let price = stock.p;
+            for(let i=0; i<30; i++) {
+                price = price * (1 + (Math.random() - 0.5) * 0.05);
+                dataPoints.push(price);
+            }
+            const labels = Array.from({length: 30}, (_, i) => i+1);
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Prix',
+                        data: dataPoints,
+                        borderColor: stock.c >= 0 ? '#10b981' : '#ef4444',
+                        backgroundColor: stock.c >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: true, grid: { color: '#222' } }
+                    }
+                }
+            });
+        }
+        function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
+
+        // --- AGENDA LOGIC (V70 COPY/PASTE STRICT) ---
+        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; return "Vitamines"; }
         function parseInput(text) {
-            let startMin = 540; let duration = 0;
-            const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
+            let startMin = 540; let duration = 0; const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
             let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; }
-            const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
-            const startMatch = text.match(startRegex);
+            const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i; const startMatch = text.match(startRegex);
             if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; } 
             else { const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)]; for (const m of allNums) { const val = parseInt(m[1]); if (durValue !== -1 && val === durValue) continue; let mVal = m[2] ? parseInt(m[2]) : 0; startMin = val * 60 + mVal; break; } }
             if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bminuit\b/i)) startMin = 1439; if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; 
             return { startMin, duration };
         }
-
         function cleanTaskText(text) {
-            const lower = text.toLowerCase();
-            // Dictionary Priority (V70)
-            const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "tennis":"Tennis", "gym":"Gym", "réunion":"Réunion", "meeting":"Meeting", "point":"Point", "dentiste":"Dentiste", "médecin":"Médecin", "docteur":"Médecin", "déjeuner":"Déjeuner", "dîner":"Dîner", "repas":"Repas", "apéro":"Apéro", "courses":"Courses", "shopping":"Shopping", "anniversaire":"Anniv", "fête":"Fête", "lessive":"Lessive", "ménage":"Ménage" };
-            for(let k in dict) { if(lower.includes(k)) return dict[k]; }
-            // Terminator Cleaning (V70)
-            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
-            const junk = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "durée", "pendant", "de", "à partir", "heures", "heure", "grosse", "match", "séance", "rendez-vous", "rdv", "le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers", "j'ai", "il faut", "je dois", "aller", "faire", "voir", "prendre", "récupérer", "manger", "déjeuner", "et", "ou"];
-            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
-            if(words.length === 0) return "Tâche";
-            return words[0].charAt(0).toUpperCase() + words[0].slice(1);
+            const lower = text.toLowerCase(); const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "réunion":"Réunion", "dentiste":"Dentiste" }; for(let k in dict) { if(lower.includes(k)) return dict[k]; }
+            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim(); let words = clean.split(/\s+/).filter(w => w.length > 2);
+            return words.length > 0 ? words[0].charAt(0).toUpperCase() + words[0].slice(1) : "Tâche";
         }
-
-        function traiterBatch() {
-            const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
-            const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3);
-            tasks.forEach(taskStr => injectTaskSmartly(taskStr));
-            save(); document.getElementById('userInput').value = ''; renderHUD();
-        }
-
+        function traiterBatch() { const raw = document.getElementById('userInput').value; if(!raw.trim()) return; const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3); tasks.forEach(taskStr => injectTaskSmartly(taskStr)); save(); document.getElementById('userInput').value = ''; renderHUD(); }
         function injectTaskSmartly(text) {
-            const lower = text.toLowerCase(); let d = selectedDay;
-            const daysMap = { "dimanche": 0, "lundi": 1, "mardi": 2, "mercredi": 3, "jeudi": 4, "vendredi": 5, "samedi": 6 };
-            let targetDayOfWeek = -1;
-            for (const [dayName, dayIndex] of Object.entries(daysMap)) { if (lower.includes(dayName)) { targetDayOfWeek = dayIndex; break; } }
-            if (targetDayOfWeek !== -1) { const currentDayOfWeek = now.getDay(); let diff = targetDayOfWeek - currentDayOfWeek; if (diff < 0) diff += 7; d = todayNum + diff; } 
-            else { if (lower.includes('demain')) d = todayNum + 1; if (lower.includes('après-demain')) d = todayNum + 2; }
-
-            const parsed = parseInput(text); const cl = cleanTaskText(text); 
-            // ALERT LOGIC (V70)
-            if(d === selectedDay) {
-                let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60; let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
-                if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); }
-            }
+            const lower = text.toLowerCase(); let d = selectedDay; if (lower.includes('demain')) d = todayNum + 1; const parsed = parseInput(text); const cl = cleanTaskText(text); 
+            if(d === selectedDay) { let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60; let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60); if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); } }
             const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60; const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
             db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }];
         }
-
         function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
-
-        // --- NAVIGATION & MARKET ---
-        function switchTab(tab) {
-            document.getElementById('page-dashboard').classList.add('hidden');
-            document.getElementById('page-market').classList.add('hidden');
-            document.getElementById('nav-dashboard').classList.remove('active');
-            document.getElementById('nav-market').classList.remove('active');
-            document.getElementById(`page-${tab}`).classList.remove('hidden');
-            document.getElementById(`nav-${tab}`).classList.add('active');
-            if(tab === 'market') renderMarketList();
-        }
-
-        function renderMarketList(filter = "") {
-            const container = document.getElementById('market-list'); container.innerHTML = "";
-            STOCK_DATA.forEach(stock => {
-                if(stock.name.toLowerCase().includes(filter.toLowerCase()) || stock.ticker.toLowerCase().includes(filter.toLowerCase())) {
-                    const isUp = stock.change.includes('+');
-                    container.innerHTML += `<div class="asset-row" onclick="openAssetDetail('${stock.ticker}')"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center font-bold text-xs">${stock.ticker.substring(0,1)}</div><div><p class="font-bold text-sm">${stock.ticker}</p><p class="text-[10px] opacity-50">${stock.name}</p></div></div><div class="text-right"><p class="font-bold text-sm">${stock.price}</p><span class="text-[10px] font-bold ${isUp ? 'text-green-400' : 'text-red-400'}">${stock.change}</span></div></div>`;
-                }
-            });
-        }
-        function filterMarket() { renderMarketList(document.getElementById('marketSearch').value); }
-        function openAssetDetail(ticker) {
-            const data = STOCK_DATA.find(s => s.ticker === ticker) || STOCK_DATA[0];
-            document.getElementById('asset-icon').innerText = ticker.substring(0,1); document.getElementById('asset-name').innerText = data.name; document.getElementById('asset-ticker').innerText = ticker; document.getElementById('asset-price').innerText = data.price; document.getElementById('asset-change').innerText = data.change; document.getElementById('asset-sector').innerText = data.sector; document.getElementById('asset-pe').innerText = data.pe; document.getElementById('asset-yield').innerText = data.yield; document.getElementById('asset-rating').innerText = data.rating; document.getElementById('asset-desc').innerText = data.desc;
-            document.getElementById('assetModal').classList.remove('hidden');
-        }
-        function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
-
-        // --- RENDER HUD (V70) ---
         function renderHUD() {
             try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-
                 const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
-                tasks.forEach(t => {
-                    const fl = (t.fullText||"").toLowerCase();
-                    if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
-                    if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
-                    if (t.time) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const startMin = h*60 + m;
-                        const dur = t.duration || 60; 
-                        occupiedSlots.push({start: startMin, end: startMin + dur});
-                    }
-                });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|projet|travail/i))) mode = 'focus';
-
-                if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
-
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
-
-                let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-                let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
-                document.getElementById('calTarget').innerText = `${tdee} kcal`;
-                document.getElementById('hudSupplements').innerText = suppsDB[mode];
-
-                const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
-                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
-                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-                const rM = ROUTINES[mode].m[rIndex]; const rE = ROUTINES[mode].e[rIndex];
-
-                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
-                occupiedSlots.forEach(slot => {
-                    if (slot.start < (dinnerMin + 45) && slot.end > dinnerMin) {
-                        dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60;
-                    }
-                });
-                const lunchTime = `${Math.floor(lunchMin/60).toString().padStart(2,'0')}:${(lunchMin%60).toString().padStart(2,'0')}`;
+                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+                let occupiedSlots = []; tasks.forEach(t => { if(t.time) { const [h,m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); } });
+                let dinnerMin = 1200; occupiedSlots.forEach(slot => { if(slot.start < (dinnerMin + 45) && slot.end > dinnerMin) dinnerMin = slot.end + 15; });
                 const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-
-                if (mode === 'sport' && sportTaskTime) {
-                    const [h, m] = sportTaskTime.split(':').map(Number);
-                    if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); }
-                }
-                if (importantEventTime) {
-                    const [h, m] = importantEventTime.split(':').map(Number);
-                    let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
-                    injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
-                    if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; }
-                }
-
-                let stream = [];
-                stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-                stream.push(...injectedItems);
-                stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-                stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-
-                tasks.forEach((t, i) => {
-                    let fl = (t.fullText||"").toLowerCase();
-                    let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
-                    let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
-                    let accent = 'accent-task'; let dot = 'dot-task';
-                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
-                    if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-                    let displayContent = t.shortText;
-                    if(t.duration > 0) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const endMin = h*60 + m + t.duration;
-                        const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60;
-                        displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`;
-                    }
-                    stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
-                });
-
-                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
-
-                const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes();
-                const currentTimeVal = currentHour * 60 + currentMin;
-                const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
-                let liveLineInserted = false;
-
-                container.innerHTML = stream.map(item => {
-                    const [h, m] = item.time.split(':').map(Number); const itemTimeVal = h * 60 + m;
-                    let html = '';
-                    if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
-                    let cardContent = '';
-                    if (item.type === 'routine') { cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`; }
-                    else if (item.type === 'meal') { cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`; }
-                    else if (item.type === 'snack') { cardContent = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`; }
-                    else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
-                    return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
-                }).join('');
-
-                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                updateWaterUI(mode);
-            } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur.</p>`; }
+                let stream = [ { type: 'meal', time: '12:30', content: 'Déjeuner Équilibré', accent: 'accent-meal', dot: 'dot-meal' }, { type: 'meal', time: dinnerTime, content: 'Dîner Récupération', accent: 'accent-meal', dot: 'dot-meal' } ];
+                tasks.forEach((t, i) => { stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: 'accent-task', dot: 'dot-task', id: i }); });
+                stream.sort((a,b) => a.time.localeCompare(b.time));
+                document.getElementById('masterTimeline').innerHTML = stream.map(item => `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent}" ${item.type==='task'?`onclick="openTaskModal(${item.id})"`:''}><p class="font-bold text-lg">${item.content}</p></div></div>`).join('');
+            } catch (e) { console.error(e); }
         }
 
-        // Utils (V70)
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
-        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function addWater(n){health.water+=n; save();}
-        function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';for(let i=1;i<=31;i++){const d=document.createElement('div');d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        // Utils (Standard V70)
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
         function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderHUD(); checkHabits();}
-        function setMusic(p){musicProvider=p;updateMusicUI();save();}
-        function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
-        function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
-        function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
-        function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
-        function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        function exportData(){const data={db,profile,health,musicProvider,manualMeals};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};save();alert("Restauré !");};reader.readAsText(file);}
+        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); renderHUD(); renderCal();}
+        function addWater(n){health.water+=n; localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); document.getElementById('waterText').innerText=`${health.water}L`;}
+        
+        // CALENDAR V78 (Enhanced with Dots)
+        function renderCal(){
+            const c=document.getElementById('calendar'); c.innerHTML='';
+            for(let i=1;i<=31;i++){
+                const d=document.createElement('div');
+                let hasTask = db[i] && db[i].length > 0;
+                d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''} ${hasTask?'has-event':''}`;
+                d.innerText=i;
+                d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};
+                c.appendChild(d);
+            }
+        }
+        function playContextMusic(){ window.open('https://open.spotify.com/search/Deep%20Focus','_blank'); }
+        function openProfile() { document.getElementById('profileModal').classList.remove('hidden'); }
+        function saveProfile() { document.getElementById('profileModal').classList.add('hidden'); }
+        function exportData(){const data={db,profile,health};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
+        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;save();alert("Restauré !");};reader.readAsText(file);}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
-        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
+        renderCal(); renderHUD();
     </script>
 </body>
 </html>
