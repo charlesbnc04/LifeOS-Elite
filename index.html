@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V28 - Nutri-Variety</title>
+    <title>LifeOS Sovereign V29 - Planner Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; }
+        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; transition: 0.3s; }
         
-        /* Styles Nutri Dynamiques */
+        /* Nutri Styles */
         .meal-card { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.05) 0%, transparent 100%); }
         .type-sport { border-color: #f97316; background: linear-gradient(90deg, rgba(249,115,22,0.1) 0%, transparent 100%); }
         .type-focus { border-color: #8b5cf6; background: linear-gradient(90deg, rgba(139,92,246,0.1) 0%, transparent 100%); }
@@ -23,6 +23,9 @@
         .has-event { border-bottom: 3px solid #3b82f6; }
         
         .water-progress { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        
+        /* Console Log Visual */
+        .console-log { font-family: monospace; font-size: 10px; color: #10b981; margin-top: 5px; opacity: 0; transition: opacity 0.5s; }
     </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
@@ -35,8 +38,7 @@
                 
                 <div>
                     <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-3">Menu du Jour</p>
-                    <div id="sidebarNutri" class="glass-panel p-5 space-y-4">
-                        </div>
+                    <div id="sidebarNutri" class="glass-panel p-5 space-y-4"></div>
                 </div>
 
                 <div class="glass-panel p-6">
@@ -61,14 +63,16 @@
         <main class="lg:col-span-6 space-y-6">
             <div id="inputZone" class="glass p-10 relative transition-all duration-300">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Injection & Variété V28</span>
+                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Multi-Tasking V29</span>
                     <div id="successMsg" class="opacity-0 text-[10px] font-bold text-green-400 transition-opacity">Synchronisé ✔</div>
                 </div>
                 
-                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-8 placeholder:opacity-20 min-h-[120px] resize-none" placeholder="Ex: Match demain, Réunion le 28..."></textarea>
+                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-4 placeholder:opacity-20 min-h-[120px] resize-none" placeholder="Ex: Lundi sport, Mardi dentiste, Mercredi bureau..."></textarea>
                 
-                <div class="flex gap-4">
-                    <button onclick="traiter()" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all">Injecter au Planning</button>
+                <div id="consoleOutput" class="console-log h-12 overflow-y-auto"></div>
+
+                <div class="flex gap-4 mt-6">
+                    <button onclick="traiter()" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all">Planifier la semaine</button>
                     <button onclick="toggleVoice()" id="voiceBtn" class="w-16 glass-panel flex items-center justify-center text-2xl hover:text-blue-400 transition-all">🎤</button>
                 </div>
             </div>
@@ -107,271 +111,205 @@
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v28_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v28_health') || '{"water":0}');
+        // --- DATA INIT ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v29_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v29_health') || '{"water":0}');
         const now = new Date();
         const todayNum = now.getDate();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
         let currentDayOpen = null;
 
-        // --- DATABASE CULINAIRE (VARIÉTÉ) ---
+        // --- CULINARY DB ---
         const mealDB = {
-            sport: {
-                lunch: [
-                    "Pâtes Complètes + Blanc de Poulet + Courgettes",
-                    "Riz Basmati + Steak Haché 5% + Haricots verts",
-                    "Wrap Thon + Maïs + Oeuf dur",
-                    "Salade de Quinoa + Dinde + Avocat",
-                    "Sandwich Pain complet + Jambon + Tomates"
-                ],
-                dinner: [
-                    "Omelette (3 oeufs) + Patates douces",
-                    "Cabillaud + Purée de pommes de terre",
-                    "Bowl Riz + Saumon + Edamame",
-                    "Wok Poulet + Nouilles chinoises",
-                    "Lentilles + Saucisse volaille"
-                ]
-            },
-            focus: {
-                lunch: [
-                    "Pavé de Saumon + Fondue de Poireaux",
-                    "Salade César (Sauce légère) + Poulet",
-                    "Maquereau grillé + Salade de tomates",
-                    "Bowl Quinoa + Tofu fumé + Avocat",
-                    "Carpaccio de boeuf + Roquette"
-                ],
-                dinner: [
-                    "Soupe de légumes + Fromage blanc",
-                    "Filet de Dinde + Haricots verts",
-                    "Oeufs brouillés + Épinards",
-                    "Sardines grillées + Salade verte",
-                    "Velouté de Potiron + Dés de jambon"
-                ]
-            },
-            std: {
-                lunch: [
-                    "Chili con Carne (Léger) + Riz",
-                    "Rôti de Porc + Petits pois",
-                    "Couscous Royal (Semoule moyenne)",
-                    "Lasagnes aux légumes + Salade",
-                    "Hachis Parmentier + Salade verte",
-                    "Wrap Poulet Curry + Crudités",
-                    "Taboulé Libanais + Brochettes de poulet"
-                ],
-                dinner: [
-                    "Gratin de chou-fleur + Jambon",
-                    "Salade composée (Thon/Oeuf/Tomate)",
-                    "Ratatouille + Riz complet",
-                    "Poêlée forestière + Omelette",
-                    "Soupe Miso + Sashimi",
-                    "Croque-monsieur (Pain complet) + Salade",
-                    "Curry de légumes + Pois chiches"
-                ]
-            }
+            sport: { lunch: ["Pâtes Complètes Poulet", "Riz Steak Haché", "Wrap Thon", "Quinoa Dinde", "Sandwich Complet"], dinner: ["Omelette Patates douces", "Cabillaud Purée", "Bowl Riz Saumon", "Wok Poulet", "Lentilles Volaille"] },
+            focus: { lunch: ["Saumon Poireaux", "Salade César", "Maquereau", "Bowl Tofu", "Carpaccio"], dinner: ["Soupe Légumes", "Filet Dinde", "Oeufs Épinards", "Sardines", "Velouté"] },
+            std: { lunch: ["Chili con Carne", "Rôti Porc", "Couscous", "Lasagnes", "Hachis Parmentier", "Wrap Curry", "Taboulé"], dinner: ["Gratin chou-fleur", "Salade composée", "Ratatouille", "Poêlée", "Soupe Miso", "Croque-monsieur", "Curry pois chiches"] }
         };
 
-        // --- ALGORITHME DE SÉLECTION ROTATIF ---
+        // --- INTELLIGENCE DE PARSING (V29) ---
+        function traiter() {
+            const rawText = document.getElementById('userInput').value;
+            if(!rawText.trim()) return;
+
+            const consoleDiv = document.getElementById('consoleOutput');
+            consoleDiv.innerHTML = ""; 
+            consoleDiv.style.opacity = "1";
+
+            // 1. DÉCOUPAGE PAR MOTS-CLÉS DE TEMPS
+            // On sépare la phrase sur les virgules, points, ou mots de liaison "et", "puis"
+            const segments = rawText.split(/[,.;]|\bet\b|\bpuis\b/i);
+
+            let logs = [];
+
+            segments.forEach(segment => {
+                segment = segment.trim();
+                if(!segment) return;
+
+                let targetDay = todayNum; // Par défaut aujourd'hui
+                let foundDate = false;
+                const lower = segment.toLowerCase();
+
+                // DÉTECTION "LUNDI", "MARDI"...
+                const daysOfWeek = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+                for (let i = 0; i < 7; i++) {
+                    if (lower.includes(daysOfWeek[i])) {
+                        targetDay = getNextDate(i); // Fonction magique
+                        foundDate = true;
+                        break;
+                    }
+                }
+
+                // DÉTECTION "DEMAIN", "LE 25"
+                if (!foundDate) {
+                    if (lower.includes('demain')) {
+                        targetDay = todayNum + 1;
+                    } else if (lower.includes('après-demain')) {
+                        targetDay = todayNum + 2;
+                    } else {
+                        const dateMatch = lower.match(/le (\d{1,2})/);
+                        if (dateMatch) {
+                            targetDay = parseInt(dateMatch[1]);
+                        }
+                    }
+                }
+                
+                // Nettoyage du texte (enlève "lundi", "demain" pour garder juste la tâche)
+                let cleanTask = segment
+                    .replace(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)/gi, '')
+                    .replace(/(demain|après-demain)/gi, '')
+                    .replace(/le \d{1,2}/gi, '')
+                    .trim();
+
+                // Injection
+                if(targetDay > 31) targetDay = 1; // Sécurité mois
+                if(cleanTask.length > 2) {
+                    db[targetDay] = [...(db[targetDay] || []), { text: cleanTask, done: false }];
+                    logs.push(`> Ajouté le ${targetDay}: "${cleanTask}"`);
+                }
+            });
+
+            // Afficher le résultat
+            consoleDiv.innerHTML = logs.join('<br>');
+            
+            save();
+            document.getElementById('userInput').value = '';
+            const msg = document.getElementById('successMsg');
+            msg.style.opacity = '1';
+            setTimeout(() => { msg.style.opacity = '0'; consoleDiv.style.opacity = "0"; }, 4000);
+        }
+
+        // Fonction pour trouver la date du prochain "Lundi", "Mardi", etc.
+        function getNextDate(dayIndex) {
+            const today = new Date();
+            const currentDayIndex = today.getDay(); // 0=Dim, 1=Lun...
+            
+            let distance = dayIndex - currentDayIndex;
+            if (distance <= 0) distance += 7; // Si on est Mardi et qu'on dit Lundi, c'est Lundi prochain
+            
+            const nextDate = new Date(today);
+            nextDate.setDate(today.getDate() + distance);
+            return nextDate.getDate();
+        }
+
+        // --- AUX FUNCTIONS (Nutri, Wakeup, UI) ---
         function getMealPlan(dayIndex) {
             const tasks = (db[dayIndex] || []).map(t => t.text.toLowerCase()).join(' ');
+            let type = 'std'; let title = 'Équilibre'; let icon = '⚖️';
             
-            // 1. DÉTERMINER LE TYPE (Contexte)
-            let type = 'std';
-            let title = 'Menu Équilibre';
-            let icon = '⚖️';
-            
-            if (tasks.includes('sport') || tasks.includes('match') || tasks.includes('gym') || tasks.includes('foot')) {
-                type = 'sport'; title = 'Haute Énergie'; icon = '🔥';
-            } else if (tasks.includes('réunion') || tasks.includes('bureau') || tasks.includes('cours')) {
-                type = 'focus'; title = 'Focus Mental'; icon = '🧠';
-            }
+            if (tasks.includes('sport') || tasks.includes('match') || tasks.includes('gym')) { type = 'sport'; title = 'Performance'; icon = '🔥'; } 
+            else if (tasks.includes('réunion') || tasks.includes('bureau') || tasks.includes('cours')) { type = 'focus'; title = 'Focus'; icon = '🧠'; }
 
-            // 2. SÉLECTION ROTATIVE (Jour % Taille du menu)
-            // Cela assure un plat différent chaque jour, mais toujours le même pour une date donnée (pas aléatoire à chaque clic)
             const menuList = mealDB[type];
-            const lunchIndex = (dayIndex - 1) % menuList.lunch.length;
-            const dinnerIndex = (dayIndex - 1) % menuList.dinner.length;
-
             return {
-                type: type,
-                icon: icon,
-                title: title,
-                lunch: menuList.lunch[lunchIndex],
-                dinner: menuList.dinner[dinnerIndex]
+                type: type, icon: icon, title: title,
+                lunch: menuList.lunch[(dayIndex - 1) % menuList.lunch.length],
+                dinner: menuList.dinner[(dayIndex - 1) % menuList.dinner.length]
             };
         }
 
-        // --- RENDU UI ---
         function renderNutriUI() {
-            const plan = getMealPlan(todayNum); // Pour aujourd'hui dans la sidebar
-            const html = `
-                <div class="text-xs font-bold mb-2 flex items-center gap-2 ${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">
-                    <span>${plan.icon}</span> <span>${plan.title}</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="pl-3 border-l-2 border-white/20">
-                        <p class="text-[8px] uppercase font-black opacity-50">MIDI ☀️</p>
-                        <p class="text-xs font-medium leading-tight">${plan.lunch}</p>
-                    </div>
-                    <div class="pl-3 border-l-2 border-white/20">
-                        <p class="text-[8px] uppercase font-black opacity-50">SOIR 🌙</p>
-                        <p class="text-xs font-medium leading-tight">${plan.dinner}</p>
-                    </div>
-                </div>
+            const plan = getMealPlan(todayNum);
+            document.getElementById('sidebarNutri').innerHTML = `
+                <div class="text-xs font-bold mb-2 flex items-center gap-2 ${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}"><span>${plan.icon}</span> <span>${plan.title}</span></div>
+                <div class="space-y-3"><div class="pl-3 border-l-2 border-white/20"><p class="text-[8px] uppercase font-black opacity-50">MIDI</p><p class="text-xs font-medium">${plan.lunch}</p></div><div class="pl-3 border-l-2 border-white/20"><p class="text-[8px] uppercase font-black opacity-50">SOIR</p><p class="text-xs font-medium">${plan.dinner}</p></div></div>
             `;
-            const box = document.getElementById('sidebarNutri');
-            box.innerHTML = html;
-            box.className = `glass-panel p-5 meal-card type-${plan.type}`;
+            document.getElementById('sidebarNutri').className = `glass-panel p-5 meal-card type-${plan.type}`;
         }
 
         function renderModalNutri(day) {
-            const plan = getMealPlan(day); // Pour le jour cliqué
-            const html = `
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[10px] uppercase tracking-widest font-black opacity-50">Menu du jour</p>
-                    <h3 class="text-lg font-bold flex items-center gap-2">
-                        <span>${plan.icon}</span> <span class="${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">${plan.title}</span>
-                    </h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-black/20 p-4 rounded-xl border border-white/5">
-                        <p class="text-[9px] font-black text-yellow-500 uppercase mb-1">MIDI</p>
-                        <p class="text-sm font-medium">${plan.lunch}</p>
-                    </div>
-                    <div class="bg-black/20 p-4 rounded-xl border border-white/5">
-                        <p class="text-[9px] font-black text-blue-400 uppercase mb-1">SOIR</p>
-                        <p class="text-sm font-medium">${plan.dinner}</p>
-                    </div>
-                </div>
+            const plan = getMealPlan(day);
+            document.getElementById('modalNutri').innerHTML = `
+                <div class="flex justify-between mb-4"><p class="text-[10px] uppercase font-black opacity-50">Menu</p><h3 class="text-lg font-bold flex gap-2"><span>${plan.icon}</span> <span class="${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">${plan.title}</span></h3></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-black/20 p-4 rounded-xl border border-white/5"><p class="text-[9px] font-black text-yellow-500 uppercase mb-1">MIDI</p><p class="text-sm font-medium">${plan.lunch}</p></div><div class="bg-black/20 p-4 rounded-xl border border-white/5"><p class="text-[9px] font-black text-blue-400 uppercase mb-1">SOIR</p><p class="text-sm font-medium">${plan.dinner}</p></div></div>
             `;
-            const container = document.getElementById('modalNutri');
-            container.innerHTML = html;
-            container.className = `mb-8 p-6 rounded-2xl border border-white/5 bg-white/5 meal-card type-${plan.type}`;
-        }
-
-        // --- SYSTEME DE BASE ---
-        function traiter() {
-            const input = document.getElementById('userInput');
-            const txt = input.value;
-            if(!txt.trim()) return;
-
-            let targetDay = todayNum;
-            let finalTxt = txt;
-            let lower = txt.toLowerCase();
-
-            if (lower.includes('demain')) {
-                targetDay = todayNum + 1;
-                finalTxt = txt.replace(/demain/gi, '').trim();
-            } else if (lower.includes('après-demain')) {
-                targetDay = todayNum + 2;
-                finalTxt = txt.replace(/après-demain/gi, '').trim();
-            } else {
-                const dateMatch = lower.match(/le (\d{1,2})/);
-                if(dateMatch) {
-                    targetDay = parseInt(dateMatch[1]);
-                    finalTxt = txt.replace(/le \d{1,2}/gi, '').trim();
-                }
-            }
-            if(targetDay > 31) targetDay = 1;
-
-            db[targetDay] = [...(db[targetDay] || []), { text: finalTxt, done: false }];
-            save();
-            input.value = '';
-            const msg = document.getElementById('successMsg');
-            msg.style.opacity = '1';
-            setTimeout(() => msg.style.opacity = '0', 2000);
+            document.getElementById('modalNutri').className = `mb-8 p-6 rounded-2xl border border-white/5 bg-white/5 meal-card type-${plan.type}`;
         }
 
         function calculateWakeUp() {
             const tmrTasks = db[todayNum + 1] || [];
-            let wake = "08:00"; let reason = "Cycle Standard";
+            let wake = "08:00"; let reason = "Repos";
             tmrTasks.forEach(t => {
                 const match = t.text.match(/(\d{1,2})[h:](\d{2})?/);
-                if(match) {
-                    const h = parseInt(match[1]);
-                    if(h < 10) {
-                        let wakeH = h - 2; 
-                        let wakeM = match[2] ? parseInt(match[2]) : 0;
-                        if (wakeM === 0) { wakeM = 30; wakeH -= 1; }
-                        wake = `${wakeH.toString().padStart(2,'0')}:${wakeM.toString().padStart(2,'0')}`;
-                        reason = `Mission à ${h}h`;
-                    }
+                if(match && parseInt(match[1]) < 10) {
+                    let wh = parseInt(match[1]) - 2;
+                    let wm = match[2] ? parseInt(match[2]) : 0;
+                    if(wm===0){wm=30; wh-=1;}
+                    wake = `${wh.toString().padStart(2,'0')}:${wm.toString().padStart(2,'0')}`;
+                    reason = `Mission ${match[1]}h`;
                 }
             });
             document.getElementById('wakeTime').innerText = wake;
             document.getElementById('wakeReason').innerText = reason;
         }
 
-        function updateAll() {
-            renderCal();
-            renderNutriUI();
-            calculateWakeUp();
-            scanAlerts();
-            updateWater();
-        }
-
         function scanAlerts() {
             let html = '';
-            for(let i=1; i<todayNum; i++) {
-                if(db[i] && db[i].some(t => !t.done)) html += `<div class="p-3 bg-red-500/10 border-l-2 border-red-500 text-xs text-red-400 font-bold">⚠️ Retard du ${i}</div>`;
-            }
-            document.getElementById('alertBox').innerHTML = html || '<div class="text-center py-6 opacity-20 text-xs italic">Aucune urgence.</div>';
+            for(let i=1; i<todayNum; i++) if(db[i] && db[i].some(t => !t.done)) html += `<div class="p-3 bg-red-500/10 border-l-2 border-red-500 text-xs text-red-400 font-bold">⚠️ Retard du ${i}</div>`;
+            document.getElementById('alertBox').innerHTML = html || '<div class="text-center py-6 opacity-20 text-xs italic">R.A.S</div>';
         }
 
-        function addWater(n) { health.water += n; save(); }
-        function updateWater() {
+        function updateAll() {
+            renderCal(); renderNutriUI(); calculateWakeUp(); scanAlerts();
             document.getElementById('waterText').innerText = health.water + "L";
             document.getElementById('waterBar').style.width = Math.min(100, (health.water/2.5)*100) + "%";
-            let total=0, done=0;
-            Object.values(db).forEach(arr => arr.forEach(t => { total++; if(t.done) done++; }));
-            const score = Math.round((health.water/2.5*40) + (total ? done/total*60 : 0));
-            document.getElementById('score').innerText = Math.min(100, score) + "%";
+            let t=0, d=0; Object.values(db).forEach(a => a.forEach(x => { t++; if(x.done) d++; }));
+            document.getElementById('score').innerText = Math.round((health.water/2.5*40) + (t ? d/t*60 : 0)) + "%";
         }
 
         function renderCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
             const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
             for(let i=1; i<=days; i++) {
-                const hasTask = db[i] && db[i].length;
                 const d = document.createElement('div');
-                d.className = `day ${i===todayNum ? 'day-today' : ''} ${hasTask ? 'has-event' : ''}`;
-                d.innerText = i;
-                d.onclick = () => showDay(i);
-                cal.appendChild(d);
+                d.className = `day ${i===todayNum?'day-today':''} ${(db[i]&&db[i].length)?'has-event':''}`;
+                d.innerText = i; d.onclick = () => showDay(i); cal.appendChild(d);
             }
         }
 
         function showDay(day) {
-            currentDayOpen = day;
-            renderModalNutri(day); // On génère le menu spécifique à ce jour
+            currentDayOpen = day; renderModalNutri(day);
             const tasks = db[day] || [];
-            document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
-            document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
+            document.getElementById('modalDate').innerText = `${day}/${now.getMonth()+1}`;
+            document.getElementById('taskList').innerHTML = tasks.map((t,i) => `
                 <div class="glass-panel p-4 flex justify-between items-center group">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5 cursor-pointer">
-                        <span class="${t.done ? 'line-through opacity-30' : 'font-medium'}">${t.text}</span>
-                    </div>
+                    <div class="flex items-center gap-3"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5 cursor-pointer"><span class="${t.done?'line-through opacity-30':'font-medium'}">${t.text}</span></div>
                     <button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button>
-                </div>
-            `).join('') || '<p class="opacity-30 text-center italic text-sm">Aucune tâche.</p>';
+                </div>`).join('') || '<p class="opacity-30 text-center italic text-sm">Vide</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
         function addTaskManually() {
-            const val = document.getElementById('newTaskInput').value;
-            if(!val) return;
-            db[currentDayOpen] = [...(db[currentDayOpen] || []), {text: val, done: false}];
+            const val = document.getElementById('newTaskInput').value; if(!val) return;
+            db[currentDayOpen] = [...(db[currentDayOpen]||[]), {text: val, done: false}];
             save(); document.getElementById('newTaskInput').value = '';
         }
         function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); showDay(d); }
         function delTask(d,i) { db[d].splice(i,1); save(); showDay(d); }
-        function save() { 
-            localStorage.setItem('lifeos_v28_db', JSON.stringify(db)); 
-            localStorage.setItem('lifeos_v28_health', JSON.stringify(health));
-            updateAll();
-        }
+        function save() { localStorage.setItem('lifeos_v29_db', JSON.stringify(db)); localStorage.setItem('lifeos_v29_health', JSON.stringify(health)); updateAll(); }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
+        function addWater(n) { health.water += n; save(); }
         document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') traiter(); });
-        
         updateAll();
     </script>
 </body>
