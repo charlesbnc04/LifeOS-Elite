@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V61 - Event Horizon</title>
+    <title>LifeOS Sovereign V63 - Semantic</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -18,14 +18,11 @@
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
         
-        /* COLORS & ACCENTS */
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
         .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        
-        /* IMPORTANT EVENT STYLES */
         .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
         .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
         .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
@@ -63,7 +60,7 @@
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Grosse réunion demain à 17h'&#10;(Le système vous prépare mentalement)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent (Sémantique)</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Déjeuner avec Paul à midi' ou 'Match de foot ce soir'"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
                 <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
@@ -99,10 +96,10 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v61_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v61_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v61_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v61_manual_meals') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v63_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v63_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v63_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v63_manual_meals') || "{}");
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
@@ -119,8 +116,48 @@
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
-        function extractTimeFromInput(text) { const match = text.match(/(\d{1,2})\s*[:hH]\s*(\d{2})?/); if(match) { let h = parseInt(match[1]); let m = match[2] ? parseInt(match[2]) : 0; return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; } return null; }
-        function cleanTaskText(text) { let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim(); const prefixes = ["grosse","j'ai un", "j'ai une", "j'ai", "il faut que", "il faut", "je dois", "aller au", "aller à", "aller chez", "faire du", "faire de la", "séance de", "rendez-vous", "rdv", "voir", "prendre", "récupérer", "manger avec", "déjeuner avec"]; prefixes.sort((a,b) => b.length - a.length); let lower = clean.toLowerCase(); for(let p of prefixes) { if(lower.startsWith(p)) { clean = clean.substring(p.length).trim(); lower = clean.toLowerCase(); } } const connectors = ["le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez"]; let words = clean.split(' '); if(words.length > 0 && connectors.includes(words[0].toLowerCase())) { words.shift(); clean = words.join(' '); } if(clean.length === 0) return "Tâche"; return clean.charAt(0).toUpperCase() + clean.slice(1); }
+
+        // --- NEW V63: SEMANTIC TIME ENGINE ---
+        function extractTimeFromInput(text) {
+            const lower = text.toLowerCase();
+            
+            // 1. Check Regex (Explicit digits)
+            const match = text.match(/(\d{1,2})\s*[:hH]\s*(\d{2})?/);
+            if(match) {
+                let h = parseInt(match[1]);
+                let m = match[2] ? parseInt(match[2]) : 0;
+                return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+            }
+
+            // 2. Check Semantic Keywords (Implicit)
+            if (lower.includes('midi')) return '12:00';
+            if (lower.includes('minuit')) return '23:59'; // End of day
+            if (lower.includes('matin')) return '09:00';
+            if (lower.includes('soir')) return '19:00';
+            if (lower.includes('fin de journée') || lower.includes('après-midi')) return '18:00';
+
+            return null;
+        }
+
+        function cleanTaskText(text) {
+            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
+            
+            // Words to remove (including semantics)
+            const removals = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "apres-demain"];
+            removals.forEach(w => { clean = clean.replace(new RegExp(w, 'gi'), ''); });
+
+            const prefixes = ["grosse","j'ai un", "j'ai une", "j'ai", "il faut que", "il faut", "je dois", "aller au", "aller à", "aller chez", "faire du", "faire de la", "séance de", "rendez-vous", "rdv", "voir", "prendre", "récupérer", "manger avec", "déjeuner avec"]; 
+            prefixes.sort((a,b) => b.length - a.length); 
+            let lower = clean.toLowerCase(); 
+            for(let p of prefixes) { if(lower.startsWith(p)) { clean = clean.substring(p.length).trim(); lower = clean.toLowerCase(); } } 
+            
+            const connectors = ["le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers"]; 
+            let words = clean.split(' ').filter(w => w.trim() !== '');
+            if(words.length > 0 && connectors.includes(words[0].toLowerCase())) { words.shift(); clean = words.join(' '); } 
+            
+            if(clean.length === 0) return "Tâche"; 
+            return clean.charAt(0).toUpperCase() + clean.slice(1); 
+        }
 
         function renderHUD() {
             const isToday = (selectedDay === todayNum);
@@ -130,7 +167,6 @@
 
             const tasks = db[selectedDay] || [];
             const txt = tasks.map(t => t.fullText.toLowerCase()).join(' ');
-            
             let mode = 'diet'; 
             let sportTaskTime = null;
             let importantEventTime = null;
@@ -138,7 +174,6 @@
             tasks.forEach(t => {
                 const fl = t.fullText.toLowerCase();
                 if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
-                // V61 IMPORTANT EVENT DETECTION
                 if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
             });
             if (mode === 'diet' && txt.match(/réunion|bureau|projet|travail|code|étude|cours|admin|compta/)) mode = 'focus';
@@ -162,36 +197,21 @@
             const rM = ROUTINES[mode].m[rIndex];
             const rE = ROUTINES[mode].e[rIndex];
 
-            // --- V60 & V61 LOGIC ---
-            let lunchTime = "12:30";
-            let dinnerTime = "20:00";
-            let injectedItems = [];
-            let dinnerSubtitle = `✨ ${getVits(d)}`;
+            // V60 + V61 LOGIC
+            let lunchTime = "12:30"; let dinnerTime = "20:00"; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
 
-            // Sport Shift (V60)
             if (mode === 'sport' && sportTaskTime) {
                 const [h, m] = sportTaskTime.split(':').map(Number);
                 if (h >= 18) {
-                    let endH = h + 2; if(endH>=24) endH -= 24;
-                    dinnerTime = `${endH.toString().padStart(2,'0')}:00`;
-                    dinnerSubtitle = "⚠️ <b>Optimisé Post-Effort</b>";
-                    let snackH = h - 3;
-                    injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes (Énergie)", color: 'dot-snack', accent: 'accent-snack' });
+                    let endH = h + 2; if(endH>=24) endH -= 24; dinnerTime = `${endH.toString().padStart(2,'0')}:00`; dinnerSubtitle = "⚠️ <b>Optimisé Post-Effort</b>";
+                    let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes (Énergie)", color: 'dot-snack', accent: 'accent-snack' });
                 }
             }
-
-            // High Stakes Event (V61)
             if (importantEventTime) {
                 const [h, m] = importantEventTime.split(':').map(Number);
-                // Prep Mental (30 mins before)
-                let prepMin = m - 30; let prepH = h;
-                if(prepMin < 0) { prepMin += 60; prepH -= 1; }
+                let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
                 injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing stress relief", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
-                
-                // If event is in afternoon, switch lunch to FOCUS (lighter)
-                if (h >= 13 && h <= 18) {
-                    l = mealsDB['focus'].lunch[rot]; // Force Light Lunch
-                }
+                if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; }
             }
 
             let stream = [];
@@ -205,11 +225,9 @@
                 let fl = t.fullText.toLowerCase();
                 let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
                 let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
-                
                 let accent = 'accent-task'; let dot = 'dot-task';
                 if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
                 if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-
                 stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
             });
 
@@ -229,11 +247,7 @@
                 const [h, m] = item.time.split(':').map(Number);
                 const itemTimeVal = h * 60 + m;
                 let html = '';
-
-                if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) {
-                    html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                    liveLineInserted = true;
-                }
+                if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
 
                 let cardContent = '';
                 if (item.type === 'routine') {
@@ -245,7 +259,6 @@
                 } else if (item.type === 'task') {
                     cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`;
                 }
-
                 return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
             }).join('');
 
@@ -254,20 +267,33 @@
         }
 
         // HELPERS
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v61_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
+        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v63_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
-        function traiter(){const r=document.getElementById('userInput').value;if(!r.trim())return;traiterInput(r);}
-        function traiterInput(r){let d=selectedDay;if(r.match(/demain/i))d=todayNum+1;else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} let time=extractTimeFromInput(r)||"09:00"; const cl=cleanTaskText(r); db[d]=[...(db[d]||[]),{shortText:cl,fullText:r,time:time,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();}
+        
+        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
+        function traiterInput(r) { 
+            let d = selectedDay;
+            if (r.match(/apr[èe]s[- ]?demain/i)) { d = todayNum + 2; }
+            else if (r.match(/demain/i)) { d = todayNum + 1; }
+            else { const m = r.match(/le (\d{1,2})/i); if(m) d = parseInt(m[1]); }
+            
+            let time = extractTimeFromInput(r) || "09:00"; 
+            const cl = cleanTaskText(r); 
+            db[d] = [...(db[d]||[]), {shortText:cl, fullText:r, time:time, done:false}]; 
+            save(); document.getElementById('userInput').value=''; 
+            if(d === selectedDay) renderHUD(); else { alert(`Tâche ajoutée pour le ${d} !`); }
+        }
+
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
         function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v61_db',JSON.stringify(db)); localStorage.setItem('lifeos_v61_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v61_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
+        function save(){localStorage.setItem('lifeos_v63_db',JSON.stringify(db)); localStorage.setItem('lifeos_v63_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v63_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p;updateMusicUI();save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function checkHabits() { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>t.fullText).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); }
