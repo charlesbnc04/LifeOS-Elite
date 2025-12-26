@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V43 - Chronos</title>
+    <title>LifeOS Sovereign V44 - Chef Vision</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -19,7 +19,6 @@
         .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; }
         .glass-card:hover { background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); }
 
-        /* TIMELINE STYLES */
         .timeline-item { position: relative; padding-left: 2rem; border-left: 2px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; }
         .timeline-item:last-child { border-left: 2px solid transparent; }
         .timeline-dot { position: absolute; left: -0.4rem; top: 0; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
@@ -33,8 +32,13 @@
 
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .primary-btn:hover { transform: scale(1.02); }
+        
         .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .video-btn:hover { background: white; color: black; transform: scale(1.05); }
+        
+        /* NEW COOKING BTN STYLE */
+        .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+        .cook-btn:hover { background: #10b981; border-color: #10b981; color: black; }
 
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(255,255,255,0.1); border-color: white; }
@@ -85,7 +89,15 @@
 
                     <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="lunchColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
-                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner</p><span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><p id="hudLunch" class="text-xl font-bold mb-1">--</p><p id="lunchReason" class="text-xs opacity-70 italic mb-2">--</p><p id="lunchVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p></div>
+                        <div class="flex-1 pl-4">
+                            <div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner</p><span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <p id="hudLunch" class="text-xl font-bold">--</p>
+                                <button id="btnCookL" class="cook-btn">▶ Cuisiner</button>
+                            </div>
+                            <p id="lunchReason" class="text-xs opacity-70 italic mb-2">--</p>
+                            <p id="lunchVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p>
+                        </div>
                     </div>
 
                     <div class="glass-card p-6">
@@ -97,7 +109,15 @@
 
                     <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="dinnerColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-purple-500"></div>
-                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-purple-400">Dîner</p><span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><p id="hudDinner" class="text-xl font-bold mb-1">--</p><p id="dinnerReason" class="text-xs opacity-70 italic mb-2">--</p><p id="dinnerVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p></div>
+                        <div class="flex-1 pl-4">
+                            <div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-purple-400">Dîner</p><span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <p id="hudDinner" class="text-xl font-bold">--</p>
+                                <button id="btnCookD" class="cook-btn">▶ Cuisiner</button>
+                            </div>
+                            <p id="dinnerReason" class="text-xs opacity-70 italic mb-2">--</p>
+                            <p id="dinnerVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p>
+                        </div>
                     </div>
 
                     <div class="glass-card p-6 flex items-center justify-between border-l-2 border-indigo-500 group"><div class="flex items-center gap-6"><div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-xl">🌙</div><div><p class="text-[10px] font-bold uppercase text-indigo-500 mb-1">Soir</p><p id="hudRoutineE" class="text-lg font-medium">--</p></div></div><button id="btnRoutineE" class="video-btn">▶ Vidéo</button></div>
@@ -109,9 +129,9 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem]"><h2 class="text-xl font-bold mb-6 text-center">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids (kg)"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille (cm)"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male" class="text-black">Homme</option><option value="female" class="text-black">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Sauvegarder</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v43_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v43_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v43_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v44_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v44_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v44_health') || '{"water":0}');
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; let selectedDay = todayNum; let currentMode = 'diet';
 
@@ -125,7 +145,7 @@
         const mealsDB = {
             sport: { lunch: M_SPORT_L, dinner: M_SPORT_D, vits: "Vit B12, Fer, Magnésium" },
             focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D, vits: "Omega-3, Vit D, Zinc" },
-            diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D, vits: "Fibres, Vit C, Antioxydants" } // Diet reuse Focus meals for simplicty in this massive list
+            diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D, vits: "Fibres, Vit C, Antioxydants" }
         };
 
         const routinesDB = { sport: { m: {l:"Mobilité (10min)", q:"mobility routine"}, e: {l:"Automassage", q:"foam rolling"} }, focus: { m: {l:"Méditation Focus", q:"meditation focus"}, e: {l:"Étirements Cou", q:"neck relief"} }, diet: { m: {l:"Yoga Réveil", q:"morning yoga"}, e: {l:"Respiration", q:"breathing exercises"} } };
@@ -137,46 +157,45 @@
             document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
             document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
 
-            // 1. ANALYSE & MODE
             const tasks = db[selectedDay] || [];
             const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
             let mode = 'diet'; if (txt.includes('sport') || txt.includes('crossfit') || txt.includes('match')) mode = 'sport'; else if (txt.includes('réunion') || txt.includes('bureau')) mode = 'focus';
             currentMode = mode;
 
-            // 2. STYLING
             const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport", s:"Playlist: Beast Mode"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus", s:"Playlist: Concentration"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill", s:"Playlist: Chill Lo-Fi"} };
             document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-xl font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
             document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`; document.getElementById('sonicLabel').innerText = styles[mode].s;
 
-            // 3. CALORIES & REPAS (31 JOURS)
             let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
             let act = mode==='sport'?1.7:(mode==='focus'?1.3:1.2);
             const tdee = Math.round(bmr*act);
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
             document.getElementById('hudSupplements').innerText = supplementsDB[mode];
 
-            const dayIndex = (selectedDay - 1); // 0 to 30
+            const dayIndex = (selectedDay - 1);
             const l = mealsDB[mode].lunch[dayIndex] || mealsDB[mode].lunch[0];
             const d = mealsDB[mode].dinner[dayIndex] || mealsDB[mode].dinner[0];
 
+            // RENDER LUNCH & BUTTON
             document.getElementById('hudLunch').innerText = l;
             document.getElementById('lunchReason').innerText = mode==='sport'?"Charge Glucidique":"Équilibre & Légèreté";
             document.getElementById('lunchVits').innerText = `✨ Apport : ${mealsDB[mode].vits}`;
             document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
             document.getElementById('lunchColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
+            document.getElementById('btnCookL').onclick = () => window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(l)}+saine`, '_blank');
 
+            // RENDER DINNER & BUTTON
             document.getElementById('hudDinner').innerText = d;
             document.getElementById('dinnerReason').innerText = mode==='sport'?"Récupération":"Digestion Facile";
             document.getElementById('dinnerVits').innerText = `✨ Apport : ${mealsDB[mode].vits}`;
             document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
             document.getElementById('dinnerColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
+            document.getElementById('btnCookD').onclick = () => window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(d)}+saine`, '_blank');
 
             const r = routinesDB[mode];
             document.getElementById('hudRoutineM').innerText = r.m.l; document.getElementById('btnRoutineM').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.m.q)}`, '_blank');
             document.getElementById('hudRoutineE').innerText = r.e.l; document.getElementById('btnRoutineE').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.e.q)}`, '_blank');
 
-            // 4. TASKS TIMELINE SORTING
-            // Trie les tâches par heure
             const sortedTasks = [...tasks].sort((a, b) => {
                 const timeA = extractTime(a.text) || "23:59";
                 const timeB = extractTime(b.text) || "23:59";
@@ -203,12 +222,7 @@
             const main = document.getElementById('main-hud'); main.classList.remove('updated-flash'); void main.offsetWidth; main.classList.add('updated-flash');
         }
 
-        function extractTime(str) {
-            const m = str.match(/(\d{1,2})[h:](\d{2})?/);
-            if(m) return `${m[1].padStart(2,'0')}:${m[2] || '00'}`;
-            return null;
-        }
-
+        function extractTime(str) { const m = str.match(/(\d{1,2})[h:](\d{2})?/); if(m) return `${m[1].padStart(2,'0')}:${m[2] || '00'}`; return null; }
         function playContextMusic() {
             let q = currentMode==='sport'?"Workout Phonk":(currentMode==='focus'?"Deep Focus":"Chill Lofi");
             if(musicProvider==='spotify') window.open(`https://open.spotify.com/search/${encodeURIComponent(q)}`,'_blank');
@@ -222,7 +236,7 @@
         function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; let d=selectedDay; if(r.toLowerCase().includes('demain'))d=todayNum+1; else{const m=r.toLowerCase().match(/le (\d{1,2})/);if(m)d=parseInt(m[1]);} const cl=r.replace(/demain|le \d{1,2}/gi,'').trim(); db[d]=[...(db[d]||[]),{text:cl,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD(); }
         function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
         function delTask(d,i){db[d].splice(i,1); save();}
-        function save(){localStorage.setItem('lifeos_v43_db',JSON.stringify(db)); localStorage.setItem('lifeos_v43_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v43_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD();}
+        function save(){localStorage.setItem('lifeos_v44_db',JSON.stringify(db)); localStorage.setItem('lifeos_v44_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v44_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD();}
         function setMusic(p){musicProvider=p; updateMusicUI(); save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
