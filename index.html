@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V44 - Chef Vision</title>
+    <title>LifeOS Sovereign V45 - Predictive Mind</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -19,6 +19,14 @@
         .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; }
         .glass-card:hover { background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); }
 
+        /* COACH ALERT BANNER */
+        .coach-alert {
+            background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
         .timeline-item { position: relative; padding-left: 2rem; border-left: 2px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; }
         .timeline-item:last-child { border-left: 2px solid transparent; }
         .timeline-dot { position: absolute; left: -0.4rem; top: 0; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
@@ -32,11 +40,8 @@
 
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .primary-btn:hover { transform: scale(1.02); }
-        
         .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .video-btn:hover { background: white; color: black; transform: scale(1.05); }
-        
-        /* NEW COOKING BTN STYLE */
         .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; }
         .cook-btn:hover { background: #10b981; border-color: #10b981; color: black; }
 
@@ -71,6 +76,17 @@
         <main class="lg:col-span-9 space-y-6 pb-10">
             <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
                 
+                <div id="coachAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center justify-between coach-alert">
+                    <div class="flex items-center gap-4">
+                        <div class="text-3xl">⚠️</div>
+                        <div>
+                            <p class="text-xs font-bold uppercase text-orange-400">Analyse de Rythme</p>
+                            <p id="coachMsg" class="text-sm font-medium">Vous n'avez pas fait de sport depuis 5 jours.</p>
+                        </div>
+                    </div>
+                    <button onclick="injectSport()" class="bg-orange-500 text-black px-4 py-2 rounded-lg text-xs font-black uppercase hover:bg-white transition-colors">Planifier Séance</button>
+                </div>
+
                 <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
                     <div>
                         <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
@@ -129,16 +145,15 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem]"><h2 class="text-xl font-bold mb-6 text-center">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids (kg)"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille (cm)"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male" class="text-black">Homme</option><option value="female" class="text-black">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Sauvegarder</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v44_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v44_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v44_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v45_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v45_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v45_health') || '{"water":0}');
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; let selectedDay = todayNum; let currentMode = 'diet';
 
-        // --- DATABASE GASTRONOMIQUE 31 JOURS ---
+        // --- DATABASE ---
         const M_SPORT_L = ["Pâtes Bolo Maison", "Riz + Steak Haché", "Wrap Poulet (x2)", "Gnocchis Pesto Dinde", "Semoule + Boeuf", "Risotto Champignons", "Pâtes Carbonara Light", "Burrito Bowl Boeuf", "Sandwich Club Poulet", "Purée + Saucisse", "Quinoa Crevettes", "Riz Cantonais", "Pâtes Saumon Crème", "Steak + Frites Four", "Taboulé Poulet", "Lasagnes Boeuf", "Chili Con Carne", "Bagel Saumon Avocat", "Burger Maison Complet", "Riz Curry Poulet", "Pâtes Thon Tomate", "Hachis Parmentier", "Tortilla Pomme de Terre", "Salade Pâtes Jambon", "Croque Monsieur Four", "Escalope Milanaise + Pâtes", "Riz Pilaf + Dinde", "Pâtes Pesto Rosso", "Wrap Boeuf", "Gratin Dauphinois + Jambon", "Pizza Maison Pâte Fine"];
         const M_SPORT_D = ["Omelette Patates", "Cabillaud Purée", "Bowl Quinoa Dinde", "Wok Poulet Nouilles", "Lentilles Saucisse", "Sardines Pommes Vapeur", "Avocat Oeuf Pain", "Soupe Pâtes", "Hachis Parmentier", "Pizza Maison", "Curry Pois Chiches", "Saumon Riz Epinard", "Tarte Thon Tomate", "Oeufs Cocotte", "Salade Riz Thon", "Velouté + Tartines", "Galette Sarrasin", "Gratin Pâtes", "Poulet Rôti + PdT", "Poisson Pané + Purée", "Riz Tomate Oeuf", "Bruschetta Complète", "Moussaka Light", "Cannelloni Epinard", "Riz Frit Crevettes", "Dinde Paprika + Riz", "Salade Niçoise + Pain", "Frittata Légumes", "Tacos Maison Light", "Gaspacho + Jambon", "Bowl Saumon Avocat"];
-        
         const M_FOCUS_L = ["Saumon Quinoa", "Salade César", "Bowl Tofu Avocat", "Maquereau Tomates", "Carpaccio Roquette", "Sushi (12pc)", "Tartare Saumon", "Salade Niçoise", "Poulet Wok Légumes", "Ceviche Poisson", "Omelette Epinards", "Bowl Falafel", "Salade Grecque", "Rouleaux Printemps", "Crevettes Sautées", "Filet Mignon Haricots", "Bowl Lentilles Feta", "Salade Endives Noix", "Pavé Thon Sésame", "Wrap Saumon Fumé", "Taboulé Quinoa", "Salade Caprese", "Poke Bowl Tofu", "Salade Lentilles", "Aiguillettes Canard", "Salade Chèvre Chaud", "Tataki Boeuf", "Salade Mexicaine", "Bowl Houmous", "Oeufs Mimosa Light", "Salade Pâtes Complètes"];
         const M_FOCUS_D = ["Soupe Légumes", "Dinde Haricots", "Wok Cajou", "Velouté Asperges", "Colin Courgettes", "Salade Grecque", "Ratatouille Riz", "Papillote Poisson", "Champignons Sautés", "Gaspacho", "Fromage Blanc Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomate", "Purée Carottes", "Sardines Grillées", "Curry Légumes", "Vapeur Brocolis", "Salade Concombre", "Tomates Farcies Light", "Tian Légumes", "Flan Courgettes", "Soupe Miso", "Salade Betterave", "Chou-fleur Rôti", "Poêlée Paysanne", "Asperges Oeuf", "Salade Fenouil", "Artichaut Vinaigrette", "Carpaccio Courgette"];
 
@@ -150,6 +165,35 @@
 
         const routinesDB = { sport: { m: {l:"Mobilité (10min)", q:"mobility routine"}, e: {l:"Automassage", q:"foam rolling"} }, focus: { m: {l:"Méditation Focus", q:"meditation focus"}, e: {l:"Étirements Cou", q:"neck relief"} }, diet: { m: {l:"Yoga Réveil", q:"morning yoga"}, e: {l:"Respiration", q:"breathing exercises"} } };
         const supplementsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
+
+        // --- NEW: INTELLIGENT COACH (V45) ---
+        function checkHabits() {
+            let lastSportDay = 0;
+            // Scan last 30 days history
+            for(let i=1; i<=todayNum; i++) {
+                const txt = (db[i] || []).map(t => t.text.toLowerCase()).join(' ');
+                if(txt.includes('sport') || txt.includes('crossfit') || txt.includes('gym') || txt.includes('match')) {
+                    lastSportDay = i;
+                }
+            }
+
+            const gap = todayNum - lastSportDay;
+            const alertBox = document.getElementById('coachAlertBox');
+            
+            // Si pas de sport depuis plus de 3 jours
+            if (lastSportDay > 0 && gap > 3) {
+                alertBox.classList.remove('hidden');
+                document.getElementById('coachMsg').innerText = `Dernier sport : le ${lastSportDay}. Ça fait ${gap} jours de pause. On s'y remet ?`;
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        function injectSport() {
+            // Auto planifie pour ce soir
+            traiterInput("Séance de reprise sport 18h");
+            document.getElementById('coachAlertBox').classList.add('hidden');
+        }
 
         function renderHUD() {
             const isToday = (selectedDay === todayNum);
@@ -176,7 +220,6 @@
             const l = mealsDB[mode].lunch[dayIndex] || mealsDB[mode].lunch[0];
             const d = mealsDB[mode].dinner[dayIndex] || mealsDB[mode].dinner[0];
 
-            // RENDER LUNCH & BUTTON
             document.getElementById('hudLunch').innerText = l;
             document.getElementById('lunchReason').innerText = mode==='sport'?"Charge Glucidique":"Équilibre & Légèreté";
             document.getElementById('lunchVits').innerText = `✨ Apport : ${mealsDB[mode].vits}`;
@@ -184,7 +227,6 @@
             document.getElementById('lunchColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
             document.getElementById('btnCookL').onclick = () => window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(l)}+saine`, '_blank');
 
-            // RENDER DINNER & BUTTON
             document.getElementById('hudDinner').innerText = d;
             document.getElementById('dinnerReason').innerText = mode==='sport'?"Récupération":"Digestion Facile";
             document.getElementById('dinnerVits').innerText = `✨ Apport : ${mealsDB[mode].vits}`;
@@ -233,17 +275,22 @@
         function addWater(n) { health.water += n; save(); }
         function updateWaterUI(mode) { let t = (profile.weight*0.03)+(mode==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText = `${health.water}L`; document.getElementById('waterTarget').innerText = `/ ${t}L`; document.getElementById('waterBar').style.width = `${Math.min(100, (health.water/t)*100)}%`; }
         function renderCal() { const c = document.getElementById('calendar'); c.innerHTML=''; const m = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate(); for(let i=1; i<=m; i++) { const d = document.createElement('div'); let cls="day"; if(i===todayNum)cls+=" day-today"; if(i===selectedDay)cls+=" day-selected"; if(db[i]&&db[i].length)cls+=" has-event"; d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i; renderCal(); renderHUD();}; c.appendChild(d); } }
-        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; let d=selectedDay; if(r.toLowerCase().includes('demain'))d=todayNum+1; else{const m=r.toLowerCase().match(/le (\d{1,2})/);if(m)d=parseInt(m[1]);} const cl=r.replace(/demain|le \d{1,2}/gi,'').trim(); db[d]=[...(db[d]||[]),{text:cl,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD(); }
+        
+        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
+        function traiterInput(r) {
+            let d=selectedDay; if(r.toLowerCase().includes('demain'))d=todayNum+1; else{const m=r.toLowerCase().match(/le (\d{1,2})/);if(m)d=parseInt(m[1]);} const cl=r.replace(/demain|le \d{1,2}/gi,'').trim(); db[d]=[...(db[d]||[]),{text:cl,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();
+        }
+
         function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
         function delTask(d,i){db[d].splice(i,1); save();}
-        function save(){localStorage.setItem('lifeos_v44_db',JSON.stringify(db)); localStorage.setItem('lifeos_v44_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v44_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD();}
+        function save(){localStorage.setItem('lifeos_v45_db',JSON.stringify(db)); localStorage.setItem('lifeos_v45_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v45_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p; updateMusicUI(); save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
         function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
 
         document.getElementById('userInput').addEventListener('keypress', (e)=>{if(e.key==='Enter')traiter()});
-        updateMusicUI(); renderCal(); renderHUD();
+        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
     </script>
 </body>
 </html>
