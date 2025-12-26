@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V57 - Timekeeper</title>
+    <title>LifeOS Sovereign V58 - Time-Lord</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); cursor: pointer; }
-        
-        /* TIMELINE STRUCTURE */
+        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
+        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        .flow-card::after { content: '↗'; position: absolute; top: 10px; right: 10px; opacity: 0; font-size: 12px; transition: 0.2s; }
+        .flow-card:hover::after { opacity: 0.5; }
+
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
@@ -24,16 +25,10 @@
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
 
-        /* LIVE LINE */
         .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
         .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
         .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
         .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
-
-        .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
-        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
-        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
-        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
 
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -45,9 +40,10 @@
         .has-event { border-bottom: 2px solid #a855f7; }
         .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         
-        /* ALERTS */
-        .coach-alert { background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); border: 1px solid rgba(249, 115, 22, 0.3); }
-        .knowledge-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
+        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
+        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
+        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -57,10 +53,9 @@
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
-                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Musique</p><div class="flex gap-3"><button onclick="setMusic('spotify')" id="btn-spotify" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-green-500 transition-colors"><svg class="w-5 h-5 text-[#1db954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></button><button onclick="setMusic('deezer')" id="btn-deezer" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-purple-500 transition-colors"><svg class="w-5 h-5 text-[#a238ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg></button><button onclick="setMusic('apple')" id="btn-apple" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-red-500 transition-colors"><svg class="w-5 h-5 text-[#fa2d48]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg></button></div></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'J'ai match de foot à 20h30'&#10;(Devient: Match Foot)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'J'ai match de foot à 20h30'&#10;(Synthétise et place à l'heure exacte)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
@@ -68,45 +63,45 @@
             <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
                 
                 <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
-                    <div>
-                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
-                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
-                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
-                    </div>
+                    <div><div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2><div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div></div>
                     <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
                 </div>
+                <div id="sonicTrigger" onclick="playContextMusic()" class="sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl sonic-chill"><div class="flex items-center gap-4 text-white"><div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[10px] font-black uppercase tracking-widest opacity-80">Ambiance Active</p><p id="sonicLabel" class="text-lg font-bold">Chargement...</p></div></div><div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-black">▶</div></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                    <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
-                </div>
-
-                <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
-                <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
+                <div id="coachAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center justify-between" style="background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); border: 1px solid rgba(249, 115, 22, 0.3);"><div class="flex items-center gap-4"><div class="text-3xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach Sportif</p><p id="coachMsg" class="text-sm font-medium">Pause trop longue.</p></div></div><button onclick="injectSport()" class="bg-orange-500 text-black px-4 py-2 rounded-lg text-xs font-black uppercase">Planifier</button></div>
+                <div id="knowledgeHub" class="hidden rounded-2xl p-6 mb-6 flex flex-col md:flex-row items-center gap-6" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3);"><div class="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-2xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-lg font-bold">On s'instruit ?</p></div><div class="flex flex-col gap-2"><button onclick="learn('finance')" class="video-btn bg-blue-600 hover:bg-white hover:text-black">▶ Finance</button><button onclick="learn('culture')" class="video-btn hover:bg-white hover:text-black">▶ Culture</button></div></div>
 
                 <div class="relative pl-4 pt-4">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique (Tout unifié)</p>
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
                     <div id="masterTimeline"></div>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md">
-        <div class="glass-base p-8 max-w-lg w-full rounded-[2rem]">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold">Détails de la Tâche</h2>
-                <button onclick="closeTaskModal()" class="text-zinc-500 hover:text-white">✕</button>
-            </div>
-            <div class="space-y-4">
-                <div><p class="text-[10px] font-bold uppercase text-zinc-500 mb-1">Horaire</p><input type="time" id="modalTime" class="w-full bg-black/20 p-3 rounded-xl text-white outline-none border border-white/10"></div>
-                <div><p class="text-[10px] font-bold uppercase text-zinc-500 mb-1">Titre (Synthèse)</p><input type="text" id="modalShort" class="w-full bg-black/20 p-3 rounded-xl text-white outline-none border border-white/10"></div>
-                <div><p class="text-[10px] font-bold uppercase text-zinc-500 mb-1">Description Complète</p><textarea id="modalFull" class="w-full bg-black/20 p-3 rounded-xl text-white outline-none border border-white/10 h-32"></textarea></div>
-                <div class="flex gap-2 mt-4">
-                    <button onclick="saveTaskModal()" class="primary-btn flex-1 py-3 rounded-xl font-bold text-xs uppercase">Enregistrer</button>
-                    <button onclick="deleteTaskModal()" class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white py-3 px-6 rounded-xl font-bold text-xs uppercase transition-colors">Supprimer</button>
+    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl">
+        <div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative">
+            <button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button>
+            <h2 class="text-2xl font-black italic mb-8">Modifier la Tâche</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label>
+                    <input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500">
                 </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre (Synthèse sur l'agenda)</label>
+                    <input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète (Contexte)</label>
+                    <textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-8">
+                <button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button>
+                <button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button>
             </div>
         </div>
     </div>
@@ -114,67 +109,76 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v57_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v57_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v57_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v57_manual_meals') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v58_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v58_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v58_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v58_manual_meals') || "{}");
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
-        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
-        let editingTaskId = null; // For modal
+        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juillet", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
+        let editingTaskId = null; // Store current editing ID
 
-        // DATABASE MEALS & ROUTINES (SAME AS V54)
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet", "Lasagnes Boeuf Aubergines", "Chili Con Carne", "Bagel Saumon", "Burger Maison 5%", "Riz Curry Poulet", "Pâtes Thon Tomate", "Hachis Parmentier", "Tortilla Pommes de Terre", "Salade Pâtes Jambon", "Croque-Monsieur Four", "Escalope Milanaise", "Riz Pilaf Dinde", "Pâtes Pesto Rosso", "Fajitas Boeuf", "Gratin Dauphinois Jambon", "Pizza Maison Fine"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Pommes Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise", "Velouté Tartines", "Galette Sarrasin", "Gratin Pâtes", "Poulet Rôti", "Poisson Pané", "Riz Tomate", "Bruschetta", "Moussaka", "Cannelloni", "Riz Crevettes", "Dinde Paprika", "Salade Niçoise", "Frittata", "Tacos Light", "Gaspacho", "Bowl Saumon"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon", "Salade Lentilles", "Salade Endives Noix", "Thon Mi-Cuit", "Wrap Saumon", "Taboulé Quinoa", "Salade Caprese", "Poke Saumon", "Lentilles Corail", "Aiguillettes Canard", "Chèvre Chaud", "Tataki Boeuf", "Salade Mexicaine", "Bowl Houmous", "Oeufs Mimosa", "Salade Pâtes Complètes"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates", "Purée Carottes", "Sardines", "Curry Légumes", "Brocolis", "Concombre", "Tomates Farcies", "Tian", "Flan Courgettes", "Miso", "Betterave", "Chou-fleur", "Poêlée", "Asperges", "Fenouil", "Artichaut", "Carpaccio"];
+        // DATASETS
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
         const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
+        
         const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
         ROUTINES.diet = ROUTINES.focus;
         const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // --- NEW V57: PARSING & CLEANING ---
+        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+
+        // --- IMPROVED PARSING V58 ---
         function extractTimeFromInput(text) {
-            const timeRegex = /(\d{1,2})[\.:hH](\d{2})?/;
-            const match = text.match(timeRegex);
+            // Regex capture 20h, 20:00, 20H30, 20 h 30
+            const match = text.match(/(\d{1,2})\s*[:hH]\s*(\d{2})?/);
             if(match) {
                 let h = parseInt(match[1]);
                 let m = match[2] ? parseInt(match[2]) : 0;
                 return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
             }
-            return null; // No time found
+            return null;
         }
 
         function cleanTaskText(text) {
-            // Remove time patterns
-            let clean = text.replace(/(\d{1,2})[\.:hH](\d{2})?/gi, '').trim();
-            
-            // Remove prefixes
+            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
             const prefixes = ["j'ai un", "j'ai une", "j'ai", "il faut que", "il faut", "je dois", "aller au", "aller à", "aller chez", "faire du", "faire de la", "séance de", "rendez-vous", "rdv", "voir", "prendre", "récupérer", "manger avec", "déjeuner avec"];
             prefixes.sort((a,b) => b.length - a.length);
-            
             let lower = clean.toLowerCase();
-            for(let p of prefixes) {
-                if(lower.startsWith(p)) {
-                    clean = clean.substring(p.length).trim();
-                    lower = clean.toLowerCase();
-                }
-            }
-            
-            // Remove connectors at start
+            for(let p of prefixes) { if(lower.startsWith(p)) { clean = clean.substring(p.length).trim(); lower = clean.toLowerCase(); } }
             const connectors = ["le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez"];
             let words = clean.split(' ');
-            if(words.length > 0 && connectors.includes(words[0].toLowerCase())) {
-                words.shift();
-                clean = words.join(' ');
-            }
-            
-            // Capitalize
+            if(words.length > 0 && connectors.includes(words[0].toLowerCase())) { words.shift(); clean = words.join(' '); }
             if(clean.length === 0) return "Tâche";
             return clean.charAt(0).toUpperCase() + clean.slice(1);
         }
 
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+        // --- NEW: MODAL LOGIC (V58) ---
+        function openTaskModal(id) {
+            editingTaskId = id;
+            const t = db[selectedDay][id];
+            document.getElementById('modalTime').value = t.time;
+            document.getElementById('modalShort').value = t.shortText;
+            document.getElementById('modalFull').value = t.fullText;
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+        function saveTaskModal() {
+            if(editingTaskId === null) return;
+            const t = db[selectedDay][editingTaskId];
+            t.time = document.getElementById('modalTime').value;
+            t.shortText = document.getElementById('modalShort').value;
+            t.fullText = document.getElementById('modalFull').value;
+            save(); closeTaskModal();
+        }
+        function deleteTaskModal() {
+            if(editingTaskId === null) return;
+            delTask(selectedDay, editingTaskId);
+            closeTaskModal();
+        }
+        function closeTaskModal() { document.getElementById('taskModal').classList.add('hidden'); editingTaskId = null; }
 
         function renderHUD() {
             const isToday = (selectedDay === todayNum);
@@ -188,9 +192,9 @@
 
             if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
 
-            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿"} };
+            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
             document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-            
+            document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
             const musicIndex = (selectedDay - 1) % MUSIC_DB[mode].length;
             document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][musicIndex]}`;
 
@@ -200,7 +204,8 @@
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
             document.getElementById('hudSupplements').innerText = suppsDB[mode];
 
-            const rot = (selectedDay - 1) % 31; const rIndex = (selectedDay - 1) % 3; 
+            // Stream construction with CORRECT time handling
+            const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
             const l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
             const d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
             const rM = ROUTINES[mode].m[rIndex];
@@ -217,100 +222,66 @@
                 stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: isSportTask?'accent-sport':'accent-task', dot: isSportTask?'dot-sport':'dot-task', id: i, done: t.done });
             });
 
-            stream.sort((a,b) => a.time.localeCompare(b.time));
+            // CORRECT SORT (MINUTES)
+            stream.sort((a,b) => {
+                const [hA, mA] = a.time.split(':').map(Number);
+                const [hB, mB] = b.time.split(':').map(Number);
+                return (hA * 60 + mA) - (hB * 60 + mB);
+            });
 
             const container = document.getElementById('masterTimeline');
             const currentHour = now.getHours(); const currentMin = now.getMinutes();
+            const currentTimeVal = currentHour * 60 + currentMin;
             const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
             let liveLineInserted = false;
 
             container.innerHTML = stream.map(item => {
+                const [h, m] = item.time.split(':').map(Number);
+                const itemTimeVal = h * 60 + m;
                 let html = '';
-                if(isToday && !liveLineInserted && item.time > currentTimeStr) {
+
+                if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) {
                     html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
                     liveLineInserted = true;
                 }
 
                 let cardContent = '';
                 if (item.type === 'routine') {
-                    cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="action-btn">▶ Vidéo</button></div>`;
+                    cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`;
                 } else if (item.type === 'meal') {
-                    cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">✨ ${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="action-btn self-start md:self-center">▶ Cuisiner</button></div>`;
+                    cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">✨ ${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`;
                 } else if (item.type === 'task') {
+                    // HERE IS THE FIX: onclick="openTaskModal(${item.id})"
                     cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`;
                 }
 
-                html += `
-                <div class="timeline-row">
-                    <div class="timeline-time">${item.time}</div>
-                    <div class="timeline-line"></div>
-                    <div class="timeline-dot ${item.dot}"></div>
-                    <div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">
-                        ${cardContent}
-                    </div>
-                </div>`;
+                html += `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
                 return html;
             }).join('');
 
-            if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
+            if(isToday && !liveLineInserted && stream.length > 0) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
             updateWaterUI(mode);
         }
 
-        // --- INTERACTION LOGIC (V57) ---
-        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
-        
-        function traiterInput(r) { 
-            let d=selectedDay; if(r.match(/demain/i))d=todayNum+1; else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} 
-            
-            // 1. EXTRACT TIME
-            let foundTime = extractTimeFromInput(r);
-            let timeToStore = foundTime ? foundTime : "09:00"; // Default only if not found
-
-            // 2. CLEAN TEXT
-            let clean = cleanTaskText(r);
-
-            // 3. STORE STRUCTURED OBJECT
-            db[d]=[...(db[d]||[]),{shortText:clean, fullText:r, time:timeToStore, done:false}]; 
-            save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();
-        }
-
-        function openTaskModal(id) {
-            editingTaskId = id;
-            const task = db[selectedDay][id];
-            document.getElementById('modalTime').value = task.time;
-            document.getElementById('modalShort').value = task.shortText;
-            document.getElementById('modalFull').value = task.fullText;
-            document.getElementById('taskModal').classList.remove('hidden');
-        }
-
-        function saveTaskModal() {
-            if(editingTaskId === null) return;
-            const tasks = db[selectedDay];
-            tasks[editingTaskId].time = document.getElementById('modalTime').value;
-            tasks[editingTaskId].shortText = document.getElementById('modalShort').value;
-            tasks[editingTaskId].fullText = document.getElementById('modalFull').value;
-            save(); closeTaskModal();
-        }
-
-        function deleteTaskModal() {
-            if(editingTaskId === null) return;
-            delTask(selectedDay, editingTaskId);
-            closeTaskModal();
-        }
-
-        function closeTaskModal() { document.getElementById('taskModal').classList.add('hidden'); editingTaskId = null; }
-
-        function editItem(type, id) {
-            if (type === 'meal') { const newMeal = prompt("Modifier le repas :", ""); if(newMeal) { if(!manualMeals[selectedDay]) manualMeals[selectedDay] = {}; manualMeals[selectedDay][id] = newMeal; localStorage.setItem('lifeos_v57_manual_meals', JSON.stringify(manualMeals)); renderHUD(); } }
-        }
-
+        // --- HELPERS ---
+        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v58_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        
+        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
+        function traiterInput(r) { 
+            let d=selectedDay; if(r.match(/demain/i))d=todayNum+1; else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} 
+            let time = extractTimeFromInput(r) || "09:00"; // Get correct time or default
+            const cl = cleanTaskText(r); 
+            db[d]=[...(db[d]||[]),{shortText:cl, fullText:r, time:time, done:false}]; 
+            save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();
+        }
+
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v57_db',JSON.stringify(db)); localStorage.setItem('lifeos_v57_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v57_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
+        function save(){localStorage.setItem('lifeos_v58_db',JSON.stringify(db)); localStorage.setItem('lifeos_v58_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v58_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p;updateMusicUI();save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function checkHabits() { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>t.fullText).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); }
