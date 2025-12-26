@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V64 - Time Span</title>
+    <title>LifeOS Sovereign V65 - Conflict Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -18,7 +18,6 @@
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
         
-        /* COLORS & ACCENTS */
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
@@ -44,6 +43,7 @@
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
         .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        
         .coach-alert { background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); border: 1px solid rgba(249, 115, 22, 0.3); }
         .knowledge-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3); }
         .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
@@ -60,7 +60,7 @@
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent (Expert)</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Grosse réunion de 3h à partir de 19h' (Déplace les repas, calcule la durée)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Analyser & Planifier</button></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant Planificateur</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Réunion d'une durée de 3h à partir de 19h' (L'IA gère les conflits)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Optimiser & Planifier</button></div>
                 <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
@@ -81,11 +81,17 @@
                     <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
                     <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
                 </div>
+                
+                <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center gap-4" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <div class="text-2xl">🛡️</div>
+                    <div><p class="text-xs font-bold uppercase text-red-400">Assistant Planning</p><p id="conflictMsg" class="text-sm font-medium text-white">Conflit détecté.</p></div>
+                </div>
+
                 <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
                 <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
 
                 <div class="relative pl-4 pt-4">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique (Adaptatif)</p>
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
                     <div id="masterTimeline"></div>
                 </div>
             </div>
@@ -96,10 +102,10 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v64_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v64_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v64_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v64_manual_meals') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v65_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v65_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v65_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v65_manual_meals') || "{}");
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
@@ -117,51 +123,52 @@
 
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
 
-        // --- V64: SEMANTIC PARSER WITH DURATION & START ---
+        // --- V65: PARSE LOGIC REWRITTEN (FIX 3H BUG) ---
         function parseInput(text) {
-            let start = "09:00";
+            let startMin = 540; // 09:00 default
             let duration = 0;
             
-            // 1. DURATION DETECTION (ex: "durée de 3h", "pendant 2h", "de 3h")
-            // We look for 'durée', 'pendant' OR just 'de X h' if followed/preceded by time logic, 
-            // BUT careful not to confuse with start time.
-            // Regex to find "3h" meant as duration
-            const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
+            // 1. EXTRACT DURATION (Look for "durée de X h" OR "pendant X h")
+            // Strict regex: must have keywords
+            const durRegex = /(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i;
+            const durMatch = text.match(durRegex);
+            let durValue = -1;
             if (durMatch) {
-                duration = parseInt(durMatch[1]) * 60; // in minutes
+                durValue = parseInt(durMatch[1]);
+                duration = durValue * 60;
             }
 
-            // 2. START TIME DETECTION
-            // Look for "à", "vers", "à partir de" followed by number
-            // OR look for number that is NOT the duration we just found
-            const startMatch = text.match(/(?:à|vers|de|partir de)\s*(\d{1,2})(?:[h:](\d{2})?)?/i);
+            // 2. EXTRACT START TIME (Look for "à X h", "vers X h", "partir de X h")
+            // Prioritize explicit start keywords to avoid confusion with duration
+            const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
+            const startMatch = text.match(startRegex);
             
-            // Fallback: if we found a number but no specific "start" keyword, 
-            // check if it's different from duration
-            if (!startMatch) {
-                const anyNumMatch = text.match(/(\d{1,2})(?:[h:](\d{2})?)?/);
-                if (anyNumMatch) {
-                    const val = parseInt(anyNumMatch[1]);
-                    // Heuristic: If we found a duration like "3h", and we see "19h", 19 is likely start
-                    if (durMatch && val === parseInt(durMatch[1])) {
-                        // It's the duration number, ignore unless there is another number
-                        const secondNum = text.match(new RegExp(val + ".*?(\\d{1,2})"));
-                        if (secondNum) start = `${secondNum[1].padStart(2,'0')}:00`;
-                    } else {
-                        start = `${val.toString().padStart(2,'0')}:${(anyNumMatch[2]||0).toString().padStart(2,'0')}`;
-                    }
-                }
+            if (startMatch) {
+                // If specific keyword found, trust it 100%
+                let h = parseInt(startMatch[1]);
+                let m = startMatch[2] ? parseInt(startMatch[2]) : 0;
+                startMin = h * 60 + m;
             } else {
-                start = `${startMatch[1].padStart(2,'0')}:${(startMatch[2]||0).toString().padStart(2,'0')}`;
+                // Fallback: Find any number that is NOT the duration value
+                const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)];
+                for (const m of allNums) {
+                    const val = parseInt(m[1]);
+                    // If we found a duration, skip this number if it matches the duration value
+                    // Unless it's far away in the string (heuristic)
+                    if (durValue !== -1 && val === durValue) continue; 
+                    
+                    let mVal = m[2] ? parseInt(m[2]) : 0;
+                    startMin = val * 60 + mVal;
+                    break; // Take the first valid number that isn't duration
+                }
             }
 
-            // Semantic override
-            if (text.includes('midi')) start = "12:00";
-            if (text.includes('minuit')) start = "23:59";
-            if (text.includes('matin')) start = "09:00";
-            if (text.includes('soir') && !startMatch) start = "19:00";
+            // Semantic Override
+            if (text.match(/\bmidi\b/i)) startMin = 720;
+            if (text.match(/\bminuit\b/i)) startMin = 1439;
+            if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; // 19h
 
-            return { start, duration };
+            return { startMin, duration };
         }
 
         function cleanTaskText(text) {
@@ -179,7 +186,7 @@
             return clean.charAt(0).toUpperCase() + clean.slice(1); 
         }
 
-        // --- NEW V64: DATA PROCESSING ---
+        // --- V65: COLLISION MANAGER ---
         function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
         function traiterInput(r) { 
             let d = selectedDay;
@@ -190,174 +197,66 @@
             const parsed = parseInput(r);
             const cl = cleanTaskText(r); 
             
-            db[d] = [...(db[d]||[]), {
-                shortText: cl, 
-                fullText: r, 
-                time: parsed.start, 
-                duration: parsed.duration, // Stored in minutes
-                done: false
-            }]; 
-            save(); document.getElementById('userInput').value=''; 
-            if(d === selectedDay) renderHUD(); else { alert(`Tâche ajoutée pour le ${d} !`); }
-        }
-
-        // ... [Standard Modal Functions: openTaskModal, saveTaskModal, etc.] ...
-        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
-        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
-        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
-        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-
-        function renderHUD() {
-            const isToday = (selectedDay === todayNum);
-            document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-            document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-
-            const tasks = db[selectedDay] || [];
-            const txt = tasks.map(t => t.fullText.toLowerCase()).join(' ');
-            let mode = 'diet'; 
-            let sportTaskTime = null;
-            let importantEventTime = null;
-            let occupiedSlots = []; // To track busy times
-
-            tasks.forEach(t => {
-                const fl = t.fullText.toLowerCase();
-                if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
-                if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
+            // CONFLICT DETECTION
+            let finalStart = parsed.startMin;
+            let finalEnd = finalStart + (parsed.duration || 60); // Default duration 60m if not specified
+            let conflictFound = false;
+            
+            const existing = db[d] || [];
+            existing.forEach(t => {
+                const [h,m] = t.time.split(':').map(Number);
+                const tStart = h*60 + m;
+                const tEnd = tStart + (t.duration || 60);
                 
-                // Track occupation for V64 logic
-                if (t.duration > 0) {
-                    const [h, m] = t.time.split(':').map(Number);
-                    const startMin = h*60 + m;
-                    const endMin = startMin + t.duration;
-                    occupiedSlots.push({start: startMin, end: endMin});
-                }
-            });
-            if (mode === 'diet' && txt.match(/réunion|bureau|projet|travail|code|étude|cours|admin|compta/)) mode = 'focus';
-
-            if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
-
-            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-            document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-            document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
-            document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
-
-            let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-            let act = mode==='sport'?1.7:(mode==='focus'?1.3:1.2);
-            const tdee = Math.round(bmr*act);
-            document.getElementById('calTarget').innerText = `${tdee} kcal`;
-            document.getElementById('hudSupplements').innerText = suppsDB[mode];
-
-            const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
-            let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
-            let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-            const rM = ROUTINES[mode].m[rIndex];
-            const rE = ROUTINES[mode].e[rIndex];
-
-            // --- V64: DYNAMIC CONFLICT RESOLUTION ---
-            let lunchTimeVal = 12 * 60 + 30; // 12:30 default
-            let dinnerTimeVal = 20 * 60; // 20:00 default
-            let injectedItems = [];
-            let dinnerSubtitle = `✨ ${getVits(d)}`;
-
-            // Check if Dinner conflicts with any task
-            occupiedSlots.forEach(slot => {
-                // If task overlaps 20:00 (1200 mins)
-                if (slot.start <= dinnerTimeVal && slot.end > dinnerTimeVal) {
-                    // Move Dinner AFTER task + 15 mins
-                    dinnerTimeVal = slot.end + 15;
-                    dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>";
-                    if (dinnerTimeVal >= 22*60) dinnerSubtitle += " - Digestion légère";
+                // If overlap: (StartA < EndB) and (EndA > StartB)
+                if (finalStart < tEnd && finalEnd > tStart) {
+                    conflictFound = true;
+                    // Move new task AFTER existing task + 15 min buffer
+                    finalStart = tEnd + 15;
+                    finalEnd = finalStart + (parsed.duration || 60);
                 }
             });
 
             // Convert back to string
-            const lunchTime = `${Math.floor(lunchTimeVal/60).toString().padStart(2,'0')}:${(lunchTimeVal%60).toString().padStart(2,'0')}`;
-            const dinnerTime = `${Math.floor(dinnerTimeVal/60).toString().padStart(2,'0')}:${(dinnerTimeVal%60).toString().padStart(2,'0')}`;
+            const h = Math.floor(finalStart/60) % 24;
+            const m = finalStart % 60;
+            const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
 
-            // Sport Logic (V60 reused)
-            if (mode === 'sport' && sportTaskTime) {
-                const [h, m] = sportTaskTime.split(':').map(Number);
-                if (h >= 18) {
-                    let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' });
+            db[d] = [...(db[d]||[]), {
+                shortText: cl, 
+                fullText: r, 
+                time: timeStr, 
+                duration: parsed.duration || 0,
+                done: false
+            }]; 
+            
+            save(); 
+            document.getElementById('userInput').value=''; 
+            
+            if(d === selectedDay) {
+                renderHUD();
+                if(conflictFound) {
+                    const alertBox = document.getElementById('conflictAlertBox');
+                    document.getElementById('conflictMsg').innerText = `Créneau occupé ! Tâche décalée à ${timeStr}.`;
+                    alertBox.classList.remove('hidden');
+                    setTimeout(() => alertBox.classList.add('hidden'), 5000);
                 }
-            }
-            if (importantEventTime) {
-                const [h, m] = importantEventTime.split(':').map(Number);
-                let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
-                injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
-                if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; }
-            }
-
-            let stream = [];
-            stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-            stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-            stream.push(...injectedItems);
-            stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-            stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-
-            tasks.forEach((t, i) => {
-                let fl = t.fullText.toLowerCase();
-                let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
-                let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
-                let accent = 'accent-task'; let dot = 'dot-task';
-                if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
-                if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-                
-                // Display duration if exists (V64)
-                let displayContent = t.shortText;
-                if(t.duration > 0) {
-                    const [h, m] = t.time.split(':').map(Number);
-                    const endMin = h*60 + m + t.duration;
-                    const endH = Math.floor(endMin/60) % 24; // Handle overflow 24h
-                    const endM = endMin % 60;
-                    const endStr = `${endH.toString().padStart(2,'0')}:${endM.toString().padStart(2,'0')}`;
-                    displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endStr})</span>`;
-                }
-
-                stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
-            });
-
-            stream.sort((a,b) => {
-                const [hA, mA] = a.time.split(':').map(Number);
-                const [hB, mB] = b.time.split(':').map(Number);
-                return (hA * 60 + mA) - (hB * 60 + mB);
-            });
-
-            const container = document.getElementById('masterTimeline');
-            const currentHour = now.getHours(); const currentMin = now.getMinutes();
-            const currentTimeVal = currentHour * 60 + currentMin;
-            const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
-            let liveLineInserted = false;
-
-            container.innerHTML = stream.map(item => {
-                const [h, m] = item.time.split(':').map(Number);
-                const itemTimeVal = h * 60 + m;
-                let html = '';
-                if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
-
-                let cardContent = '';
-                if (item.type === 'routine') { cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`; }
-                else if (item.type === 'meal') { cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`; }
-                else if (item.type === 'snack') { cardContent = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`; }
-                else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
-
-                return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
-            }).join('');
-
-            if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-            updateWaterUI(mode);
+            } else { alert(`Tâche ajoutée pour le ${d} !`); }
         }
 
-        // HELPERS (editItem, playContextMusic, etc. same as before)
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v64_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
+        // ... [Modal & Helpers - Same as V64] ...
+        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
+        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
+        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
+        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
+        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v65_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v64_db',JSON.stringify(db)); localStorage.setItem('lifeos_v64_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v64_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
+        function save(){localStorage.setItem('lifeos_v65_db',JSON.stringify(db)); localStorage.setItem('lifeos_v65_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v65_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p;updateMusicUI();save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function checkHabits() { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>t.fullText).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); }
