@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V46 - Intellectual Expansion</title>
+    <title>LifeOS Sovereign V47 - Omniscience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* KNOWLEDGE CARD SPECIAL STYLE */
-        .knowledge-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3); }
+        /* SPECIAL CARDS */
+        .coach-alert { background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); border: 1px solid rgba(249, 115, 22, 0.3); animation: slideDown 0.5s ease-out; }
+        .knowledge-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3); animation: slideDown 0.5s ease-out; }
+        .shop-card { background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.2); }
         
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
         .timeline-item { position: relative; padding-left: 2rem; border-left: 2px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; }
         .timeline-dot { position: absolute; left: -0.4rem; top: 0; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: #3b82f6; }
-        .timeline-time { font-family: monospace; font-size: 0.75rem; opacity: 0.6; }
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; }
-        .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+        .timeline-time { font-family: monospace; font-size: 0.75rem; opacity: 0.6; margin-bottom: 0.2rem; }
+
+        .sonic-bar { cursor: pointer; position: relative; overflow: hidden; transition: all 0.4s ease; }
+        .sonic-bar:hover { filter: brightness(1.2); transform: scale-[1.01]; }
+        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
+        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
+        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
+
+        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+        .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .video-btn:hover { background: white; color: black; transform: scale(1.05); }
+        .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+        .cook-btn:hover { background: #10b981; border-color: #10b981; color: black; }
+
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; }
+        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        @keyframes highlight { 0% { background-color: rgba(59, 130, 246, 0.3); } 100% { background-color: transparent; } }
+        .updated-flash { animation: highlight 1s ease-out; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -33,131 +51,194 @@
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
+                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Musique</p><div class="flex gap-3"><button onclick="setMusic('spotify')" id="btn-spotify" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-green-500 transition-colors"><svg class="w-5 h-5 text-[#1db954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></button><button onclick="setMusic('deezer')" id="btn-deezer" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-purple-500 transition-colors"><svg class="w-5 h-5 text-[#a238ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg></button><button onclick="setMusic('apple')" id="btn-apple" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-red-500 transition-colors"><svg class="w-5 h-5 text-[#fa2d48]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg></button></div></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Rapide</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none h-32" placeholder="Ex: 'Réunion à 10h'"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Réunion à 10h' ou 'Sport à 18h'"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase">Planifier</button></div>
+                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
         <main class="lg:col-span-9 space-y-6 pb-10">
-            <div id="main-hud" class="glass-base p-8 md:p-10">
+            <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
                 
-                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 border-b border-white/5 gap-6">
-                    <div>
-                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black italic tracking-tight text-white">Date</h2>
-                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
-                    </div>
-                    <div class="flex gap-8 text-right h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Objectif</p><p id="calTarget" class="text-2xl font-mono font-medium">--</p></div></div>
+                <div id="coachAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center justify-between coach-alert">
+                    <div class="flex items-center gap-4"><div class="text-3xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Analyse de Rythme</p><p id="coachMsg" class="text-sm font-medium">Pause trop longue. On s'y remet ?</p></div></div>
+                    <button onclick="injectSport()" class="bg-orange-500 text-black px-4 py-2 rounded-lg text-xs font-black uppercase hover:bg-white">Planifier Séance</button>
                 </div>
 
-                <div id="knowledgeHub" class="hidden glass-card knowledge-card p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
-                    <div class="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center text-3xl">📚</div>
-                    <div class="flex-1 text-center md:text-left">
-                        <p class="text-[10px] font-black uppercase text-blue-400 mb-1">Opportunité de Croissance</p>
-                        <p class="text-lg font-bold">Journée calme. On s'instruit ?</p>
-                        <p class="text-xs opacity-60">Utilisez ce temps pour votre éducation financière ou culturelle.</p>
+                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
+                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
+                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
                     </div>
-                    <div class="flex flex-col gap-2 w-full md:w-auto">
-                        <button onclick="learn('finance')" class="video-btn bg-blue-600 hover:bg-white hover:text-black transition-colors">▶ Finance (Finary/Louvet)</button>
-                        <button onclick="learn('culture')" class="video-btn hover:bg-white hover:text-black">▶ Culture & Histoire</button>
-                    </div>
+                    <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
+                </div>
+
+                <div id="sonicTrigger" onclick="playContextMusic()" class="sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl">
+                    <div class="flex items-center gap-4 text-white"><div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[10px] font-black uppercase tracking-widest opacity-80">Ambiance Active</p><p id="sonicLabel" class="text-lg font-bold">Chargement...</p></div></div><div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-black">▶</div>
+                </div>
+
+                <div id="knowledgeHub" class="hidden glass-card knowledge-card p-6 mb-6 flex flex-col md:flex-row items-center gap-6">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-2xl">📚</div>
+                    <div class="flex-1 text-center md:text-left"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Opportunité de Croissance</p><p class="text-lg font-bold">Journée calme détectée.</p><p class="text-xs opacity-60">Temps idéal pour l'éducation financière ou culturelle.</p></div>
+                    <div class="flex flex-col gap-2 w-full md:w-auto"><button onclick="learn('finance')" class="video-btn bg-blue-600 hover:bg-white hover:text-black">▶ Finance (Finary/Louvet)</button><button onclick="learn('culture')" class="video-btn hover:bg-white hover:text-black">▶ Culture & Histoire</button></div>
                 </div>
 
                 <div class="space-y-6">
-                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-yellow-500"><div class="flex items-center gap-6 text-xl">☀️<div><p class="text-[10px] font-bold uppercase text-yellow-500">Matin</p><p id="hudRoutineM" class="text-lg font-medium">--</p></div></div><button id="btnRoutineM" class="video-btn">▶ Vidéo</button></div>
+                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-yellow-500 group"><div class="flex items-center gap-6"><div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-xl">☀️</div><div><p class="text-[10px] font-bold uppercase text-yellow-500 mb-1">Matin</p><p id="hudRoutineM" class="text-lg font-medium">--</p></div></div><button id="btnRoutineM" class="video-btn">▶ Lancer</button></div>
 
-                    <div class="glass-card p-6 flex flex-col relative overflow-hidden">
+                    <div class="glass-card shop-card p-6 flex items-center gap-6 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div class="flex-1"><p class="text-[10px] font-bold uppercase text-green-400 mb-1">Bio-Stack (Recommandé)</p><p id="hudSupplements" class="text-sm font-bold text-white">--</p></div></div>
+
+                    <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="lunchColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
-                        <div class="pl-4"><p id="hudLunch" class="text-xl font-bold">--</p><p id="lunchVits" class="text-[10px] text-zinc-400 mt-2 font-mono">--</p></div>
+                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner</p><span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudLunch" class="text-xl font-bold">--</p><button id="btnCookL" class="cook-btn">▶ Cuisiner</button></div><p id="lunchReason" class="text-xs opacity-70 italic mb-2">--</p><p id="lunchVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p></div>
                     </div>
 
-                    <div class="glass-card p-6"><p class="text-xs font-bold uppercase opacity-40 mb-6">Agenda Chronologique</p><div id="hudTasks" class="space-y-0 pl-2"></div></div>
+                    <div class="glass-card p-6"><div class="flex justify-between items-center mb-6"><p class="text-xs font-bold uppercase opacity-40 tracking-widest">Agenda Chronologique</p></div><div id="hudTasks" class="space-y-0 pl-2"></div></div>
 
-                    <div class="glass-card p-6 flex flex-col relative overflow-hidden">
+                    <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="dinnerColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-purple-500"></div>
-                        <div class="pl-4"><p id="hudDinner" class="text-xl font-bold">--</p><p id="dinnerVits" class="text-[10px] text-zinc-400 mt-2 font-mono">--</p></div>
+                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase text-purple-400">Dîner</p><span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudDinner" class="text-xl font-bold">--</p><button id="btnCookD" class="cook-btn">▶ Cuisiner</button></div><p id="dinnerReason" class="text-xs opacity-70 italic mb-2">--</p><p id="dinnerVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">✨ Apport : --</p></div>
                     </div>
 
-                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-indigo-500"><div class="flex items-center gap-6 text-xl">🌙<div><p class="text-[10px] font-bold uppercase text-indigo-500">Soir</p><p id="hudRoutineE" class="text-lg font-medium">--</p></div></div><button id="btnRoutineE" class="video-btn">▶ Vidéo</button></div>
+                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-indigo-500 group"><div class="flex items-center gap-6"><div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-xl">🌙</div><div><p class="text-[10px] font-bold uppercase text-indigo-500 mb-1">Soir</p><p id="hudRoutineE" class="text-lg font-medium">--</p></div></div><button id="btnRoutineE" class="video-btn">▶ Lancer</button></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem]"><h2 class="text-xl font-bold mb-6 text-center">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids (kg)"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille (cm)"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white border border-white/10"><option value="male" class="text-black">Homme</option><option value="female" class="text-black">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button></div></div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem]"><h2 class="text-xl font-bold mb-6 text-center">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids (kg)"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille (cm)"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male" class="text-black">Homme</option><option value="female" class="text-black">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v46_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v46_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v46_health') || '{"water":0}');
-        const now = new Date(); const todayNum = now.getDate(); let selectedDay = todayNum;
+        let db = JSON.parse(localStorage.getItem('lifeos_v47_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v47_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v47_health') || '{"water":0}');
+        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
+        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; let selectedDay = todayNum; let currentMode = 'diet';
 
-        // --- DATABASE REPAS (EXTRAIT) ---
-        const M_SPORT_L = ["Pâtes Bolo Maison", "Riz + Steak Haché", "Wrap Poulet"];
-        const M_SPORT_D = ["Omelette Patates", "Cabillaud Purée", "Bowl Quinoa"];
-        const M_FOCUS_L = ["Saumon Quinoa", "Salade César", "Bowl Tofu"];
-        const M_FOCUS_D = ["Soupe Légumes", "Dinde Haricots", "Wok Cajou"];
+        // --- DATABASE MASSIVE (31 JOURS, VITAMINES, RAISONS) ---
+        // Pour faire simple et robuste, on utilise les tableaux V43, mais on génère les vitamines dynamiquement selon le nom
+        const M_SPORT_L = ["Pâtes Bolo Maison", "Riz + Steak Haché", "Wrap Poulet (x2)", "Gnocchis Pesto Dinde", "Semoule + Boeuf", "Risotto Champignons", "Pâtes Carbonara Light", "Burrito Bowl Boeuf", "Sandwich Club Poulet", "Purée + Saucisse", "Quinoa Crevettes", "Riz Cantonais", "Pâtes Saumon Crème", "Steak + Frites Four", "Taboulé Poulet", "Lasagnes Boeuf", "Chili Con Carne", "Bagel Saumon Avocat", "Burger Maison Complet", "Riz Curry Poulet", "Pâtes Thon Tomate", "Hachis Parmentier", "Tortilla Pomme de Terre", "Salade Pâtes Jambon", "Croque Monsieur Four", "Escalope Milanaise + Pâtes", "Riz Pilaf + Dinde", "Pâtes Pesto Rosso", "Wrap Boeuf", "Gratin Dauphinois + Jambon", "Pizza Maison Pâte Fine"];
+        const M_SPORT_D = ["Omelette Patates", "Cabillaud Purée", "Bowl Quinoa Dinde", "Wok Poulet Nouilles", "Lentilles Saucisse", "Sardines Pommes Vapeur", "Avocat Oeuf Pain", "Soupe Pâtes", "Hachis Parmentier", "Pizza Maison", "Curry Pois Chiches", "Saumon Riz Epinard", "Tarte Thon Tomate", "Oeufs Cocotte", "Salade Riz Thon", "Velouté + Tartines", "Galette Sarrasin", "Gratin Pâtes", "Poulet Rôti + PdT", "Poisson Pané + Purée", "Riz Tomate Oeuf", "Bruschetta Complète", "Moussaka Light", "Cannelloni Epinard", "Riz Frit Crevettes", "Dinde Paprika + Riz", "Salade Niçoise + Pain", "Frittata Légumes", "Tacos Maison Light", "Gaspacho + Jambon", "Bowl Saumon Avocat"];
+        
+        const M_FOCUS_L = ["Saumon Quinoa", "Salade César", "Bowl Tofu Avocat", "Maquereau Tomates", "Carpaccio Roquette", "Sushi (12pc)", "Tartare Saumon", "Salade Niçoise", "Poulet Wok Légumes", "Ceviche Poisson", "Omelette Epinards", "Bowl Falafel", "Salade Grecque", "Rouleaux Printemps", "Crevettes Sautées", "Filet Mignon Haricots", "Bowl Lentilles Feta", "Salade Endives Noix", "Pavé Thon Sésame", "Wrap Saumon Fumé", "Taboulé Quinoa", "Salade Caprese", "Poke Bowl Tofu", "Salade Lentilles", "Aiguillettes Canard", "Salade Chèvre Chaud", "Tataki Boeuf", "Salade Mexicaine", "Bowl Houmous", "Oeufs Mimosa Light", "Salade Pâtes Complètes"];
+        const M_FOCUS_D = ["Soupe Légumes", "Dinde Haricots", "Wok Cajou", "Velouté Asperges", "Colin Courgettes", "Salade Grecque", "Ratatouille Riz", "Papillote Poisson", "Champignons Sautés", "Gaspacho", "Fromage Blanc Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomate", "Purée Carottes", "Sardines Grillées", "Curry Légumes", "Vapeur Brocolis", "Salade Concombre", "Tomates Farcies Light", "Tian Légumes", "Flan Courgettes", "Soupe Miso", "Salade Betterave", "Chou-fleur Rôti", "Poêlée Paysanne", "Asperges Oeuf", "Salade Fenouil", "Artichaut Vinaigrette", "Carpaccio Courgette"];
+
+        const mealsDB = {
+            sport: { lunch: M_SPORT_L, dinner: M_SPORT_D },
+            focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D },
+            diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }
+        };
+
+        const routinesDB = { sport: { m: {l:"Mobilité (10min)", q:"mobility routine"}, e: {l:"Automassage", q:"foam rolling"} }, focus: { m: {l:"Méditation Focus", q:"meditation focus"}, e: {l:"Étirements Cou", q:"neck relief"} }, diet: { m: {l:"Yoga Réveil", q:"morning yoga"}, e: {l:"Respiration", q:"breathing exercises"} } };
+        const supplementsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
+
+        // Helper pour vitamines (V42 logic restored dynamically)
+        function getVits(meal) {
+            if(meal.includes("Saumon") || meal.includes("Thon")) return "Omega-3, Vit D, B12";
+            if(meal.includes("Poulet") || meal.includes("Dinde")) return "Vit B6, Niacine, Protéines";
+            if(meal.includes("Oeuf") || meal.includes("Omelette")) return "Choline, Vit A, B12";
+            if(meal.includes("Boeuf") || meal.includes("Steak")) return "Fer, Zinc, Créatine";
+            if(meal.includes("Légumes") || meal.includes("Salade")) return "Fibres, Vit C, Antioxydants";
+            return "Vitamines Essentielles";
+        }
+
+        // --- NEW: KNOWLEDGE & COACH LOGIC ---
+        function checkHabits() {
+            let lastSport = 0; for(let i=1;i<=todayNum;i++){ if(((db[i]||[]).map(t=>t.text.toLowerCase()).join(' ')).match(/sport|gym|crossfit/)) lastSport=i; }
+            if(lastSport>0 && (todayNum-lastSport)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden');
+        }
+        function learn(t) {
+            let q = t==='finance'?"Mathieu Louvet Finary Bourse":"Documentaire Histoire Arte Nota Bene";
+            window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank');
+        }
+        function injectSport() { traiterInput("Séance Reprise Sport 18h"); }
 
         function renderHUD() {
             const isToday = (selectedDay === todayNum);
-            document.getElementById('hudDate').innerText = `${selectedDay} ${["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."][now.getMonth()]}`;
+            document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
+            document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
+            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
 
             const tasks = db[selectedDay] || [];
             const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
-            
-            // LOGIQUE KNOWLEDGE HUB : Si journée calme (moins de 3 tâches)
-            const kHub = document.getElementById('knowledgeHub');
-            if (tasks.length <= 2) { kHub.classList.remove('hidden'); } else { kHub.classList.add('hidden'); }
+            let mode = 'diet'; if (txt.includes('sport') || txt.includes('crossfit')) mode = 'sport'; else if (txt.includes('réunion') || txt.includes('bureau')) mode = 'focus';
+            currentMode = mode;
 
-            let mode = 'diet'; if (txt.includes('sport')) mode = 'sport'; else if (txt.includes('réunion') || txt.includes('bureau')) mode = 'focus';
+            // Logic Knowledge Hub (V46)
+            if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
 
-            // REPAS & VITS (Rotation simplifiée ici)
-            const rot = (selectedDay - 1) % 3;
-            const l = mode==='sport'?M_SPORT_L[rot]:M_FOCUS_L[rot];
-            const d = mode==='sport'?M_SPORT_D[rot]:M_FOCUS_D[rot];
-            
+            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport", s:"Playlist: Beast Mode"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus", s:"Playlist: Concentration"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill", s:"Playlist: Chill Lo-Fi"} };
+            document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-xl font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
+            document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`; document.getElementById('sonicLabel').innerText = styles[mode].s;
+
+            let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
+            let act = mode==='sport'?1.7:(mode==='focus'?1.3:1.2);
+            const tdee = Math.round(bmr*act);
+            document.getElementById('calTarget').innerText = `${tdee} kcal`;
+            document.getElementById('hudSupplements').innerText = supplementsDB[mode];
+
+            const rot = (selectedDay - 1) % 31; // V43 Infinite logic
+            const l = mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0];
+            const d = mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0];
+
             document.getElementById('hudLunch').innerText = l;
-            document.getElementById('lunchVits').innerText = `✨ Apport : Vit. D, B12, Magnésium`;
+            document.getElementById('lunchReason').innerText = mode==='sport'?"Recharge Glucidique":"Léger & Nutritif";
+            document.getElementById('lunchVits').innerText = `✨ Apport : ${getVits(l)}`;
+            document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
+            document.getElementById('lunchColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
+            document.getElementById('btnCookL').onclick = () => window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(l)}+saine`, '_blank');
+
             document.getElementById('hudDinner').innerText = d;
-            document.getElementById('dinnerVits').innerText = `✨ Apport : Omega-3, Fer, Zinc`;
+            document.getElementById('dinnerReason').innerText = mode==='sport'?"Récupération":"Digestion Facile";
+            document.getElementById('dinnerVits').innerText = `✨ Apport : ${getVits(d)}`;
+            document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
+            document.getElementById('dinnerColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
+            document.getElementById('btnCookD').onclick = () => window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(d)}+saine`, '_blank');
 
-            // ROUTINES
-            const routines = { sport: { m: "Mobilité Articulaire", e: "Automassage" }, focus: { m: "Méditation Focus", e: "Lecture papier" }, diet: { m: "Yoga Flow", e: "Respiration" } };
-            document.getElementById('hudRoutineM').innerText = routines[mode].m;
-            document.getElementById('hudRoutineE').innerText = routines[mode].e;
+            const r = routinesDB[mode];
+            document.getElementById('hudRoutineM').innerText = r.m.l; document.getElementById('btnRoutineM').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.m.q)}`, '_blank');
+            document.getElementById('hudRoutineE').innerText = r.e.l; document.getElementById('btnRoutineE').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.e.q)}`, '_blank');
 
-            // TIMELINE
+            const sortedTasks = [...tasks].sort((a, b) => {
+                const timeA = (a.text.match(/(\d{1,2})[h:]/) || ["0","23"])[1];
+                const timeB = (b.text.match(/(\d{1,2})[h:]/) || ["0","23"])[1];
+                return parseInt(timeA) - parseInt(timeB);
+            });
+
             const tBox = document.getElementById('hudTasks');
-            tBox.innerHTML = tasks.length ? tasks.sort((a,b) => (a.text.match(/\d+h/)||["23h"])[0].localeCompare((b.text.match(/\d+h/)||["23h"])[0])).map((t, i) => {
+            tBox.innerHTML = sortedTasks.length ? sortedTasks.map((t, i) => {
                 const time = (t.text.match(/(\d{1,2}h\d{0,2})/) || ["•"])[0];
-                return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time">${time}</div><div class="glass-card p-3 flex items-center gap-3 group"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${selectedDay}, ${tasks.indexOf(t)})" class="w-4 h-4 accent-blue-500"><span class="${t.done?'line-through opacity-30':'font-medium text-sm'}">${t.text}</span></div></div>`;
+                return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time">${time}</div><div class="glass-card p-3 flex items-center gap-3 group"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${selectedDay}, ${tasks.indexOf(t)})" class="w-4 h-4 accent-blue-500"><span class="${t.done?'line-through opacity-30':'font-medium text-sm'}">${t.text.replace(/(\d{1,2}h\d{0,2})/, '').trim()}</span><button onclick="delTask(${selectedDay},${tasks.indexOf(t)})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100">✕</button></div></div>`;
             }).join('') : `<p class="text-sm opacity-30 italic text-center p-4">Agenda libre.</p>`;
 
-            // CALORIES
-            let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-            document.getElementById('calTarget').innerText = `${Math.round(bmr*(mode==='sport'?1.7:1.3))} kcal`;
-            
             updateWaterUI(mode);
+            const main = document.getElementById('main-hud'); main.classList.remove('updated-flash'); void main.offsetWidth; main.classList.add('updated-flash');
         }
 
-        // NEW: FUNCTION TO LEARN
-        function learn(topic) {
-            let q = "";
-            if (topic === 'finance') q = "Mathieu Louvet Mathieu Baccino Finary bourse investissement éducation financière";
-            else q = "Documentaire histoire du monde culture générale Nota Bene Arte";
-            window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`, '_blank');
+        // --- HELPERS (V39-V44) ---
+        function playContextMusic() {
+            let q = currentMode==='sport'?"Workout Phonk":(currentMode==='focus'?"Deep Focus":"Chill Lofi");
+            if(musicProvider==='spotify') window.open(`https://open.spotify.com/search/${encodeURIComponent(q)}`,'_blank');
+            if(musicProvider==='deezer') window.open(`https://www.deezer.com/search/${encodeURIComponent(q)}`,'_blank');
+            if(musicProvider==='apple') window.open(`https://music.apple.com/us/search?term=${encodeURIComponent(q)}`,'_blank');
         }
-
-        // --- HELPERS ---
         function addWater(n) { health.water += n; save(); }
-        function updateWaterUI(m) { let t = (profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText = `${health.water}L`; document.getElementById('waterBar').style.width = `${Math.min(100, (health.water/t)*100)}%`; }
+        function updateWaterUI(m) { let t = (profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText = `${health.water}L`; document.getElementById('waterTarget').innerText = `/ ${t}L`; document.getElementById('waterBar').style.width = `${Math.min(100, (health.water/t)*100)}%`; }
         function renderCal() { const c = document.getElementById('calendar'); c.innerHTML=''; const m = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate(); for(let i=1; i<=m; i++) { const d = document.createElement('div'); let cls="day"; if(i===todayNum)cls+=" day-today"; if(i===selectedDay)cls+=" day-selected"; if(db[i]&&db[i].length)cls+=" has-event"; d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i; renderCal(); renderHUD();}; c.appendChild(d); } }
-        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; db[selectedDay]=[...(db[selectedDay]||[]),{text:r,done:false}]; save(); document.getElementById('userInput').value=''; renderHUD(); }
+        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
+        function traiterInput(r) { let d=selectedDay; if(r.toLowerCase().includes('demain'))d=todayNum+1; else{const m=r.toLowerCase().match(/le (\d{1,2})/);if(m)d=parseInt(m[1]);} const cl=r.replace(/demain|le \d{1,2}/gi,'').trim(); db[d]=[...(db[d]||[]),{text:cl,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD(); }
         function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
-        function save(){localStorage.setItem('lifeos_v46_db',JSON.stringify(db)); localStorage.setItem('lifeos_v46_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v46_health',JSON.stringify(health)); renderCal(); renderHUD();}
+        function delTask(d,i){db[d].splice(i,1); save();}
+        function save(){localStorage.setItem('lifeos_v47_db',JSON.stringify(db)); localStorage.setItem('lifeos_v47_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v47_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
+        function setMusic(p){musicProvider=p; updateMusicUI(); save();}
+        function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
         function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        renderCal(); renderHUD();
+
+        document.getElementById('userInput').addEventListener('keypress', (e)=>{if(e.key==='Enter')traiter()});
+        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
     </script>
 </body>
 </html>
