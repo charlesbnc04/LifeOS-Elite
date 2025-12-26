@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V53 - Stable Core</title>
+    <title>LifeOS Sovereign V54 - Gourmet & Symphony</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -58,8 +58,8 @@
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Musique</p><div class="flex gap-3"><button onclick="setMusic('spotify')" id="btn-spotify" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-green-500 transition-colors"><svg class="w-5 h-5 text-[#1db954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></button><button onclick="setMusic('deezer')" id="btn-deezer" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-purple-500 transition-colors"><svg class="w-5 h-5 text-[#a238ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg></button><button onclick="setMusic('apple')" id="btn-apple" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-red-500 transition-colors"><svg class="w-5 h-5 text-[#fa2d48]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg></button></div></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout (Syntoniseur)</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Faut voir Maman demain' -> 'Voir Maman'"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent (Syntoniseur)</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Faut voir Maman demain' -> 'Voir Maman'"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
@@ -86,7 +86,7 @@
 
                     <div id="cardLunch" class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden theme-diet editable" onclick="editItem('meal', 'lunch')">
                         <div id="lunchColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
-                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase opacity-60">Déjeuner</p><span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudLunch" class="text-xl font-bold">--</p><button id="btnCookL" class="cook-btn" onclick="event.stopPropagation();">▶ Recette</button></div><p id="lunchReason" class="text-xs opacity-70 italic mb-2">--</p><p id="lunchVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">--</p></div>
+                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase opacity-60">Déjeuner</p><span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudLunch" class="text-lg font-bold leading-tight">--</p><button id="btnCookL" class="cook-btn" onclick="event.stopPropagation();">▶ Recette</button></div><p id="lunchReason" class="text-xs opacity-70 italic mb-2">--</p><p id="lunchVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">--</p></div>
                     </div>
 
                     <div class="glass-card p-6">
@@ -98,7 +98,7 @@
 
                     <div id="cardDinner" class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden theme-diet editable" onclick="editItem('meal', 'dinner')">
                         <div id="dinnerColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
-                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase opacity-60">Dîner</p><span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudDinner" class="text-xl font-bold">--</p><button id="btnCookD" class="cook-btn" onclick="event.stopPropagation();">▶ Recette</button></div><p id="dinnerReason" class="text-xs opacity-70 italic mb-2">--</p><p id="dinnerVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">--</p></div>
+                        <div class="flex-1 pl-4"><div class="flex justify-between mb-2"><p class="text-[10px] font-bold uppercase opacity-60">Dîner</p><span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span></div><div class="flex items-center gap-2 mb-1"><p id="hudDinner" class="text-lg font-bold leading-tight">--</p><button id="btnCookD" class="cook-btn" onclick="event.stopPropagation();">▶ Recette</button></div><p id="dinnerReason" class="text-xs opacity-70 italic mb-2">--</p><p id="dinnerVits" class="text-[10px] text-zinc-400 font-mono border-t border-white/5 pt-2 mt-2">--</p></div>
                     </div>
 
                     <div class="glass-card p-6 flex items-center justify-between group theme-diet" id="cardSoir"><div class="flex items-center gap-6"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xl">🌙</div><div><p class="text-[10px] font-bold uppercase mb-1 opacity-70">Soir</p><p id="hudRoutineE" class="text-lg font-medium">--</p></div></div><button id="btnRoutineE" class="video-btn">▶ Vidéo</button></div>
@@ -110,21 +110,107 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v53_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v53_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v53_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v53_manual_meals') || "{}");
+        let db = JSON.parse(localStorage.getItem('lifeos_v54_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v54_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v54_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v54_manual_meals') || "{}");
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; let selectedDay = todayNum;
 
-        // DATASETS (ROBUSTES)
-        const M_SPORT_L = ["Pâtes Bolo Maison", "Riz + Steak Haché", "Wrap Poulet (x2)", "Gnocchis Dinde", "Semoule Boeuf", "Risotto", "Pâtes Carbo Light", "Burrito Bowl", "Club Sandwich", "Purée Saucisse", "Quinoa Crevettes", "Riz Cantonais", "Pâtes Saumon", "Steak Frites Four", "Taboulé Poulet", "Lasagnes", "Chili Con Carne", "Bagel Saumon", "Burger Maison", "Riz Curry", "Pâtes Thon", "Hachis Parmentier", "Tortilla", "Salade Pâtes", "Croque Four", "Escalope Pâtes", "Riz Pilaf", "Pâtes Pesto", "Wrap Boeuf", "Gratin Dauphinois", "Pizza Fine"];
-        const M_SPORT_D = ["Omelette Patates", "Cabillaud Purée", "Bowl Quinoa", "Wok Poulet", "Lentilles Saucisse", "Sardines Vapeur", "Avocat Oeuf", "Soupe Pâtes", "Hachis", "Pizza Maison", "Curry Pois", "Saumon Riz", "Tarte Thon", "Oeufs Cocotte", "Salade Riz", "Velouté Tartines", "Galette", "Gratin Pâtes", "Poulet Rôti", "Poisson Pané", "Riz Tomate", "Bruschetta", "Moussaka", "Cannelloni", "Riz Crevettes", "Dinde Paprika", "Salade Niçoise", "Frittata", "Tacos Light", "Gaspacho", "Bowl Saumon"];
-        const M_FOCUS_L = ["Saumon Quinoa", "Salade César", "Bowl Tofu", "Maquereau Tomates", "Carpaccio", "Sushi", "Tartare Saumon", "Salade Niçoise", "Poulet Wok", "Ceviche", "Omelette Epinards", "Falafel", "Salade Grecque", "Rouleaux Printemps", "Crevettes Sautées", "Filet Mignon", "Lentilles Feta", "Endives Noix", "Thon Sésame", "Wrap Saumon", "Taboulé Quinoa", "Caprese", "Poke Tofu", "Lentilles", "Canard", "Chèvre Chaud", "Tataki", "Salade Mexicaine", "Houmous", "Oeufs Mimosa", "Pâtes Complètes"];
-        const M_FOCUS_D = ["Soupe Légumes", "Dinde Haricots", "Wok Cajou", "Velouté Asperges", "Colin Courgettes", "Salade Grecque", "Ratatouille", "Papillote", "Champignons", "Gaspacho", "Fromage Blanc", "Bouillon", "Poireaux", "Oeufs Brouillés", "Salade Verte", "Purée Carottes", "Sardines", "Curry Légumes", "Brocolis", "Concombre", "Tomates Farcies", "Tian", "Flan Courgettes", "Miso", "Betterave", "Chou-fleur", "Poêlée", "Asperges", "Fenouil", "Artichaut", "Carpaccio"];
-        const MEALS_DIET = { l: M_FOCUS_L, d: M_FOCUS_D }; 
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: MEALS_DIET.l, dinner: MEALS_DIET.d } };
-        
+        // --- NOUVELLE BASE DE DONNÉES GASTRONOMIQUE DÉTAILLÉE (V54) ---
+        // Des noms de plats complets pour une recherche YouTube précise
+        const M_SPORT_L = [
+            "Penne Complètes à la Bolognaise (Boeuf 5% & Concassé de Tomates)",
+            "Riz Basmati, Steak Haché 5% Boucher & Haricots Verts à l'Ail",
+            "Double Wrap Poulet Grillé, Avocat, Maïs & Sauce Yaourt Grec",
+            "Gnocchis à Poêler, Émincé de Dinde & Pesto Verde Maison",
+            "Couscous Royal Light : Semoule Complète, Boeuf Mijoté & Légumes",
+            "Risotto Crémeux aux Champignons des Bois & Parmesan",
+            "Tagliatelles à la Carbonara Légère (Crème 4%, Allumettes de Bacon)",
+            "Burrito Bowl : Riz, Haricots Rouges, Boeuf Haché & Guacamole",
+            "Club Sandwich Pain Complet : Poulet Rôti, Oeuf Dur & Crudités",
+            "Purée de Pommes de Terre Maison & Saucisse de Volaille Confite",
+            "Quinoa Gourmand aux Crevettes Sautées, Petits Pois & Menthe",
+            "Riz Cantonais Maison : Dés de Jambon, Omelette & Petits Pois",
+            "Pâtes Complètes au Saumon Frais & Crème d'Aneth Citronnée",
+            "Pavé de Rumsteak Grillé & Frites de Patate Douce au Four",
+            "Grand Taboulé de Semoule au Poulet Rôti, Menthe & Raisins Secs"
+        ];
+        // On remplit le reste pour atteindre 31 jours par rotation
+        const FILLER_SPORT = ["Lasagnes au Boeuf & Aubergines", "Chili Con Carne Maison & Riz", "Bagel Saumon Fumé & Cream Cheese Light", "Burger Maison Pain Complet & Steack 5%", "Riz Jaune au Curry de Poulet Coco", "Gratin de Pâtes au Thon & Tomate", "Hachis Parmentier à la Patate Douce", "Tortilla Espagnole aux Pommes de Terre & Salade", "Salade de Pâtes Tricolores, Dés de Jambon & Comté", "Croque-Monsieur au Four (Pain Complet)", "Escalope de Veau Milanaise & Spaghetti", "Riz Pilaf aux Petits Légumes & Dinde", "Pâtes au Pesto Rosso & Tomates Séchées", "Fajitas au Boeuf, Poivrons & Oignons", "Gratin Dauphinois Léger & Jambon Blanc", "Pizza Maison Pâte Fine : Jambon, Champignons, Mozza"];
+        M_SPORT_L.push(...FILLER_SPORT);
+
+        const M_SPORT_D = [
+            "Omelette Moelleuse (3 oeufs) aux Pommes de Terre & Ciboulette",
+            "Dos de Cabillaud Rôti & Écrasé de Pommes de Terre à l'Huile d'Olive",
+            "Bowl Énergie : Quinoa, Dinde Marinée Soja & Avocat",
+            "Wok de Nouilles Chinoises, Poulet & Légumes Croquants",
+            "Saucisse de Toulouse Grillée & Lentilles Vertes Mijotées",
+            "Sardines à l'Huile d'Olive & Pommes de Terre Vapeur",
+            "Toast Avocat & Oeuf Mollet sur Pain de Seigle",
+            "Soupe Minestrone (Pâtes & Légumes) & Parmesan",
+            "Hachis Parmentier de Canard & Salade Verte",
+            "Pizza Blanche Maison : Mozzarella, Chèvre & Miel",
+            "Curry Végétarien de Pois Chiches, Épinards & Lait de Coco",
+            "Pavé de Saumon Grillé, Riz Sauvage & Fondue de Poireaux",
+            "Tarte Fine à la Tomate, Moutarde & Thon",
+            "Oeufs Cocotte à la Crème & Mouillettes de Pain Complet",
+            "Salade de Riz Niçoise (Thon, Oeuf, Olives, Tomates)"
+        ];
+        M_SPORT_D.push(...FILLER_SPORT); // Reuse filler for variety demo
+
+        const M_FOCUS_L = [
+            "Pavé de Saumon Rôti, Quinoa aux Herbes & Épinards Frais",
+            "Grande Salade César : Poulet, Parmesan, Croûtons & Sauce Light",
+            "Buddha Bowl : Tofu Fumé, Avocat, Riz Vinaigré & Edamame",
+            "Filets de Maquereau Grillés & Salade de Tomates au Basilic",
+            "Carpaccio de Boeuf au Basilic, Copeaux de Parmesan & Roquette",
+            "Plateau Sushi & Sashimi (12 pièces) & Salade de Chou",
+            "Tartare de Saumon à l'Avocat & Citron Vert",
+            "Salade Niçoise Authentique : Thon, Anchois, Oeuf, Haricots",
+            "Wok de Poulet aux Noix de Cajou & Légumes Sautés",
+            "Ceviche de Daurade au Lait de Coco & Coriandre",
+            "Omelette Baveuse aux Épinards & Champignons de Paris",
+            "Bowl Libanais : Falafels, Houmous, Taboulé & Pita",
+            "Salade Grecque : Feta, Olives Kalamata, Concombre & Origan",
+            "Rouleaux de Printemps Crevettes & Sauce Nuoc-Mâm",
+            "Poêlée de Crevettes à l'Ail & Persil, Riz Basmati"
+        ];
+        const FILLER_FOCUS = ["Filet Mignon de Porc & Haricots Verts Vapeur", "Salade de Lentilles, Feta & Grenade", "Salade d'Endives aux Noix & Roquefort", "Pavé de Thon Mi-Cuit au Sésame & Wok", "Wrap Saumon Fumé, Concombre & Aneth", "Taboulé de Quinoa, Menthe & Feta", "Salade Caprese : Tomates Cœur de Boeuf & Mozza Di Bufala", "Poke Bowl Saumon Mariné & Mangue", "Salade de Lentilles Corail & Coco", "Aiguillettes de Canard & Poêlée Champignons", "Salade de Chèvre Chaud sur Pain aux Noix", "Tataki de Boeuf & Salade de Chou Asiatique", "Salade Mexicaine : Maïs, Haricots Rouges, Avocat", "Grand Bowl de Houmous & Légumes Croquants", "Oeufs Mimosa au Thon & Salade Verte", "Salade de Pâtes Complètes, Tomates Séchées & Pignons"];
+        M_FOCUS_L.push(...FILLER_FOCUS);
+
+        const M_FOCUS_D = [
+            "Velouté de Potiron au Lait de Coco & Éclats de Châtaigne",
+            "Escalope de Dinde Grillée & Haricots Verts Persillades",
+            "Wok de Légumes de Saison, Sauce Soja & Noix de Cajou",
+            "Velouté d'Asperges Vertes & Oeuf Poché",
+            "Filet de Colin Papillote, Citron & Julienne de Courgettes",
+            "Grande Salade Grecque sans pain (Feta, Tomates, Concombre)",
+            "Ratatouille Provençale Maison & Riz Complet",
+            "Papillote de Cabillaud aux Petits Légumes & Aneth",
+            "Poêlée de Champignons Forestiers & Oeuf Mollet",
+            "Gaspacho Andalou Maison & Dés de Concombre",
+            "Faisselle, Miel & Fruits Rouges Frais",
+            "Bouillon de Volaille aux Vermicelles & Petits Légumes",
+            "Fondue de Poireaux à la Crème Légère & Saint-Jacques",
+            "Oeufs Brouillés Nature & Salade de Mâche",
+            "Salade Verte, Tomates Cerises & Vinaigrette Balsamique"
+        ];
+        M_FOCUS_D.push(...FILLER_FOCUS);
+
+        const mealsDB = {
+            sport: { lunch: M_SPORT_L, dinner: M_SPORT_D },
+            focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D },
+            diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } // Diet uses Focus meals (High quality nutrients)
+        };
+
+        // --- NEW: MUSIC ROTATION DB (V54) ---
+        const MUSIC_DB = {
+            sport: ["Workout Phonk", "90s Hip Hop Gym", "Hardstyle Motivation", "Metal Workout Playlist", "EDM High Tempo", "Rocky Balboa Soundtrack", "Techno Bunker"],
+            focus: ["Deep Focus Hans Zimmer", "Lofi Girl Study", "Binaural Beats 40Hz", "Classical for Work", "Movie Soundtracks Focus", "Piano Ambient", "Brown Noise Focus"],
+            diet: ["Coffee Shop Jazz", "Acoustic Chill Covers", "Nature Sounds & Piano", "Soul & R&B Sunday", "Reggae Chill", "Indie Folk Playlist", "Bossa Nova Cafe"]
+        };
+
         const ROUTINES_LIST = {
             sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}, {l:"Étirements Dynamiques", q:"dynamic stretching"}, {l:"Cardio Léger", q:"jumping jacks"}, {l:"Yoga Athlètes", q:"yoga for athletes"}, {l:"Wim Hof", q:"wim hof breathing"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}, {l:"Bain Froid", q:"cold shower"}, {l:"Massage Mollets", q:"calves massage"}, {l:"Scan Corporel", q:"body scan"}, {l:"Respiration 4-7-8", q:"4 7 8 breathing"}] },
             focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}, {l:"Journaling", q:"morning pages"}, {l:"Marche consciente", q:"mindful walking"}, {l:"Respiration Carrée", q:"box breathing"}, {l:"Lecture", q:"reading habit"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}, {l:"Digital Detox", q:"digital detox"}, {l:"Binaural", q:"binaural beats"}, {l:"Relaxation", q:"progressive relaxation"}, {l:"Silence", q:"silence meditation"}] }
@@ -152,11 +238,14 @@
 
             if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
 
-            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport", s:"Playlist: Beast Mode", theme:"theme-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus", s:"Playlist: Concentration", theme:"theme-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill", s:"Playlist: Chill Lo-Fi", theme:"theme-diet"} };
+            const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport", theme:"theme-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus", theme:"theme-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill", theme:"theme-diet"} };
             document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-xl font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-            document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`; document.getElementById('sonicLabel').innerText = styles[mode].s;
+            document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`; 
+            
+            // DYNAMIC MUSIC LABEL (V54)
+            const musicIndex = (selectedDay - 1) % MUSIC_DB[mode].length;
+            document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][musicIndex]}`;
 
-            // CARTE THEME UPDATE
             ['cardLunch', 'cardDinner', 'cardMatin', 'cardSoir'].forEach(id => {
                 document.getElementById(id).className = `glass-card p-6 flex flex-col md:flex-row relative overflow-hidden transition-all duration-500 ${styles[mode].theme} ${id.includes('Matin')||id.includes('Soir')?'flex items-center justify-between group':''} editable`;
             });
@@ -167,27 +256,23 @@
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
             document.getElementById('hudSupplements').innerText = suppsDB[mode];
 
-            const rot = (selectedDay - 1) % 31; const rIndex = (selectedDay - 1) % 7; 
-            
-            // MANUAL OVERRIDE CHECK
+            const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 7; 
             const l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
             const d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-            
             const rM = ROUTINES_LIST[mode].m[rIndex] || ROUTINES_LIST[mode].m[0];
             const rE = ROUTINES_LIST[mode].e[rIndex] || ROUTINES_LIST[mode].e[0];
 
             document.getElementById('hudLunch').innerText = l; document.getElementById('lunchVits').innerText = `✨ Apport : ${getVits(l)}`; document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
             document.getElementById('lunchColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
-            document.getElementById('btnCookL').onclick = (e) => { e.stopPropagation(); window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(l)}+saine`, '_blank'); };
+            document.getElementById('btnCookL').onclick = (e) => { e.stopPropagation(); window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(l)}`, '_blank'); };
 
             document.getElementById('hudDinner').innerText = d; document.getElementById('dinnerVits').innerText = `✨ Apport : ${getVits(d)}`; document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
             document.getElementById('dinnerColorBar').className = `absolute left-0 top-0 bottom-0 w-1 ${mode==='sport'?'bg-orange-500':(mode==='focus'?'bg-purple-500':'bg-green-500')}`;
-            document.getElementById('btnCookD').onclick = (e) => { e.stopPropagation(); window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(d)}+saine`, '_blank'); };
+            document.getElementById('btnCookD').onclick = (e) => { e.stopPropagation(); window.open(`https://www.youtube.com/results?search_query=recette+${encodeURIComponent(d)}`, '_blank'); };
 
             document.getElementById('hudRoutineM').innerText = rM.l; document.getElementById('btnRoutineM').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(rM.q)}`, '_blank');
             document.getElementById('hudRoutineE').innerText = rE.l; document.getElementById('btnRoutineE').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(rE.q)}`, '_blank');
 
-            // TIMELINE GENERATION (AGENDA)
             const sortedTasks = [...tasks].sort((a, b) => {
                 const timeA = (a.text.match(/(\d{1,2})[h:]/) || ["0","23"])[1];
                 const timeB = (b.text.match(/(\d{1,2})[h:]/) || ["0","23"])[1];
@@ -196,67 +281,42 @@
 
             const tBox = document.getElementById('hudTasks');
             let html = "";
-            
-            // Live Line calculation
             const currentHour = now.getHours(); const currentMin = now.getMinutes();
             const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
             let liveLineInserted = false;
 
-            if (sortedTasks.length === 0) {
-                html = `<p class="text-sm opacity-30 italic text-center p-4">Agenda libre.</p>`;
-            } else {
+            if (sortedTasks.length === 0) { html = `<p class="text-sm opacity-30 italic text-center p-4">Agenda libre.</p>`; } else {
                 html = sortedTasks.map((t, i) => {
                     const timeMatch = t.text.match(/(\d{1,2}h\d{0,2})/) || ["•"];
                     const timeVal = (t.text.match(/(\d{1,2})[h:](\d{2})?/) || ["0","09:00"])[0].replace('h',':');
                     let extraHtml = "";
-                    
-                    if(isToday && !liveLineInserted && timeVal > currentTimeStr) {
-                        extraHtml = `<div class="live-line-container"><div class="live-dot"></div><div class="live-text">MAINTENANT (${currentTimeStr})</div></div>`;
-                        liveLineInserted = true;
-                    }
-
-                    return `${extraHtml}<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time">${timeMatch[0]}</div><div class="glass-card p-3 flex items-center gap-3 group editable" onclick="editItem('task', ${i})"><input type="checkbox" ${t.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${tasks.indexOf(t)})" class="w-4 h-4 accent-blue-500"><span class="${t.done?'line-through opacity-30':'font-medium text-sm'}">${t.text.replace(/(\d{1,2}h\d{0,2})/, '').trim()}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${tasks.indexOf(t)})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100">✕</button></div></div>`;
+                    if(isToday && !liveLineInserted && timeVal > currentTimeStr) { extraHtml = `<div class="live-line-container"><div class="live-dot"></div><div class="live-text">MAINTENANT (${currentTimeStr})</div></div>`; liveLineInserted = true; }
+                    return `${extraHtml}<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time">${timeMatch[0]}</div><div class="glass-card p-3 flex items-center gap-3 group editable" onclick="editItem('task', ${i})"><input type="checkbox" ${t.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${tasks.indexOf(t)})" class="w-4 h-4 accent-blue-500"><span class="${t.done?'line-through opacity-30':'font-medium text-sm'}">${t.text.replace(/(\d{1,2}h\d{0,2})/, '').trim()}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${tasks.indexOf(t)})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div></div>`;
                 }).join('');
             }
-            
             if(isToday && !liveLineInserted && sortedTasks.length > 0) html += `<div class="live-line-container"><div class="live-dot"></div><div class="live-text">MAINTENANT (${currentTimeStr})</div></div>`;
             tBox.innerHTML = html;
 
             updateWaterUI(mode);
         }
 
-        // EDIT FUNCTION
+        // --- NEW: DYNAMIC MUSIC PLAYER (V54) ---
+        function playContextMusic() {
+            const label = document.getElementById('sonicLabel').innerText.replace('Playlist: ', '');
+            if(musicProvider==='spotify') window.open(`https://open.spotify.com/search/${encodeURIComponent(label)}`,'_blank');
+            if(musicProvider==='deezer') window.open(`https://www.deezer.com/search/${encodeURIComponent(label)}`,'_blank');
+            if(musicProvider==='apple') window.open(`https://music.apple.com/us/search?term=${encodeURIComponent(label)}`,'_blank');
+        }
+
         function editItem(type, id) {
-            if(type === 'task') {
-                const tasks = db[selectedDay];
-                const newText = prompt("Modifier la tâche :", tasks[id].text);
-                if(newText) { tasks[id].text = newText; save(); }
-            } else if (type === 'meal') {
-                const newMeal = prompt("Modifier le repas :", "");
-                if(newMeal) {
-                    if(!manualMeals[selectedDay]) manualMeals[selectedDay] = {};
-                    manualMeals[selectedDay][id] = newMeal;
-                    localStorage.setItem('lifeos_v53_manual_meals', JSON.stringify(manualMeals));
-                    renderHUD();
-                }
-            }
+            if(type === 'task') { const tasks = db[selectedDay]; const newText = prompt("Modifier la tâche :", tasks[id].text); if(newText) { tasks[id].text = newText; save(); } } 
+            else if (type === 'meal') { const newMeal = prompt("Modifier le repas :", ""); if(newMeal) { if(!manualMeals[selectedDay]) manualMeals[selectedDay] = {}; manualMeals[selectedDay][id] = newMeal; localStorage.setItem('lifeos_v54_manual_meals', JSON.stringify(manualMeals)); renderHUD(); } }
         }
-
-        function exportData() {
-            const data = { db, profile, health, musicProvider, manualMeals };
-            const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = "lifeos_backup.json"; a.click();
-        }
-        function importData(input) {
-            const file = input.files[0]; const reader = new FileReader();
-            reader.onload = (e) => { const data = JSON.parse(e.target.result); db = data.db; profile = data.profile; health = data.health; musicProvider = data.musicProvider; manualMeals = data.manualMeals || {}; save(); alert("Restauré !"); }; reader.readAsText(file);
-        }
-
+        function exportData() { const data = { db, profile, health, musicProvider, manualMeals }; const blob = new Blob([JSON.stringify(data)], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "lifeos_backup.json"; a.click(); }
+        function importData(input) { const file = input.files[0]; const reader = new FileReader(); reader.onload = (e) => { const data = JSON.parse(e.target.result); db = data.db; profile = data.profile; health = data.health; musicProvider = data.musicProvider; manualMeals = data.manualMeals || {}; save(); alert("Restauré !"); }; reader.readAsText(file); }
         function checkHabits() { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>t.text).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); }
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
         function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
-        function playContextMusic(){ let q="Chill Lofi"; if(document.getElementById('sonicLabel').innerText.includes('Beast'))q="Workout Phonk"; if(document.getElementById('sonicLabel').innerText.includes('Concentration'))q="Deep Focus"; window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
@@ -264,7 +324,7 @@
         function traiterInput(r){let d=selectedDay;if(r.match(/demain/i))d=todayNum+1;else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} const cl=synthesizeTask(r.replace(/demain|le \d{1,2}/gi,'').trim()); db[d]=[...(db[d]||[]),{text:cl,fullText:r,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v53_db',JSON.stringify(db)); localStorage.setItem('lifeos_v53_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v53_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
+        function save(){localStorage.setItem('lifeos_v54_db',JSON.stringify(db)); localStorage.setItem('lifeos_v54_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v54_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p;updateMusicUI();save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
