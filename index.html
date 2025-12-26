@@ -3,18 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V74 - Market Command</title>
+    <title>LifeOS Sovereign V75 - Restore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         
-        /* GLASS & STRUCTURE */
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* NAVIGATION TABS */
+        /* STRICT V70 TIMELINE CSS */
+        .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
+        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
+        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
+        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        
+        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
+        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
+        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
+        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
+        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
+        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; } .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
+        .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
+        
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
+        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
+        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
+        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
+
+        /* TAB NAVIGATION */
         .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
         .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
         .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
@@ -27,35 +47,14 @@
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
 
-        /* FINANCE UI */
+        /* MARKET UI */
         .market-up { color: #10b981; } .market-down { color: #ef4444; }
-        .ticker-badge { font-family: monospace; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-        .ticker-up { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .ticker-down { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
         .asset-row { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; cursor: pointer; }
         .asset-row:hover { background: rgba(255,255,255,0.05); }
         .search-bar { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; width: 100%; color: white; outline: none; font-size: 0.9rem; transition: 0.3s; }
-        .search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
-
-        /* AGENDA V70 STYLES */
-        .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
-        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
-        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
-        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
-        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
-        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
-        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; } .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
-        .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
-        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
-        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
-        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
         
         .alert-box { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
         .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
@@ -72,8 +71,8 @@
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️</button></div>
                 
                 <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5 shrink-0">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active"><span>🗓️</span> Agenda & Life</button>
-                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn"><span>📈</span> Marchés & ETFs</button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active"><span>🗓️</span> Agenda V70</button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn"><span>📈</span> Marché & Bourse</button>
                 </div>
 
                 <div class="shrink-0">
@@ -83,7 +82,7 @@
 
                 <div class="flex-1 shrink-0">
                     <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant Agenda</p>
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Match de foot à 20h'"></textarea>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea>
                     <button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button>
                 </div>
             </div>
@@ -107,7 +106,7 @@
                         <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
                     </div>
                     <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="text-[10px] bg-orange-500 text-black px-3 py-1.5 rounded uppercase font-bold">Planifier</button></div>
-                    <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ?</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="text-[10px] bg-white/10 px-3 py-1.5 rounded hover:bg-white hover:text-black transition">Finance</button></div></div>
+                    <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
 
                     <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p><div id="masterTimeline"></div></div>
                 </div>
@@ -115,7 +114,7 @@
 
             <div id="page-market" class="hidden space-y-6">
                 <div class="glass-base p-6">
-                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">🌍 Indices Mondiaux</h3>
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">🌍 Marché Mondial</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="flow-card text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">S&P 500</p><p class="text-xl font-black market-up">5,842</p><span class="text-[10px] font-bold ticker-up">+1.2%</span></div>
                         <div class="flow-card text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">NASDAQ</p><p class="text-xl font-black market-up">18,673</p><span class="text-[10px] font-bold ticker-up">+0.9%</span></div>
@@ -130,24 +129,18 @@
                             <h3 class="text-xl font-bold mb-4">🔍 Recherche Actifs</h3>
                             <input type="text" id="marketSearch" onkeyup="filterMarket()" placeholder="Chercher une action, un ETF (ex: CW8, Tesla)..." class="search-bar">
                         </div>
-                        
-                        <div class="space-y-2 mb-6" id="market-list">
-                            </div>
+                        <div class="space-y-2 mb-6" id="market-list"></div>
                     </div>
 
                     <div class="glass-base p-8 flex flex-col">
                         <h3 class="text-sm font-bold uppercase text-zinc-500 mb-6 tracking-widest">🏆 Recommandation Hebdo</h3>
-                        <div class="flex-1 bg-gradient-to-br from-blue-900/40 to-purple-900/40 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden group">
+                        <div class="flex-1 bg-gradient-to-br from-blue-900/40 to-purple-900/40 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden">
                             <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">💡</div>
-                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">Focus ETF</span>
-                            <h2 class="text-2xl font-black mb-2">MSCI World (CW8)</h2>
-                            <p class="text-sm leading-relaxed opacity-80 mb-4">Dans un contexte de baisse des taux, la diversification mondiale reste la clé. Le CW8 offre une exposition optimale aux géants US tout en lissant le risque.</p>
-                            <div class="flex gap-4 text-xs font-mono opacity-60">
-                                <span>Risk: 3/5</span>
-                                <span>Perf 1Y: +12%</span>
-                            </div>
+                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">ETF Focus</span>
+                            <h2 class="text-2xl font-black mb-2">Amundi MSCI World (CW8)</h2>
+                            <p class="text-sm leading-relaxed opacity-80 mb-4">Stratégie long terme : Diversification géographique maximale. Idéal pour lisser le risque dans un contexte de taux volatils.</p>
+                            <div class="flex gap-4 text-xs font-mono opacity-60"><span>Risque: 3/5</span><span>Perf 1Y: +12%</span></div>
                         </div>
-                        
                         <div class="mt-8">
                             <h3 class="text-sm font-bold uppercase text-zinc-500 mb-4 tracking-widest">🔥 Top Movers</h3>
                             <div class="space-y-3">
@@ -188,30 +181,40 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        // INIT
-        let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
-        // Repair Legacy
+        // INIT & REPAIR (V74)
+        let db = JSON.parse(localStorage.getItem('lifeos_v74_db') || "{}");
         Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].map(t => { if (!t.fullText) t.fullText = t.text || "Tâche"; if (!t.shortText) t.shortText = t.text || "Tâche"; if (!t.time) t.time = "09:00"; return t; }); } });
-        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v74_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v74_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v74_manual_meals') || "{}");
+        let wealth = JSON.parse(localStorage.getItem('lifeos_v74_wealth') || '{"tr":0, "bourso":0}');
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
 
-        // --- MOCK FINANCE DATABASE ---
+        // DATASETS
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
+        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
+        const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
+        ROUTINES.diet = ROUTINES.focus;
+        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
+        const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
+
         const STOCK_DATA = [
-            { ticker: "CW8", name: "Amundi MSCI World", price: "524.30 €", change: "+0.45%", sector: "ETF Global", pe: "--", yield: "N/A", rating: "Strong Buy", desc: "L'ETF de référence. Exposition à plus de 1500 entreprises dans 23 pays développés. La base de tout portefeuille long terme." },
-            { ticker: "NVDA", name: "NVIDIA Corp", price: "145.20 $", change: "+3.4%", sector: "Technology", pe: "72.5", yield: "0.03%", rating: "Buy", desc: "Leader incontesté des puces IA. Croissance explosive mais valorisation élevée." },
-            { ticker: "AAPL", name: "Apple Inc", price: "225.10 $", change: "+0.5%", sector: "Technology", pe: "32.4", yield: "0.5%", rating: "Hold", desc: "La plus grande capitalisation boursière. Valeur sûre avec un écosystème robuste." },
-            { ticker: "MC.PA", name: "LVMH", price: "680.40 €", change: "+0.5%", sector: "Luxe", pe: "24.1", yield: "1.9%", rating: "Buy", desc: "Leader mondial du luxe. Très dépendant de la demande asiatique mais résilient." },
-            { ticker: "TSLA", name: "Tesla Inc", price: "242.50 $", change: "-1.2%", sector: "Automotive", pe: "68.2", yield: "0%", rating: "Neutral", desc: "Plus qu'un constructeur auto : IA, Robotique, Énergie. Très volatil." },
-            { ticker: "TTE", name: "TotalEnergies", price: "62.10 €", change: "-0.8%", sector: "Energy", pe: "8.2", yield: "5.2%", rating: "Buy", desc: "Major pétrolière avec une transition forte vers les renouvelables. Rendement élevé." },
-            { ticker: "AI.PA", name: "Air Liquide", price: "172.50 €", change: "+0.2%", sector: "Chimie", pe: "28.5", yield: "1.8%", rating: "Buy", desc: "L'aristocrate du CAC40. Croissance régulière et actions gratuites." },
-            { ticker: "BTC", name: "Bitcoin", price: "94,210 $", change: "+4.5%", sector: "Crypto", pe: "--", yield: "--", rating: "Speculative", desc: "L'or numérique. Réserve de valeur décentralisée." }
+            { ticker: "CW8", name: "Amundi MSCI World", price: "524.30 €", change: "+0.45%", sector: "ETF Global", pe: "--", yield: "N/A", rating: "Strong Buy", desc: "Exposition à +1500 entreprises dans 23 pays développés." },
+            { ticker: "NVDA", name: "NVIDIA Corp", price: "145.20 $", change: "+3.4%", sector: "Technology", pe: "72.5", yield: "0.03%", rating: "Buy", desc: "Leader des puces IA." },
+            { ticker: "AAPL", name: "Apple Inc", price: "225.10 $", change: "+0.5%", sector: "Technology", pe: "32.4", yield: "0.5%", rating: "Hold", desc: "Géant de la tech grand public." },
+            { ticker: "MC.PA", name: "LVMH", price: "680.40 €", change: "+0.5%", sector: "Luxe", pe: "24.1", yield: "1.9%", rating: "Buy", desc: "Leader mondial du luxe." },
+            { ticker: "TSLA", name: "Tesla Inc", price: "242.50 $", change: "-1.2%", sector: "Automotive", pe: "68.2", yield: "0%", rating: "Neutral", desc: "Véhicules électriques et IA." },
+            { ticker: "TTE", name: "TotalEnergies", price: "62.10 €", change: "-0.8%", sector: "Energy", pe: "8.2", yield: "5.2%", rating: "Buy", desc: "Major pétrolière et renouvelables." },
+            { ticker: "AI.PA", name: "Air Liquide", price: "172.50 €", change: "+0.2%", sector: "Chimie", pe: "28.5", yield: "1.8%", rating: "Buy", desc: "Gaz industriels et santé." },
+            { ticker: "BTC", name: "Bitcoin", price: "94,210 $", change: "+4.5%", sector: "Crypto", pe: "--", yield: "--", rating: "Speculative", desc: "Or numérique." }
         ];
 
-        // --- NAVIGATION & MARKET LOGIC ---
+        // --- NAVIGATION & MARKET ---
         function switchTab(tab) {
             document.getElementById('page-dashboard').classList.add('hidden');
             document.getElementById('page-market').classList.add('hidden');
@@ -230,25 +233,13 @@
                     const isUp = stock.change.includes('+');
                     container.innerHTML += `
                         <div class="asset-row" onclick="openAssetDetail('${stock.ticker}')">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center font-bold text-xs">${stock.ticker.substring(0,1)}</div>
-                                <div><p class="font-bold text-sm">${stock.ticker}</p><p class="text-[10px] opacity-50">${stock.name}</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-sm">${stock.price}</p>
-                                <span class="text-[10px] font-bold ${isUp ? 'ticker-up' : 'ticker-down'}">${stock.change}</span>
-                            </div>
-                        </div>
-                    `;
+                            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center font-bold text-xs">${stock.ticker.substring(0,1)}</div><div><p class="font-bold text-sm">${stock.ticker}</p><p class="text-[10px] opacity-50">${stock.name}</p></div></div>
+                            <div class="text-right"><p class="font-bold text-sm">${stock.price}</p><span class="text-[10px] font-bold ${isUp ? 'ticker-up' : 'ticker-down'}">${stock.change}</span></div>
+                        </div>`;
                 }
             });
         }
-
-        function filterMarket() {
-            const val = document.getElementById('marketSearch').value;
-            renderMarketList(val);
-        }
-
+        function filterMarket() { renderMarketList(document.getElementById('marketSearch').value); }
         function openAssetDetail(ticker) {
             const data = STOCK_DATA.find(s => s.ticker === ticker) || STOCK_DATA[0];
             document.getElementById('asset-icon').innerText = ticker.substring(0,1);
@@ -266,11 +257,7 @@
         }
         function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
 
-        // --- AGENDA LOGIC (V70 COPY - NO CHANGES) ---
-        const M_SPORT_L_DS = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
-        const M_SPORT_D_DS = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
-        // ... (Using short datasets for brevity, logic handles rotation)
-        
+        // --- AGENDA V70 LOGIC (RESTORED) ---
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; return "Vitamines"; }
         function parseInput(text) {
             let startMin = 540; let duration = 0;
@@ -330,20 +317,19 @@
             } catch (e) { console.error(e); }
         }
 
-        // Utils
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
         function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); renderHUD();}
-        function addWater(n){health.water+=n; localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); document.getElementById('waterText').innerText=`${health.water}L`;}
+        function save(){localStorage.setItem('lifeos_v74_db',JSON.stringify(db)); localStorage.setItem('lifeos_v74_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v74_health',JSON.stringify(health)); renderHUD();}
+        function addWater(n){health.water+=n; localStorage.setItem('lifeos_v74_health',JSON.stringify(health)); document.getElementById('waterText').innerText=`${health.water}L`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';for(let i=1;i<=31;i++){const d=document.createElement('div');d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function playContextMusic(){ window.open('https://open.spotify.com/search/Deep%20Focus','_blank'); }
         function openProfile() { document.getElementById('profileModal').classList.remove('hidden'); }
         function saveProfile() { document.getElementById('profileModal').classList.add('hidden'); }
-        function exportData(){const data={db,profile,health,musicProvider,manualMeals};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};save();alert("Restauré !");};reader.readAsText(file);}
+        function exportData(){const data={db,profile,health,musicProvider,manualMeals,wealth};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
+        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};wealth=data.wealth||{};save();alert("Restauré !");};reader.readAsText(file);}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
         renderCal(); renderHUD();
