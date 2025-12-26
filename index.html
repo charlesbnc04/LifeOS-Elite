@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V82 - Self Healing</title>
+    <title>LifeOS Sovereign V83 - News Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* DESIGN GLOBAL V70 (INTACT) */
+        /* CORE DESIGN (V70/V82) */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* TIMELINE */
+        /* NAVIGATION */
+        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+
+        /* NEWS CARD STYLE */
+        .news-card { display: flex; gap: 1rem; align-items: center; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; cursor: pointer; margin-bottom: 1rem; }
+        .news-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-2px); }
+        .news-img { width: 80px; height: 80px; border-radius: 0.8rem; object-fit: cover; background: #333; flex-shrink: 0; }
+        .news-tag { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px; }
+        .tag-fr { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .tag-world { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+        /* AGENDA STYLES (V82) */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
-        
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
@@ -51,19 +62,7 @@
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
-
-        /* NAVIGATION & BOURSE PRO */
-        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .market-up { color: #10b981; } .bg-up { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; }
-        .market-down { color: #ef4444; } .bg-down { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; }
-        .pro-table { width: 100%; border-collapse: collapse; font-family: monospace; font-size: 0.8rem; }
-        .pro-table th { text-align: left; color: #888; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 600; text-transform: uppercase; }
-        .pro-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .pro-table tr:hover { background: rgba(255,255,255,0.05); cursor: pointer; }
-        .search-bar { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; width: 100%; color: white; outline: none; font-size: 0.9rem; transition: 0.3s; }
-        .search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -75,12 +74,12 @@
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 
                 <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5 shrink-0">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">📅 Agenda V70</button>
-                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn">💹 Bourse Pro</button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active"><span>🗓️</span> Agenda & Life</button>
+                    <button onclick="switchTab('news')" id="nav-news" class="nav-btn"><span>📰</span> Actualités (Live)</button>
                 </div>
 
                 <div>
-                    <div class="flex justify-between items-center mb-2"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p><button onclick="hardReset()" class="text-[9px] text-red-500 hover:text-red-400 font-bold uppercase" title="Cliquer si bug d'affichage">🗑️ Reset Data</button></div>
+                    <div class="flex justify-between items-center mb-2"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p><button onclick="hardReset()" class="text-[9px] text-red-500 hover:text-red-400 font-bold uppercase" title="Cliquer si bug d'affichage">🗑️ Reset</button></div>
                     <div id="calendar" class="grid grid-cols-7 gap-1"></div>
                 </div>
 
@@ -113,33 +112,49 @@
                 </div>
             </div>
 
-            <div id="page-market" class="hidden space-y-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="glass-base p-6 text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">S&P 500</p><p class="text-xl font-black market-up">5,842</p><span class="text-[10px] font-bold ticker-up">+1.2%</span></div>
-                    <div class="glass-base p-6 text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">NASDAQ</p><p class="text-xl font-black market-up">18,673</p><span class="text-[10px] font-bold ticker-up">+0.9%</span></div>
-                    <div class="glass-base p-6 text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">CAC 40</p><p class="text-xl font-black market-down">7,421</p><span class="text-[10px] font-bold ticker-down">-0.1%</span></div>
-                    <div class="glass-base p-6 text-center"><p class="text-[10px] font-bold uppercase opacity-50 mb-1">BITCOIN</p><p class="text-xl font-black market-up">94,210$</p><span class="text-[10px] font-bold ticker-up">+4.5%</span></div>
+            <div id="page-news" class="hidden space-y-6">
+                <div class="glass-base p-0 overflow-hidden relative h-64 md:h-80 cursor-pointer group" onclick="window.open('https://www.lemonde.fr', '_blank')">
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition duration-700">
+                    <div class="absolute bottom-0 left-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent w-full">
+                        <span class="text-[10px] bg-red-600 text-white px-2 py-1 rounded font-bold uppercase mb-3 inline-block">À la Une</span>
+                        <h2 class="text-3xl md:text-4xl font-black leading-tight mb-2">L'Intelligence Artificielle transforme l'économie mondiale</h2>
+                        <p class="text-sm opacity-80 line-clamp-2">Analyse complète sur l'impact de l'IA générative dans les secteurs de la santé et de la finance pour 2025.</p>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-base p-8">
-                        <div class="mb-6"><h3 class="text-xl font-bold mb-4">🔍 Terminal de Recherche</h3><input type="text" id="marketSearch" onkeyup="filterMarket()" placeholder="> Rechercher (Ticker, Nom)..." class="search-bar"></div>
-                        <div class="space-y-2 mb-6" id="market-list"></div>
-                    </div>
-                    <div class="glass-base p-8 flex flex-col">
-                        <h3 class="text-sm font-bold uppercase text-zinc-500 mb-6 tracking-widest">🏆 Recommandation Hebdo</h3>
-                        <div class="flex-1 bg-gradient-to-br from-indigo-900/50 to-blue-900/50 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-blue-400 transition-all" onclick="openChart({t:'CW8',n:'Amundi MSCI World',p:524.30,c:0.45,s:'ETF',pe:'-',r:'Buy',m:'12B'})">
-                            <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">💎</div>
-                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">ETF Focus</span>
-                            <h2 class="text-2xl font-black mb-2 text-white">MSCI World</h2>
-                            <p class="text-xs leading-relaxed opacity-80 mb-4 text-blue-100">La pierre angulaire de tout portefeuille. Exposition mondiale pour lisser le risque.</p>
-                            <div class="flex gap-4 text-xs font-mono opacity-70 border-t border-white/10 pt-4 mt-2"><span>Risque: 2/5</span><span>Potentiel: Moyen</span></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-base p-8">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">🇫🇷 Actualité France</h3>
+                        <div id="news-fr-container">
+                            <div class="news-card" onclick="window.open('https://www.lefigaro.fr', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-fr">Politique</span><p class="font-bold text-sm leading-snug">Réforme des retraites : les nouveaux enjeux du débat parlementaire.</p></div>
+                            </div>
+                            <div class="news-card" onclick="window.open('https://www.lesechos.fr', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-fr">Économie</span><p class="font-bold text-sm leading-snug">Le CAC40 atteint un nouveau record historique porté par le luxe.</p></div>
+                            </div>
+                            <div class="news-card" onclick="window.open('https://www.lequipe.fr', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=2070&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-fr">Sport</span><p class="font-bold text-sm leading-snug">Ligue 1 : Le PSG s'impose dans le classique face à l'OM.</p></div>
+                            </div>
                         </div>
-                        <div class="mt-8">
-                            <h3 class="text-sm font-bold uppercase text-zinc-500 mb-4 tracking-widest">🤖 AI Radar</h3>
-                            <div class="space-y-3">
-                                <div class="flow-card p-4 border-l-2 border-green-500 bg-white/5"><p class="text-xs font-bold text-green-400 mb-1">HAUSSIER</p><p class="text-sm font-bold">Semi-conducteurs & IA</p></div>
-                                <div class="flow-card p-4 border-l-2 border-red-500 bg-white/5"><p class="text-xs font-bold text-red-400 mb-1">BAISSIER</p><p class="text-sm font-bold">Immobilier Commercial</p></div>
+                    </div>
+
+                    <div class="glass-base p-8">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-3">🌍 Actualité Monde</h3>
+                        <div id="news-world-container">
+                            <div class="news-card" onclick="window.open('https://www.bbc.com', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1526304640152-d4619684e884?q=80&w=2073&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-world">Geopolitique</span><p class="font-bold text-sm leading-snug">Tensions diplomatiques en Asie : les USA renforcent leur présence.</p></div>
+                            </div>
+                            <div class="news-card" onclick="window.open('https://techcrunch.com', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-world">Tech</span><p class="font-bold text-sm leading-snug">Apple dévoile ses lunettes AR : Révolution ou Gadget ?</p></div>
+                            </div>
+                            <div class="news-card" onclick="window.open('https://www.nationalgeographic.com', '_blank')">
+                                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop" class="news-img">
+                                <div><span class="news-tag tag-world">Climat</span><p class="font-bold text-sm leading-snug">COP29 : Un accord historique signé pour la protection des océans.</p></div>
                             </div>
                         </div>
                     </div>
@@ -149,44 +164,14 @@
         </main>
     </div>
 
-    <div id="assetModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md">
-        <div class="glass-base p-0 max-w-4xl w-full rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col h-[80vh]">
-            <div class="p-6 border-b border-white/10 flex justify-between items-start bg-[#0a0a0a]">
-                <div class="flex items-center gap-4"><div id="modal-ticker" class="text-3xl font-black font-mono">AAPL</div><div><div id="modal-name" class="text-sm font-bold text-zinc-400">Apple Inc.</div><div id="modal-sector" class="text-[10px] uppercase tracking-widest text-zinc-600">Technology</div></div></div>
-                <div class="text-right"><div id="modal-price" class="text-3xl font-bold font-mono">225.10</div><div id="modal-change" class="text-sm font-bold market-up">+0.50%</div></div>
-            </div>
-            <div class="flex-1 bg-[#050505] p-4 relative"><canvas id="mainChart"></canvas></div>
-            <div class="p-6 border-t border-white/10 grid grid-cols-4 gap-4 bg-[#0a0a0a]">
-                <div><p class="text-[10px] text-zinc-500 uppercase">P/E Ratio</p><p id="modal-pe" class="font-mono font-bold">--</p></div>
-                <div><p class="text-[10px] text-zinc-500 uppercase">Market Cap</p><p id="modal-mcap" class="font-mono font-bold">--</p></div>
-                <div><p class="text-[10px] text-zinc-500 uppercase">Rating</p><p id="modal-rating" class="font-bold text-blue-400">--</p></div>
-                <button onclick="closeAssetModal()" class="bg-white text-black font-bold uppercase text-xs rounded hover:bg-zinc-300">Fermer</button>
-            </div>
-        </div>
-    </div>
-
     <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        // --- DATA INIT & SELF-HEALING (V82) ---
+        // INIT DATA WITH AUTO-REPAIR (V82 LOGIC)
         let db;
-        try {
-            db = JSON.parse(localStorage.getItem('lifeos_v82_db') || "{}");
-        } catch(e) { db = {}; }
-
-        // MOTEUR KÄRCHER : Nettoie les données corrompues au démarrage
-        Object.keys(db).forEach(key => {
-            if (Array.isArray(db[key])) {
-                db[key] = db[key].filter(t => t && typeof t === 'object').map(t => ({
-                    shortText: t.shortText || "Tâche",
-                    fullText: t.fullText || "Tâche",
-                    time: (t.time && t.time.length === 5) ? t.time : "09:00", // Force l'heure si manquante
-                    duration: t.duration || 60,
-                    done: !!t.done
-                }));
-            }
-        });
+        try { db = JSON.parse(localStorage.getItem('lifeos_v83_db') || "{}"); } catch(e) { db = {}; }
+        Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].filter(t => t && typeof t === 'object').map(t => ({ shortText: t.shortText || "Tâche", fullText: t.fullText || "Tâche", time: (t.time && t.time.length === 5) ? t.time : "09:00", duration: t.duration || 60, done: !!t.done })); } });
 
         let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
@@ -194,9 +179,8 @@
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
-        let chartInstance = null;
 
-        // DATASETS
+        // DATASETS V70 (STRICT)
         const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
         const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
         const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
@@ -207,20 +191,9 @@
         const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        const STOCK_DB = [
-            { t: "CW8", n: "Amundi MSCI World", p: 524.30, c: 0.45, s: "ETF", pe: "-", r: "Buy", m: "12B" },
-            { t: "NVDA", n: "NVIDIA Corp", p: 145.20, c: 3.40, s: "Tech", pe: 72.5, r: "Buy", m: "3.2T" },
-            { t: "AAPL", n: "Apple Inc", p: 225.10, c: 0.50, s: "Tech", pe: 32.4, r: "Hold", m: "3.4T" },
-            { t: "MSFT", n: "Microsoft", p: 420.00, c: -0.20, s: "Tech", pe: 35.8, r: "Hold", m: "3.1T" },
-            { t: "AMZN", n: "Amazon", p: 185.60, c: 1.10, s: "Retail", pe: 42.1, r: "Buy", m: "1.9T" },
-            { t: "TSLA", n: "Tesla Inc", p: 242.50, c: -1.20, s: "Auto", pe: 68.2, r: "Neutral", m: "750B" },
-            { t: "LVMH", n: "LVMH", p: 680.40, c: 0.50, s: "Luxe", pe: 24.1, r: "Buy", m: "380B" },
-            { t: "TTE", n: "TotalEnergies", p: 62.10, c: -0.80, s: "Energy", pe: 8.2, r: "Buy", m: "150B" },
-            { t: "BTC", n: "Bitcoin", p: 94210, c: 4.50, s: "Crypto", pe: "-", r: "Speculative", m: "1.8T" }
-        ];
-
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
 
+        // --- SAFE PARSER ---
         function parseInput(text) {
             let startMin = 540; let duration = 0; const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
             let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; }
@@ -249,7 +222,12 @@
 
         function injectTaskSmartly(text) {
             const lower = text.toLowerCase(); let d = selectedDay;
-            if (lower.includes('demain')) d = todayNum + 1;
+            const daysMap = { "dimanche": 0, "lundi": 1, "mardi": 2, "mercredi": 3, "jeudi": 4, "vendredi": 5, "samedi": 6 };
+            let targetDayOfWeek = -1;
+            for (const [dayName, dayIndex] of Object.entries(daysMap)) { if (lower.includes(dayName)) { targetDayOfWeek = dayIndex; break; } }
+            if (targetDayOfWeek !== -1) { const currentDayOfWeek = now.getDay(); let diff = targetDayOfWeek - currentDayOfWeek; if (diff < 0) diff += 7; d = todayNum + diff; } 
+            else { if (lower.includes('demain')) d = todayNum + 1; if (lower.includes('après-demain')) d = todayNum + 2; }
+
             const parsed = parseInput(text); const cl = cleanTaskText(text); 
             if(d === selectedDay) {
                 let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60; let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
@@ -261,81 +239,34 @@
 
         function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
         function switchTab(tab) {
-            document.getElementById('page-dashboard').classList.add('hidden'); document.getElementById('page-market').classList.add('hidden');
-            document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-market').classList.remove('active');
-            document.getElementById(`page-${tab}`).classList.remove('hidden'); 
-            if(tab === 'market') document.getElementById('page-market').classList.remove('hidden');
-            document.getElementById(`nav-${tab}`).classList.add('active');
-            if(tab === 'market') renderMarketTable();
+            document.getElementById('page-dashboard').classList.add('hidden'); document.getElementById('page-news').classList.add('hidden');
+            document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-news').classList.remove('active');
+            document.getElementById(`page-${tab}`).classList.remove('hidden'); document.getElementById(`nav-${tab}`).classList.add('active');
         }
 
-        function renderMarketTable(filter = "") {
-            const body = document.getElementById('market-table-body'); body.innerHTML = "";
-            STOCK_DB.forEach(s => {
-                if(s.n.toLowerCase().includes(filter.toLowerCase()) || s.t.toLowerCase().includes(filter.toLowerCase())) {
-                    const color = s.c >= 0 ? "bg-up" : "bg-down";
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="font-bold text-white">${s.t}</td><td class="text-zinc-400 text-xs">${s.n}</td><td><span class="bg-white/5 px-2 py-1 rounded text-[10px] text-zinc-500">${s.s}</span></td><td class="text-right font-mono">${s.p}</td><td class="text-right"><span class="${color} text-[10px] font-bold">${s.c > 0 ? '+' : ''}${s.c}%</span></td><td class="text-right text-[10px] font-bold text-zinc-500">${s.r}</td>`;
-                    row.onclick = () => openChart(s); body.appendChild(row);
-                }
-            });
-        }
-        function filterMarket() { renderMarketTable(document.getElementById('marketSearch').value); }
-
-        function openChart(stock) {
-            document.getElementById('assetModal').classList.remove('hidden');
-            document.getElementById('modal-ticker').innerText = stock.t; document.getElementById('modal-name').innerText = stock.n; document.getElementById('modal-sector').innerText = stock.s; document.getElementById('modal-price').innerText = stock.p; document.getElementById('modal-change').innerText = (stock.c > 0 ? '+' : '') + stock.c + '%'; document.getElementById('modal-change').className = stock.c >= 0 ? "text-sm font-bold market-up" : "text-sm font-bold market-down"; document.getElementById('modal-pe').innerText = stock.pe; document.getElementById('modal-mcap').innerText = stock.m; document.getElementById('modal-rating').innerText = stock.r;
-            const ctx = document.getElementById('mainChart').getContext('2d'); if(chartInstance) chartInstance.destroy();
-            let dataPoints = []; let price = stock.p; for(let i=0; i<30; i++) { price = price * (1 + (Math.random() - 0.5) * 0.05); dataPoints.push(price); }
-            const labels = Array.from({length: 30}, (_, i) => i+1);
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: { labels: labels, datasets: [{ label: 'Prix', data: dataPoints, borderColor: stock.c >= 0 ? '#10b981' : '#ef4444', backgroundColor: stock.c >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true, grid: { color: '#222' } } } }
-            });
-        }
-        function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
-
-        // --- SAFE RENDER V82 (SELF-HEALING) ---
         function renderHUD() {
             try {
                 const tasks = db[selectedDay] || [];
                 document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
                 
                 let occupiedSlots = [];
-                tasks.forEach(t => { 
-                    if(t.time) { const [h, m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); }
-                });
+                tasks.forEach(t => { if(t.time) { const [h, m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); } });
 
                 let dinnerMin = 1200; occupiedSlots.forEach(slot => { if(slot.start < (dinnerMin + 45) && slot.end > dinnerMin) dinnerMin = slot.end + 15; });
                 const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
 
                 let stream = [ { type: 'meal', time: '12:30', content: 'Déjeuner Équilibré', accent: 'accent-meal', dot: 'dot-meal' }, { type: 'meal', time: dinnerTime, content: 'Dîner Récupération', accent: 'accent-meal', dot: 'dot-meal' } ];
-                
                 tasks.forEach((t, i) => { if(t.time) stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: 'accent-task', dot: 'dot-task', id: i }); });
-
-                // SAFE SORT V82 (STRING COMPARE)
                 stream.sort((a,b) => a.time.localeCompare(b.time));
 
                 document.getElementById('masterTimeline').innerHTML = stream.map(item => `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent}" ${item.type==='task'?`onclick="openTaskModal(${item.id})"`:''}><p class="font-bold text-lg">${item.content}</p></div></div>`).join('');
             } catch (e) { 
-                console.error("Crash détecté, auto-réparation...", e); 
-                db[selectedDay] = []; // Nettoyage de la journée corrompue
-                save(); // Sauvegarde du vide propre
-                alert("Données corrompues détectées et réparées. Veuillez réessayer.");
+                console.error("Crash", e); db[selectedDay] = []; save(); 
+                document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500">Erreur réparée. Réessayez.</p>`;
             }
         }
 
-        // BUTTON RESET
-        function hardReset() {
-            if(confirm("Attention : Cela va effacer tout le calendrier pour corriger les bugs. Continuer ?")) {
-                localStorage.removeItem('lifeos_v82_db');
-                db = {};
-                renderHUD(); renderCal();
-                alert("Calendrier remis à zéro.");
-            }
-        }
-
+        function hardReset() { if(confirm("Réinitialiser tout ?")) { localStorage.removeItem('lifeos_v83_db'); location.reload(); } }
         function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
@@ -343,7 +274,7 @@
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';for(let i=1;i<=31;i++){const d=document.createElement('div');let hasTask=db[i]&&db[i].length>0;d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''} ${hasTask?'has-event':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v82_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); renderHUD(); renderCal();}
+        function save(){localStorage.setItem('lifeos_v83_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); renderHUD(); renderCal();}
         function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
         function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
