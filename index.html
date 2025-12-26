@@ -3,223 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V23 - Deep Awareness</title>
+    <title>LifeOS Sovereign V24 - Apex Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
-        .glass { border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(50px); background: rgba(255,255,255,0.02); }
-        .day { aspect-ratio: 1; border-radius: 1.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        
+        /* Glassmorphism Pro */
+        .glass { border-radius: 2rem; border: 1px solid rgba(255,255,255,0.06); background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(40px); }
+        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; }
+        
+        /* Animations */
+        @keyframes pulse-scan { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+        .scanning { animation: pulse-scan 2s infinite; border-color: #3b82f6; }
+        
+        .water-bar { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        
+        /* Calendar Grid */
+        .day { aspect-ratio: 1; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        .day:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; transform: translateY(-3px); }
         .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1); }
-        .water-progress { height: 100%; background: linear-gradient(90deg, #3b82f6, #06b6d4); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); shadow: 0 0 15px #3b82f6; }
-        .task-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; transition: 0.3s; }
-        @keyframes pulse-red { 0%, 100% { border-color: rgba(239, 68, 68, 0.2); } 50% { border-color: #ef4444; } }
-        .urgent-border { animation: pulse-red 2s infinite; border-width: 2px; }
+        .has-event { border-bottom: 2px solid #8b5cf6; }
+        
+        /* Task Cards */
+        .task-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; transition: 0.2s; }
+        .task-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen">
+<body class="p-4 md:p-8 min-h-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
 
-    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <aside class="lg:col-span-3 space-y-6">
-            <div class="glass p-8 space-y-10">
+            <div class="glass p-8 space-y-8">
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
                 
-                <div class="space-y-4">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-blue-400 italic">Réveil Intelligent</p>
-                    <div class="p-6 bg-blue-500/5 rounded-[2rem] border border-blue-500/20 text-center">
-                        <p id="sleepAdvice" class="text-5xl font-black italic text-blue-500">07:30</p>
-                        <p id="sleepReason" class="text-[8px] opacity-40 font-bold mt-2 uppercase tracking-tighter">Basé sur 8h de sommeil</p>
-                    </div>
+                <div class="glass-panel p-6 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Cycle Circadien</p>
+                    <p id="wakeTime" class="text-5xl font-black italic text-white">08:00</p>
+                    <p id="wakeReason" class="text-[10px] mt-2 text-blue-400 font-bold">Mode Récupération</p>
                 </div>
 
-                <div class="space-y-4">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-purple-400 italic">Diagnostic IA</p>
-                    <div id="aiDiagnostic" class="p-6 bg-purple-500/5 rounded-3xl border border-purple-500/20 text-xs italic opacity-80 leading-relaxed">
-                        En attente d'analyse...
+                <div class="glass-panel p-6 space-y-4 border-l-2 border-green-500">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[9px] font-black uppercase tracking-widest text-green-500">Bio-Fuel Recommandé</p>
+                        <span class="text-lg">🥗</span>
                     </div>
-                    <a id="ytLink" target="_blank" class="hidden w-full py-3 bg-red-600 rounded-xl text-center text-[9px] font-black uppercase">Solution Vidéo 🎬</a>
+                    <div id="mealPlan" class="text-sm font-medium opacity-80 leading-relaxed">
+                        Analyse de l'activité en cours...
+                    </div>
                 </div>
             </div>
 
             <div class="glass p-8 space-y-6">
                 <div class="flex justify-between items-end">
-                    <p class="text-[9px] font-black uppercase opacity-30">Performance</p>
-                    <span id="score" class="text-3xl font-black text-blue-500">0%</span>
+                    <span class="text-[9px] font-black uppercase text-blue-400">Hydratation</span>
+                    <span id="waterText" class="text-2xl font-black">0L</span>
                 </div>
-                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden"><div id="waterBar" class="water-progress w-0"></div></div>
-                <div class="flex gap-2">
-                    <button onclick="addWater(0.5)" class="flex-1 py-4 glass text-[10px] font-black hover:bg-white/5">+0.5L</button>
-                    <button onclick="addWater(1.5)" class="flex-1 py-4 glass text-[10px] font-black hover:bg-white/5">+1.5L</button>
+                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div id="waterBar" class="water-progress h-full bg-blue-500 w-0"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="addWater(0.25)" class="py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all">+ Verre (25cl)</button>
+                    <button onclick="addWater(0.5)" class="py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all">+ Gourde (50cl)</button>
                 </div>
             </div>
         </aside>
 
-        <main class="lg:col-span-5 space-y-6">
-            <div class="glass p-10">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-[9px] font-black text-blue-500 uppercase">Neural Engine</span>
-                    <button onclick="toggleVoice()" id="voiceBtn" class="w-10 h-10 glass rounded-full flex items-center justify-center">🎤</button>
+        <main class="lg:col-span-6 space-y-6">
+            <div class="glass p-10 relative">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="text-[10px] font-black uppercase tracking-widest opacity-50">Système en ligne</span>
+                    </div>
+                    <p id="dateDisplay" class="text-xs font-bold opacity-40 uppercase"></p>
                 </div>
-                <textarea id="userInput" class="w-full bg-transparent outline-none text-2xl font-light mb-6 min-h-[120px]" placeholder="Notez une urgence ou un ressenti..."></textarea>
-                <button onclick="traiter()" id="btnMain" class="w-full bg-blue-600 py-6 rounded-3xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-blue-900/20">Mettre à jour le système</button>
+                
+                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-10 min-h-[140px] resize-none" placeholder="Quels sont les objectifs ? (ex: Sport demain 9h)"></textarea>
+                
+                <div class="flex gap-4">
+                    <button onclick="traiter()" id="btnMain" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all">Exécuter</button>
+                    <button onclick="toggleVoice()" id="voiceBtn" class="w-14 glass-panel flex items-center justify-center text-xl hover:text-blue-400 transition-all">🎤</button>
+                </div>
             </div>
 
-            <div class="glass p-8 space-y-4">
-                <p class="text-[9px] font-black text-red-500 uppercase italic">Urgences détectées</p>
-                <div id="emergencyList" class="space-y-3">
-                    <p class="text-xs opacity-20 italic">Calme plat. Aucune menace.</p>
+            <div class="glass p-8 min-h-[200px]">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-6">Radar d'Urgences & Conflits</h3>
+                <div id="alertBox" class="space-y-3">
+                    <div class="text-center py-10 opacity-20 italic text-xs">Aucune anomalie détectée.</div>
                 </div>
             </div>
         </main>
 
-        <section class="lg:col-span-4 glass p-8 space-y-6">
-            <h2 id="currentMonth" class="font-black text-2xl tracking-tighter italic uppercase underline decoration-blue-500 decoration-4 underline-offset-8">Roadmap</h2>
-            <div id="calendar" class="grid grid-cols-7 gap-3"></div>
-        </section>
+        <aside class="lg:col-span-3 glass p-8 flex flex-col h-full">
+            <h2 class="font-black text-xl italic uppercase mb-8">Roadmap</h2>
+            <div id="calendar" class="grid grid-cols-7 gap-2 mb-8"></div>
+            
+            <div class="mt-auto pt-6 border-t border-white/5">
+                <p class="text-[9px] font-black uppercase opacity-30 mb-2">Score de Souveraineté</p>
+                <div class="flex items-end gap-2">
+                    <span id="score" class="text-6xl font-black text-blue-500 italic">0%</span>
+                    <span class="text-xs opacity-50 mb-2">/ JOUR</span>
+                </div>
+            </div>
+        </aside>
     </div>
 
-    <div id="dayModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-3xl">
-        <div class="glass p-10 max-w-xl w-full space-y-8">
-            <div class="flex justify-between items-center">
-                <h2 id="modalDate" class="text-4xl font-black italic text-blue-500 capitalize">Date</h2>
-                <button onclick="closeDay()" class="text-2xl opacity-20 hover:opacity-100">✕</button>
+    <div id="dayModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
+        <div class="glass p-8 max-w-lg w-full relative">
+            <div class="flex justify-between items-center mb-8">
+                <h2 id="modalDate" class="text-3xl font-black italic capitalize">Date</h2>
+                <button onclick="closeDay()" class="text-zinc-500 hover:text-white">✕</button>
             </div>
-            <div class="relative">
-                <input type="text" id="newTaskInput" placeholder="Nouvelle mission..." class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/10">
-                <button onclick="addTaskManually()" class="absolute right-3 top-3 bg-blue-600 w-10 h-10 rounded-xl font-black">+</button>
+            
+            <div class="flex gap-2 mb-6">
+                <input type="text" id="newTaskInput" placeholder="Ajouter..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 outline-none focus:border-blue-500 transition-all">
+                <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold hover:bg-blue-500">+</button>
             </div>
-            <div id="taskList" class="space-y-4 max-h-[400px] overflow-y-auto"></div>
+
+            <div id="taskList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v23_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v23_health') || '{"water":0}');
+        // --- DATA CORE ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v24_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v24_health') || '{"water":0, "date": null}');
         const now = new Date();
         const todayNum = now.getDate();
-        let currentDayOpen = null;
-
-        // --- MOTEUR D'INTELLIGENCE ---
-        function globalUpdate() {
-            // 1. Calcul du Réveil (Scan des tâches de demain)
-            const tomorrowTasks = db[todayNum + 1] || [];
-            let earlyTime = "07:30";
-            let reason = "Basé sur 8h de sommeil";
-            
-            tomorrowTasks.forEach(t => {
-                const match = t.text.match(/([0-9]+)h([0-9]*)/);
-                if(match) {
-                    let hour = parseInt(match[1]);
-                    let min = match[2] ? parseInt(match[2]) : 0;
-                    let alarmH = hour - 2; // Réveil 2h avant
-                    earlyTime = `${alarmH.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;
-                    reason = `Réveil anticipé pour mission à ${match[0]}`;
-                }
-            });
-            document.getElementById('sleepAdvice').innerText = earlyTime;
-            document.getElementById('sleepReason').innerText = reason;
-
-            // 2. Scan des Urgences & Diagnostic
-            const urgBox = document.getElementById('emergencyList');
-            const diagBox = document.getElementById('aiDiagnostic');
-            const yt = document.getElementById('ytLink');
-            let urgHtml = "";
-            let hasUrgent = false;
-
-            // Check Retards
-            for(let d=1; d<todayNum; d++) {
-                if(db[d] && db[d].some(t => !t.done)) {
-                    urgHtml += `<div class="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-[10px] font-bold text-red-500 flex justify-between items-center"><span>⚠️ RETARD : MISSION DU ${d} NON VALIDÉE</span><button onclick="showDay(${d})" class="underline">VOIR</button></div>`;
-                    hasUrgent = true;
-                }
-            }
-            
-            // Check Santé/Mots clés
-            let allText = JSON.stringify(db).toLowerCase();
-            if(allText.includes("mal") || allText.includes("dos") || allText.includes("cervicale")) {
-                diagBox.innerHTML = "L'IA détecte une tension physique. Recommandation : Séance de décompression vertébrale (15min).";
-                yt.classList.remove('hidden');
-                yt.href = "https://www.youtube.com/results?search_query=soulager+mal+de+dos+yoga";
-            } else {
-                diagBox.innerHTML = "Système nominal. Continuez l'optimisation.";
-                yt.classList.add('hidden');
-            }
-
-            urgBox.innerHTML = urgHtml || `<p class="text-xs opacity-20 italic text-center">Calme plat. Aucune menace.</p>`;
-
-            // 3. Eau & Score
-            document.getElementById('waterBar').style.width = (health.water / 3 * 100) + "%";
-            let totalT=0, doneT=0;
-            Object.values(db).forEach(day => day.forEach(t => { totalT++; if(t.done) doneT++; }));
-            document.getElementById('score').innerText = Math.round((health.water/3*40) + (totalT ? (doneT/totalT*60) : 0)) + "%";
-            
-            buildCal();
+        
+        // Reset Health if new day
+        if(health.date !== now.toDateString()) {
+            health = { water: 0, date: now.toDateString() };
+            localStorage.setItem('lifeos_v24_health', JSON.stringify(health));
         }
 
-        function addWater(n) { health.water = Math.min(3, health.water + n); saveHealth(); }
-        function saveHealth() { localStorage.setItem('lifeos_v23_health', JSON.stringify(health)); globalUpdate(); }
+        // --- INITIALIZATION ---
+        document.getElementById('dateDisplay').innerText = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' }).format(now);
+        updateEverything();
 
-        function buildCal() {
-            const cal = document.getElementById('calendar'); cal.innerHTML = '';
-            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            for(let i=1; i<=daysInMonth; i++) {
-                const tasks = db[i] || [];
-                const allDone = tasks.length > 0 && tasks.every(t => t.done);
-                const hasLate = i < todayNum && tasks.some(t => !t.done);
-                const d = document.createElement('div');
-                d.className = `day ${i === todayNum ? 'day-today' : ''} ${hasLate ? 'urgent-border' : ''}`;
-                d.innerHTML = `<span class="text-[10px] font-bold">${i}</span>`;
-                if(tasks.length) {
-                    const dot = document.createElement('div');
-                    dot.className = `w-1 h-1 rounded-full mt-1 ${allDone ? 'bg-green-500' : 'bg-red-500'}`;
-                    d.appendChild(dot);
+        // --- CORE FUNCTIONS ---
+        function updateEverything() {
+            renderCalendar();
+            calculateWakeUp();
+            calculateBioFuel();
+            scanUrgencies();
+            updateWaterUI();
+            updateScore();
+        }
+
+        // 1. BIO-FUEL ENGINE (NUTRITION)
+        function calculateBioFuel() {
+            const todayTasks = (db[todayNum] || []).map(t => t.text.toLowerCase()).join(' ');
+            const box = document.getElementById('mealPlan');
+            
+            if (todayTasks.includes('sport') || todayTasks.includes('foot') || todayTasks.includes('gym')) {
+                box.innerHTML = `
+                    <span class="text-orange-400 font-bold">🔥 Mode Performance Physique</span><br>
+                    <span class="opacity-70 text-xs">Midi : Poulet / Patate Douce / Avocat</span><br>
+                    <span class="opacity-70 text-xs">Soir : Omelette / Légumes verts</span>
+                `;
+            } else if (todayTasks.includes('réunion') || todayTasks.includes('cours') || todayTasks.includes('bureau')) {
+                box.innerHTML = `
+                    <span class="text-blue-400 font-bold">🧠 Mode Focus Cognitif</span><br>
+                    <span class="opacity-70 text-xs">Midi : Saumon / Quinoa / Noix</span><br>
+                    <span class="opacity-70 text-xs">Snack : Chocolat Noir / Amandes</span>
+                `;
+            } else {
+                box.innerHTML = `<span class="opacity-50 text-xs">Aucune activité majeure détectée. Mangez équilibré et léger.</span>`;
+            }
+        }
+
+        // 2. CHRONO-SYNC (RÉVEIL)
+        function calculateWakeUp() {
+            const tmrTasks = db[todayNum + 1] || [];
+            let wakeTime = "08:00";
+            let reason = "Récupération standard";
+            let earliestHour = 24;
+
+            tmrTasks.forEach(t => {
+                const match = t.text.match(/(\d{1,2})[h:](\d{2})?/);
+                if (match) {
+                    let h = parseInt(match[1]);
+                    if (h < earliestHour && h > 4) earliestHour = h;
                 }
+            });
+
+            if (earliestHour < 24) {
+                wakeTime = `${(earliestHour - 1).toString().padStart(2,'0')}:30`; // Réveil 1h30 avant
+                reason = `Optimisé pour mission de ${earliestHour}h`;
+            }
+
+            document.getElementById('wakeTime').innerText = wakeTime;
+            document.getElementById('wakeReason').innerText = reason;
+        }
+
+        // 3. URGENCY RADAR
+        function scanUrgencies() {
+            const box = document.getElementById('alertBox');
+            let html = '';
+            
+            // Check past days
+            for(let i=1; i<todayNum; i++) {
+                if(db[i] && db[i].some(t => !t.done)) {
+                    html += `<div class="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+                        <span class="text-xs text-red-400 font-bold">⚠️ Retard J-${todayNum-i}</span>
+                        <button onclick="showDay(${i})" class="text-[10px] underline">Régler</button>
+                    </div>`;
+                }
+            }
+            
+            // Check today's priorities
+            const todayTasks = db[todayNum] || [];
+            if(todayTasks.some(t => t.text.toLowerCase().includes('important'))) {
+                 html += `<div class="flex items-center justify-between p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                        <span class="text-xs text-blue-400 font-bold">⚡ Focus Prioritaire Aujourd'hui</span>
+                    </div>`;
+            }
+
+            if(html === '') html = '<div class="text-center py-4 opacity-20 italic text-xs">Système nominal.</div>';
+            box.innerHTML = html;
+        }
+
+        // 4. WATER ENGINE
+        function addWater(amount) {
+            health.water += amount;
+            localStorage.setItem('lifeos_v24_health', JSON.stringify(health));
+            updateWaterUI();
+            updateScore();
+        }
+        function updateWaterUI() {
+            const pct = Math.min(100, (health.water / 2.5) * 100); // Objectif 2.5L
+            document.getElementById('waterBar').style.width = pct + "%";
+            document.getElementById('waterText').innerText = health.water.toFixed(2) + "L";
+        }
+
+        // UI HELPERS
+        function renderCalendar() {
+            const cal = document.getElementById('calendar'); cal.innerHTML = '';
+            const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            for(let i=1; i<=days; i++) {
+                const hasTask = db[i] && db[i].length > 0;
+                const d = document.createElement('div');
+                d.className = `day ${i===todayNum ? 'day-today' : ''} ${hasTask ? 'has-event' : ''}`;
+                d.innerText = i;
                 d.onclick = () => showDay(i);
                 cal.appendChild(d);
             }
         }
 
         function showDay(day) {
-            currentDayOpen = day;
+            currentDay = day;
             const tasks = db[day] || [];
-            document.getElementById('modalDate').innerText = `${day} Décembre`;
-            document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, idx) => `
-                <div class="task-card p-5 flex items-center justify-between group">
-                    <div class="flex items-center gap-4">
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${idx})" class="w-5 h-5 accent-blue-500">
-                        <span class="text-sm ${t.done ? 'line-through opacity-20' : 'font-bold'}">${t.text}</span>
+            document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
+            document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
+                <div class="task-card p-4 flex justify-between items-center group">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500">
+                        <span class="${t.done ? 'line-through opacity-30' : ''}">${t.text}</span>
                     </div>
-                    <button onclick="delTask(${day},${idx})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button>
+                    <button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button>
                 </div>
-            `).join('') : '<p class="text-center py-10 opacity-20 italic">Vide.</p>';
+            `).join('') || '<p class="opacity-30 text-center italic text-sm">Vide</p>';
             document.getElementById('dayModal').classList.remove('hidden');
-        }
-
-        async function traiter() {
-            const input = document.getElementById('userInput').value;
-            if(!input) return;
-            // Simulation IA rapide pour l'exemple
-            if(input.toLowerCase().includes("1.5")) addWater(1.5);
-            if(input.toLowerCase().includes("médecin")) {
-                db[todayNum+1] = [...(db[todayNum+1]||[]), {text: "RDV Médecin à 08h30", done: false}];
-            }
-            document.getElementById('userInput').value = "";
-            save();
         }
 
         function addTaskManually() {
             const val = document.getElementById('newTaskInput').value;
             if(!val) return;
-            db[currentDayOpen] = [...(db[currentDayOpen] || []), {text: val, done: false}];
+            db[currentDay] = [...(db[currentDay] || []), {text: val, done: false}];
             save(); document.getElementById('newTaskInput').value = '';
         }
+
+        // DATA HANDLERS
+        let currentDay = null;
         function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); }
         function delTask(d,i) { db[d].splice(i,1); save(); }
-        function save() { localStorage.setItem('lifeos_v23_db', JSON.stringify(db)); showDay(currentDayOpen); globalUpdate(); }
+        function save() { 
+            localStorage.setItem('lifeos_v24_db', JSON.stringify(db)); 
+            showDay(currentDay); 
+            updateEverything(); 
+        }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        
-        globalUpdate();
+        function updateScore() {
+             // Score simple pour l'exemple
+             let score = Math.min(100, (health.water * 20) + 10);
+             document.getElementById('score').innerText = Math.round(score) + "%";
+        }
+
+        // SIMULATED AI PARSER
+        function traiter() {
+            const txt = document.getElementById('userInput').value.toLowerCase();
+            if(!txt) return;
+            
+            // Simulation d'extraction intelligente
+            if(txt.includes('demain')) {
+                // Extrait une heure si présente
+                db[todayNum+1] = [...(db[todayNum+1]||[]), {text: txt.replace('demain', '').trim(), done: false}];
+            } else {
+                db[todayNum] = [...(db[todayNum]||[]), {text: txt, done: false}];
+            }
+            
+            document.getElementById('userInput').value = '';
+            alert("Données intégrées au Core.");
+            save();
+        }
+
+        // ENTER KEY SUPPORT
+        document.getElementById('newTaskInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') addTaskManually() });
     </script>
 </body>
 </html>
