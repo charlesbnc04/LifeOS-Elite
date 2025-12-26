@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V80 - Bulletproof</title>
+    <title>LifeOS Sovereign V81 - Unbreakable</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* DESIGN GLOBAL (AGENDA V70) */
+        /* === DESIGN V70 ORIGINAL (INTACT) === */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* TIMELINE STYLES */
+        /* TIMELINE */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
@@ -29,6 +29,7 @@
         .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
         .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
         .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
+        
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
         .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
@@ -37,11 +38,6 @@
         .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
 
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         .alert-box { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
@@ -49,7 +45,20 @@
         .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
         .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
 
-        /* BOURSE PRO STYLES */
+        /* CALENDAR */
+        #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        .day:hover { background: rgba(255,255,255,0.1); }
+        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
+        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .has-event { border-bottom: 2px solid #a855f7; }
+
+        /* NAVIGATION TABS */
+        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+
+        /* MARKET PRO */
         .market-up { color: #10b981; } .bg-up { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; border-radius: 4px; }
         .market-down { color: #ef4444; } .bg-down { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; }
         .pro-table { width: 100%; border-collapse: collapse; font-family: monospace; font-size: 0.8rem; }
@@ -58,9 +67,6 @@
         .pro-table tr:hover { background: rgba(255,255,255,0.05); cursor: pointer; }
         .search-bar { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; width: 100%; color: white; outline: none; font-size: 0.9rem; transition: 0.3s; }
         .search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
-        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -72,11 +78,11 @@
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 
                 <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5 shrink-0">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">📅 Agenda V70</button>
-                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn">💹 Bourse Pro</button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active"><span>🗓️</span> Agenda V70</button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn"><span>💹</span> Bourse Pro</button>
                 </div>
 
-                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
+                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar"></div></div>
                 <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
                 <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
@@ -121,7 +127,7 @@
                     </div>
                     <div class="glass-base p-8 flex flex-col">
                         <h3 class="text-sm font-bold uppercase text-zinc-500 mb-6 tracking-widest">🏆 Recommandation Hebdo</h3>
-                        <div class="flex-1 bg-gradient-to-br from-indigo-900/50 to-blue-900/50 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-blue-400 transition-all" onclick="openAssetDetail('CW8')">
+                        <div class="flex-1 bg-gradient-to-br from-indigo-900/50 to-blue-900/50 border border-blue-500/30 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-blue-400 transition-all" onclick="openChart({t:'CW8',n:'Amundi MSCI World',p:524.30,c:0.45,s:'ETF',pe:'-',r:'Buy',m:'12B'})">
                             <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">💎</div>
                             <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">ETF Focus</span>
                             <h2 class="text-2xl font-black mb-2 text-white">MSCI World</h2>
@@ -162,17 +168,22 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        // INIT DATA (V80 - BULLETPROOF)
-        let db = JSON.parse(localStorage.getItem('lifeos_v80_db') || "{}");
-        // AUTO-REPAIR: Add missing 'time' to prevent crash
+        // INIT DATA WITH AUTO-REPAIR (KEY FIX V81)
+        let db;
+        try {
+            db = JSON.parse(localStorage.getItem('lifeos_v81_db') || "{}");
+        } catch(e) { db = {}; }
+
+        // SANITIZER: Ensure no null/undefined time/text exists to prevent crash
         Object.keys(db).forEach(key => {
             if (Array.isArray(db[key])) {
-                db[key] = db[key].map(t => {
-                    if (!t.fullText) t.fullText = t.text || "Tâche";
-                    if (!t.shortText) t.shortText = t.text || "Tâche";
-                    if (!t.time) t.time = "09:00"; // FIX: Default time if missing
-                    return t;
-                });
+                db[key] = db[key].filter(t => t).map(t => ({
+                    shortText: t.shortText || "Tâche",
+                    fullText: t.fullText || "Tâche",
+                    time: (t.time && t.time.length === 5) ? t.time : "09:00",
+                    duration: t.duration || 60,
+                    done: !!t.done
+                }));
             }
         });
 
@@ -210,7 +221,7 @@
 
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
 
-        // --- SAFE PARSER (V80) ---
+        // --- SAFE PARSER (V81) ---
         function parseInput(text) {
             let startMin = 540; let duration = 0; const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
             let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; }
@@ -296,7 +307,7 @@
         }
         function closeAssetModal() { document.getElementById('assetModal').classList.add('hidden'); }
 
-        // --- RENDER HUD (SAFE V80) ---
+        // --- RENDER HUD (SAFE V81) ---
         function renderHUD() {
             try {
                 const tasks = db[selectedDay] || [];
@@ -317,11 +328,10 @@
                 let stream = [ { type: 'meal', time: '12:30', content: 'Déjeuner Équilibré', accent: 'accent-meal', dot: 'dot-meal' }, { type: 'meal', time: dinnerTime, content: 'Dîner Récupération', accent: 'accent-meal', dot: 'dot-meal' } ];
                 
                 tasks.forEach((t, i) => { 
-                    if (!t.time) return; // SAFEGUARD
+                    if (!t.time) return; 
                     stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: 'accent-task', dot: 'dot-task', id: i }); 
                 });
 
-                // SAFE SORT
                 stream.sort((a,b) => { 
                     const [hA, mA] = a.time.split(':').map(Number); 
                     const [hB, mB] = b.time.split(':').map(Number); 
@@ -329,7 +339,10 @@
                 });
 
                 document.getElementById('masterTimeline').innerHTML = stream.map(item => `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent}" ${item.type==='task'?`onclick="openTaskModal(${item.id})"`:''}><p class="font-bold text-lg">${item.content}</p></div></div>`).join('');
-            } catch (e) { console.error("Render error", e); }
+            } catch (e) { 
+                console.error("Render error", e); 
+                document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500">Erreur de données. Cliquez sur Restaurer.</p>`;
+            }
         }
 
         // Utils (Safe)
@@ -340,10 +353,10 @@
             if (!health || !profile) return;
             let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;
         }
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';for(let i=1;i<=31;i++){const d=document.createElement('div');d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';for(let i=1;i<=31;i++){const d=document.createElement('div');let hasTask=db[i]&&db[i].length>0;d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''} ${hasTask?'has-event':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v80_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); renderHUD();}
+        function save(){localStorage.setItem('lifeos_v81_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); renderHUD(); renderCal();}
         function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
         function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
