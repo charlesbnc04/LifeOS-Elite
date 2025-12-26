@@ -3,31 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V24 - Apex Edition</title>
+    <title>LifeOS Sovereign V25 - Automation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        /* Glassmorphism Pro */
-        .glass { border-radius: 2rem; border: 1px solid rgba(255,255,255,0.06); background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(40px); }
+        .glass { background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; }
         .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; }
         
-        /* Animations */
-        @keyframes pulse-scan { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
-        .scanning { animation: pulse-scan 2s infinite; border-color: #3b82f6; }
-        
-        .water-bar { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        
-        /* Calendar Grid */
         .day { aspect-ratio: 1; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; transform: translateY(-3px); }
         .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1); }
-        .has-event { border-bottom: 2px solid #8b5cf6; }
+        .has-event { border-bottom: 3px solid #3b82f6; }
         
-        /* Task Cards */
-        .task-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; transition: 0.2s; }
-        .task-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+        .water-progress { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        
+        @keyframes flash-green { 0% { background-color: rgba(34, 197, 94, 0.2); } 100% { background-color: transparent; } }
+        .success-flash { animation: flash-green 1s ease-out; }
     </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
@@ -38,21 +31,15 @@
             <div class="glass p-8 space-y-8">
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
                 
-                <div class="glass-panel p-6 text-center relative overflow-hidden group">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Cycle Circadien</p>
-                    <p id="wakeTime" class="text-5xl font-black italic text-white">08:00</p>
-                    <p id="wakeReason" class="text-[10px] mt-2 text-blue-400 font-bold">Mode Récupération</p>
+                <div class="glass-panel p-6 text-center">
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Réveil Optimisé</p>
+                    <p id="wakeTime" class="text-5xl font-black italic text-white">--:--</p>
+                    <p id="wakeReason" class="text-[10px] mt-2 text-blue-400 font-bold">En attente de données</p>
                 </div>
 
                 <div class="glass-panel p-6 space-y-4 border-l-2 border-green-500">
-                    <div class="flex justify-between items-center">
-                        <p class="text-[9px] font-black uppercase tracking-widest text-green-500">Bio-Fuel Recommandé</p>
-                        <span class="text-lg">🥗</span>
-                    </div>
-                    <div id="mealPlan" class="text-sm font-medium opacity-80 leading-relaxed">
-                        Analyse de l'activité en cours...
-                    </div>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-green-500">Nutrition Contextuelle</p>
+                    <div id="mealPlan" class="text-sm font-medium opacity-80 leading-relaxed">Analyse...</div>
                 </div>
             </div>
 
@@ -62,51 +49,39 @@
                     <span id="waterText" class="text-2xl font-black">0L</span>
                 </div>
                 <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div id="waterBar" class="water-progress h-full bg-blue-500 w-0"></div>
+                    <div id="waterBar" class="water-progress h-full w-0"></div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="addWater(0.25)" class="py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all">+ Verre (25cl)</button>
-                    <button onclick="addWater(0.5)" class="py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all">+ Gourde (50cl)</button>
-                </div>
+                <button onclick="addWater(0.5)" class="w-full py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all uppercase">+ Gourde 50cl</button>
             </div>
         </aside>
 
         <main class="lg:col-span-6 space-y-6">
-            <div class="glass p-10 relative">
+            <div id="inputZone" class="glass p-10 relative transition-colors duration-500">
                 <div class="flex justify-between items-center mb-8">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                        <span class="text-[10px] font-black uppercase tracking-widest opacity-50">Système en ligne</span>
-                    </div>
-                    <p id="dateDisplay" class="text-xs font-bold opacity-40 uppercase"></p>
+                    <span class="bg-blue-500/10 text-blue-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Auto-Injection V25</span>
+                    <p id="statusMsg" class="text-xs font-bold text-green-400 opacity-0 transition-opacity">Tâche ajoutée avec succès ✔</p>
                 </div>
                 
-                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-10 min-h-[140px] resize-none" placeholder="Quels sont les objectifs ? (ex: Sport demain 9h)"></textarea>
+                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-20 min-h-[140px] resize-none" placeholder="Ex: Match demain à 10h... (Ça s'ajoute tout seul)"></textarea>
                 
                 <div class="flex gap-4">
-                    <button onclick="traiter()" id="btnMain" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all">Exécuter</button>
+                    <button onclick="traiter()" id="btnMain" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all shadow-xl">Exécuter & Injecter</button>
                     <button onclick="toggleVoice()" id="voiceBtn" class="w-14 glass-panel flex items-center justify-center text-xl hover:text-blue-400 transition-all">🎤</button>
                 </div>
             </div>
 
-            <div class="glass p-8 min-h-[200px]">
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-6">Radar d'Urgences & Conflits</h3>
-                <div id="alertBox" class="space-y-3">
-                    <div class="text-center py-10 opacity-20 italic text-xs">Aucune anomalie détectée.</div>
-                </div>
+            <div class="glass p-8 min-h-[150px]">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-4">Urgences Détectées</h3>
+                <div id="alertBox" class="space-y-2"></div>
             </div>
         </main>
 
-        <aside class="lg:col-span-3 glass p-8 flex flex-col h-full">
+        <aside class="lg:col-span-3 glass p-8 flex flex-col">
             <h2 class="font-black text-xl italic uppercase mb-8">Roadmap</h2>
             <div id="calendar" class="grid grid-cols-7 gap-2 mb-8"></div>
-            
             <div class="mt-auto pt-6 border-t border-white/5">
-                <p class="text-[9px] font-black uppercase opacity-30 mb-2">Score de Souveraineté</p>
-                <div class="flex items-end gap-2">
-                    <span id="score" class="text-6xl font-black text-blue-500 italic">0%</span>
-                    <span class="text-xs opacity-50 mb-2">/ JOUR</span>
-                </div>
+                <p class="text-[9px] font-black uppercase opacity-30 mb-2">Vitalité Globale</p>
+                <span id="score" class="text-6xl font-black text-blue-500 italic">0%</span>
             </div>
         </aside>
     </div>
@@ -115,36 +90,67 @@
         <div class="glass p-8 max-w-lg w-full relative">
             <div class="flex justify-between items-center mb-8">
                 <h2 id="modalDate" class="text-3xl font-black italic capitalize">Date</h2>
-                <button onclick="closeDay()" class="text-zinc-500 hover:text-white">✕</button>
+                <button onclick="closeDay()" class="text-zinc-500 hover:text-white text-xl">✕</button>
             </div>
-            
             <div class="flex gap-2 mb-6">
-                <input type="text" id="newTaskInput" placeholder="Ajouter..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 outline-none focus:border-blue-500 transition-all">
-                <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold hover:bg-blue-500">+</button>
+                <input type="text" id="newTaskInput" placeholder="Ajout manuel..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 outline-none focus:border-blue-500">
+                <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold">+</button>
             </div>
-
-            <div id="taskList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+            <div id="taskList" class="space-y-3 max-h-[400px] overflow-y-auto"></div>
         </div>
     </div>
 
     <script>
-        // --- DATA CORE ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v24_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v24_health') || '{"water":0, "date": null}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v25_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v25_health') || '{"water":0}');
         const now = new Date();
         const todayNum = now.getDate();
-        
-        // Reset Health if new day
-        if(health.date !== now.toDateString()) {
-            health = { water: 0, date: now.toDateString() };
-            localStorage.setItem('lifeos_v24_health', JSON.stringify(health));
+
+        // 1. LE COEUR DU SYSTEME : PARSEUR NLP AUTOMATIQUE
+        function traiter() {
+            const rawInput = document.getElementById('userInput').value;
+            if(!rawInput.trim()) return;
+
+            let targetDay = todayNum; // Par défaut aujourd'hui
+            let cleanText = rawInput;
+            const lowerInput = rawInput.toLowerCase();
+
+            // DÉTECTION INTELLIGENTE DE LA DATE
+            if (lowerInput.includes('demain')) {
+                targetDay = todayNum + 1;
+                cleanText = rawInput.replace(/demain/gi, '').trim();
+            } else if (lowerInput.includes('après-demain') || lowerInput.includes('apres demain')) {
+                targetDay = todayNum + 2;
+                cleanText = rawInput.replace(/après-demain|apres demain/gi, '').trim();
+            } else {
+                // Détection de "le 28", "le 5", etc.
+                const dateMatch = lowerInput.match(/le (\d{1,2})/);
+                if (dateMatch) {
+                    targetDay = parseInt(dateMatch[1]);
+                    cleanText = rawInput.replace(/le \d{1,2}/gi, '').trim();
+                }
+            }
+
+            // GESTION DES DEBORDEMENTS DE MOIS (Basique pour démo)
+            if (targetDay > 31) targetDay = 1; 
+
+            // INJECTION DANS LA BASE DE DONNEES
+            db[targetDay] = [...(db[targetDay] || []), { text: cleanText, done: false }];
+            
+            // FEEDBACK UTILISATEUR
+            save();
+            document.getElementById('userInput').value = '';
+            
+            // Animation de succès
+            const msg = document.getElementById('statusMsg');
+            const zone = document.getElementById('inputZone');
+            msg.style.opacity = '1';
+            zone.classList.add('success-flash');
+            setTimeout(() => { msg.style.opacity = '0'; zone.classList.remove('success-flash'); }, 2000);
         }
 
-        // --- INITIALIZATION ---
-        document.getElementById('dateDisplay').innerText = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' }).format(now);
-        updateEverything();
+        // --- MOTEURS AUXILIAIRES ---
 
-        // --- CORE FUNCTIONS ---
         function updateEverything() {
             renderCalendar();
             calculateWakeUp();
@@ -154,93 +160,54 @@
             updateScore();
         }
 
-        // 1. BIO-FUEL ENGINE (NUTRITION)
-        function calculateBioFuel() {
-            const todayTasks = (db[todayNum] || []).map(t => t.text.toLowerCase()).join(' ');
-            const box = document.getElementById('mealPlan');
-            
-            if (todayTasks.includes('sport') || todayTasks.includes('foot') || todayTasks.includes('gym')) {
-                box.innerHTML = `
-                    <span class="text-orange-400 font-bold">🔥 Mode Performance Physique</span><br>
-                    <span class="opacity-70 text-xs">Midi : Poulet / Patate Douce / Avocat</span><br>
-                    <span class="opacity-70 text-xs">Soir : Omelette / Légumes verts</span>
-                `;
-            } else if (todayTasks.includes('réunion') || todayTasks.includes('cours') || todayTasks.includes('bureau')) {
-                box.innerHTML = `
-                    <span class="text-blue-400 font-bold">🧠 Mode Focus Cognitif</span><br>
-                    <span class="opacity-70 text-xs">Midi : Saumon / Quinoa / Noix</span><br>
-                    <span class="opacity-70 text-xs">Snack : Chocolat Noir / Amandes</span>
-                `;
-            } else {
-                box.innerHTML = `<span class="opacity-50 text-xs">Aucune activité majeure détectée. Mangez équilibré et léger.</span>`;
-            }
-        }
-
-        // 2. CHRONO-SYNC (RÉVEIL)
         function calculateWakeUp() {
-            const tmrTasks = db[todayNum + 1] || [];
-            let wakeTime = "08:00";
-            let reason = "Récupération standard";
-            let earliestHour = 24;
-
-            tmrTasks.forEach(t => {
-                const match = t.text.match(/(\d{1,2})[h:](\d{2})?/);
-                if (match) {
-                    let h = parseInt(match[1]);
-                    if (h < earliestHour && h > 4) earliestHour = h;
+            const tasks = db[todayNum + 1] || [];
+            let wake = "08:00"; let reason = "Repos";
+            tasks.forEach(t => {
+                const m = t.text.match(/(\d{1,2})[h:]/);
+                if(m) {
+                    const h = parseInt(m[1]);
+                    if(h < 10) { wake = `${(h-1).toString().padStart(2,'0')}:30`; reason = `Mission à ${h}h`; }
                 }
             });
-
-            if (earliestHour < 24) {
-                wakeTime = `${(earliestHour - 1).toString().padStart(2,'0')}:30`; // Réveil 1h30 avant
-                reason = `Optimisé pour mission de ${earliestHour}h`;
-            }
-
-            document.getElementById('wakeTime').innerText = wakeTime;
+            document.getElementById('wakeTime').innerText = wake;
             document.getElementById('wakeReason').innerText = reason;
         }
 
-        // 3. URGENCY RADAR
+        function calculateBioFuel() {
+            const txt = JSON.stringify(db[todayNum] || []).toLowerCase();
+            const el = document.getElementById('mealPlan');
+            if(txt.includes('sport') || txt.includes('match') || txt.includes('gym')) {
+                el.innerHTML = '<span class="text-orange-400 font-bold">🔥 Carb-Load</span><br>Pâtes complètes / Poulet / Banane';
+            } else if(txt.includes('réunion') || txt.includes('bureau') || txt.includes('cours')) {
+                el.innerHTML = '<span class="text-blue-400 font-bold">🧠 Brain Food</span><br>Poisson gras / Légumes / Noix';
+            } else {
+                el.innerHTML = '<span class="opacity-50">Standard équilibré</span>';
+            }
+        }
+
         function scanUrgencies() {
-            const box = document.getElementById('alertBox');
             let html = '';
-            
-            // Check past days
             for(let i=1; i<todayNum; i++) {
-                if(db[i] && db[i].some(t => !t.done)) {
-                    html += `<div class="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
-                        <span class="text-xs text-red-400 font-bold">⚠️ Retard J-${todayNum-i}</span>
-                        <button onclick="showDay(${i})" class="text-[10px] underline">Régler</button>
-                    </div>`;
-                }
+                if(db[i] && db[i].some(t => !t.done)) html += `<div class="text-red-400 text-xs font-bold border-l-2 border-red-500 pl-3">Retard J-${todayNum-i}</div>`;
             }
-            
-            // Check today's priorities
-            const todayTasks = db[todayNum] || [];
-            if(todayTasks.some(t => t.text.toLowerCase().includes('important'))) {
-                 html += `<div class="flex items-center justify-between p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                        <span class="text-xs text-blue-400 font-bold">⚡ Focus Prioritaire Aujourd'hui</span>
-                    </div>`;
-            }
-
-            if(html === '') html = '<div class="text-center py-4 opacity-20 italic text-xs">Système nominal.</div>';
-            box.innerHTML = html;
+            document.getElementById('alertBox').innerHTML = html || '<div class="opacity-20 text-xs italic text-center">R.A.S</div>';
         }
 
-        // 4. WATER ENGINE
-        function addWater(amount) {
-            health.water += amount;
-            localStorage.setItem('lifeos_v24_health', JSON.stringify(health));
-            updateWaterUI();
-            updateScore();
-        }
+        function addWater(n) { health.water += n; save(); }
         function updateWaterUI() {
-            const pct = Math.min(100, (health.water / 2.5) * 100); // Objectif 2.5L
-            document.getElementById('waterBar').style.width = pct + "%";
-            document.getElementById('waterText').innerText = health.water.toFixed(2) + "L";
+            document.getElementById('waterText').innerText = health.water + "L";
+            document.getElementById('waterBar').style.width = (health.water/2.5*100) + "%";
+        }
+        function updateScore() {
+            let tasksDone = 0; let total = 0;
+            Object.values(db).forEach(day => day.forEach(t => { total++; if(t.done) tasksDone++; }));
+            const wScore = Math.min(100, (health.water/2.5)*40);
+            const tScore = total ? (tasksDone/total)*60 : 0;
+            document.getElementById('score').innerText = Math.round(wScore + tScore) + "%";
         }
 
-        // UI HELPERS
+        // CALENDRIER
         function renderCalendar() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
             const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
@@ -259,60 +226,33 @@
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
             document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
-                <div class="task-card p-4 flex justify-between items-center group">
+                <div class="bg-white/5 p-4 rounded-xl flex justify-between items-center group">
                     <div class="flex items-center gap-3">
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500">
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5">
                         <span class="${t.done ? 'line-through opacity-30' : ''}">${t.text}</span>
                     </div>
-                    <button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button>
+                    <button onclick="delTask(${day},${i})" class="text-red-500 opacity-0 group-hover:opacity-100">✕</button>
                 </div>
-            `).join('') || '<p class="opacity-30 text-center italic text-sm">Vide</p>';
+            `).join('') || '<p class="opacity-30 text-center text-sm">Vide</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
+        function save() { localStorage.setItem('lifeos_v25_db', JSON.stringify(db)); localStorage.setItem('lifeos_v25_health', JSON.stringify(health)); updateEverything(); }
+        
         function addTaskManually() {
             const val = document.getElementById('newTaskInput').value;
             if(!val) return;
             db[currentDay] = [...(db[currentDay] || []), {text: val, done: false}];
             save(); document.getElementById('newTaskInput').value = '';
         }
-
-        // DATA HANDLERS
-        let currentDay = null;
-        function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); }
-        function delTask(d,i) { db[d].splice(i,1); save(); }
-        function save() { 
-            localStorage.setItem('lifeos_v24_db', JSON.stringify(db)); 
-            showDay(currentDay); 
-            updateEverything(); 
-        }
+        function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); showDay(d); }
+        function delTask(d,i) { db[d].splice(i,1); save(); showDay(d); }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        function updateScore() {
-             // Score simple pour l'exemple
-             let score = Math.min(100, (health.water * 20) + 10);
-             document.getElementById('score').innerText = Math.round(score) + "%";
-        }
-
-        // SIMULATED AI PARSER
-        function traiter() {
-            const txt = document.getElementById('userInput').value.toLowerCase();
-            if(!txt) return;
-            
-            // Simulation d'extraction intelligente
-            if(txt.includes('demain')) {
-                // Extrait une heure si présente
-                db[todayNum+1] = [...(db[todayNum+1]||[]), {text: txt.replace('demain', '').trim(), done: false}];
-            } else {
-                db[todayNum] = [...(db[todayNum]||[]), {text: txt, done: false}];
-            }
-            
-            document.getElementById('userInput').value = '';
-            alert("Données intégrées au Core.");
-            save();
-        }
-
-        // ENTER KEY SUPPORT
-        document.getElementById('newTaskInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') addTaskManually() });
+        
+        // SUPPORT TOUCHE ENTREE
+        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); traiter(); } });
+        
+        updateEverything();
     </script>
 </body>
 </html>
