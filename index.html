@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V27 - Nutri-Plan</title>
+    <title>LifeOS Sovereign V28 - Nutri-Variety</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        .glass { background: rgba(18, 18, 18, 0.7); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; }
         .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; transition: 0.3s; }
         
-        /* Nutri Styles */
+        /* Styles Nutri Dynamiques */
         .meal-card { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.05) 0%, transparent 100%); }
         .type-sport { border-color: #f97316; background: linear-gradient(90deg, rgba(249,115,22,0.1) 0%, transparent 100%); }
         .type-focus { border-color: #8b5cf6; background: linear-gradient(90deg, rgba(139,92,246,0.1) 0%, transparent 100%); }
@@ -34,7 +34,7 @@
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
                 
                 <div>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-3">Menu du Jour (Aujourd'hui)</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-3">Menu du Jour</p>
                     <div id="sidebarNutri" class="glass-panel p-5 space-y-4">
                         </div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="glass-panel p-6">
                     <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1">Réveil Demain</p>
                     <p id="wakeTime" class="text-4xl font-black italic text-white">08:00</p>
-                    <p id="wakeReason" class="text-[10px] text-blue-400 font-bold mt-1">Cycle Standard</p>
+                    <p id="wakeReason" class="text-[10px] text-blue-400 font-bold mt-1">--</p>
                 </div>
 
                 <div class="mt-auto space-y-4">
@@ -61,8 +61,8 @@
         <main class="lg:col-span-6 space-y-6">
             <div id="inputZone" class="glass p-10 relative transition-all duration-300">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Auto-Injection V27</span>
-                    <div id="successMsg" class="opacity-0 text-[10px] font-bold text-green-400 transition-opacity">Donnée Synchronisée ✔</div>
+                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Injection & Variété V28</span>
+                    <div id="successMsg" class="opacity-0 text-[10px] font-bold text-green-400 transition-opacity">Synchronisé ✔</div>
                 </div>
                 
                 <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-8 placeholder:opacity-20 min-h-[120px] resize-none" placeholder="Ex: Match demain, Réunion le 28..."></textarea>
@@ -91,14 +91,12 @@
 
     <div id="dayModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
         <div class="glass p-8 max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
-            
             <div class="flex justify-between items-center mb-6">
                 <h2 id="modalDate" class="text-3xl font-black italic capitalize text-blue-500">Date</h2>
                 <button onclick="closeDay()" class="text-zinc-500 hover:text-white text-2xl">✕</button>
             </div>
-
-            <div id="modalNutri" class="mb-8 p-6 rounded-2xl border border-white/5 bg-white/5">
-                </div>
+            
+            <div id="modalNutri" class="mb-8 p-6 rounded-2xl border border-white/5 bg-white/5"></div>
 
             <div class="flex gap-2 mb-4">
                 <input type="text" id="newTaskInput" placeholder="Ajouter une tâche..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all">
@@ -109,101 +107,147 @@
     </div>
 
     <script>
-        // --- CONFIG ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v27_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v27_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v28_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v28_health') || '{"water":0}');
         const now = new Date();
         const todayNum = now.getDate();
         let currentDayOpen = null;
 
-        // --- 🧠 LE CERVEAU NUTRITIONNEL (ALGORITHME) ---
+        // --- DATABASE CULINAIRE (VARIÉTÉ) ---
+        const mealDB = {
+            sport: {
+                lunch: [
+                    "Pâtes Complètes + Blanc de Poulet + Courgettes",
+                    "Riz Basmati + Steak Haché 5% + Haricots verts",
+                    "Wrap Thon + Maïs + Oeuf dur",
+                    "Salade de Quinoa + Dinde + Avocat",
+                    "Sandwich Pain complet + Jambon + Tomates"
+                ],
+                dinner: [
+                    "Omelette (3 oeufs) + Patates douces",
+                    "Cabillaud + Purée de pommes de terre",
+                    "Bowl Riz + Saumon + Edamame",
+                    "Wok Poulet + Nouilles chinoises",
+                    "Lentilles + Saucisse volaille"
+                ]
+            },
+            focus: {
+                lunch: [
+                    "Pavé de Saumon + Fondue de Poireaux",
+                    "Salade César (Sauce légère) + Poulet",
+                    "Maquereau grillé + Salade de tomates",
+                    "Bowl Quinoa + Tofu fumé + Avocat",
+                    "Carpaccio de boeuf + Roquette"
+                ],
+                dinner: [
+                    "Soupe de légumes + Fromage blanc",
+                    "Filet de Dinde + Haricots verts",
+                    "Oeufs brouillés + Épinards",
+                    "Sardines grillées + Salade verte",
+                    "Velouté de Potiron + Dés de jambon"
+                ]
+            },
+            std: {
+                lunch: [
+                    "Chili con Carne (Léger) + Riz",
+                    "Rôti de Porc + Petits pois",
+                    "Couscous Royal (Semoule moyenne)",
+                    "Lasagnes aux légumes + Salade",
+                    "Hachis Parmentier + Salade verte",
+                    "Wrap Poulet Curry + Crudités",
+                    "Taboulé Libanais + Brochettes de poulet"
+                ],
+                dinner: [
+                    "Gratin de chou-fleur + Jambon",
+                    "Salade composée (Thon/Oeuf/Tomate)",
+                    "Ratatouille + Riz complet",
+                    "Poêlée forestière + Omelette",
+                    "Soupe Miso + Sashimi",
+                    "Croque-monsieur (Pain complet) + Salade",
+                    "Curry de légumes + Pois chiches"
+                ]
+            }
+        };
+
+        // --- ALGORITHME DE SÉLECTION ROTATIF ---
         function getMealPlan(dayIndex) {
             const tasks = (db[dayIndex] || []).map(t => t.text.toLowerCase()).join(' ');
             
-            // LOGIQUE 1 : JOUR DE SPORT (Haute dépense)
-            if (tasks.includes('sport') || tasks.includes('match') || tasks.includes('foot') || tasks.includes('gym') || tasks.includes('course')) {
-                return {
-                    type: 'sport',
-                    icon: '🔥',
-                    title: 'Haute Performance',
-                    lunch: 'Pâtes complètes (200g) + Blanc de Poulet + Brocolis',
-                    dinner: 'Omelette (3 oeufs) + Patates douces + Avocat'
-                };
+            // 1. DÉTERMINER LE TYPE (Contexte)
+            let type = 'std';
+            let title = 'Menu Équilibre';
+            let icon = '⚖️';
+            
+            if (tasks.includes('sport') || tasks.includes('match') || tasks.includes('gym') || tasks.includes('foot')) {
+                type = 'sport'; title = 'Haute Énergie'; icon = '🔥';
+            } else if (tasks.includes('réunion') || tasks.includes('bureau') || tasks.includes('cours')) {
+                type = 'focus'; title = 'Focus Mental'; icon = '🧠';
             }
-            // LOGIQUE 2 : JOUR DE FOCUS (Mental / Sédentaire)
-            else if (tasks.includes('réunion') || tasks.includes('bureau') || tasks.includes('code') || tasks.includes('cours') || tasks.includes('étude')) {
-                return {
-                    type: 'focus',
-                    icon: '🧠',
-                    title: 'Focus Cognitif',
-                    lunch: 'Pavé de Saumon + Quinoa + Épinards (Léger)',
-                    dinner: 'Soupe de légumes + Dinde + Fromage Blanc'
-                };
-            }
-            // LOGIQUE 3 : STANDARD (Maintenance)
-            else {
-                return {
-                    type: 'std',
-                    icon: '⚖️',
-                    title: 'Équilibre Vital',
-                    lunch: 'Salade composée (Thon/Maïs/Oeuf) + Riz',
-                    dinner: 'Wok de légumes + Tofu ou Poisson blanc'
-                };
-            }
+
+            // 2. SÉLECTION ROTATIVE (Jour % Taille du menu)
+            // Cela assure un plat différent chaque jour, mais toujours le même pour une date donnée (pas aléatoire à chaque clic)
+            const menuList = mealDB[type];
+            const lunchIndex = (dayIndex - 1) % menuList.lunch.length;
+            const dinnerIndex = (dayIndex - 1) % menuList.dinner.length;
+
+            return {
+                type: type,
+                icon: icon,
+                title: title,
+                lunch: menuList.lunch[lunchIndex],
+                dinner: menuList.dinner[dinnerIndex]
+            };
         }
 
-        // --- RENDU UI NUTRITION ---
+        // --- RENDU UI ---
         function renderNutriUI() {
-            // 1. Sidebar (Aujourd'hui)
-            const planToday = getMealPlan(todayNum);
-            const sideHTML = `
-                <div class="text-xs font-bold mb-2 flex items-center gap-2 ${planToday.type === 'sport' ? 'text-orange-400' : (planToday.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">
-                    <span>${planToday.icon}</span> <span>${planToday.title}</span>
+            const plan = getMealPlan(todayNum); // Pour aujourd'hui dans la sidebar
+            const html = `
+                <div class="text-xs font-bold mb-2 flex items-center gap-2 ${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">
+                    <span>${plan.icon}</span> <span>${plan.title}</span>
                 </div>
                 <div class="space-y-3">
                     <div class="pl-3 border-l-2 border-white/20">
                         <p class="text-[8px] uppercase font-black opacity-50">MIDI ☀️</p>
-                        <p class="text-xs font-medium leading-tight">${planToday.lunch}</p>
+                        <p class="text-xs font-medium leading-tight">${plan.lunch}</p>
                     </div>
                     <div class="pl-3 border-l-2 border-white/20">
                         <p class="text-[8px] uppercase font-black opacity-50">SOIR 🌙</p>
-                        <p class="text-xs font-medium leading-tight">${planToday.dinner}</p>
+                        <p class="text-xs font-medium leading-tight">${plan.dinner}</p>
                     </div>
                 </div>
             `;
-            document.getElementById('sidebarNutri').innerHTML = sideHTML;
-            document.getElementById('sidebarNutri').className = `glass-panel p-5 meal-card type-${planToday.type}`;
+            const box = document.getElementById('sidebarNutri');
+            box.innerHTML = html;
+            box.className = `glass-panel p-5 meal-card type-${plan.type}`;
         }
 
         function renderModalNutri(day) {
-            const plan = getMealPlan(day);
+            const plan = getMealPlan(day); // Pour le jour cliqué
             const html = `
                 <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <p class="text-[10px] uppercase tracking-widest font-black opacity-50">Plan Nutritionnel du jour</p>
-                        <h3 class="text-xl font-bold flex items-center gap-2 mt-1">
-                            <span>${plan.icon}</span> <span class="${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">${plan.title}</span>
-                        </h3>
-                    </div>
+                    <p class="text-[10px] uppercase tracking-widest font-black opacity-50">Menu du jour</p>
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        <span>${plan.icon}</span> <span class="${plan.type === 'sport' ? 'text-orange-400' : (plan.type === 'focus' ? 'text-purple-400' : 'text-blue-400')}">${plan.title}</span>
+                    </h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-black/20 p-4 rounded-xl border border-white/5">
-                        <p class="text-[9px] font-black text-yellow-500 uppercase mb-1">REPAS 1 : MIDI</p>
+                        <p class="text-[9px] font-black text-yellow-500 uppercase mb-1">MIDI</p>
                         <p class="text-sm font-medium">${plan.lunch}</p>
                     </div>
                     <div class="bg-black/20 p-4 rounded-xl border border-white/5">
-                        <p class="text-[9px] font-black text-blue-400 uppercase mb-1">REPAS 2 : SOIR</p>
+                        <p class="text-[9px] font-black text-blue-400 uppercase mb-1">SOIR</p>
                         <p class="text-sm font-medium">${plan.dinner}</p>
                     </div>
                 </div>
             `;
             const container = document.getElementById('modalNutri');
             container.innerHTML = html;
-            // Appliquer les couleurs dynamiques au cadre
             container.className = `mb-8 p-6 rounded-2xl border border-white/5 bg-white/5 meal-card type-${plan.type}`;
         }
 
-        // --- AUTO INJECTION & SYSTEM ---
+        // --- SYSTEME DE BASE ---
         function traiter() {
             const input = document.getElementById('userInput');
             const txt = input.value;
@@ -229,7 +273,6 @@
             if(targetDay > 31) targetDay = 1;
 
             db[targetDay] = [...(db[targetDay] || []), { text: finalTxt, done: false }];
-            
             save();
             input.value = '';
             const msg = document.getElementById('successMsg');
@@ -239,8 +282,7 @@
 
         function calculateWakeUp() {
             const tmrTasks = db[todayNum + 1] || [];
-            let wake = "08:00"; let reason = "Repos Standard";
-            
+            let wake = "08:00"; let reason = "Cycle Standard";
             tmrTasks.forEach(t => {
                 const match = t.text.match(/(\d{1,2})[h:](\d{2})?/);
                 if(match) {
@@ -260,7 +302,7 @@
 
         function updateAll() {
             renderCal();
-            renderNutriUI(); // Update sidebar nutri
+            renderNutriUI();
             calculateWakeUp();
             scanAlerts();
             updateWater();
@@ -299,8 +341,7 @@
 
         function showDay(day) {
             currentDayOpen = day;
-            renderModalNutri(day); // AFFICHER LA NUTRITION DE CE JOUR
-            
+            renderModalNutri(day); // On génère le menu spécifique à ce jour
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
             document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
@@ -324,8 +365,8 @@
         function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); showDay(d); }
         function delTask(d,i) { db[d].splice(i,1); save(); showDay(d); }
         function save() { 
-            localStorage.setItem('lifeos_v27_db', JSON.stringify(db)); 
-            localStorage.setItem('lifeos_v27_health', JSON.stringify(health));
+            localStorage.setItem('lifeos_v28_db', JSON.stringify(db)); 
+            localStorage.setItem('lifeos_v28_health', JSON.stringify(health));
             updateAll();
         }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
