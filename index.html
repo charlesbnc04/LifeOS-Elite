@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V32 - Sonic Visuals</title>
+    <title>LifeOS Sovereign V33 - Life Balance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        /* Glassmorphism */
         .glass { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
         .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; transition: 0.3s; }
         .glass-panel:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
         
-        /* Platform Buttons (Logos) */
-        .platform-btn { opacity: 0.4; filter: grayscale(100%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid transparent; }
+        /* Routine Cards */
+        .routine-card { position: relative; overflow: hidden; }
+        .routine-morning { border-left: 3px solid #facc15; background: linear-gradient(90deg, rgba(250, 204, 21, 0.05) 0%, transparent 100%); }
+        .routine-evening { border-left: 3px solid #818cf8; background: linear-gradient(90deg, rgba(129, 140, 248, 0.05) 0%, transparent 100%); }
+        .routine-relax { border-left: 3px solid #34d399; background: linear-gradient(90deg, rgba(52, 211, 153, 0.05) 0%, transparent 100%); }
+
+        /* Platform Buttons */
+        .platform-btn { opacity: 0.4; filter: grayscale(100%); transition: 0.4s; border: 1px solid transparent; }
         .platform-btn:hover { opacity: 0.8; transform: scale(1.05); }
-        .platform-btn svg { width: 20px; height: 20px; fill: currentColor; }
-        
         .platform-btn.active { opacity: 1; filter: grayscale(0%); transform: scale(1.15); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        
-        /* Brand Colors Active */
         .spotify-active { color: #1db954; border-color: #1db954; box-shadow: 0 0 20px rgba(29, 185, 84, 0.3) !important; }
         .deezer-active { color: #a238ff; border-color: #a238ff; box-shadow: 0 0 20px rgba(162, 56, 255, 0.3) !important; }
         .apple-active { color: #fa2d48; border-color: #fa2d48; box-shadow: 0 0 20px rgba(250, 45, 72, 0.3) !important; }
 
-        /* Calendar & UI */
         .day { aspect-ratio: 1; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; transform: translateY(-3px); }
         .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1); }
-        .water-progress { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .water-progress { transition: width 0.8s; background: linear-gradient(90deg, #3b82f6, #60a5fa); }
         
-        /* Tags & Buttons */
-        .tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 0.05em; margin-right: 8px; }
-        .tag-deep { background: #8b5cf6; color: white; }
-        .tag-phys { background: #f97316; color: white; }
-        .tag-admin { background: #64748b; color: white; }
-        
-        .music-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 14px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .music-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 14px; font-size: 11px; font-weight: 800; text-transform: uppercase; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
         .music-btn:hover { transform: scale(1.05); }
     </style>
 </head>
@@ -51,30 +45,34 @@
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
                 
                 <div class="glass-panel p-5">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-4">Source Audio</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-4">Passerelle Audio</p>
                     <div class="flex justify-between px-4 items-center">
                         <button onclick="setMusic('spotify')" id="btn-spotify" class="platform-btn w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                            <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
                         </button>
                         <button onclick="setMusic('deezer')" id="btn-deezer" class="platform-btn w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                            <svg viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg>
                         </button>
                         <button onclick="setMusic('apple')" id="btn-apple" class="platform-btn w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                            <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg>
                         </button>
                     </div>
-                    <p id="musicStatus" class="text-[9px] text-center mt-3 opacity-50 italic">Sélectionnez une plateforme</p>
-                </div>
-
-                <div>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-3">Menu du Jour</p>
-                    <div id="sidebarNutri" class="glass-panel p-5 space-y-4"></div>
                 </div>
 
                 <div class="glass-panel p-6">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1">Réveil Demain</p>
-                    <p id="wakeTime" class="text-4xl font-black italic text-white">08:00</p>
-                    <p id="wakeReason" class="text-[10px] text-blue-400 font-bold mt-1">--</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1">Cible du Jour</p>
+                    <p id="dailyFocus" class="text-2xl font-black italic text-white">Équilibre</p>
+                </div>
+
+                <div class="mt-auto space-y-4">
+                    <div class="flex justify-between items-end">
+                        <span class="text-[9px] font-black uppercase text-blue-400">Hydratation</span>
+                        <span id="waterText" class="text-xl font-bold">0L</span>
+                    </div>
+                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div id="waterBar" class="water-progress h-full w-0"></div>
+                    </div>
+                    <button onclick="addWater(0.5)" class="w-full py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold uppercase transition-all">+ 500ml</button>
                 </div>
             </div>
         </aside>
@@ -82,14 +80,12 @@
         <main class="lg:col-span-6 space-y-6">
             <div id="inputZone" class="glass p-10 relative transition-all duration-300">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Sovereign Core V32</span>
+                    <span class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Sovereign Core V33</span>
                     <div id="successMsg" class="opacity-0 text-[10px] font-bold text-green-400 transition-opacity">Synchronisé ✔</div>
                 </div>
                 
                 <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-4 placeholder:opacity-20 min-h-[120px] resize-none" placeholder="Ex: Match demain, Réunion le 28..."></textarea>
-                
                 <div id="consoleOutput" class="text-[10px] text-green-400 font-mono h-6 opacity-0 transition-opacity mb-4"></div>
-
                 <div class="flex gap-4">
                     <button onclick="traiter()" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all">Planifier</button>
                     <button onclick="toggleVoice()" id="voiceBtn" class="w-16 glass-panel flex items-center justify-center text-2xl hover:text-blue-400 transition-all">🎤</button>
@@ -97,18 +93,8 @@
             </div>
 
             <div class="glass p-8 flex justify-between items-center">
-                <div>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-blue-400 mb-2">Hydratation</p>
-                    <div class="flex items-end gap-2">
-                        <span id="waterText" class="text-3xl font-black">0L</span>
-                        <button onclick="addWater(0.5)" class="text-xs bg-blue-500/20 px-2 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors">+</button>
-                    </div>
-                    <div class="h-1.5 w-32 bg-white/10 rounded-full mt-2 overflow-hidden"><div id="waterBar" class="water-progress h-full w-0"></div></div>
-                </div>
-                <div class="text-right">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Score</p>
-                    <span id="score" class="text-5xl font-black italic text-blue-500">0%</span>
-                </div>
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-zinc-500">Score Global</h3>
+                <span id="score" class="text-5xl font-black italic text-blue-500">0%</span>
             </div>
         </main>
 
@@ -125,14 +111,22 @@
                 <button onclick="closeDay()" class="text-zinc-500 hover:text-white text-2xl">✕</button>
             </div>
             
-            <div id="dailyStrategy" class="mb-6 p-5 rounded-2xl border border-white/5 bg-white/5 text-sm leading-relaxed"></div>
-            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div id="routineMorning" class="glass-panel p-4 routine-card routine-morning">
+                    </div>
+                <div id="routineEvening" class="glass-panel p-4 routine-card routine-evening">
+                    </div>
+            </div>
+
+            <div id="relaxBlock" class="hidden mb-6 glass-panel p-4 routine-card routine-relax flex justify-between items-center">
+                </div>
+
             <div id="musicBox" class="flex gap-3 mb-6 overflow-x-auto pb-2"></div>
 
             <div id="modalNutri" class="mb-6 p-5 rounded-2xl border border-white/5 bg-white/5"></div>
 
             <div class="flex gap-2 mb-4">
-                <input type="text" id="newTaskInput" placeholder="Ajouter une tâche..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all">
+                <input type="text" id="newTaskInput" placeholder="Nouvelle mission..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500">
                 <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold hover:bg-blue-500">+</button>
             </div>
             <div id="taskList" class="space-y-3"></div>
@@ -140,130 +134,141 @@
     </div>
 
     <script>
-        // CONFIG
-        let db = JSON.parse(localStorage.getItem('lifeos_v32_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v32_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v33_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v33_health') || '{"water":0}');
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date();
         const todayNum = now.getDate();
         let currentDayOpen = null;
 
-        // --- MUSIC ENGINE (VISUALS UPDATE) ---
-        function setMusic(provider) {
-            musicProvider = provider;
-            localStorage.setItem('lifeos_music', provider);
-            updateMusicUI();
-        }
+        // --- BASES DE DONNÉES EXERCICES ---
+        const exercises = {
+            morning: [
+                "Salutation au Soleil (Yoga) - 5 min", "Jumping Jacks (3x30 sec)", "Étirements dynamiques du cou", 
+                "Planche (3x45 sec)", "Squats poids du corps (3x15)", "Corde à sauter (5 min)", "Mobilité de hanches"
+            ],
+            evening: [
+                "Posture de l'enfant (Yoga)", "Étirements des ischio-jambiers", "Respiration 4-7-8 (Relaxation)", 
+                "Automassage mollets", "Méditation assise (5 min)", "Posture du Chat-Vache", "Rotation des chevilles"
+            ]
+        };
 
+        // --- MOTEUR AUDIO ---
+        function setMusic(p) { musicProvider = p; localStorage.setItem('lifeos_music', p); updateMusicUI(); }
         function updateMusicUI() {
-            // Reset
-            ['spotify', 'deezer', 'apple'].forEach(p => {
-                const b = document.getElementById(`btn-${p}`);
-                b.classList.remove('active', 'spotify-active', 'deezer-active', 'apple-active');
-            });
-            // Activate
-            const btn = document.getElementById(`btn-${musicProvider}`);
-            btn.classList.add('active');
-            if(musicProvider === 'spotify') btn.classList.add('spotify-active');
-            if(musicProvider === 'deezer') btn.classList.add('deezer-active');
-            if(musicProvider === 'apple') btn.classList.add('apple-active');
-            
-            const names = { spotify: "Spotify Connecté", deezer: "Deezer Connecté", apple: "Apple Music Connecté" };
-            document.getElementById('musicStatus').innerText = names[musicProvider];
-            document.getElementById('musicStatus').className = "text-[9px] text-center mt-3 font-bold text-green-400";
+            ['spotify','deezer','apple'].forEach(p => document.getElementById(`btn-${p}`).classList.remove('active','spotify-active','deezer-active','apple-active'));
+            const b = document.getElementById(`btn-${musicProvider}`); b.classList.add('active');
+            if(musicProvider==='spotify') b.classList.add('spotify-active');
+            if(musicProvider==='deezer') b.classList.add('deezer-active');
+            if(musicProvider==='apple') b.classList.add('apple-active');
         }
-
         function getMusicLink(type) {
-            let query = "", label = "";
-            if (type === 'focus') { query = "Deep Focus"; label = "Playlist Focus"; }
-            if (type === 'sport') { query = "Workout Phonk"; label = "Playlist Sport"; }
-            if (type === 'chill') { query = "Lo-Fi Beats"; label = "Playlist Chill"; }
+            let q="", l="", c="";
+            if(type==='focus'){q="Deep Focus";l="Focus"; c="bg-[#a238ff] text-white";}
+            if(type==='sport'){q="Workout Phonk";l="Sport"; c="bg-[#1db954] text-black";}
+            if(type==='relax'){q="Meditation Sounds";l="Détente"; c="bg-[#34d399] text-black";}
+            
+            // Simulation Deep Link (Ouvre l'app si installée, sinon web)
+            let url = "";
+            if(musicProvider==='spotify') url = `https://open.spotify.com/search/${encodeURIComponent(q)}`;
+            if(musicProvider==='deezer') url = `https://www.deezer.com/search/${encodeURIComponent(q)}`;
+            if(musicProvider==='apple') url = `https://music.apple.com/us/search?term=${encodeURIComponent(q)}`;
 
-            let url = "", colorClass = "";
-            if (musicProvider === 'spotify') { url = `https://open.spotify.com/search/${query}`; colorClass = "bg-[#1db954] text-black hover:bg-white"; } 
-            else if (musicProvider === 'deezer') { url = `https://www.deezer.com/search/${query}`; colorClass = "bg-[#a238ff] text-white hover:bg-white hover:text-black"; } 
-            else if (musicProvider === 'apple') { url = `https://music.apple.com/us/search?term=${query}`; colorClass = "bg-[#fa2d48] text-white hover:bg-white hover:text-black"; }
-
-            return `<a href="${url}" target="_blank" class="music-btn ${colorClass}">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> ${label}
-            </a>`;
+            return `<a href="${url}" target="_blank" class="music-btn ${c}">▶ ${l}</a>`;
         }
 
-        // --- OPTIMIZATION & TAGS ---
-        function analyzeDay(day) {
+        // --- MOTEUR ROUTINE & DETENTE ---
+        function calculateRoutine(day) {
+            // Rotation basée sur le jour pour ne jamais avoir le même
+            const mEx = exercises.morning[(day - 1) % exercises.morning.length];
+            const eEx = exercises.evening[(day - 1) % exercises.evening.length];
+            
+            document.getElementById('routineMorning').innerHTML = `
+                <p class="text-[8px] uppercase font-black text-yellow-500 mb-1">Matin (Activation)</p>
+                <p class="text-xs font-bold">${mEx}</p>
+            `;
+            document.getElementById('routineEvening').innerHTML = `
+                <p class="text-[8px] uppercase font-black text-indigo-400 mb-1">Soir (Retour au calme)</p>
+                <p class="text-xs font-bold">${eEx}</p>
+            `;
+
+            // Calcul Détente
             const tasks = db[day] || [];
-            let musicButtons = [], stratText = "";
-            const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
-
-            if (tasks.length === 0) { stratText = "Journée libre. Récupération active."; musicButtons.push(getMusicLink('chill')); } 
-            else if (txt.includes('sport') || txt.includes('match') || txt.includes('gym')) { stratText = "⚡ <b>Pic Physique.</b> Activez la playlist 'Sport' 10min avant."; musicButtons.push(getMusicLink('sport')); } 
-            else if (txt.includes('projet') || txt.includes('code') || txt.includes('réunion')) { stratText = "🧠 <b>Deep Work.</b> Bloquez les notifs."; musicButtons.push(getMusicLink('focus')); } 
-            else { stratText = "Journée Standard. Restez dans le flux."; musicButtons.push(getMusicLink('chill')); }
-
-            document.getElementById('dailyStrategy').innerHTML = `<p class="text-[9px] uppercase font-black opacity-50 mb-2">Stratégie Audio</p>${stratText}`;
-            document.getElementById('musicBox').innerHTML = musicButtons.join('');
+            const relaxBox = document.getElementById('relaxBlock');
+            if(tasks.length > 3) {
+                // Journée chargée = Détente le soir
+                relaxBox.classList.remove('hidden');
+                relaxBox.innerHTML = `
+                    <div><p class="text-[8px] uppercase font-black text-green-400">Grosse Journée détectée</p><p class="text-xs font-bold">Séance Détente Profonde (20 min)</p></div>
+                    ${getMusicLink('relax')}
+                `;
+            } else if (tasks.length > 0 && tasks.length <= 3) {
+                 // Journée légère = Méditation matin
+                relaxBox.classList.remove('hidden');
+                relaxBox.innerHTML = `
+                    <div><p class="text-[8px] uppercase font-black text-green-400">Journée Fluide</p><p class="text-xs font-bold">Méditation Matinale (10 min)</p></div>
+                    ${getMusicLink('relax')}
+                `;
+            } else {
+                relaxBox.classList.add('hidden');
+            }
         }
 
-        function getTags(text) {
-            const t = text.toLowerCase();
-            if(t.includes('sport') || t.includes('match')) return '<span class="tag tag-phys">PHYSIQUE</span>';
-            if(t.includes('projet') || t.includes('code')) return '<span class="tag tag-deep">DEEP WORK</span>';
-            if(t.includes('mail') || t.includes('appel')) return '<span class="tag tag-admin">ADMIN</span>';
-            return '<span class="tag bg-white/10">TASK</span>';
+        // --- CORE ---
+        const mealDB = { sport: {l:["Pâtes Poulet","Riz Steak"], d:["Omelette","Cabillaud"]}, focus: {l:["Saumon","Salade"], d:["Soupe","Dinde"]}, std: {l:["Chili","Rôti"], d:["Gratin","Salade"]} };
+        function getMealPlan(day) {
+            const t = (db[day]||[]).map(x=>x.text.toLowerCase()).join(' '); let type='std';
+            if(t.includes('sport')) type='sport'; else if(t.includes('réunion')) type='focus';
+            const m = mealDB[type]; return {type, l: m.l[day%m.l.length], d: m.d[day%m.d.length]};
         }
-
-        // --- STANDARD CORE ---
-        const mealDB = { sport: {lunch: ["Pâtes Poulet", "Riz Steak", "Wrap Thon"], dinner: ["Omelette", "Cabillaud", "Bowl Saumon"]}, focus: {lunch: ["Saumon", "Salade César", "Bowl Tofu"], dinner: ["Soupe", "Dinde", "Oeufs"]}, std: {lunch: ["Chili", "Rôti", "Couscous"], dinner: ["Gratin", "Salade", "Ratatouille"]} };
-
-        function getMealPlan(dayIndex) {
-            const tasks = (db[dayIndex] || []).map(t => t.text.toLowerCase()).join(' ');
-            let type = 'std', title = 'Équilibre', icon = '⚖️';
-            if (tasks.includes('sport')) { type = 'sport'; title = 'Performance'; icon = '🔥'; } 
-            else if (tasks.includes('réunion') || tasks.includes('bureau')) { type = 'focus'; title = 'Focus'; icon = '🧠'; }
-            const m = mealDB[type]; return { type, icon, title, lunch: m.lunch[dayIndex%m.lunch.length], dinner: m.dinner[dayIndex%m.dinner.length] };
-        }
-
-        function renderNutriUI() {
-            const plan = getMealPlan(todayNum);
-            document.getElementById('sidebarNutri').innerHTML = `<div class="text-xs font-bold mb-2 flex items-center gap-2 ${plan.type==='sport'?'text-orange-400':(plan.type==='focus'?'text-purple-400':'text-blue-400')}"><span>${plan.icon}</span> <span>${plan.title}</span></div><div class="space-y-3 text-xs"><div class="pl-3 border-l-2 border-white/20"><p class="text-[8px] uppercase font-black opacity-50">MIDI</p>${plan.lunch}</div><div class="pl-3 border-l-2 border-white/20"><p class="text-[8px] uppercase font-black opacity-50">SOIR</p>${plan.dinner}</div></div>`;
-        }
-
         function renderModalNutri(day) {
-            const plan = getMealPlan(day);
-            document.getElementById('modalNutri').innerHTML = `<div class="flex justify-between mb-2"><p class="text-[9px] uppercase font-black opacity-50">Fuel</p><h3 class="text-sm font-bold flex gap-2"><span>${plan.icon}</span> <span>${plan.title}</span></h3></div><div class="flex gap-4 text-xs"><div class="flex-1"><span class="font-bold text-yellow-500">Midi:</span> ${plan.lunch}</div><div class="flex-1"><span class="font-bold text-blue-400">Soir:</span> ${plan.dinner}</div></div>`;
+            const p = getMealPlan(day);
+            document.getElementById('modalNutri').innerHTML = `<div class="flex gap-4 text-xs"><div class="flex-1"><span class="font-bold text-yellow-500">Midi:</span> ${p.l}</div><div class="flex-1"><span class="font-bold text-blue-400">Soir:</span> ${p.d}</div></div>`;
+        }
+        function getMusicBtns(day) {
+            const t = (db[day]||[]).map(x=>x.text.toLowerCase()).join(' ');
+            let b = [];
+            if(t.includes('sport')) b.push(getMusicLink('sport'));
+            if(t.includes('projet')) b.push(getMusicLink('focus'));
+            return b.join('');
         }
 
-        function traiter() {
-            const rawText = document.getElementById('userInput').value; if(!rawText.trim()) return;
-            const output = document.getElementById('consoleOutput'); const segments = rawText.split(/[,.;]|\bet\b/i); let logs = [];
-            segments.forEach(segment => {
-                segment = segment.trim(); if(!segment) return; let targetDay = todayNum; let foundDate = false; const lower = segment.toLowerCase();
-                const daysOfWeek = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-                for (let i=0; i<7; i++) { if (lower.includes(daysOfWeek[i])) { targetDay = getNextDate(i); foundDate = true; break; } }
-                if (!foundDate) { if (lower.includes('demain')) targetDay = todayNum + 1; else { const dm = lower.match(/le (\d{1,2})/); if (dm) targetDay = parseInt(dm[1]); } }
-                let clean = segment.replace(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|le \d{1,2})/gi, '').trim();
-                if(clean.length>2) { if(targetDay>31) targetDay=1; db[targetDay]=[...(db[targetDay]||[]), {text: clean, done: false}]; logs.push(`+ ${clean}`); }
+        function showDay(day) {
+            currentDayOpen = day;
+            calculateRoutine(day);
+            renderModalNutri(day);
+            document.getElementById('musicBox').innerHTML = getMusicBtns(day);
+            document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
+            const tasks = db[day] || [];
+            document.getElementById('taskList').innerHTML = tasks.map((t, i) => `<div class="glass-panel p-4 flex justify-between items-center group"><div class="flex items-center gap-3"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5 cursor-pointer"><span class="${t.done?'line-through opacity-30':'font-medium'}">${t.text}</span></div><button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button></div>`).join('') || '<p class="opacity-30 text-center text-sm">Vide</p>';
+            document.getElementById('dayModal').classList.remove('hidden');
+        }
+
+        // --- COMMON ---
+        function traiter() { /* Code Parsing V29 inchangé */
+            const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
+            const seg = raw.split(/[,.;]|\bet\b/i); let logs=[];
+            seg.forEach(s => {
+                s=s.trim(); if(!s)return; let td=todayNum; let fd=false; const l=s.toLowerCase();
+                ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'].forEach((d,i)=>{if(l.includes(d)){td=getNextDate(i);fd=true;}});
+                if(!fd){if(l.includes('demain'))td=todayNum+1;else{const m=l.match(/le (\d{1,2})/);if(m)td=parseInt(m[1]);}}
+                let cl=s.replace(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|le \d{1,2})/gi,'').trim();
+                if(cl.length>2){if(td>31)td=1; db[td]=[...(db[td]||[]),{text:cl,done:false}]; logs.push(`+ ${cl}`);}
             });
-            output.innerText = logs.join(' | '); output.style.opacity = "1"; save(); document.getElementById('userInput').value = ''; setTimeout(() => output.style.opacity = "0", 3000);
+            save(); document.getElementById('userInput').value=''; 
+            const o=document.getElementById('consoleOutput'); o.innerText=logs.join(' | '); o.style.opacity='1'; setTimeout(()=>o.style.opacity='0',3000);
         }
-
-        function getNextDate(idx) { const today = new Date(); let d = idx - today.getDay(); if (d <= 0) d += 7; const next = new Date(today); next.setDate(today.getDate() + d); return next.getDate(); }
-        function calculateWakeUp() {
-            const tmrTasks = db[todayNum + 1] || []; let wake = "08:00"; let reason = "Repos";
-            tmrTasks.forEach(t => { const m = t.text.match(/(\d{1,2})[h:]/); if(m && parseInt(m[1]) < 10) { wake = `${parseInt(m[1])-2}:30`; reason = `Mission ${m[1]}h`; } });
-            document.getElementById('wakeTime').innerText = wake.padStart(5, '0'); document.getElementById('wakeReason').innerText = reason;
-        }
-        function updateAll() { renderCal(); renderNutriUI(); calculateWakeUp(); updateMusicUI(); document.getElementById('waterText').innerText = health.water + "L"; document.getElementById('waterBar').style.width = Math.min(100, (health.water/2.5)*100) + "%"; let t=0, d=0; Object.values(db).forEach(a => a.forEach(x => { t++; if(x.done) d++; })); document.getElementById('score').innerText = Math.round((health.water/2.5*40) + (t ? d/t*60 : 0)) + "%"; }
-        function renderCal() { const cal = document.getElementById('calendar'); cal.innerHTML = ''; const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate(); for(let i=1; i<=days; i++) { const d = document.createElement('div'); d.className = `day ${i===todayNum?'day-today':''} ${(db[i]&&db[i].length)?'has-event':''}`; d.innerText = i; d.onclick = () => showDay(i); cal.appendChild(d); } }
-        function showDay(day) { currentDayOpen = day; analyzeDay(day); renderModalNutri(day); const tasks = db[day] || []; document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`; document.getElementById('taskList').innerHTML = tasks.map((t, i) => `<div class="glass-panel p-4 flex justify-between items-center group"><div class="flex items-center gap-3"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5 cursor-pointer"><div>${getTags(t.text)}<span class="${t.done?'line-through opacity-30':'font-medium'}">${t.text}</span></div></div><button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button></div>`).join('') || '<p class="opacity-30 text-center italic text-sm">Vide</p>'; document.getElementById('dayModal').classList.remove('hidden'); }
-        function addTaskManually() { const val = document.getElementById('newTaskInput').value; if(!val) return; db[currentDayOpen] = [...(db[currentDayOpen]||[]), {text: val, done: false}]; save(); document.getElementById('newTaskInput').value = ''; }
-        function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); showDay(d); }
-        function delTask(d,i) { db[d].splice(i,1); save(); showDay(d); }
-        function save() { localStorage.setItem('lifeos_v32_db', JSON.stringify(db)); localStorage.setItem('lifeos_v32_health', JSON.stringify(health)); updateAll(); }
-        function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        function addWater(n) { health.water += n; save(); }
-        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') traiter(); });
-        updateAll();
+        function getNextDate(idx){const t=new Date();let d=idx-t.getDay();if(d<=0)d+=7;const n=new Date(t);n.setDate(t.getDate()+d);return n.getDate();}
+        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const d=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=d;i++){const e=document.createElement('div');e.className=`day ${i===todayNum?'day-today':''} ${(db[i]&&db[i].length)?'has-event':''}`;e.innerText=i;e.onclick=()=>showDay(i);c.appendChild(e);}}
+        function addTaskManually(){const v=document.getElementById('newTaskInput').value;if(!v)return;db[currentDayOpen]=[...(db[currentDayOpen]||[]),{text:v,done:false}];save();document.getElementById('newTaskInput').value='';}
+        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();showDay(d);}
+        function delTask(d,i){db[d].splice(i,1);save();showDay(d);}
+        function save(){localStorage.setItem('lifeos_v33_db',JSON.stringify(db));localStorage.setItem('lifeos_v33_health',JSON.stringify(health));renderCal();updateScore();}
+        function closeDay(){document.getElementById('dayModal').classList.add('hidden');}
+        function addWater(n){health.water+=n;save();document.getElementById('waterText').innerText=health.water+"L";document.getElementById('waterBar').style.width=Math.min(100,health.water/2.5*100)+"%";}
+        function updateScore(){let t=0,d=0;Object.values(db).forEach(a=>a.forEach(x=>{t++;if(x.done)d++;}));document.getElementById('score').innerText=Math.round((health.water/2.5*40)+(t?d/t*60:0))+"%";}
+        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiter();});
+        updateMusicUI(); renderCal(); updateScore();
     </script>
 </body>
 </html>
