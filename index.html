@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V25 - Automation</title>
+    <title>LifeOS Sovereign V26 - Bio-Sync</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        .glass { background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; }
-        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; }
+        /* Glassmorphism Ultra */
+        .glass { background: rgba(18, 18, 18, 0.65); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; transition: 0.3s; }
+        .glass-panel:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+
+        /* Nutri-Card Special */
+        .nutri-card { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.05) 0%, transparent 100%); }
+        .nutri-carb { border-color: #f97316; background: linear-gradient(90deg, rgba(249,115,22,0.05) 0%, transparent 100%); } /* Orange pour énergie */
+        .nutri-focus { border-color: #8b5cf6; background: linear-gradient(90deg, rgba(139,92,246,0.05) 0%, transparent 100%); } /* Violet pour cerveau */
         
         .day { aspect-ratio: 1; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; transform: translateY(-3px); }
         .day-today { border: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.1); }
         .has-event { border-bottom: 3px solid #3b82f6; }
         
-        .water-progress { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        .water-progress { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
         
-        @keyframes flash-green { 0% { background-color: rgba(34, 197, 94, 0.2); } 100% { background-color: transparent; } }
-        .success-flash { animation: flash-green 1s ease-out; }
+        /* Animations */
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide { animation: slideIn 0.5s ease-out forwards; }
     </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
@@ -28,191 +36,247 @@
     <div class="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <aside class="lg:col-span-3 space-y-6">
-            <div class="glass p-8 space-y-8">
+            <div class="glass p-8 space-y-8 h-full flex flex-col">
                 <h1 class="text-4xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
                 
-                <div class="glass-panel p-6 text-center">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Réveil Optimisé</p>
-                    <p id="wakeTime" class="text-5xl font-black italic text-white">--:--</p>
-                    <p id="wakeReason" class="text-[10px] mt-2 text-blue-400 font-bold">En attente de données</p>
+                <div class="space-y-3">
+                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500">Bio-Fuel Recommandé</p>
+                    <div id="nutriBox" class="glass-panel nutri-card p-6 relative overflow-hidden group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span id="nutriIcon" class="text-2xl">🥗</span>
+                            <span id="nutriTag" class="text-[9px] font-bold bg-white/10 px-2 py-1 rounded-md uppercase">Standard</span>
+                        </div>
+                        <p id="nutriTitle" class="text-lg font-bold leading-tight mb-2">Assiette Équilibrée</p>
+                        <p id="nutriDesc" class="text-xs opacity-60 font-medium leading-relaxed">En attente d'activités pour optimiser...</p>
+                    </div>
                 </div>
 
-                <div class="glass-panel p-6 space-y-4 border-l-2 border-green-500">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-green-500">Nutrition Contextuelle</p>
-                    <div id="mealPlan" class="text-sm font-medium opacity-80 leading-relaxed">Analyse...</div>
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center mb-1">
+                        <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500">Coucher / Lever</p>
+                        <span id="wakeIcon" class="text-xs">🌙</span>
+                    </div>
+                    <p id="wakeTime" class="text-4xl font-black italic text-white">07:30</p>
+                    <p id="wakeReason" class="text-[10px] text-blue-400 font-bold mt-1">Cycle Standard</p>
                 </div>
-            </div>
 
-            <div class="glass p-8 space-y-6">
-                <div class="flex justify-between items-end">
-                    <span class="text-[9px] font-black uppercase text-blue-400">Hydratation</span>
-                    <span id="waterText" class="text-2xl font-black">0L</span>
+                <div class="mt-auto space-y-4">
+                    <div class="flex justify-between items-end">
+                        <span class="text-[9px] font-black uppercase text-blue-400">Hydratation</span>
+                        <span id="waterText" class="text-xl font-bold">0L</span>
+                    </div>
+                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div id="waterBar" class="water-progress h-full w-0"></div>
+                    </div>
+                    <button onclick="addWater(0.5)" class="w-full py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95">+ 500ml</button>
                 </div>
-                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div id="waterBar" class="water-progress h-full w-0"></div>
-                </div>
-                <button onclick="addWater(0.5)" class="w-full py-3 glass-panel hover:bg-blue-500/20 text-[10px] font-bold transition-all uppercase">+ Gourde 50cl</button>
             </div>
         </aside>
 
         <main class="lg:col-span-6 space-y-6">
-            <div id="inputZone" class="glass p-10 relative transition-colors duration-500">
-                <div class="flex justify-between items-center mb-8">
-                    <span class="bg-blue-500/10 text-blue-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Auto-Injection V25</span>
-                    <p id="statusMsg" class="text-xs font-bold text-green-400 opacity-0 transition-opacity">Tâche ajoutée avec succès ✔</p>
+            <div id="inputZone" class="glass p-10 relative transition-all duration-300">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-black text-[10px] uppercase tracking-widest">Neural Injection V26</span>
+                    <div id="successMsg" class="opacity-0 text-[10px] font-bold text-green-400 transition-opacity">Donnée Synchronisée ✔</div>
                 </div>
                 
-                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-10 placeholder:opacity-20 min-h-[140px] resize-none" placeholder="Ex: Match demain à 10h... (Ça s'ajoute tout seul)"></textarea>
+                <textarea id="userInput" class="w-full bg-transparent outline-none text-3xl font-light mb-8 placeholder:opacity-20 min-h-[120px] resize-none" placeholder="Ex: Match de tennis demain matin..."></textarea>
                 
                 <div class="flex gap-4">
-                    <button onclick="traiter()" id="btnMain" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all shadow-xl">Exécuter & Injecter</button>
-                    <button onclick="toggleVoice()" id="voiceBtn" class="w-14 glass-panel flex items-center justify-center text-xl hover:text-blue-400 transition-all">🎤</button>
+                    <button onclick="traiter()" class="flex-1 bg-white text-black hover:bg-zinc-200 py-4 rounded-xl uppercase text-[11px] font-black tracking-widest transition-all shadow-lg hover:shadow-white/20 active:scale-95">Injecter au Planning</button>
+                    <button onclick="toggleVoice()" id="voiceBtn" class="w-16 glass-panel flex items-center justify-center text-2xl hover:text-blue-400 transition-all">🎤</button>
                 </div>
             </div>
 
             <div class="glass p-8 min-h-[150px]">
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-4">Urgences Détectées</h3>
-                <div id="alertBox" class="space-y-2"></div>
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-4">Radar Temporel (Urgences)</h3>
+                <div id="alertBox" class="grid gap-2"></div>
             </div>
         </main>
 
         <aside class="lg:col-span-3 glass p-8 flex flex-col">
             <h2 class="font-black text-xl italic uppercase mb-8">Roadmap</h2>
             <div id="calendar" class="grid grid-cols-7 gap-2 mb-8"></div>
-            <div class="mt-auto pt-6 border-t border-white/5">
-                <p class="text-[9px] font-black uppercase opacity-30 mb-2">Vitalité Globale</p>
-                <span id="score" class="text-6xl font-black text-blue-500 italic">0%</span>
+            
+            <div class="mt-auto border-t border-white/5 pt-6">
+                 <p class="text-[9px] font-black uppercase opacity-30 mb-2">Score Global</p>
+                 <div class="flex items-baseline gap-2">
+                     <span id="score" class="text-6xl font-black text-blue-500 italic">0%</span>
+                     <span class="text-xs opacity-50">OPTIMISÉ</span>
+                 </div>
             </div>
         </aside>
     </div>
 
     <div id="dayModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-        <div class="glass p-8 max-w-lg w-full relative">
+        <div class="glass p-8 max-w-lg w-full">
             <div class="flex justify-between items-center mb-8">
-                <h2 id="modalDate" class="text-3xl font-black italic capitalize">Date</h2>
-                <button onclick="closeDay()" class="text-zinc-500 hover:text-white text-xl">✕</button>
+                <h2 id="modalDate" class="text-3xl font-black italic capitalize text-blue-500">Date</h2>
+                <button onclick="closeDay()" class="text-zinc-500 hover:text-white text-xl transition-transform hover:rotate-90">✕</button>
             </div>
             <div class="flex gap-2 mb-6">
-                <input type="text" id="newTaskInput" placeholder="Ajout manuel..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 outline-none focus:border-blue-500">
-                <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold">+</button>
+                <input type="text" id="newTaskInput" placeholder="Ajout manuel..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all">
+                <button onclick="addTaskManually()" class="bg-blue-600 w-12 rounded-xl font-bold hover:bg-blue-500">+</button>
             </div>
-            <div id="taskList" class="space-y-3 max-h-[400px] overflow-y-auto"></div>
+            <div id="taskList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v25_db') || "{}");
-        let health = JSON.parse(localStorage.getItem('lifeos_v25_health') || '{"water":0}');
+        // CONFIGURATION & ETAT
+        let db = JSON.parse(localStorage.getItem('lifeos_v26_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v26_health') || '{"water":0}');
         const now = new Date();
         const todayNum = now.getDate();
+        let currentDayOpen = null;
 
-        // 1. LE COEUR DU SYSTEME : PARSEUR NLP AUTOMATIQUE
-        function traiter() {
-            const rawInput = document.getElementById('userInput').value;
-            if(!rawInput.trim()) return;
+        // --- MOTEUR NUTRITIONNEL AVANCÉ (V26) ---
+        function calculateNutrition() {
+            const todayTasks = (db[todayNum] || []).map(t => t.text.toLowerCase()).join(' ');
+            const tomorrowTasks = (db[todayNum + 1] || []).map(t => t.text.toLowerCase()).join(' ');
+            
+            const box = document.getElementById('nutriBox');
+            const title = document.getElementById('nutriTitle');
+            const desc = document.getElementById('nutriDesc');
+            const icon = document.getElementById('nutriIcon');
+            const tag = document.getElementById('nutriTag');
+            
+            // RESET STYLE
+            box.className = "glass-panel nutri-card p-6 relative overflow-hidden group";
 
-            let targetDay = todayNum; // Par défaut aujourd'hui
-            let cleanText = rawInput;
-            const lowerInput = rawInput.toLowerCase();
-
-            // DÉTECTION INTELLIGENTE DE LA DATE
-            if (lowerInput.includes('demain')) {
-                targetDay = todayNum + 1;
-                cleanText = rawInput.replace(/demain/gi, '').trim();
-            } else if (lowerInput.includes('après-demain') || lowerInput.includes('apres demain')) {
-                targetDay = todayNum + 2;
-                cleanText = rawInput.replace(/après-demain|apres demain/gi, '').trim();
-            } else {
-                // Détection de "le 28", "le 5", etc.
-                const dateMatch = lowerInput.match(/le (\d{1,2})/);
-                if (dateMatch) {
-                    targetDay = parseInt(dateMatch[1]);
-                    cleanText = rawInput.replace(/le \d{1,2}/gi, '').trim();
-                }
+            // LOGIQUE DE DÉCISION
+            if (tomorrowTasks.includes('sport') || tomorrowTasks.includes('match') || tomorrowTasks.includes('course')) {
+                // CAS 1 : SPORT DEMAIN -> CARB LOAD CE SOIR
+                box.classList.add('nutri-carb');
+                icon.innerText = "🍝";
+                tag.innerText = "Préparation J+1";
+                title.innerText = "Dîner : Charge Glucidique";
+                desc.innerText = "Mangez des pâtes ou du riz ce soir. Votre corps a besoin de stocker du glycogène pour la performance de demain.";
+            } 
+            else if (todayTasks.includes('sport') || todayTasks.includes('gym') || todayTasks.includes('foot')) {
+                // CAS 2 : SPORT AUJOURD'HUI -> RECUPERATION
+                box.classList.add('nutri-carb');
+                icon.innerText = "🥩";
+                tag.innerText = "Récupération & Force";
+                title.innerText = "Post-Effort : Protéines";
+                desc.innerText = "Poulet, Œufs ou Whey après la séance. Accompagnez de patates douces pour refaire le stock d'énergie.";
             }
-
-            // GESTION DES DEBORDEMENTS DE MOIS (Basique pour démo)
-            if (targetDay > 31) targetDay = 1; 
-
-            // INJECTION DANS LA BASE DE DONNEES
-            db[targetDay] = [...(db[targetDay] || []), { text: cleanText, done: false }];
-            
-            // FEEDBACK UTILISATEUR
-            save();
-            document.getElementById('userInput').value = '';
-            
-            // Animation de succès
-            const msg = document.getElementById('statusMsg');
-            const zone = document.getElementById('inputZone');
-            msg.style.opacity = '1';
-            zone.classList.add('success-flash');
-            setTimeout(() => { msg.style.opacity = '0'; zone.classList.remove('success-flash'); }, 2000);
+            else if (todayTasks.includes('bureau') || todayTasks.includes('réunion') || todayTasks.includes('code') || todayTasks.includes('cours')) {
+                // CAS 3 : TRAVAIL MENTAL -> BRAIN FOOD
+                box.classList.add('nutri-focus');
+                icon.innerText = "🐟";
+                tag.innerText = "Focus Cognitif";
+                title.innerText = "Déjeuner : Omega-3 & Léger";
+                desc.innerText = "Saumon, Avocat et Légumes verts. Évitez les grosses pâtes le midi pour ne pas dormir devant l'écran.";
+            }
+            else {
+                // CAS 4 : STANDARD
+                icon.innerText = "🥗";
+                tag.innerText = "Maintenance";
+                title.innerText = "Assiette Équilibrée";
+                desc.innerText = "1/2 Légumes, 1/4 Protéines, 1/4 Féculents. Hydratez-vous bien.";
+            }
         }
 
-        // --- MOTEURS AUXILIAIRES ---
-
-        function updateEverything() {
-            renderCalendar();
-            calculateWakeUp();
-            calculateBioFuel();
-            scanUrgencies();
-            updateWaterUI();
-            updateScore();
-        }
-
+        // --- MOTEUR DE RÉVEIL PREDICTIF ---
         function calculateWakeUp() {
-            const tasks = db[todayNum + 1] || [];
-            let wake = "08:00"; let reason = "Repos";
-            tasks.forEach(t => {
-                const m = t.text.match(/(\d{1,2})[h:]/);
-                if(m) {
-                    const h = parseInt(m[1]);
-                    if(h < 10) { wake = `${(h-1).toString().padStart(2,'0')}:30`; reason = `Mission à ${h}h`; }
+            const tmrTasks = db[todayNum + 1] || [];
+            let wake = "08:00"; let reason = "Cycle Naturel";
+            
+            tmrTasks.forEach(t => {
+                // Cherche "09h00", "9h", "9:00"
+                const match = t.text.match(/(\d{1,2})[h:](\d{2})?/);
+                if(match) {
+                    const h = parseInt(match[1]);
+                    // Si mission avant 10h, on décale le réveil
+                    if(h < 10) {
+                        let wakeH = h - 2; // 2h avant
+                        let wakeM = match[2] ? parseInt(match[2]) : 0;
+                        // Ajustement fin (ex: 8h -> 6h30 pour avoir le temps)
+                        if (wakeM === 0) { wakeM = 30; wakeH -= 1; }
+                        
+                        wake = `${wakeH.toString().padStart(2,'0')}:${wakeM.toString().padStart(2,'0')}`;
+                        reason = `Optimisé pour mission de ${h}h`;
+                    }
                 }
             });
             document.getElementById('wakeTime').innerText = wake;
             document.getElementById('wakeReason').innerText = reason;
         }
 
-        function calculateBioFuel() {
-            const txt = JSON.stringify(db[todayNum] || []).toLowerCase();
-            const el = document.getElementById('mealPlan');
-            if(txt.includes('sport') || txt.includes('match') || txt.includes('gym')) {
-                el.innerHTML = '<span class="text-orange-400 font-bold">🔥 Carb-Load</span><br>Pâtes complètes / Poulet / Banane';
-            } else if(txt.includes('réunion') || txt.includes('bureau') || txt.includes('cours')) {
-                el.innerHTML = '<span class="text-blue-400 font-bold">🧠 Brain Food</span><br>Poisson gras / Légumes / Noix';
+        // --- MOTEUR D'INJECTION AUTOMATIQUE (NLP) ---
+        function traiter() {
+            const input = document.getElementById('userInput');
+            const txt = input.value;
+            if(!txt.trim()) return;
+
+            let targetDay = todayNum;
+            let finalTxt = txt;
+            let lower = txt.toLowerCase();
+
+            // Détection temporelle
+            if (lower.includes('demain')) {
+                targetDay = todayNum + 1;
+                finalTxt = txt.replace(/demain/gi, '').trim();
+            } else if (lower.includes('après-demain')) {
+                targetDay = todayNum + 2;
+                finalTxt = txt.replace(/après-demain/gi, '').trim();
             } else {
-                el.innerHTML = '<span class="opacity-50">Standard équilibré</span>';
+                // Regex pour "le 25"
+                const dateMatch = lower.match(/le (\d{1,2})/);
+                if(dateMatch) {
+                    targetDay = parseInt(dateMatch[1]);
+                    finalTxt = txt.replace(/le \d{1,2}/gi, '').trim();
+                }
             }
+
+            // Injection
+            db[targetDay] = [...(db[targetDay] || []), { text: finalTxt, done: false }];
+            
+            // Feedback UI
+            save();
+            input.value = '';
+            const msg = document.getElementById('successMsg');
+            msg.style.opacity = '1';
+            setTimeout(() => msg.style.opacity = '0', 2000);
         }
 
-        function scanUrgencies() {
+        // --- MOTEUR UI & DATA ---
+        function updateAll() {
+            renderCal();
+            calculateNutrition(); // V26 New Feature
+            calculateWakeUp();
+            scanAlerts();
+            updateWater();
+        }
+
+        function scanAlerts() {
             let html = '';
+            // Check retards
             for(let i=1; i<todayNum; i++) {
-                if(db[i] && db[i].some(t => !t.done)) html += `<div class="text-red-400 text-xs font-bold border-l-2 border-red-500 pl-3">Retard J-${todayNum-i}</div>`;
+                if(db[i] && db[i].some(t => !t.done)) {
+                    html += `<div class="p-3 bg-red-500/10 border-l-2 border-red-500 text-xs text-red-400 font-bold animate-pulse">⚠️ Retard du ${i} non traité</div>`;
+                }
             }
-            document.getElementById('alertBox').innerHTML = html || '<div class="opacity-20 text-xs italic text-center">R.A.S</div>';
+            document.getElementById('alertBox').innerHTML = html || '<div class="text-center py-6 opacity-20 text-xs italic">Aucune urgence détectée.</div>';
         }
 
         function addWater(n) { health.water += n; save(); }
-        function updateWaterUI() {
+        function updateWater() {
             document.getElementById('waterText').innerText = health.water + "L";
-            document.getElementById('waterBar').style.width = (health.water/2.5*100) + "%";
-        }
-        function updateScore() {
-            let tasksDone = 0; let total = 0;
-            Object.values(db).forEach(day => day.forEach(t => { total++; if(t.done) tasksDone++; }));
-            const wScore = Math.min(100, (health.water/2.5)*40);
-            const tScore = total ? (tasksDone/total)*60 : 0;
-            document.getElementById('score').innerText = Math.round(wScore + tScore) + "%";
+            document.getElementById('waterBar').style.width = Math.min(100, (health.water/2.5)*100) + "%";
+            // Score
+            let total=0, done=0;
+            Object.values(db).forEach(arr => arr.forEach(t => { total++; if(t.done) done++; }));
+            const score = Math.round((health.water/2.5*40) + (total ? done/total*60 : 0));
+            document.getElementById('score').innerText = Math.min(100, score) + "%";
         }
 
-        // CALENDRIER
-        function renderCalendar() {
+        function renderCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML = '';
             const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
             for(let i=1; i<=days; i++) {
-                const hasTask = db[i] && db[i].length > 0;
+                const hasTask = db[i] && db[i].length;
                 const d = document.createElement('div');
                 d.className = `day ${i===todayNum ? 'day-today' : ''} ${hasTask ? 'has-event' : ''}`;
                 d.innerText = i;
@@ -222,37 +286,39 @@
         }
 
         function showDay(day) {
-            currentDay = day;
+            currentDayOpen = day;
             const tasks = db[day] || [];
             document.getElementById('modalDate').innerText = `${day} / ${now.getMonth()+1}`;
             document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
-                <div class="bg-white/5 p-4 rounded-xl flex justify-between items-center group">
+                <div class="glass-panel p-4 flex justify-between items-center group animate-slide" style="animation-delay: ${i*50}ms">
                     <div class="flex items-center gap-3">
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5">
-                        <span class="${t.done ? 'line-through opacity-30' : ''}">${t.text}</span>
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${day},${i})" class="accent-blue-500 w-5 h-5 cursor-pointer">
+                        <span class="${t.done ? 'line-through opacity-30' : 'font-medium'}">${t.text}</span>
                     </div>
-                    <button onclick="delTask(${day},${i})" class="text-red-500 opacity-0 group-hover:opacity-100">✕</button>
+                    <button onclick="delTask(${day},${i})" class="opacity-0 group-hover:opacity-100 text-red-500 hover:scale-110 transition-transform">✕</button>
                 </div>
-            `).join('') || '<p class="opacity-30 text-center text-sm">Vide</p>';
+            `).join('') || '<p class="opacity-30 text-center italic text-sm">Aucune donnée.</p>';
             document.getElementById('dayModal').classList.remove('hidden');
         }
 
-        function save() { localStorage.setItem('lifeos_v25_db', JSON.stringify(db)); localStorage.setItem('lifeos_v25_health', JSON.stringify(health)); updateEverything(); }
-        
         function addTaskManually() {
             const val = document.getElementById('newTaskInput').value;
             if(!val) return;
-            db[currentDay] = [...(db[currentDay] || []), {text: val, done: false}];
+            db[currentDayOpen] = [...(db[currentDayOpen] || []), {text: val, done: false}];
             save(); document.getElementById('newTaskInput').value = '';
         }
+
         function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); showDay(d); }
         function delTask(d,i) { db[d].splice(i,1); save(); showDay(d); }
+        function save() { 
+            localStorage.setItem('lifeos_v26_db', JSON.stringify(db)); 
+            localStorage.setItem('lifeos_v26_health', JSON.stringify(health));
+            updateAll();
+        }
         function closeDay() { document.getElementById('dayModal').classList.add('hidden'); }
-        
-        // SUPPORT TOUCHE ENTREE
-        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); traiter(); } });
-        
-        updateEverything();
+        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') traiter(); });
+
+        updateAll();
     </script>
 </body>
 </html>
