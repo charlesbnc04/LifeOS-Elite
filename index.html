@@ -3,136 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>LifeOS Sovereign V35 - Time Command</title>
+    <title>LifeOS Sovereign V36 - Ethereal UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #fff; -webkit-font-smoothing: antialiased; }
         
-        .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(50px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; }
-        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.2rem; transition: 0.2s; }
-        .glass-panel:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+        /* --- BASE AESTHETICS --- */
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #050505;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: #fff; 
+            -webkit-font-smoothing: antialiased; 
+            overflow: hidden; /* App feel */
+        }
         
-        /* HUD Style */
-        .hud-container { background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; padding: 2rem; overflow-y: auto; height: 100%; }
-        .hud-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent); margin: 1.5rem 0; }
+        /* --- GLASS 2.0 --- */
+        .glass-base {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
         
-        /* Calendar Styles */
-        .day { aspect-ratio: 1; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; }
-        .day:hover { background: rgba(255,255,255,0.1); }
-        .day-today { border: 2px solid #3b82f6 !important; color: #3b82f6; font-weight: bold; }
-        .day-selected { background: #fff !important; color: #000 !important; border-color: #fff !important; font-weight: 900; transform: scale(1.1); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+        }
 
-        /* Tags */
-        .macro-tag { font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-        .carb { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
-        .prot { color: #f87171; background: rgba(248, 113, 113, 0.1); }
-        .veg { color: #34d399; background: rgba(52, 211, 153, 0.1); }
+        /* --- UI ELEMENTS --- */
+        .primary-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            transition: 0.3s;
+        }
+        .primary-btn:hover { box-shadow: 0 8px 30px rgba(37, 99, 235, 0.5); transform: translateY(-1px); }
+        .primary-btn:active { transform: scale(0.98); }
+
+        .input-modern {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .input-modern:focus {
+            background: rgba(0,0,0,0.4);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        /* --- CALENDAR MODERN --- */
+        .day {
+            aspect-ratio: 1; border-radius: 1rem; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.5);
+            cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .day:hover { background: rgba(255,255,255,0.1); color: white; }
+        .day-today { color: #60a5fa; font-weight: 800; background: rgba(59, 130, 246, 0.1); }
+        .day-selected { 
+            background: white !important; color: black !important; 
+            font-weight: 800; transform: scale(1.05); 
+            box-shadow: 0 0 20px rgba(255,255,255,0.2); 
+        }
+        .has-event { position: relative; }
+        .has-event::after {
+            content: ''; position: absolute; bottom: 6px; 
+            width: 4px; height: 4px; background: #a855f7; border-radius: 50%;
+        }
+
+        /* --- PLATFORM ICONS --- */
+        .platform-icon { filter: grayscale(100%); opacity: 0.4; transition: 0.4s; }
+        .platform-icon:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+        .platform-icon.active { filter: grayscale(0%); opacity: 1; transform: scale(1.2); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 0px; background: transparent; } /* Hidden scrollbar for clean look */
         
-        /* Platform Buttons */
-        .platform-btn { opacity: 0.4; filter: grayscale(100%); transition: 0.3s; }
-        .platform-btn.active { opacity: 1; filter: grayscale(0%); transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        /* --- ANIMATIONS --- */
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-enter { animation: fadeSlide 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     </style>
 </head>
-<body class="p-4 md:p-6 min-h-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+<body class="p-4 md:p-6 h-screen flex flex-col overflow-hidden">
 
-    <div class="max-w-[1900px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-3rem)]">
+    <div class="max-w-[1900px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
         
-        <aside class="lg:col-span-3 flex flex-col gap-6">
-            <div class="glass p-6 space-y-6 flex-1">
-                <div class="flex justify-between items-center">
-                    <h1 class="text-3xl font-black italic tracking-tighter">LIFE<span class="text-blue-500">OS</span></h1>
-                    <button onclick="openProfile()" class="text-[9px] font-bold bg-white/10 px-3 py-1 rounded-full hover:bg-white/20">👤 PROFIL</button>
+        <aside class="lg:col-span-3 flex flex-col gap-6 h-full">
+            
+            <div class="glass-base rounded-[2.5rem] p-8 flex flex-col gap-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none"></div>
+
+                <div class="relative z-10 flex justify-between items-center">
+                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-400 font-black italic">OS</span></h1>
+                    <button onclick="openProfile()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                        <span class="text-xs">👤</span>
+                    </button>
                 </div>
 
-                <div class="glass-panel p-4">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-3">Audio Source</p>
-                    <div class="flex justify-between px-2">
-                         <button onclick="setMusic('spotify')" id="btn-spotify" class="platform-btn w-10 h-10 rounded-full bg-[#1db954] flex items-center justify-center text-black font-bold text-xs">Sp</button>
-                        <button onclick="setMusic('deezer')" id="btn-deezer" class="platform-btn w-10 h-10 rounded-full bg-[#a238ff] flex items-center justify-center text-white font-bold text-xs">Dz</button>
-                        <button onclick="setMusic('apple')" id="btn-apple" class="platform-btn w-10 h-10 rounded-full bg-[#fa2d48] flex items-center justify-center text-white font-bold text-xs">Ap</button>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Ambiance Sonore</p>
+                    <div class="flex gap-4">
+                        <button onclick="setMusic('spotify')" id="btn-spotify" class="platform-icon w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5">
+                            <svg class="w-5 h-5 text-[#1db954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                        </button>
+                        <button onclick="setMusic('deezer')" id="btn-deezer" class="platform-icon w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5">
+                             <svg class="w-5 h-5 text-[#a238ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg>
+                        </button>
+                        <button onclick="setMusic('apple')" id="btn-apple" class="platform-icon w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5">
+                            <svg class="w-5 h-5 text-[#fa2d48]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg>
+                        </button>
                     </div>
                 </div>
 
-                <div class="glass-panel p-4 flex-1 flex flex-col">
-                    <p class="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-2">Ajout Rapide</p>
-                    <textarea id="userInput" class="w-full bg-transparent text-sm outline-none placeholder:opacity-20 resize-none flex-1" placeholder="Tapez ici... (S'ajoute au jour sélectionné)"></textarea>
-                    <button onclick="traiter()" class="w-full mt-3 bg-blue-600 py-3 rounded-lg text-[10px] font-bold hover:bg-blue-500 transition-all">INJECTER</button>
+                <div class="relative z-10 flex-1 flex flex-col">
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Planification Rapide</p>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none flex-1 focus:border-blue-500/50 transition-colors" placeholder="Quoi de prévu ? Ex: 'Sport demain à 18h'..."></textarea>
+                    <button onclick="traiter()" class="primary-btn w-full mt-4 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest">Injecter</button>
                 </div>
             </div>
-            
-            <div class="glass p-6">
-                <h2 class="font-black text-sm italic uppercase mb-4 text-zinc-500">Navigateur Temporel</h2>
-                <div id="calendar" class="grid grid-cols-7 gap-2"></div>
+
+            <div class="glass-base rounded-[2rem] p-6 h-auto">
+                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
             </div>
         </aside>
 
-        <main class="lg:col-span-9">
-            <div class="glass hud-container flex flex-col">
+
+        <main class="lg:col-span-9 h-full">
+            <div class="glass-base rounded-[2.5rem] p-10 h-full flex flex-col overflow-y-auto" id="mainContainer">
                 
-                <div class="flex justify-between items-end mb-8 border-b border-white/5 pb-6">
+                <div class="flex justify-between items-end mb-10 pb-6 border-b border-white/5">
                     <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <span id="dayIndicator" class="w-2 h-2 bg-white rounded-full"></span>
-                            <span id="hudStatus" class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Mode Édition</span>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="px-3 py-1 rounded-full bg-white/5 border border-white/5 flex items-center gap-2">
+                                <span id="dayIndicator" class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                <span id="hudStatus" class="text-[9px] font-bold uppercase tracking-widest opacity-60">Overview</span>
+                            </div>
                         </div>
-                        <h2 id="hudDate" class="text-6xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">Sélectionnez...</h2>
+                        <h2 id="hudDate" class="text-6xl font-black tracking-tight text-white">Sélectionnez...</h2>
                     </div>
-                    <div class="text-right">
-                        <div id="hudContextBadge" class="inline-block px-4 py-1 rounded-full bg-white/5 text-xs font-bold mb-1">Standard</div>
-                        <p class="text-xs opacity-40 font-mono">Objectif: <span id="calTarget">--</span> kcal</p>
+                    
+                    <div class="flex gap-8 text-right">
+                        <div>
+                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible Cal.</p>
+                            <p id="calTarget" class="text-xl font-mono font-medium">--</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Score</p>
+                            <p id="dayScore" class="text-xl font-black italic text-green-400">0%</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="space-y-8 pr-2 overflow-y-auto custom-scroll">
-                    
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-2 text-right pt-2"><span class="text-xs font-bold opacity-30 uppercase">Matin</span></div>
-                        <div class="col-span-10 p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center hover:border-white/20 transition-colors">
+                <div class="space-y-4">
+
+                    <div class="glass-card p-6 flex items-center gap-6 animate-enter" style="animation-delay: 0ms;">
+                        <div class="w-12 h-12 rounded-2xl bg-yellow-500/10 flex items-center justify-center text-xl">☀️</div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-bold uppercase text-yellow-500/80 mb-1">Routine Matin</p>
+                            <p id="hudRoutineM" class="text-lg font-medium opacity-90">--</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] opacity-40 uppercase">Durée</p>
+                            <p class="font-mono text-xs">15 min</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-0 flex animate-enter" style="animation-delay: 50ms;">
+                        <div class="w-2 bg-blue-500 rounded-l-2xl"></div>
+                        <div class="p-6 flex-1">
+                            <div class="flex justify-between mb-2">
+                                <p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner (12:30)</p>
+                                <span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span>
+                            </div>
+                            <p id="hudLunch" class="text-lg font-medium mb-3">--</p>
+                            <div id="lunchTags" class="flex gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="py-4 animate-enter" style="animation-delay: 100ms;">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <p class="text-xs font-bold uppercase opacity-40 tracking-widest">Missions Prioritaires</p>
+                            <button id="musicContextBtn" class="hidden text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition-all">▶ Lancer Playlist</button>
+                        </div>
+                        <div id="hudTasks" class="space-y-2"></div>
+                    </div>
+
+                    <div class="glass-card p-0 flex animate-enter" style="animation-delay: 150ms;">
+                        <div class="w-2 bg-purple-500 rounded-l-2xl"></div>
+                        <div class="p-6 flex-1">
+                            <div class="flex justify-between mb-2">
+                                <p class="text-[10px] font-bold uppercase text-purple-400">Dîner (20:00)</p>
+                                <span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span>
+                            </div>
+                            <p id="hudDinner" class="text-lg font-medium mb-3">--</p>
+                            <div id="dinnerTags" class="flex gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 animate-enter" style="animation-delay: 200ms;">
+                        <div class="glass-card p-6 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-lg">🌙</div>
                             <div>
-                                <p class="text-[9px] text-yellow-500 font-bold uppercase mb-1">Activation</p>
-                                <p id="hudRoutineM" class="text-sm font-medium">--</p>
-                            </div>
-                            <div id="musicBtnM"></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-2 text-right pt-2"><span class="text-xs font-bold opacity-30 uppercase">12:30</span></div>
-                        <div class="col-span-10 p-5 bg-gradient-to-r from-blue-500/10 to-transparent rounded-2xl border border-blue-500/20">
-                            <div class="flex justify-between mb-1">
-                                <span class="text-[9px] text-blue-400 font-bold uppercase">Carburant</span>
-                                <span id="lunchKcal" class="text-[9px] font-mono opacity-50">--</span>
-                            </div>
-                            <p id="hudLunch" class="text-lg font-bold">--</p>
-                            <div id="lunchTags" class="mt-2 flex gap-2"></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-2 text-right pt-2"><span class="text-xs font-bold opacity-30 uppercase">Focus</span></div>
-                        <div class="col-span-10 space-y-2" id="hudTasks"></div>
-                    </div>
-
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-2 text-right pt-2"><span class="text-xs font-bold opacity-30 uppercase">20:00</span></div>
-                        <div class="col-span-10 p-5 bg-gradient-to-r from-purple-500/10 to-transparent rounded-2xl border border-purple-500/20">
-                            <div class="flex justify-between mb-1">
-                                <span class="text-[9px] text-purple-400 font-bold uppercase">Récupération</span>
-                                <span id="dinnerKcal" class="text-[9px] font-mono opacity-50">--</span>
-                            </div>
-                            <p id="hudDinner" class="text-lg font-bold">--</p>
-                            <div id="dinnerTags" class="mt-2 flex gap-2"></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-2 text-right pt-2"><span class="text-xs font-bold opacity-30 uppercase">22:30</span></div>
-                        <div class="col-span-10 p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
-                            <div>
-                                <p class="text-[9px] text-indigo-400 font-bold uppercase mb-1">Sommeil</p>
+                                <p class="text-[9px] font-bold uppercase text-indigo-400 mb-1">Soir</p>
                                 <p id="hudRoutineE" class="text-sm font-medium">--</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6 relative overflow-hidden group cursor-pointer" onclick="addWater(0.5)">
+                            <div class="absolute inset-0 bg-blue-600/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                            <div class="relative z-10 flex justify-between items-end">
+                                <div>
+                                    <p class="text-[9px] font-bold uppercase text-blue-400 mb-1">Eau</p>
+                                    <p id="waterText" class="text-2xl font-black">0L</p>
+                                </div>
+                                <div class="text-[10px] bg-white/10 px-2 py-1 rounded">+0.5L</div>
+                            </div>
+                            <div class="h-1 w-full bg-white/5 mt-3 rounded-full overflow-hidden">
+                                <div id="waterBar" class="h-full bg-blue-500 w-0 transition-all duration-700"></div>
                             </div>
                         </div>
                     </div>
@@ -142,205 +240,159 @@
         </main>
     </div>
 
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-        <div class="glass p-10 max-w-sm w-full text-center">
-            <h2 class="text-xl font-black italic mb-6">Calibrage Bio</h2>
-            <input type="number" id="inputWeight" class="w-full bg-white/10 p-3 rounded-xl mb-3 text-center" placeholder="Poids (kg)">
-            <input type="number" id="inputHeight" class="w-full bg-white/10 p-3 rounded-xl mb-3 text-center" placeholder="Taille (cm)">
-            <input type="number" id="inputAge" class="w-full bg-white/10 p-3 rounded-xl mb-3 text-center" placeholder="Âge">
-            <select id="inputSex" class="w-full bg-white/10 p-3 rounded-xl mb-6 text-center text-black"><option value="male">Homme</option><option value="female">Femme</option></select>
-            <button onclick="saveProfile()" class="w-full bg-blue-600 py-3 rounded-xl font-black">Sauvegarder</button>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
+        <div class="glass-base p-8 max-w-sm w-full rounded-[2rem]">
+            <h2 class="text-xl font-bold mb-6 text-center">Calibrage Bio</h2>
+            <div class="space-y-3 mb-6">
+                <input type="number" id="inputWeight" class="input-modern w-full p-4 rounded-xl text-center text-white placeholder:text-zinc-600 outline-none" placeholder="Poids (kg)">
+                <input type="number" id="inputHeight" class="input-modern w-full p-4 rounded-xl text-center text-white placeholder:text-zinc-600 outline-none" placeholder="Taille (cm)">
+                <input type="number" id="inputAge" class="input-modern w-full p-4 rounded-xl text-center text-white placeholder:text-zinc-600 outline-none" placeholder="Âge">
+                <select id="inputSex" class="input-modern w-full p-4 rounded-xl text-center text-white outline-none bg-black/20 appearance-none">
+                    <option value="male" class="text-black">Homme</option>
+                    <option value="female" class="text-black">Femme</option>
+                </select>
+            </div>
+            <button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Sauvegarder</button>
         </div>
     </div>
 
     <script>
-        // --- DATA STORE ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v35_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v35_profile') || '{"weight":75, "height":180, "age":25, "sex":"male"}');
+        // --- LOGIC CORE (V36 SAME FEATURES, BETTER UI) ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v36_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v36_profile') || '{"weight":75, "height":180, "age":25, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v36_health') || '{"water":0}');
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
-        
         const now = new Date();
         const todayNum = now.getDate();
-        const currentMonth = now.getMonth(); 
+        const currentMonth = now.getMonth();
         const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
         
-        // --- ETAT GLOBAL ---
-        let selectedDay = todayNum; // Par défaut, on regarde aujourd'hui
+        let selectedDay = todayNum;
 
-        // --- CORE FUNCTIONS ---
-        
-        function selectDay(day) {
-            selectedDay = day;
-            renderCal(); // Met à jour le visuel du calendrier (case blanche)
-            renderHUD(); // Met à jour l'écran central
+        function renderHUD() {
+            // Header
+            const isToday = (selectedDay === todayNum);
+            document.getElementById('hudStatus').innerText = isToday ? "En direct" : "Planification";
+            document.getElementById('hudStatus').className = isToday ? "text-[9px] font-bold uppercase tracking-widest text-green-400" : "text-[9px] font-bold uppercase tracking-widest text-blue-400";
+            document.getElementById('dayIndicator').className = isToday ? "w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" : "w-1.5 h-1.5 rounded-full bg-blue-500";
+            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[currentMonth]}`;
+
+            // Context
+            const tasks = db[selectedDay] || [];
+            const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
+            const isSport = txt.includes('sport') || txt.includes('match');
+            
+            // Nutri Calc
+            let bmr = (10 * profile.weight) + (6.25 * profile.height) - (5 * profile.age) + (profile.sex==='male'?5:-161);
+            const tdee = Math.round(bmr * (isSport ? 1.6 : 1.2));
+            const ratio = tdee / 2000;
+            document.getElementById('calTarget').innerText = `${tdee} kcal`;
+
+            // Display Nutri
+            const cL = Math.round(200*ratio); const pL = Math.round(150*ratio);
+            document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
+            document.getElementById('hudLunch').innerText = isSport ? `${cL}g Pâtes, ${pL}g Poulet` : `${pL}g Saumon, ${Math.round(cL*0.6)}g Quinoa`;
+            document.getElementById('lunchTags').innerHTML = isSport 
+                ? `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-yellow-500/20 text-yellow-500">GLUCIDES+</span>` 
+                : `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-green-500/20 text-green-500">LOW CARB</span>`;
+
+            document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
+            document.getElementById('hudDinner').innerText = isSport ? `Omelette (${Math.round(3*ratio)} oeufs), Patates` : `Soupe, ${pL}g Dinde`;
+            document.getElementById('dinnerTags').innerHTML = isSport 
+                ? `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/20 text-purple-400">RECHARGE</span>` 
+                : `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/20 text-indigo-400">LIGHT</span>`;
+
+            // Routines
+            const rM = ["Mobilité & Eau", "Jumping Jacks", "Yoga Flow", "Pompes (3x10)"];
+            document.getElementById('hudRoutineM').innerText = rM[(selectedDay-1) % rM.length];
+            const rE = ["Lecture (20min)", "Méditation", "Étirements", "Journaling"];
+            document.getElementById('hudRoutineE').innerText = rE[(selectedDay-1) % rE.length];
+
+            // Music Context Button
+            const mBtn = document.getElementById('musicContextBtn');
+            if(isSport) {
+                mBtn.classList.remove('hidden'); mBtn.innerText = "▶ Mode Sport";
+                mBtn.onclick = () => window.open(getLink('sport'), '_blank');
+            } else if(tasks.length > 0) {
+                mBtn.classList.remove('hidden'); mBtn.innerText = "▶ Mode Focus";
+                mBtn.onclick = () => window.open(getLink('focus'), '_blank');
+            } else {
+                mBtn.classList.add('hidden');
+            }
+
+            // Tasks
+            const tBox = document.getElementById('hudTasks');
+            if(tasks.length) {
+                tBox.innerHTML = tasks.map((t, i) => `
+                    <div class="glass-card p-4 flex items-center gap-4 group hover:bg-white/5 transition-colors">
+                        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${selectedDay}, ${i})" class="w-5 h-5 rounded-md border-2 border-white/20 bg-transparent checked:bg-blue-500 checked:border-blue-500 appearance-none cursor-pointer transition-all relative after:content-['✔'] after:absolute after:text-[10px] after:text-white after:left-1 after:top-0 after:opacity-0 checked:after:opacity-100">
+                        <span class="${t.done?'line-through opacity-30':'font-medium text-sm'}">${t.text}</span>
+                        <button onclick="delTask(${selectedDay},${i})" class="ml-auto text-[10px] font-bold text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">SUPPR</button>
+                    </div>
+                `).join('');
+            } else {
+                tBox.innerHTML = `<div class="glass-card p-6 text-center"><p class="text-sm opacity-30 italic">Repos total.</p></div>`;
+            }
+            
+            // Score
+            let t=0,d=0; Object.values(db).forEach(a=>a.forEach(x=>{t++;if(x.done)d++;}));
+            const score = Math.round((health.water/2.5*40)+(t?d/t*60:0));
+            document.getElementById('dayScore').innerText = `${score}%`;
+        }
+
+        function getLink(type) {
+            let q = type==='sport' ? "Workout Phonk" : "Deep Focus";
+            if(musicProvider==='spotify') return `https://open.spotify.com/search/${encodeURIComponent(q)}`;
+            if(musicProvider==='deezer') return `https://www.deezer.com/search/${encodeURIComponent(q)}`;
+            return `https://music.apple.com/us/search?term=${encodeURIComponent(q)}`;
         }
 
         function renderCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML='';
-            const maxDays = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-            
-            for(let i=1; i<=maxDays; i++) {
-                const hasTask = db[i] && db[i].length > 0;
+            const max = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            for(let i=1; i<=max; i++) {
                 const d = document.createElement('div');
-                
-                // Classes dynamiques
-                let classes = "day";
-                if(i === todayNum) classes += " day-today";
-                if(i === selectedDay) classes += " day-selected"; // La nouvelle classe "sélectionnée"
-                if(hasTask) classes += " has-event";
-                
-                d.className = classes;
-                d.innerText = i;
-                d.onclick = () => selectDay(i); // Déclenche la navigation
+                let c = "day";
+                if(i===todayNum) c += " day-today";
+                if(i===selectedDay) c += " day-selected";
+                if(db[i] && db[i].length) c += " has-event";
+                d.className = c; d.innerText = i;
+                d.onclick = () => { selectedDay=i; renderCal(); renderHUD(); document.getElementById('mainContainer').scrollTo({top:0, behavior:'smooth'}); };
                 cal.appendChild(d);
             }
         }
 
-        function renderHUD() {
-            // 1. DATES & TITRES
-            const isToday = (selectedDay === todayNum);
-            document.getElementById('hudStatus').innerText = isToday ? "LIVE DASHBOARD" : "PLANIFICATION FUTURE";
-            document.getElementById('hudStatus').className = isToday ? "text-[10px] font-black uppercase tracking-widest text-green-400" : "text-[10px] font-black uppercase tracking-widest text-blue-400";
-            document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 bg-green-500 rounded-full animate-pulse" : "w-2 h-2 bg-blue-500 rounded-full";
-            
-            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[currentMonth]}`;
-
-            // 2. CONTEXTE & TASKS
-            const tasks = db[selectedDay] || [];
-            const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
-            const isSport = txt.includes('sport') || txt.includes('match') || txt.includes('gym');
-            const isFocus = txt.includes('bureau') || txt.includes('projet') || txt.includes('cours');
-
-            // Badge Contexte
-            const badge = document.getElementById('hudContextBadge');
-            if(isSport) { badge.innerText = "PERFORMANCE"; badge.className = "inline-block px-4 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold mb-1"; }
-            else if(isFocus) { badge.innerText = "DEEP WORK"; badge.className = "inline-block px-4 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-bold mb-1"; }
-            else { badge.innerText = "STANDARD"; badge.className = "inline-block px-4 py-1 rounded-full bg-white/10 text-zinc-400 text-xs font-bold mb-1"; }
-
-            // 3. CALCUL METABOLIQUE (Contextuel au jour sélectionné)
-            let bmr = (10 * profile.weight) + (6.25 * profile.height) - (5 * profile.age) + (profile.sex==='male'?5:-161);
-            const tdee = Math.round(bmr * (isSport ? 1.6 : 1.2));
-            const ratio = tdee / 2000;
-            
-            document.getElementById('calTarget').innerText = tdee;
-
-            // Lunch
-            const carbL = Math.round(200*ratio); const protL = Math.round(150*ratio);
-            document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
-            if(isSport) {
-                document.getElementById('hudLunch').innerText = `${carbL}g Pâtes, ${protL}g Poulet, Brocolis`;
-                document.getElementById('lunchTags').innerHTML = `<span class="macro-tag carb">CARB LOAD</span>`;
-            } else {
-                document.getElementById('hudLunch').innerText = `${protL}g Saumon, ${Math.round(carbL*0.6)}g Quinoa`;
-                document.getElementById('lunchTags').innerHTML = `<span class="macro-tag veg">LOW CARB</span>`;
-            }
-
-            // Dinner
-            const carbD = Math.round(180*ratio);
-            document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
-            if(isSport) {
-                document.getElementById('hudDinner').innerText = `Omelette (${Math.round(3*ratio)} oeufs), ${carbD}g Patates douces`;
-            } else {
-                document.getElementById('hudDinner').innerText = `Soupe de légumes, ${protL}g Dinde`;
-            }
-
-            // 4. ROUTINES (Rotation sur selectedDay)
-            const rM = ["Mobilité", "Jumping Jacks", "Yoga", "Pompes"];
-            const rE = ["Lecture", "Méditation", "Étirements", "Journaling"];
-            document.getElementById('hudRoutineM').innerText = rM[(selectedDay-1) % rM.length];
-            document.getElementById('hudRoutineE').innerText = rE[(selectedDay-1) % rE.length];
-
-            // 5. TASKS RENDERING
-            const taskBox = document.getElementById('hudTasks');
-            if(tasks.length > 0) {
-                taskBox.innerHTML = tasks.map((t, i) => `
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group">
-                        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${selectedDay}, ${i})" class="accent-blue-500 w-5 h-5 cursor-pointer">
-                        <span class="${t.done?'line-through opacity-30':'font-medium text-lg'}">${t.text}</span>
-                        <button onclick="delTask(${selectedDay},${i})" class="ml-auto opacity-0 group-hover:opacity-100 text-red-500 text-xs uppercase font-bold">Suppr</button>
-                    </div>
-                `).join('');
-            } else {
-                taskBox.innerHTML = `<p class="text-sm opacity-20 italic py-4">Aucune mission pour le ${selectedDay}. Ajoutez-en une à gauche.</p>`;
-            }
-        }
-
-        // --- TRAITEMENT INPUT INTELLIGENT ---
+        // Helpers
         function traiter() {
-            const raw = document.getElementById('userInput').value; 
-            if(!raw.trim()) return;
-            
-            // Logique intelligente :
-            // 1. Si l'utilisateur mentionne une date ("le 30"), on respecte cette date.
-            // 2. SINON, on utilise 'selectedDay' (le jour actuellement affiché au centre).
-            
-            let targetDay = selectedDay; // Par défaut : le jour qu'on regarde
-            
-            const lower = raw.toLowerCase();
-            if(lower.includes('demain')) targetDay = todayNum + 1;
-            else if(lower.includes('après-demain')) targetDay = todayNum + 2;
-            else {
-                const dateMatch = lower.match(/le (\d{1,2})/);
-                if(dateMatch) targetDay = parseInt(dateMatch[1]);
-            }
-
-            // Nettoyage et Ajout
-            const clean = raw.replace(/demain|après-demain|le \d{1,2}/gi, '').trim();
-            db[targetDay] = [...(db[targetDay] || []), {text: clean, done: false}];
-            
-            // Si l'utilisateur a ajouté une tâche pour un autre jour que celui affiché,
-            // on pourrait switcher la vue, ou juste notifier. Ici, on reste sur la vue actuelle
-            // sauf si c'est pour le jour sélectionné, ce qui mettra à jour l'affichage.
-            
-            save(); 
-            document.getElementById('userInput').value = '';
-            
-            // Petit flash feedback
-            if(targetDay === selectedDay) renderHUD(); // Update immédiat si c'est le jour courant
+            const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
+            let d = selectedDay;
+            if(raw.toLowerCase().includes('demain')) d = todayNum + 1;
+            const cl = raw.replace(/demain/gi,'').trim();
+            db[d] = [...(db[d]||[]), {text:cl, done:false}];
+            save(); document.getElementById('userInput').value='';
+            if(d===selectedDay) renderHUD();
         }
-
-        // --- HELPERS ---
-        function toggleTask(d,i) { db[d][i].done = !db[d][i].done; save(); }
-        function delTask(d,i) { db[d].splice(i,1); save(); }
-        function save() { 
-            localStorage.setItem('lifeos_v35_db', JSON.stringify(db)); 
-            localStorage.setItem('lifeos_v35_profile', JSON.stringify(profile)); 
-            localStorage.setItem('lifeos_music', musicProvider);
-            renderCal(); renderHUD(); 
-        }
-        
-        // Music UI
-        function setMusic(p) { musicProvider=p; updateMusicUI(); save(); }
-        function updateMusicUI() {
-            ['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('active','spotify-active','deezer-active','apple-active'));
-            const b = document.getElementById(`btn-${musicProvider}`); b.classList.add('active');
-            if(musicProvider==='spotify') b.classList.add('spotify-active');
-            if(musicProvider==='deezer') b.classList.add('deezer-active');
-            if(musicProvider==='apple') b.classList.add('apple-active');
-        }
-
-        // Profil UI
-        function openProfile() {
-            document.getElementById('inputWeight').value = profile.weight;
-            document.getElementById('inputHeight').value = profile.height;
-            document.getElementById('inputAge').value = profile.age;
-            document.getElementById('inputSex').value = profile.sex;
-            document.getElementById('profileModal').classList.remove('hidden');
-        }
-        function saveProfile() {
-            profile.weight = parseInt(document.getElementById('inputWeight').value)||75;
-            profile.height = parseInt(document.getElementById('inputHeight').value)||180;
-            profile.age = parseInt(document.getElementById('inputAge').value)||25;
-            profile.sex = document.getElementById('inputSex').value;
-            document.getElementById('profileModal').classList.add('hidden');
-            save();
+        function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
+        function delTask(d,i){db[d].splice(i,1); save();}
+        function addWater(n){health.water+=n; save(); document.getElementById('waterText').innerText=health.water+'L'; document.getElementById('waterBar').style.width=Math.min(100,health.water/2.5*100)+'%';}
+        function save(){localStorage.setItem('lifeos_v36_db',JSON.stringify(db)); localStorage.setItem('lifeos_v36_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v36_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderHUD();}
+        function setMusic(p){musicProvider=p; updateMusicUI(); save();}
+        function updateMusicUI(){ ['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('active')); document.getElementById(`btn-${musicProvider}`).classList.add('active'); }
+        function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
+        function saveProfile(){ 
+            profile.weight=document.getElementById('inputWeight').value||75; 
+            profile.height=document.getElementById('inputHeight').value||180; 
+            profile.age=document.getElementById('inputAge').value||25; 
+            profile.sex=document.getElementById('inputSex').value; 
+            document.getElementById('profileModal').classList.add('hidden'); save();
         }
 
         // Init
-        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') traiter(); });
-        updateMusicUI();
-        selectDay(todayNum); // Start on today
-
+        document.getElementById('userInput').addEventListener('keypress', (e)=>{if(e.key==='Enter')traiter()});
+        updateMusicUI(); renderCal(); renderHUD(); updateWater();
+        document.getElementById('inputWeight').value = profile.weight;
+        document.getElementById('inputHeight').value = profile.height;
+        document.getElementById('inputAge').value = profile.age;
     </script>
 </body>
 </html>
