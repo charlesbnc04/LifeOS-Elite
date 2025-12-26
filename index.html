@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V39 - Harmonic</title>
+    <title>LifeOS Sovereign V40 - Visionary</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -39,6 +39,23 @@
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .primary-btn:hover { transform: scale(1.02); }
 
+        .video-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .video-btn:hover { background: white; color: black; transform: scale(1.05); }
+
         /* Calendar */
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day:hover { background: rgba(255,255,255,0.1); border-color: white; }
@@ -46,10 +63,9 @@
         .day-selected { background: white !important; color: black !important; font-weight: 900; transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
 
-        /* Water Bar */
         .water-progress { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-
-        /* Animation flash */
+        
+        /* Flash animation */
         @keyframes highlight { 0% { background-color: rgba(59, 130, 246, 0.3); } 100% { background-color: transparent; } }
         .updated-flash { animation: highlight 1s ease-out; }
     </style>
@@ -79,17 +95,12 @@
                 <div class="pt-6 border-t border-white/5">
                     <div class="flex justify-between items-end mb-2">
                         <span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span>
-                        <div>
-                            <span id="waterText" class="text-2xl font-black">0L</span>
-                            <span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span>
-                        </div>
+                        <div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div>
                     </div>
-                    <div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3">
-                        <div id="waterBar" class="water-progress h-full w-0"></div>
-                    </div>
+                    <div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div>
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20 transition-all">+ Verre</button>
-                        <button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20 transition-all">+ Gourde</button>
+                        <button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button>
+                        <button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button>
                     </div>
                 </div>
             </div>
@@ -105,40 +116,34 @@
                             <span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Mode Actif</span>
                         </div>
                         <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
-                        
                         <div id="contextBanner" class="mt-4 flex items-center gap-3">
                             <span class="text-3xl">⚖️</span>
-                            <div>
-                                <p class="text-lg font-bold text-blue-400" id="contextTitle">Mode Standard</p>
-                                <p class="text-xs opacity-50" id="contextSubtitle">Routine d'équilibre</p>
-                            </div>
+                            <div><p class="text-lg font-bold text-blue-400" id="contextTitle">Mode Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Routine d'équilibre</p></div>
                         </div>
                     </div>
-                    
                     <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5">
-                        <div>
-                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p>
-                            <p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p>
-                        </div>
+                        <div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div>
                     </div>
                 </div>
 
                 <div class="space-y-6">
 
-                    <div class="glass-card p-6 flex items-center gap-6 border-l-2 border-yellow-500">
-                        <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-xl">☀️</div>
-                        <div class="flex-1">
-                            <p class="text-[10px] font-bold uppercase text-yellow-500 mb-1">Matin : Activation</p>
-                            <p id="hudRoutineM" class="text-lg font-medium">Chargement...</p>
+                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-yellow-500 group">
+                        <div class="flex items-center gap-6">
+                            <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-xl">☀️</div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase text-yellow-500 mb-1">Routine Matin</p>
+                                <p id="hudRoutineM" class="text-lg font-medium">Chargement...</p>
+                            </div>
                         </div>
-                        <div class="text-right opacity-50 text-xs">Durée: 10 min</div>
+                        <button id="btnRoutineM" class="video-btn">▶ Lancer Séance</button>
                     </div>
 
                     <div class="glass-card p-6 flex flex-col md:flex-row relative overflow-hidden">
                         <div id="lunchColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
                         <div class="flex-1 pl-4">
                             <div class="flex justify-between mb-2">
-                                <p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner (12:30)</p>
+                                <p class="text-[10px] font-bold uppercase text-blue-400">Déjeuner</p>
                                 <span id="lunchKcal" class="text-[10px] font-mono opacity-40">-- kcal</span>
                             </div>
                             <p id="hudLunch" class="text-xl font-bold mb-2">--</p>
@@ -147,9 +152,7 @@
                     </div>
 
                     <div class="glass-card p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <p class="text-xs font-bold uppercase opacity-40 tracking-widest">Programme du Jour</p>
-                        </div>
+                        <div class="flex justify-between items-center mb-4"><p class="text-xs font-bold uppercase opacity-40 tracking-widest">Programme</p></div>
                         <div id="hudTasks" class="space-y-2"></div>
                     </div>
 
@@ -157,7 +160,7 @@
                         <div id="dinnerColorBar" class="absolute left-0 top-0 bottom-0 w-1 bg-purple-500"></div>
                         <div class="flex-1 pl-4">
                             <div class="flex justify-between mb-2">
-                                <p class="text-[10px] font-bold uppercase text-purple-400">Dîner (20:00)</p>
+                                <p class="text-[10px] font-bold uppercase text-purple-400">Dîner</p>
                                 <span id="dinnerKcal" class="text-[10px] font-mono opacity-40">-- kcal</span>
                             </div>
                             <p id="hudDinner" class="text-xl font-bold mb-2">--</p>
@@ -165,13 +168,15 @@
                         </div>
                     </div>
 
-                    <div class="glass-card p-6 flex items-center gap-6 border-l-2 border-indigo-500">
-                        <div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-xl">🌙</div>
-                        <div class="flex-1">
-                            <p class="text-[10px] font-bold uppercase text-indigo-500 mb-1">Soir : Décompression</p>
-                            <p id="hudRoutineE" class="text-lg font-medium">Chargement...</p>
+                    <div class="glass-card p-6 flex items-center justify-between border-l-2 border-indigo-500 group">
+                        <div class="flex items-center gap-6">
+                            <div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-xl">🌙</div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase text-indigo-500 mb-1">Routine Soir</p>
+                                <p id="hudRoutineE" class="text-lg font-medium">Chargement...</p>
+                            </div>
                         </div>
-                        <div class="text-right opacity-50 text-xs">Durée: 15 min</div>
+                        <button id="btnRoutineE" class="video-btn">▶ Lancer Séance</button>
                     </div>
                     
                 </div>
@@ -196,18 +201,15 @@
     </div>
 
     <script>
-        // --- DATA INIT ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v39_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v39_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v39_health') || '{"water":0}');
+        let db = JSON.parse(localStorage.getItem('lifeos_v40_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v40_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v40_health') || '{"water":0}');
         
         const now = new Date();
         const todayNum = now.getDate();
         const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
         let selectedDay = todayNum;
 
-        // --- BASES DE DONNÉES INTELLIGENTES ---
-        
         const mealsDB = {
             sport: {
                 lunch: [{m:"Pâtes + Poulet + Brocolis", r:"Recharge glucidique"}, {m:"Riz + Steak + Haricots", r:"Protéines musculaires"}, {m:"Wrap Thon Complet", r:"Énergie rapide"}],
@@ -223,21 +225,28 @@
             }
         };
 
+        // --- NEW: VIDEO ROUTINE DB ---
         const routinesDB = {
-            sport: { m: "Mobilité Articulaire (5min)", e: "Massage Rouleau / Étirements" },
-            focus: { m: "Méditation (10min)", e: "Lecture papier (Pas d'écran)" },
-            diet: { m: "Marche à jeun / Yoga", e: "Respiration 4-7-8" }
+            sport: { 
+                m: { label: "Mobilité Articulaire (10min)", query: "mobility routine for athletes follow along" },
+                e: { label: "Automassage / Foam Rolling", query: "foam rolling recovery routine follow along" }
+            },
+            focus: { 
+                m: { label: "Méditation Focus (10min)", query: "guided meditation for focus 10 min" },
+                e: { label: "Étirements Cou/Dos", query: "neck and back pain relief exercises desk job" }
+            },
+            diet: { 
+                m: { label: "Yoga Réveil Matin", query: "morning yoga full body stretch 15 min" },
+                e: { label: "Respiration Profonde", query: "deep breathing exercises for relaxation" }
+            }
         };
 
-        // --- CORE LOGIC ---
         function renderHUD() {
-            // Header
             const isToday = (selectedDay === todayNum);
             document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
             document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
             document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
 
-            // Context Analysis
             const tasks = db[selectedDay] || [];
             const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
             
@@ -245,40 +254,45 @@
             if (txt.includes('sport') || txt.includes('crossfit') || txt.includes('match')) mode = 'sport';
             else if (txt.includes('réunion') || txt.includes('bureau') || txt.includes('projet')) mode = 'focus';
 
-            // UI Updates based on Mode
+            // TITRES & COULEURS
             const titles = {sport: "Mode Haute Énergie", focus: "Mode Deep Focus", diet: "Mode Vitalité"};
             const colors = {sport: "text-orange-500", focus: "text-purple-500", diet: "text-green-500"};
             const icons = {sport: "🔥", focus: "🧠", diet: "🌿"};
-            
             document.getElementById('contextTitle').innerText = titles[mode];
             document.getElementById('contextTitle').className = `text-xl font-bold ${colors[mode]}`;
             document.querySelector('#contextBanner span').innerText = icons[mode];
 
-            // Calorie Calculation
+            // TDEE
             let bmr = (10 * profile.weight) + (6.25 * profile.height) - (5 * profile.age) + (profile.sex==='male'?5:-161);
             let activity = mode === 'sport' ? 1.7 : (mode === 'focus' ? 1.3 : 1.2);
             const tdee = Math.round(bmr * activity);
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
 
-            // Meal Selection
+            // REPAS
             const rot = (selectedDay + now.getMonth()) % 3;
             const l = mealsDB[mode].lunch[rot];
             const d = mealsDB[mode].dinner[rot];
-
             document.getElementById('hudLunch').innerText = l.m;
             document.getElementById('lunchReason').innerText = l.r;
             document.getElementById('lunchKcal').innerText = `${Math.round(tdee*0.4)} kcal`;
-            
+            document.getElementById('lunchColorBar').className = mode === 'sport' ? "w-full md:w-2 bg-orange-500 h-2 md:h-auto" : (mode === 'focus' ? "w-full md:w-2 bg-purple-500 h-2 md:h-auto" : "w-full md:w-2 bg-green-500 h-2 md:h-auto");
             document.getElementById('hudDinner').innerText = d.m;
             document.getElementById('dinnerReason').innerText = d.r;
             document.getElementById('dinnerKcal').innerText = `${Math.round(tdee*0.35)} kcal`;
+            document.getElementById('dinnerColorBar').className = mode === 'sport' ? "w-full md:w-2 bg-orange-500 h-2 md:h-auto" : (mode === 'focus' ? "w-full md:w-2 bg-purple-500 h-2 md:h-auto" : "w-full md:w-2 bg-green-500 h-2 md:h-auto");
 
-            // Routine Selection (Restored)
+            // --- ROUTINES VIDÉOS INTELLIGENTES (NEW V40) ---
             const r = routinesDB[mode];
-            document.getElementById('hudRoutineM').innerText = r.m;
-            document.getElementById('hudRoutineE').innerText = r.e;
+            
+            // Matin
+            document.getElementById('hudRoutineM').innerText = r.m.label;
+            document.getElementById('btnRoutineM').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.m.query)}`, '_blank');
+            
+            // Soir
+            document.getElementById('hudRoutineE').innerText = r.e.label;
+            document.getElementById('btnRoutineE').onclick = () => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(r.e.query)}`, '_blank');
 
-            // Tasks List
+            // TACHES
             const tBox = document.getElementById('hudTasks');
             tBox.innerHTML = tasks.length ? tasks.map((t, i) => `
                 <div class="glass-card p-4 flex items-center gap-4 group hover:bg-white/5 transition-colors">
@@ -287,25 +301,24 @@
                     <button onclick="delTask(${selectedDay},${i})" class="ml-auto text-[10px] text-red-500 opacity-0 group-hover:opacity-100">✕</button>
                 </div>`).join('') : `<div class="p-6 text-center border border-dashed border-white/10 rounded-2xl"><p class="text-sm opacity-30 italic">Aucune tâche.</p></div>`;
 
-            // Update Water UI
-            updateWaterUI(mode); // Pass mode to adjust target
+            updateWaterUI(mode);
+            
+            // Flash Animation
+            const main = document.getElementById('main-hud');
+            main.classList.remove('updated-flash');
+            void main.offsetWidth; main.classList.add('updated-flash');
         }
 
-        // --- WATER ENGINE ---
         function addWater(n) { health.water += n; save(); }
         function updateWaterUI(mode) {
-            // Target base: 30ml / kg. +1L if sport.
             let target = (profile.weight * 0.03);
             if(mode === 'sport') target += 1.0;
-            target = Math.round(target * 10) / 10; // Round 1 decimal
-
+            target = Math.round(target * 10) / 10;
             document.getElementById('waterText').innerText = `${health.water}L`;
             document.getElementById('waterTarget').innerText = `/ ${target}L`;
-            const pct = Math.min(100, (health.water / target) * 100);
-            document.getElementById('waterBar').style.width = `${pct}%`;
+            document.getElementById('waterBar').style.width = `${Math.min(100, (health.water / target) * 100)}%`;
         }
 
-        // --- CALENDAR ---
         function renderCal() {
             const cal = document.getElementById('calendar'); cal.innerHTML='';
             const max = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
@@ -321,7 +334,6 @@
             }
         }
 
-        // --- HELPERS ---
         function traiter() {
             const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
             let d = selectedDay;
@@ -332,12 +344,13 @@
             save(); document.getElementById('userInput').value='';
             if(d===selectedDay) renderHUD();
         }
+
         function toggleTask(d,i){db[d][i].done=!db[d][i].done; save();}
         function delTask(d,i){db[d].splice(i,1); save();}
         function save(){
-            localStorage.setItem('lifeos_v39_db',JSON.stringify(db)); 
-            localStorage.setItem('lifeos_v39_profile',JSON.stringify(profile)); 
-            localStorage.setItem('lifeos_v39_health',JSON.stringify(health)); 
+            localStorage.setItem('lifeos_v40_db',JSON.stringify(db)); 
+            localStorage.setItem('lifeos_v40_profile',JSON.stringify(profile)); 
+            localStorage.setItem('lifeos_v40_health',JSON.stringify(health)); 
             renderCal(); renderHUD();
         }
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
@@ -349,7 +362,6 @@
             document.getElementById('profileModal').classList.add('hidden'); save();
         }
 
-        // Init
         document.getElementById('userInput').addEventListener('keypress', (e)=>{if(e.key==='Enter')traiter()});
         renderCal(); renderHUD();
     </script>
