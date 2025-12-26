@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V55 - Chrono-Synthesis</title>
+    <title>LifeOS Sovereign V56 - Precision</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         
-        /* UNIFIED CARD DESIGN */
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); cursor: pointer; }
         .flow-card:hover::after { content: '✎'; position: absolute; top: 10px; right: 10px; opacity: 0.3; font-size: 10px; }
@@ -21,33 +20,22 @@
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
         
-        /* DOT COLORS */
-        .dot-routine { background: #eab308; box-shadow: 0 0 10px #eab308; }
-        .dot-meal { background: #10b981; box-shadow: 0 0 10px #10b981; }
-        .dot-task { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
-        .dot-sport { background: #f97316; box-shadow: 0 0 10px #f97316; }
+        /* COLORS & ACCENTS */
+        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
+        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
+        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
+        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
 
-        /* LIVE LINE */
-        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; }
-        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
-        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
-        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
-
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .action-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
         .action-btn:hover { background: white; color: black; transform: scale(1.05); }
+        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
 
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         
-        /* CARD ACCENTS */
-        .accent-routine { border-left: 3px solid #eab308; }
-        .accent-meal { border-left: 3px solid #10b981; }
-        .accent-task { border-left: 3px solid #3b82f6; }
-        .accent-sport { border-left: 3px solid #f97316; }
+        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -57,10 +45,15 @@
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
-                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Musique</p><div class="flex gap-3"><button onclick="setMusic('spotify')" id="btn-spotify" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-green-500 transition-colors"><svg class="w-5 h-5 text-[#1db954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></button><button onclick="setMusic('deezer')" id="btn-deezer" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-purple-500 transition-colors"><svg class="w-5 h-5 text-[#a238ff]" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 4v9h3V4h-3zm-5.2 5v4h3V9h-3zm10.4 2v10h3V11h-3zm-5.2 3v7h3V14h-3zm-5.2 2v5h3V16h-3z"/></svg></button><button onclick="setMusic('apple')" id="btn-apple" class="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center border border-white/5 hover:border-red-500 transition-colors"><svg class="w-5 h-5 text-[#fa2d48]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.562 16.594c-.281.188-.844.563-1.688.563-1.688 0-2.344-1.313-2.344-2.813V9.375h-2.25v6.563c0 2.531 1.594 3.938 3.938 3.938 1.125 0 2.063-.563 2.344-.75v-2.532zM12.531 6c.844 0 1.5.656 1.5 1.5s-.656 1.5-1.5 1.5-1.5-.656-1.5-1.5.656-1.5 1.5-1.5z"/></svg></button></div></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout (Syntoniseur)</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'J'ai match de foot à 20h' (Devient: Match Foot)"></textarea><button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+                
+                <div class="flex-1">
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Ajout Intelligent</p>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'J'ai match de foot à 20h'&#10;(Devient: Match Foot à 20:00)"></textarea>
+                    <button onclick="traiter()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Injecter</button>
+                </div>
+
+                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
@@ -77,16 +70,12 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer hover:scale-[1.02] transition-transform"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                    
+                    <div onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
                     <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
                 </div>
 
-                <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
-                <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
-
                 <div class="relative pl-4 pt-4">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique (Tout-en-un)</p>
                     <div id="masterTimeline"></div>
                 </div>
 
@@ -94,47 +83,76 @@
         </main>
     </div>
 
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button></div></div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('lifeos_v55_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v55_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v55_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v55_manual_meals') || "{}");
-        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
+        let db = JSON.parse(localStorage.getItem('lifeos_v56_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v56_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v56_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v56_manual_meals') || "{}");
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
 
-        // DATASETS (V54 Enhanced)
+        // DATASETS (Identiques V54 pour contenu)
         const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet", "Lasagnes Boeuf Aubergines", "Chili Con Carne", "Bagel Saumon", "Burger Maison 5%", "Riz Curry Poulet", "Pâtes Thon Tomate", "Hachis Parmentier", "Tortilla Pommes de Terre", "Salade Pâtes Jambon", "Croque-Monsieur Four", "Escalope Milanaise", "Riz Pilaf Dinde", "Pâtes Pesto Rosso", "Fajitas Boeuf", "Gratin Dauphinois Jambon", "Pizza Maison Fine"];
         const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Pommes Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise", "Velouté Tartines", "Galette Sarrasin", "Gratin Pâtes", "Poulet Rôti", "Poisson Pané", "Riz Tomate", "Bruschetta", "Moussaka", "Cannelloni", "Riz Crevettes", "Dinde Paprika", "Salade Niçoise", "Frittata", "Tacos Light", "Gaspacho", "Bowl Saumon"];
         const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon", "Salade Lentilles", "Salade Endives Noix", "Thon Mi-Cuit", "Wrap Saumon", "Taboulé Quinoa", "Salade Caprese", "Poke Saumon", "Lentilles Corail", "Aiguillettes Canard", "Chèvre Chaud", "Tataki Boeuf", "Salade Mexicaine", "Bowl Houmous", "Oeufs Mimosa", "Salade Pâtes Complètes"];
         const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates", "Purée Carottes", "Sardines", "Curry Légumes", "Brocolis", "Concombre", "Tomates Farcies", "Tian", "Flan Courgettes", "Miso", "Betterave", "Chou-fleur", "Poêlée", "Asperges", "Fenouil", "Artichaut", "Carpaccio"];
-        
         const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
+        
         const ROUTINES = {
-            sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}, {l:"Étirements Dynamiques", q:"dynamic stretching"}, {l:"Cardio Léger", q:"jumping jacks"}, {l:"Yoga Athlètes", q:"yoga for athletes"}, {l:"Wim Hof", q:"wim hof breathing"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}, {l:"Bain Froid", q:"cold shower"}, {l:"Massage Mollets", q:"calves massage"}, {l:"Scan Corporel", q:"body scan"}, {l:"Respiration 4-7-8", q:"4 7 8 breathing"}] },
-            focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}, {l:"Journaling", q:"morning pages"}, {l:"Marche consciente", q:"mindful walking"}, {l:"Respiration Carrée", q:"box breathing"}, {l:"Lecture", q:"reading habit"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}, {l:"Digital Detox", q:"digital detox"}, {l:"Binaural", q:"binaural beats"}, {l:"Relaxation", q:"progressive relaxation"}, {l:"Silence", q:"silence meditation"}] }
+            sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] },
+            focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] }
         };
         ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym", "Hardstyle Motivation", "Metal Workout", "EDM Tempo"], focus: ["Deep Focus", "Lofi Girl", "Binaural 40Hz", "Classical Work", "Piano Ambient"], diet: ["Coffee Shop", "Acoustic Chill", "Nature Sounds", "Soul Sunday", "Reggae Chill"] };
+        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // --- ULTRA SYNTHESIZER (V55) ---
-        function synthesizeTask(text) {
-            // 1. Remove time to avoid duplication
-            let clean = text.replace(/(\d{1,2})[h:](\d{2})?/gi, '').trim();
-            // 2. Kill phrases
-            const killers = ["je dois","il faut","j'ai un","j'ai une","j'ai","aller au","aller à","faire du","faire de la","séance de","rendez-vous","rdv","voir","prendre","récupérer","absolument"];
-            killers.forEach(k => { clean = clean.replace(new RegExp(k, 'gi'), ''); });
-            // 3. Stop words
-            const stops = ['le','la','les','un','une','du','au','à','pour','avec','dans','sur','mon','ma','mes','ce','cette','demain','soir','matin'];
-            clean = clean.split(' ').filter(w => !stops.includes(w.toLowerCase())).join(' ');
-            // 4. Capitalize
-            clean = clean.trim();
-            return clean.charAt(0).toUpperCase() + clean.slice(1);
+        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+
+        // --- NEW: INTELLIGENT PARSER V56 ---
+        function extractTime(text) {
+            // Regex pour choper: 20h, 20H, 20:00, 20h00, 8h, 8:30...
+            const timeRegex = /(\d{1,2})[h:](\d{2})?|(\d{1,2})\s*[hH]/;
+            const match = text.match(timeRegex);
+            if (!match) return null;
+
+            let h = parseInt(match[1] || match[3]);
+            let m = parseInt(match[2] || 0);
+            
+            // Format HH:MM
+            return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
         }
 
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+        function cleanTaskText(text, timeStr) {
+            // 1. Remove the time string found (approximate match to remove from text)
+            let clean = text.replace(/(\d{1,2})[h:](\d{2})?|(\d{1,2})\s*[hH]/gi, '').trim();
+            
+            // 2. Remove filler prefixes (Case insensitive)
+            const prefixes = ["j'ai un", "j'ai une", "j'ai", "il faut que", "il faut", "je dois", "aller au", "aller à", "aller chez", "faire du", "faire de la", "séance de", "rendez-vous", "rdv", "voir", "prendre", "récupérer"];
+            
+            // Sort by length desc to remove longest phrases first
+            prefixes.sort((a,b) => b.length - a.length);
+            
+            let lowerClean = clean.toLowerCase();
+            for(let p of prefixes) {
+                if(lowerClean.startsWith(p)) {
+                    clean = clean.substring(p.length).trim();
+                    lowerClean = clean.toLowerCase(); // update for next loop
+                }
+            }
+
+            // 3. Remove connecting words ONLY at start (ex: "au", "le", "la")
+            const connectors = ["le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez"];
+            let words = clean.split(' ');
+            if(words.length > 0 && connectors.includes(words[0].toLowerCase())) {
+                words.shift();
+                clean = words.join(' ');
+            }
+
+            // 4. Capitalize
+            if(clean.length === 0) return "Tâche";
+            return clean.charAt(0).toUpperCase() + clean.slice(1);
+        }
 
         function renderHUD() {
             const isToday = (selectedDay === todayNum);
@@ -146,28 +164,24 @@
             const txt = tasks.map(t => t.text.toLowerCase()).join(' ');
             let mode = 'diet'; if (txt.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) mode = 'sport'; else if (txt.match(/réunion|bureau|projet|travail|code|étude|cours|admin|compta/)) mode = 'focus';
 
-            if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
-
             const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿"} };
             document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
             
-            // Music
             const musicIndex = (selectedDay - 1) % MUSIC_DB[mode].length;
             document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][musicIndex]}`;
 
-            // Calories
             let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
             let act = mode==='sport'?1.7:(mode==='focus'?1.3:1.2);
             const tdee = Math.round(bmr*act);
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
             document.getElementById('hudSupplements').innerText = suppsDB[mode];
 
-            // Build Unified Stream
-            const rot = (selectedDay - 1) % 31; const rIndex = (selectedDay - 1) % 7; 
+            // Build Unified Stream (V55 Style)
+            const rot = (selectedDay - 1) % 31; const rIndex = (selectedDay - 1) % 3; 
             const l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
             const d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-            const rM = ROUTINES[mode].m[rIndex] || ROUTINES[mode].m[0];
-            const rE = ROUTINES[mode].e[rIndex] || ROUTINES[mode].e[0];
+            const rM = ROUTINES[mode].m[rIndex];
+            const rE = ROUTINES[mode].e[rIndex];
 
             let stream = [];
             stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
@@ -176,27 +190,17 @@
             stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
 
             tasks.forEach((t, i) => {
-                const timeMatch = t.text.match(/(\d{1,2})[h:](\d{2})?/);
-                let time = timeMatch ? `${timeMatch[1].padStart(2,'0')}:${timeMatch[2]||'00'}` : '09:00'; 
-                let isSportTask = t.text.match(/sport|gym|crossfit|foot|match/i);
-                stream.push({ type: 'task', time: time, content: t.text.replace(/(\d{1,2})[h:](\d{2})?/,'').trim(), full: t.fullText, accent: isSportTask?'accent-sport':'accent-task', dot: isSportTask?'dot-sport':'dot-task', id: i, done: t.done });
+                let time = extractTime(t.fullText) || '09:00';
+                let cleanText = cleanTaskText(t.fullText, time);
+                let isSportTask = cleanText.match(/sport|gym|crossfit|foot|match|muscu/i);
+                stream.push({ type: 'task', time: time, content: cleanText, full: t.fullText, accent: isSportTask?'accent-sport':'accent-task', dot: isSportTask?'dot-sport':'dot-task', id: i, done: t.done });
             });
 
             stream.sort((a,b) => a.time.localeCompare(b.time));
 
             // Render
             const container = document.getElementById('masterTimeline');
-            const currentHour = now.getHours(); const currentMin = now.getMinutes();
-            const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
-            let liveLineInserted = false;
-
             container.innerHTML = stream.map(item => {
-                let html = '';
-                if(isToday && !liveLineInserted && item.time > currentTimeStr) {
-                    html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                    liveLineInserted = true;
-                }
-
                 let cardContent = '';
                 if (item.type === 'routine') {
                     cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="action-btn">▶ Vidéo</button></div>`;
@@ -206,7 +210,7 @@
                     cardContent = `<div class="flex items-center gap-4 group" onclick="editItem('task', ${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`;
                 }
 
-                html += `
+                return `
                 <div class="timeline-row">
                     <div class="timeline-time">${item.time}</div>
                     <div class="timeline-line"></div>
@@ -215,37 +219,33 @@
                         ${cardContent}
                     </div>
                 </div>`;
-                return html;
             }).join('');
-
-            if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
             
             updateWaterUI(mode);
         }
 
         // --- HELPERS ---
-        function editItem(type, id) { if(type==='task'){const t=db[selectedDay];const n=prompt("Modifier:",t[id].text);if(n){t[id].text=n;save();}}else{const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v55_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
-        function checkHabits() { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>t.text).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); }
-        function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
-        function playContextMusic(){ let q="Chill Lofi"; if(document.getElementById('sonicLabel').innerText.includes('Beast'))q="Workout Phonk"; if(document.getElementById('sonicLabel').innerText.includes('Concentration'))q="Deep Focus"; window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
+        function editItem(type, id) { if(type==='task'){const t=db[selectedDay];const n=prompt("Modifier:",t[id].fullText);if(n){t[id].fullText=n; t[id].text=cleanTaskText(n); save();}}else{const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v56_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
+        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
-        function traiter(){const r=document.getElementById('userInput').value;if(!r.trim())return;traiterInput(r);}
-        function traiterInput(r){let d=selectedDay;if(r.match(/demain/i))d=todayNum+1;else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} const cl=synthesizeTask(r.replace(/demain|le \d{1,2}/gi,'').trim()); db[d]=[...(db[d]||[]),{text:cl,fullText:r,done:false}]; save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();}
+        
+        function traiter() { const r = document.getElementById('userInput').value; if(!r.trim())return; traiterInput(r); }
+        function traiterInput(r) { 
+            let d=selectedDay; if(r.match(/demain/i))d=todayNum+1; else{const m=r.match(/le (\d{1,2})/i);if(m)d=parseInt(m[1]);} 
+            db[d]=[...(db[d]||[]),{fullText:r, done:false}]; // Store fullText only, process on render
+            save(); document.getElementById('userInput').value=''; if(d===selectedDay)renderHUD();
+        }
+
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v55_db',JSON.stringify(db)); localStorage.setItem('lifeos_v55_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v55_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
-        function setMusic(p){musicProvider=p;updateMusicUI();save();}
-        function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
+        function save(){localStorage.setItem('lifeos_v56_db',JSON.stringify(db)); localStorage.setItem('lifeos_v56_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v56_health',JSON.stringify(health)); renderCal(); renderHUD();}
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
         function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        function exportData(){const data={db,profile,health,musicProvider,manualMeals};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};save();alert("Restauré !");};reader.readAsText(file);}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiter()});
-        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
+        renderCal(); renderHUD();
     </script>
 </body>
 </html>
