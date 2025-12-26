@@ -3,30 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V71 - Market Pulse</title>
+    <title>LifeOS Sovereign V72 - Wealth & Time</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; }
-        .market-up { color: #10b981; } .market-down { color: #ef4444; }
+        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
+        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
         /* NAVIGATION */
-        .nav-link { padding: 0.75rem 1.5rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; transition: 0.3s; cursor: pointer; opacity: 0.5; }
-        .nav-link.active { background: white; color: black; opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 
-        /* TIMELINE */
+        /* AGENDA STYLES (V70) */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; z-index: 10; }
-        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
+        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
+        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
+        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
+        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
+        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; }
+        .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
+        .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
+        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
+        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
+        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
 
-        /* ALERT BOX */
+        /* MARKET STYLES */
+        .market-up { color: #10b981; } .market-down { color: #ef4444; }
+        .ticker-item { background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .bank-card { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 1.5rem; transition: 0.3s; }
+        .bank-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+        .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
+        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .has-event { border-bottom: 2px solid #a855f7; }
+        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         .alert-box { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
+        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
+        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
+        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -37,91 +66,81 @@
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️</button></div>
                 
-                <nav class="flex flex-col gap-2 bg-black/20 p-2 rounded-2xl border border-white/5">
-                    <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-link active">🏠 Dashboard</div>
-                    <div onclick="switchTab('market')" id="nav-market" class="nav-link">📈 Bourse & Marchés</div>
-                </nav>
+                <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">🗓️ Agenda & Life</button>
+                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn">📈 Finance & Bourse</button>
+                </div>
 
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Entrée Rapide</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Match à 20h..."></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
-        <main class="lg:col-span-9">
+        <main class="lg:col-span-9 space-y-6 pb-10">
             
-            <div id="page-dashboard" class="space-y-6">
-                <div class="glass-base p-8 md:p-10">
-                    <div class="flex justify-between items-end mb-6 pb-6 border-b border-white/5">
-                        <div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight">Date</h2><p id="contextTitle" class="text-blue-400 font-bold mt-2">--</p></div>
-                        <div class="text-right">
-                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible Calories</p>
-                            <p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p>
-                        </div>
+            <div id="page-dashboard">
+                <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
+                    <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
+                        <div><div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2><div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div></div>
+                        <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
                     </div>
-                    
-                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500">
-                        <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400">Assistant Planning</p><p id="conflictMsg" class="text-lg font-bold text-white">...</p></div></div>
-                        <button onclick="closeAlert()" class="text-white opacity-50 hover:opacity-100">✕</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
+                        <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
                     </div>
-
-                    <div id="masterTimeline" class="relative pl-4"></div>
+                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                        <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
+                    </div>
+                    <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
+                    <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
+                    <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p><div id="masterTimeline"></div></div>
                 </div>
             </div>
 
             <div id="page-market" class="hidden space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="glass-base p-6 text-center">
-                        <p class="text-[10px] font-bold uppercase opacity-50 mb-2">S&P 500 (US)</p>
-                        <p id="mkt-sp500" class="text-2xl font-black market-up">5,842.10</p>
-                        <span class="text-[10px] font-bold">+1.24%</span>
-                    </div>
-                    <div class="glass-base p-6 text-center">
-                        <p class="text-[10px] font-bold uppercase opacity-50 mb-2">NASDAQ (Tech)</p>
-                        <p id="mkt-nasdaq" class="text-2xl font-black market-up">18,673.40</p>
-                        <span class="text-[10px] font-bold">+0.89%</span>
-                    </div>
-                    <div class="glass-base p-6 text-center">
-                        <p class="text-[10px] font-bold uppercase opacity-50 mb-2">CAC 40 (FR)</p>
-                        <p id="mkt-cac" class="text-2xl font-black market-down">7,421.15</p>
-                        <span class="text-[10px] font-bold">-0.12%</span>
-                    </div>
-                    <div class="glass-base p-6 text-center">
-                        <p class="text-[10px] font-bold uppercase opacity-50 mb-2">BITCOIN (Crypto)</p>
-                        <p id="mkt-btc" class="text-2xl font-black market-up">94,210$</p>
-                        <span class="text-[10px] font-bold">+4.5%</span>
+                <div class="glass-base p-6">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">🌍 Indices Mondiaux</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">S&P 500</p><p class="font-bold">5,842.10</p></div><span class="text-xs font-bold market-up">+1.24%</span></div>
+                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">NASDAQ</p><p class="font-bold">18,673.40</p></div><span class="text-xs font-bold market-up">+0.89%</span></div>
+                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">CAC 40</p><p class="font-bold">7,421.15</p></div><span class="text-xs font-bold market-down">-0.12%</span></div>
+                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">BITCOIN</p><p class="font-bold">94,210$</p></div><span class="text-xs font-bold market-up">+4.5%</span></div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-base p-8">
-                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2">💹 IA Market Strategist</h3>
-                        <div class="space-y-4">
-                            <div class="flow-card flex items-center justify-between border-l-4 border-green-500">
-                                <div><p class="font-bold">NVIDIA (NVDA)</p><p class="text-xs opacity-50">Secteur IA & Hardware</p></div>
-                                <div class="text-right"><span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-[10px] font-bold">BUY</span><p class="text-xs mt-1 font-mono">Target: 145$</p></div>
+                <div class="glass-base p-6">
+                    <h3 class="text-xl font-bold mb-6">💎 Magnificent Seven</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-white text-black flex items-center justify-center font-bold"></div><span class="font-bold">Apple</span></div><span class="text-xs text-green-400">+0.5%</span></div>
+                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-green-500 text-black flex items-center justify-center font-bold">N</div><span class="font-bold">Nvidia</span></div><span class="text-xs text-green-400">+2.1%</span></div>
+                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-500 text-white flex items-center justify-center font-bold">M</div><span class="font-bold">Microsoft</span></div><span class="text-xs text-red-400">-0.2%</span></div>
+                    </div>
+                </div>
+
+                <div class="glass-base p-8">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">💼 Mon Portefeuille Global</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bank-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center font-bold">TR</div>
+                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded">Connecté</span>
                             </div>
-                            <div class="flow-card flex items-center justify-between border-l-4 border-orange-500">
-                                <div><p class="font-bold">LVMH (MC.PA)</p><p class="text-xs opacity-50">Secteur Luxe</p></div>
-                                <div class="text-right"><span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-[10px] font-bold">HOLD</span><p class="text-xs mt-1 font-mono">Consolidation</p></div>
+                            <p class="text-sm opacity-50 uppercase tracking-widest mb-1">Trade Republic</p>
+                            <input type="text" id="input-tr" placeholder="0 €" class="bg-transparent text-3xl font-black w-full outline-none" onchange="updateTotalWealth()">
+                        </div>
+                        <div class="bank-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center font-bold">B</div>
+                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded">Connecté</span>
                             </div>
-                            <div class="flow-card flex items-center justify-between border-l-4 border-blue-500">
-                                <div><p class="font-bold">ETF WORLD (CW8)</p><p class="text-xs opacity-50">Diversification Totale</p></div>
-                                <div class="text-right"><span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold">DCA</span><p class="text-xs mt-1 font-mono">Mensuel</p></div>
-                            </div>
+                            <p class="text-sm opacity-50 uppercase tracking-widest mb-1">BoursoBank</p>
+                            <input type="text" id="input-bourso" placeholder="0 €" class="bg-transparent text-3xl font-black w-full outline-none" onchange="updateTotalWealth()">
                         </div>
                     </div>
-
-                    <div class="glass-base p-8 space-y-6">
-                        <h3 class="text-xl font-bold mb-4">🌍 Statut Mondial</h3>
-                        <div class="space-y-6">
-                            <div class="flex justify-between items-center"><div class="flex items-center gap-3">🇺🇸<span>Wall Street</span></div><span id="stat-ny" class="text-[10px] bg-green-500 text-black px-2 py-1 rounded font-black">OUVERT</span></div>
-                            <div class="flex justify-between items-center"><div class="flex items-center gap-3">🇪🇺<span>Euronext</span></div><span id="stat-eu" class="text-[10px] bg-red-500 text-white px-2 py-1 rounded font-black">FERMÉ</span></div>
-                            <div class="flex justify-between items-center"><div class="flex items-center gap-3">🇯🇵<span>Tokyo</span></div><span id="stat-tokyo" class="text-[10px] bg-red-500 text-white px-2 py-1 rounded font-black">FERMÉ</span></div>
-                        </div>
-                        <div class="pt-6 border-t border-white/5">
-                            <p class="text-xs font-bold text-blue-400 mb-2 italic">Dernière News :</p>
-                            <p class="text-xs leading-relaxed opacity-70">"La Fed maintient ses taux, le marché réagit positivement aux annonces de croissance tech."</p>
-                        </div>
+                    <div class="mt-8 pt-6 border-t border-white/5 flex justify-between items-center">
+                        <p class="text-sm font-bold uppercase text-zinc-500">Patrimoine Total Estimé</p>
+                        <p id="total-wealth" class="text-4xl font-black text-blue-400">0 €</p>
                     </div>
                 </div>
             </div>
@@ -129,126 +148,253 @@
         </main>
     </div>
 
-    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Notes</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 text-red-500 border border-red-500/20 py-4 rounded-xl font-bold uppercase text-xs">Supprimer</button></div></div></div>
+    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        // INIT DATA (V71)
-        let db = JSON.parse(localStorage.getItem('lifeos_v71_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v71_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v71_manual_meals') || "{}");
+        // INIT DATA (V72)
+        let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
+        let wealth = JSON.parse(localStorage.getItem('lifeos_v72_wealth') || '{"tr":0, "bourso":0}'); // New Wealth Data
+        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
-        let activeTab = 'dashboard';
+        let editingTaskId = null;
 
-        // NAVIGATION LOGIC
-        function switchTab(tabId) {
-            activeTab = tabId;
-            document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
-            document.getElementById(`page-${tabId}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            document.getElementById(`nav-${tabId}`).classList.add('active');
-            if(tabId === 'market') simulateMarket();
-        }
+        // DATASETS & PARSERS (V70 STRICT COPY)
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
+        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
+        const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
+        ROUTINES.diet = ROUTINES.focus;
+        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
+        const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // MARKET SIMULATION (IA Signals)
-        function simulateMarket() {
-            const indices = { "mkt-sp500": 5842.10, "mkt-nasdaq": 18673.40, "mkt-cac": 7421.15, "mkt-btc": 94210 };
-            for (let id in indices) {
-                const change = (Math.random() * 2 - 1).toFixed(2);
-                const el = document.getElementById(id);
-                if (el) {
-                    const newVal = (indices[id] * (1 + change/100)).toLocaleString();
-                    el.innerText = newVal + (id === 'mkt-btc' ? '$' : '');
-                    el.className = change >= 0 ? "text-2xl font-black market-up" : "text-2xl font-black market-down";
-                }
-            }
-        }
+        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
 
-        // PARSER CORE (REUSED FROM V70)
         function parseInput(text) {
             let startMin = 540; let duration = 0;
             const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
             let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; }
             const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
             const startMatch = text.match(startRegex);
-            if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; }
-            if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bminuit\b/i)) startMin = 1439;
+            if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; } 
+            else { const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)]; for (const m of allNums) { const val = parseInt(m[1]); if (durValue !== -1 && val === durValue) continue; let mVal = m[2] ? parseInt(m[2]) : 0; startMin = val * 60 + mVal; break; } }
+            if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bminuit\b/i)) startMin = 1439; if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; 
             return { startMin, duration };
         }
 
         function cleanTaskText(text) {
             const lower = text.toLowerCase();
-            const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "réunion":"Réunion", "dentiste":"Dentiste", "déjeuner":"Déjeuner", "courses":"Courses" };
+            const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "tennis":"Tennis", "gym":"Gym", "réunion":"Réunion", "meeting":"Meeting", "point":"Point", "dentiste":"Dentiste", "médecin":"Médecin", "docteur":"Médecin", "déjeuner":"Déjeuner", "dîner":"Dîner", "repas":"Repas", "apéro":"Apéro", "courses":"Courses", "shopping":"Shopping", "anniversaire":"Anniv", "fête":"Fête", "lessive":"Lessive", "ménage":"Ménage" };
             for(let k in dict) { if(lower.includes(k)) return dict[k]; }
             let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
-            let words = clean.split(/\s+/).filter(w => w.length > 2);
-            return words.length > 0 ? words[0] : "Tâche";
+            const junk = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "durée", "pendant", "de", "à partir", "heures", "heure", "grosse", "match", "séance", "rendez-vous", "rdv", "le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers", "j'ai", "il faut", "je dois", "aller", "faire", "voir", "prendre", "récupérer", "manger", "déjeuner", "et", "ou"];
+            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
+            if(words.length === 0) return "Tâche";
+            return words[0].charAt(0).toUpperCase() + words[0].slice(1);
         }
 
         function traiterBatch() {
             const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
             const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3);
             tasks.forEach(taskStr => injectTaskSmartly(taskStr));
-            localStorage.setItem('lifeos_v71_db', JSON.stringify(db));
-            document.getElementById('userInput').value = ''; renderHUD();
+            save(); document.getElementById('userInput').value = ''; renderHUD();
         }
 
         function injectTaskSmartly(text) {
             const lower = text.toLowerCase();
             let d = selectedDay;
-            if (lower.includes('demain')) d = todayNum + 1;
-            const parsed = parseInput(text); const cl = cleanTaskText(text); 
+            const daysMap = { "dimanche": 0, "lundi": 1, "mardi": 2, "mercredi": 3, "jeudi": 4, "vendredi": 5, "samedi": 6 };
+            let targetDayOfWeek = -1;
+            for (const [dayName, dayIndex] of Object.entries(daysMap)) { if (lower.includes(dayName)) { targetDayOfWeek = dayIndex; break; } }
+            if (targetDayOfWeek !== -1) { const currentDayOfWeek = now.getDay(); let diff = targetDayOfWeek - currentDayOfWeek; if (diff < 0) diff += 7; d = todayNum + diff; } 
+            else { if (lower.includes('demain')) d = todayNum + 1; if (lower.includes('après-demain')) d = todayNum + 2; }
+
+            const parsed = parseInput(text);
+            const cl = cleanTaskText(text); 
+            
+            if(d === selectedDay) {
+                let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60;
+                let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
+                if (tStart < dinnerEnd && tEnd > dinnerMin) {
+                    document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`;
+                    document.getElementById('conflictAlertBox').classList.remove('hidden');
+                }
+            }
+
             const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60;
             const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+
             db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }];
         }
 
-        // RENDER LOGIC
-        function renderHUD() {
-            const tasks = db[selectedDay] || [];
-            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+        function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
+
+        // --- NAVIGATION V72 ---
+        function switchTab(tab) {
+            document.getElementById('page-dashboard').classList.add('hidden');
+            document.getElementById('page-market').classList.add('hidden');
+            document.getElementById('nav-dashboard').classList.remove('active');
+            document.getElementById('nav-market').classList.remove('active');
             
-            let occupiedSlots = [];
-            tasks.forEach(t => { if(t.time) { const [h,m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); } });
-
-            let dinnerMin = 1200; // 20:00
-            occupiedSlots.forEach(slot => { if(slot.start < (dinnerMin + 45) && slot.end > dinnerMin) { dinnerMin = slot.end + 15; document.getElementById('conflictAlertBox').classList.remove('hidden'); document.getElementById('conflictMsg').innerText = "Dîner décalé pour éviter un conflit."; } });
-            
-            const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-
-            let stream = [
-                { type: 'meal', time: '12:30', content: 'Déjeuner Équilibré', accent: 'accent-meal', dot: 'dot-meal' },
-                { type: 'meal', time: dinnerTime, content: 'Dîner Récupération', accent: 'accent-meal', dot: 'dot-meal' }
-            ];
-
-            tasks.forEach((t, i) => {
-                stream.push({ type: 'task', time: t.time, content: t.shortText, accent: 'accent-task', dot: 'dot-task', id: i });
-            });
-
-            stream.sort((a,b) => a.time.localeCompare(b.time));
-
-            document.getElementById('masterTimeline').innerHTML = stream.map(item => `
-                <div class="timeline-row">
-                    <div class="timeline-time">${item.time}</div>
-                    <div class="timeline-line"></div>
-                    <div class="timeline-dot ${item.dot}"></div>
-                    <div class="flex-1 flow-card ${item.accent}" ${item.type==='task'? `onclick="openTaskModal(${item.id})"` : ''}>
-                        <p class="font-bold text-lg">${item.content}</p>
-                        ${item.type==='meal' ? `<p class="text-[10px] opacity-50 mt-1">Nutrition optimisée LifeOS</p>` : ''}
-                    </div>
-                </div>
-            `).join('');
+            document.getElementById(`page-${tab}`).classList.remove('hidden');
+            document.getElementById(`nav-${tab}`).classList.add('active');
         }
 
-        function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
-        function openTaskModal(id) { editingTaskId = id; const t = db[selectedDay][id]; document.getElementById('modalTime').value = t.time; document.getElementById('modalShort').value = t.shortText; document.getElementById('modalFull').value = t.fullText; document.getElementById('taskModal').classList.remove('hidden'); }
-        function saveTaskModal() { const t = db[selectedDay][editingTaskId]; t.time = document.getElementById('modalTime').value; t.shortText = document.getElementById('modalShort').value; t.fullText = document.getElementById('modalFull').value; localStorage.setItem('lifeos_v71_db', JSON.stringify(db)); closeTaskModal(); renderHUD(); }
-        function closeTaskModal() { document.getElementById('taskModal').classList.add('hidden'); }
-        function openProfile() { alert("Poids: 80kg | Taille: 180cm | Objectif: Santé Totale"); }
+        // --- WEALTH LOGIC V72 ---
+        function loadWealth() {
+            document.getElementById('input-tr').value = wealth.tr || '';
+            document.getElementById('input-bourso').value = wealth.bourso || '';
+            updateTotalWealth();
+        }
+        function updateTotalWealth() {
+            const tr = parseFloat(document.getElementById('input-tr').value) || 0;
+            const bourso = parseFloat(document.getElementById('input-bourso').value) || 0;
+            wealth = { tr, bourso };
+            localStorage.setItem('lifeos_v72_wealth', JSON.stringify(wealth));
+            document.getElementById('total-wealth').innerText = (tr + bourso).toLocaleString() + " €";
+        }
 
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=31;for(let i=1;i<=m;i++){const d=document.createElement('div');d.className=`day ${i===todayNum?'day-today':''} ${i===selectedDay?'day-selected':''}`;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        // --- RENDER HUD (V70 LOGIC) ---
+        function renderHUD() {
+            try {
+                const isToday = (selectedDay === todayNum);
+                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
+                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
+                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
 
-        setInterval(simulateMarket, 5000);
-        renderCal(); renderHUD();
+                const tasks = db[selectedDay] || [];
+                const txt = tasks.map(t => (t.fullText||"").toLowerCase()).join(' ');
+                
+                let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
+                tasks.forEach(t => {
+                    const fl = (t.fullText||"").toLowerCase();
+                    if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
+                    if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
+                    if (t.time) {
+                        const [h, m] = t.time.split(':').map(Number);
+                        const startMin = h*60 + m;
+                        const dur = t.duration || 60; 
+                        occupiedSlots.push({start: startMin, end: startMin + dur});
+                    }
+                });
+                if (mode === 'diet' && txt.match(/réunion|bureau|projet|travail|code|étude|cours|admin|compta/)) mode = 'focus';
+
+                if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
+
+                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
+                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
+                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
+                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
+
+                let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
+                let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
+                document.getElementById('calTarget').innerText = `${tdee} kcal`;
+                document.getElementById('hudSupplements').innerText = suppsDB[mode];
+
+                const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
+                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
+                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
+                const rM = ROUTINES[mode].m[rIndex]; const rE = ROUTINES[mode].e[rIndex];
+
+                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
+                occupiedSlots.forEach(slot => {
+                    if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) {
+                        dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60;
+                    }
+                });
+                const lunchTime = `${Math.floor(lunchMin/60).toString().padStart(2,'0')}:${(lunchMin%60).toString().padStart(2,'0')}`;
+                const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
+
+                if (mode === 'sport' && sportTaskTime) {
+                    const [h, m] = sportTaskTime.split(':').map(Number);
+                    if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); }
+                }
+                if (importantEventTime) {
+                    const [h, m] = importantEventTime.split(':').map(Number);
+                    let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
+                    injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
+                    if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; }
+                }
+
+                let stream = [];
+                stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
+                stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
+                stream.push(...injectedItems);
+                stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
+                stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
+
+                tasks.forEach((t, i) => {
+                    let fl = (t.fullText||"").toLowerCase();
+                    let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
+                    let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
+                    let accent = 'accent-task'; let dot = 'dot-task';
+                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
+                    if(isUrgent) { accent='accent-important'; dot='dot-important'; }
+                    let displayContent = t.shortText;
+                    if(t.duration > 0) {
+                        const [h, m] = t.time.split(':').map(Number);
+                        const endMin = h*60 + m + t.duration;
+                        const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60;
+                        displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`;
+                    }
+                    stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
+                });
+
+                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
+
+                const container = document.getElementById('masterTimeline');
+                const currentHour = now.getHours(); const currentMin = now.getMinutes();
+                const currentTimeVal = currentHour * 60 + currentMin;
+                const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
+                let liveLineInserted = false;
+
+                container.innerHTML = stream.map(item => {
+                    const [h, m] = item.time.split(':').map(Number); const itemTimeVal = h * 60 + m;
+                    let html = '';
+                    if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
+                    let cardContent = '';
+                    if (item.type === 'routine') { cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`; }
+                    else if (item.type === 'meal') { cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`; }
+                    else if (item.type === 'snack') { cardContent = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`; }
+                    else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
+                    return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
+                }).join('');
+
+                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
+                updateWaterUI(mode);
+            } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur.</p>`; }
+        }
+
+        // Helpers
+        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
+        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
+        function addWater(n){health.water+=n; save();}
+        function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
+        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
+        function delTask(d,i){db[d].splice(i,1);save();}
+        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderHUD(); checkHabits();}
+        function setMusic(p){musicProvider=p;updateMusicUI();save();}
+        function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
+        function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
+        function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
+        function injectSport(){ traiterInput("Séance Reprise Sport 18h"); }
+        function openProfile(){document.getElementById('profileModal').classList.remove('hidden');}
+        function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; document.getElementById('profileModal').classList.add('hidden'); save();}
+        function exportData(){const data={db,profile,health,musicProvider,manualMeals};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
+        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};save();alert("Restauré !");};reader.readAsText(file);}
+        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
+        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
+        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
+        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
+
+        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
+        updateMusicUI(); renderCal(); renderHUD(); loadWealth(); checkHabits();
     </script>
 </body>
 </html>
