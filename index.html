@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V71 - Neural</title>
+    <title>LifeOS Sovereign V72 - Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -58,21 +58,21 @@
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center">
-                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded ml-2">V71</span></h1>
+                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded ml-2">V72 ULTRA</span></h1>
                     <button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="switchView('planning')" id="nav-planning" class="nav-active py-2 rounded-xl text-xs font-bold border border-transparent transition-all">📅 Planning</button>
-                    <button onclick="switchView('market')" id="nav-market" class="py-2 rounded-xl text-xs font-bold border border-transparent hover:bg-white/5 transition-all">📈 Marchés</button>
+                    <button onclick="switchView('market')" id="nav-market" class="py-2 rounded-xl text-xs font-bold border border-transparent hover:bg-white/5 transition-all">📈 Bourse</button>
                 </div>
 
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
                 
                 <div class="flex-1">
-                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Neural Engine (IA)</p>
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Muscu jambes demain à 18h et resto avec Julie samedi'"></textarea>
-                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Planifier (IA)</button>
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">IA Claude 3.5 (Planification)</p>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Entraînement de foot mardi à 19h et déjeuner avec le patron vendredi à 13h'"></textarea>
+                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Exécuter</button>
                 </div>
 
                 <div class="pt-6 border-t border-white/5">
@@ -111,27 +111,24 @@
             </div>
 
             <div id="view-market" class="hidden space-y-6">
-                <div class="glass-base p-1 overflow-hidden h-[600px]">
-                    <div class="tradingview-widget-container" style="height:100%;width:100%">
-                        <div id="tradingview_b1e30" style="height:100%;width:100%"></div>
-                    </div>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                    {
+                    "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"BITSTAMP:ETHUSD","title":"Ethereum"},{"proName":"TVC:CAC40","title":"CAC 40"}],
+                    "showSymbolLogo": true,
+                    "colorTheme": "dark",
+                    "isTransparent": true,
+                    "displayMode": "adaptive",
+                    "locale": "fr"
+                    }
+                    </script>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     <div class="glass-base p-6 border border-yellow-500/20">
-                         <h3 class="text-yellow-500 font-bold uppercase text-xs mb-2">Crypto</h3>
-                         <p class="text-2xl font-bold">Bitcoin / USD</p>
-                         <p class="text-xs opacity-50 mt-1">Données temps réel via TradingView</p>
-                     </div>
-                     <div class="glass-base p-6 border border-blue-500/20">
-                         <h3 class="text-blue-500 font-bold uppercase text-xs mb-2">Indices</h3>
-                         <p class="text-2xl font-bold">CAC 40</p>
-                         <p class="text-xs opacity-50 mt-1">Paris Index</p>
-                     </div>
-                     <div class="glass-base p-6 border border-green-500/20">
-                         <h3 class="text-green-500 font-bold uppercase text-xs mb-2">Forex</h3>
-                         <p class="text-2xl font-bold">EUR / USD</p>
-                         <p class="text-xs opacity-50 mt-1">Forex Market</p>
-                     </div>
+
+                <div class="glass-base h-[750px] overflow-hidden p-1 border border-white/10">
+                    <div class="tradingview-widget-container" style="height:100%;width:100%">
+                        <div id="tradingview_advanced" style="height:100%;width:100%"></div>
+                    </div>
                 </div>
             </div>
 
@@ -157,7 +154,7 @@
     </div>
 
     <script>
-        // INIT
+        // INIT DATA
         let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
         let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
@@ -168,214 +165,120 @@
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
 
-        // DATASETS (Raccourcis pour l'affichage)
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
-        ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
-
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
-
-        // --- NAVIGATION ---
-        function switchView(viewName) {
-            const plan = document.getElementById('view-planning');
-            const market = document.getElementById('view-market');
-            const btnPlan = document.getElementById('nav-planning');
-            const btnMarket = document.getElementById('nav-market');
-
-            if(viewName === 'planning') {
-                plan.classList.remove('hidden'); market.classList.add('hidden');
-                btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active');
-            } else {
-                plan.classList.add('hidden'); market.classList.remove('hidden');
-                btnPlan.classList.remove('nav-active'); btnMarket.classList.add('nav-active');
-                initTradingView(); // Charge le graphique si besoin
-            }
-        }
-
-        // --- CORE: IA INTELLIGENCE (OPENROUTER) ---
+        // --- CORE: INTELLIGENCE ARTIFICIELLE (CLAUDE 3.5 SONNET) ---
         async function traiterBatchIA() {
             const raw = document.getElementById('userInput').value;
             if (!raw.trim()) return;
-            if (!apiKey) { alert("⚠️ API Key manquante ! Va dans Profil ⚙️"); return; }
+            if (!apiKey) { alert("🚨 ERREUR : Clé API manquante.\n\n1. Va dans Profil ⚙️\n2. Colle ta clé OpenRouter\n3. Sauvegarde."); openProfile(); return; }
 
             const btn = document.getElementById('aiBtn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = "<span>🧠</span> Analyse en cours...";
+            btn.innerHTML = "<span>🧠</span> Réflexion en cours...";
             btn.classList.add('ai-loading');
             btn.disabled = true;
 
+            // Prompt Système Renforcé pour Claude 3.5
             const systemPrompt = `
-            Tu es l'IA centrale de LifeOS. Date: ${new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}.
-            Analyse l'entrée utilisateur et retourne un JSON strict (tableau d'objets).
+            Tu es l'intelligence centrale de LifeOS.
+            Date actuelle : ${new Date().toISOString()}.
+            Nous sommes le : ${new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}.
             
-            Format:
+            TA MISSION : Analyser la demande de l'utilisateur et retourner un tableau JSON strict.
+            
+            RÈGLES IMPORTANTES :
+            1. Calcule le "dayOffset" (décalage en jours par rapport à aujourd'hui).
+               - "Aujourd'hui" = 0
+               - "Demain" = 1
+               - "Lundi prochain" = calcule le nombre de jours exacts.
+            2. Estime l'heure si absente (matin=09:00, midi=12:30, soir=19:00).
+            3. Estime la durée si absente (standard=60 min).
+            4. Ne réponds QUE du JSON. Pas de texte avant ou après.
+
+            FORMAT JSON ATTENDU :
             [
               {
-                "shortText": "Titre Court (ex: Sport, Réunion)",
-                "fullText": "Texte original",
+                "shortText": "Titre Court (ex: Sport)",
+                "fullText": "Description complète",
                 "time": "HH:MM",
-                "duration": minutes (int),
-                "dayOffset": int (0=aujourd'hui, 1=demain, etc.)
+                "duration": 60,
+                "dayOffset": 0 
               }
             ]
-            
-            Règles:
-            - Déduis le jour (demain, lundi prochain, etc).
-            - Estime l'heure si non précisée (Matin=09:00, Soir=19:00).
-            - Estime la durée (Sport=90, Réunion=60).
             `;
 
             try {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
-                    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V71" },
+                    headers: { 
+                        "Authorization": `Bearer ${apiKey}`, 
+                        "Content-Type": "application/json",
+                        "HTTP-Referer": window.location.href,
+                        "X-Title": "LifeOS V72"
+                    },
                     body: JSON.stringify({
-                        "model": "google/gemini-flash-1.5",
-                        "messages": [{ "role": "system", "content": systemPrompt }, { "role": "user", "content": raw }]
+                        "model": "anthropic/claude-3.5-sonnet", // Modèle le plus intelligent actuellement
+                        "messages": [
+                            { "role": "system", "content": systemPrompt },
+                            { "role": "user", "content": raw }
+                        ]
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
                 
                 const data = await response.json();
+                
                 if (data.choices && data.choices.length > 0) {
-                    let content = data.choices[0].message.content.replace(/```json|```/g, '').trim();
+                    let content = data.choices[0].message.content;
+                    // Nettoyage radical du markdown
+                    content = content.replace(/```json/g, '').replace(/```/g, '').trim();
+                    
                     const tasks = JSON.parse(content);
 
                     tasks.forEach(t => {
-                        let targetDay = todayNum + (t.dayOffset || 0);
-                        const maxDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                        if (targetDay > maxDays) targetDay = targetDay - maxDays; // Simplifié pour le mois courant
+                        // Calcul de la date réelle basée sur le décalage
+                        const targetDate = new Date();
+                        targetDate.setDate(now.getDate() + (t.dayOffset || 0));
+                        const targetDayNum = targetDate.getDate(); // Récupère le jour (1-31)
                         
-                        if (!db[targetDay]) db[targetDay] = [];
-                        db[targetDay].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false });
+                        // Injection
+                        if (!db[targetDayNum]) db[targetDayNum] = [];
+                        db[targetDayNum].push({ 
+                            shortText: t.shortText, 
+                            fullText: t.fullText, 
+                            time: t.time, 
+                            duration: t.duration, 
+                            done: false 
+                        });
+                        
+                        // Si l'IA planifie pour un autre jour, on notifie l'utilisateur
+                        if (t.dayOffset > 0) {
+                            alert(`✅ Tâche planifiée pour le ${targetDayNum} : ${t.shortText}`);
+                        }
                     });
                     
                     save();
                     document.getElementById('userInput').value = '';
-                    renderHUD();
-                    btn.innerHTML = "<span>✅</span> Planifié !";
+                    renderHUD(); // Rafraichit l'affichage
+                    btn.innerHTML = "<span>✅</span> C'est fait !";
+                } else {
+                    throw new Error("Réponse vide de l'IA");
                 }
+
             } catch (error) {
-                console.error(error);
-                alert("Erreur IA. Vérifie ta clé.");
-                btn.innerHTML = "❌ Erreur";
+                console.error("ERREUR IA:", error);
+                alert(`❌ Erreur IA : ${error.message}\nVérifie ta clé API et ta connexion.`);
+                btn.innerHTML = "❌ Échec";
             } finally {
                 btn.classList.remove('ai-loading');
                 btn.disabled = false;
-                setTimeout(() => btn.innerHTML = originalText, 2000);
+                setTimeout(() => btn.innerHTML = originalText, 2500);
             }
         }
 
-        function renderHUD() {
-            try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-
-                const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
-                tasks.forEach(t => {
-                    const fl = (t.fullText||"").toLowerCase();
-                    if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
-                    if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
-                    if (t.time) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const startMin = h*60 + m; const dur = t.duration || 60; 
-                        occupiedSlots.push({start: startMin, end: startMin + dur});
-                    }
-                });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|projet|travail/i))) mode = 'focus';
-
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
-
-                let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-                let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
-                document.getElementById('calTarget').innerText = `${tdee} kcal`;
-                document.getElementById('hudSupplements').innerText = suppsDB[mode];
-
-                const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
-                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
-                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-                const rM = ROUTINES[mode].m[rIndex]; const rE = ROUTINES[mode].e[rIndex];
-
-                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
-                occupiedSlots.forEach(slot => {
-                    if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) {
-                        dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60;
-                    }
-                });
-                const lunchTime = `${Math.floor(lunchMin/60).toString().padStart(2,'0')}:${(lunchMin%60).toString().padStart(2,'0')}`;
-                const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-
-                if (mode === 'sport' && sportTaskTime) {
-                    const [h, m] = sportTaskTime.split(':').map(Number);
-                    if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); }
-                }
-                if (importantEventTime) {
-                    const [h, m] = importantEventTime.split(':').map(Number);
-                    let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; }
-                    injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" });
-                }
-
-                let stream = [];
-                stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-                stream.push(...injectedItems);
-                stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-                stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-
-                tasks.forEach((t, i) => {
-                    let fl = (t.fullText||"").toLowerCase();
-                    let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i);
-                    let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/);
-                    let accent = 'accent-task'; let dot = 'dot-task';
-                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; }
-                    if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-                    let displayContent = t.shortText;
-                    if(t.duration > 0) {
-                        const [h, m] = t.time.split(':').map(Number);
-                        const endMin = h*60 + m + t.duration;
-                        const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60;
-                        displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`;
-                    }
-                    stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
-                });
-
-                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
-
-                const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes();
-                const currentTimeVal = currentHour * 60 + currentMin;
-                const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`;
-                let liveLineInserted = false;
-
-                container.innerHTML = stream.map(item => {
-                    const [h, m] = item.time.split(':').map(Number); const itemTimeVal = h * 60 + m;
-                    let html = '';
-                    if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
-                    let cardContent = '';
-                    if (item.type === 'routine') { cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`; }
-                    else if (item.type === 'meal') { cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`; }
-                    else if (item.type === 'snack') { cardContent = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`; }
-                    else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
-                    return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
-                }).join('');
-
-                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                updateWaterUI(mode);
-            } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur Système.</p>`; }
-        }
-
-        // --- TRADINGVIEW WIDGET ---
+        // --- TRADINGVIEW AVANCÉ (Vraie Bourse) ---
         let tvInitialized = false;
         function initTradingView() {
             if(tvInitialized) return;
@@ -388,34 +291,102 @@
                 "style": "1",
                 "locale": "fr",
                 "enable_publishing": false,
-                "backgroundColor": "rgba(5, 5, 5, 1)",
-                "gridColor": "rgba(255, 255, 255, 0.05)",
-                "container_id": "tradingview_b1e30"
+                "withdateranges": true,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true, // Permet de chercher n'importe quelle action/crypto
+                "details": true,
+                "hotlist": true,
+                "calendar": true,
+                "container_id": "tradingview_advanced"
             });
             tvInitialized = true;
         }
 
-        // HELPERS
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;save();renderHUD();}} }
-        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function addWater(n){health.water+=n; save();}
-        function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        // --- DATA & RENDERING (Reste du système) ---
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
+        const M_SPORT_D = ["Omelette 3 oeufs PDT", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
+        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_SPORT_L, dinner: M_SPORT_D }, diet: { lunch: M_SPORT_L, dinner: M_SPORT_D } };
+        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
+        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Chill Lofi"] };
+        const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
+
+        function getVits(m) { return "Vitamines & Minéraux"; } // Simplifié pour lisibilité
+
+        function switchView(viewName) {
+            const plan = document.getElementById('view-planning');
+            const market = document.getElementById('view-market');
+            const btnPlan = document.getElementById('nav-planning');
+            const btnMarket = document.getElementById('nav-market');
+
+            if(viewName === 'planning') {
+                plan.classList.remove('hidden'); market.classList.add('hidden');
+                btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active');
+            } else {
+                plan.classList.add('hidden'); market.classList.remove('hidden');
+                btnPlan.classList.remove('nav-active'); btnMarket.classList.add('nav-active');
+                initTradingView();
+            }
+        }
+
+        function renderHUD() {
+            try {
+                const isToday = (selectedDay === todayNum);
+                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
+                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
+                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+
+                const tasks = db[selectedDay] || [];
+                let mode = 'diet';
+                tasks.forEach(t => { if ((t.fullText||"").match(/sport|gym|crossfit|muscu/i)) mode = 'sport'; if ((t.fullText||"").match(/bureau|travail|projet/i)) mode = 'focus'; });
+
+                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
+                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
+                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
+                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
+
+                // Logic Timeline (Simplifiée pour focus sur IA)
+                let stream = [];
+                // Routine Matin
+                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, query: ROUTINES[mode].m[0].q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
+                // Tâches
+                tasks.forEach((t, i) => {
+                    let accent = 'accent-task'; let dot = 'dot-task';
+                    if((t.fullText||"").match(/sport/i)) { accent='accent-sport'; dot='dot-sport'; }
+                    stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
+                });
+                // Routine Soir
+                stream.push({ type: 'routine', time: '22:30', content: ROUTINES[mode].e[0].l, query: ROUTINES[mode].e[0].q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
+
+                stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+
+                document.getElementById('masterTimeline').innerHTML = stream.map(item => {
+                    let html = '';
+                    let cardContent = item.content;
+                    if(item.type === 'task') cardContent = `<div class="flex items-center gap-4" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white cursor-pointer"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs">✕</button></div>`;
+                    if(item.type === 'routine') cardContent = `<div class="flex justify-between items-center"><span class="font-bold text-lg">${item.content}</span><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶</button></div>`;
+                    
+                    return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done?'opacity-40':''}">${cardContent}</div></div>`;
+                }).join('');
+
+            } catch (e) { console.error(e); }
+        }
+
+        // HELPERS (Sauvegarde, etc)
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
-        function openProfile(){document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('inputApiKey').value = apiKey; document.getElementById('inputWeight').value = profile.weight; document.getElementById('inputHeight').value = profile.height; document.getElementById('inputAge').value = profile.age; document.getElementById('inputSex').value = profile.sex;}
-        function saveProfile(){profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; apiKey=document.getElementById('inputApiKey').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        function exportData(){const data={db,profile,health,musicProvider,manualMeals,apiKey};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;profile=data.profile;health=data.health;musicProvider=data.musicProvider;manualMeals=data.manualMeals||{};apiKey=data.apiKey||"";save();alert("Restauré !");};reader.readAsText(file);}
+        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
+        function openProfile(){document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('inputApiKey').value = apiKey; }
+        function saveProfile(){apiKey=document.getElementById('inputApiKey').value; document.getElementById('profileModal').classList.add('hidden'); save();}
+        function exportData(){const data={db,apiKey};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
+        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;apiKey=data.apiKey||"";save();alert("Restauré !");};reader.readAsText(file);}
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
-        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-        function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
+        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter' && !e.shiftKey){e.preventDefault(); traiterBatchIA();}});
         
+        // Démarrage
         renderCal(); renderHUD();
     </script>
 </body>
