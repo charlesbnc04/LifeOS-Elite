@@ -1,425 +1,393 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V75 - God Mode</title>
+    <title>LifeOS V76 - Chronos Aethelgard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { 
+                        glass: "rgba(255, 255, 255, 0.05)",
+                        glassBorder: "rgba(255, 255, 255, 0.08)",
+                        accent: "#3b82f6"
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.4s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030303; color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
+        body { background-color: #09090b; color: #e4e4e7; overflow-x: hidden; }
         
-        /* BACKGROUND VIVANT */
-        .god-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #1a1a40 0%, #000000 60%); }
-        .grid-overlay { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
 
-        /* GLASSMORPHISM AVANCÉ */
-        .glass-panel { background: rgba(10, 10, 12, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); }
-        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .glass-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+        /* GLASSMORPHISM PRO */
+        .bento-card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s;
+        }
+        .bento-card:hover { border-color: rgba(255, 255, 255, 0.15); }
 
-        /* TIMELINE */
-        .timeline-container { position: relative; padding-left: 3rem; border-left: 2px solid rgba(255,255,255,0.05); margin-left: 1rem; }
-        .timeline-node { position: absolute; left: -3.55rem; top: 1.5rem; width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid #111; z-index: 10; transition: 0.3s; }
-        .time-label { position: absolute; left: -7.5rem; top: 1.4rem; font-family: monospace; font-size: 0.8rem; color: #666; width: 3.5rem; text-align: right; }
-
-        /* THEMES DYNAMIQUES */
-        .theme-sport .timeline-node { background: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
-        .theme-focus .timeline-node { background: #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
-        .theme-diet .timeline-node { background: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-        .theme-ai .timeline-node { background: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); border-color: white; }
-
-        /* UI ELEMENTS */
-        .neon-btn { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); position: relative; overflow: hidden; transition: 0.3s; }
-        .neon-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: 0.5s; }
-        .neon-btn:hover::after { left: 150%; transition: 0.7s; }
+        /* TIMELINE CONNECTORS */
+        .timeline-line { position: absolute; left: 24px; top: 3rem; bottom: -1rem; width: 2px; background: linear-gradient(to bottom, #27272a, transparent); z-index: 0; }
         
-        .ai-pulse { animation: aiPulse 2s infinite; }
-        @keyframes aiPulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
-
-        .day-cell { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); }
-        .day-cell.active { background: #fff; color: #000; font-weight: 900; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .day-cell.has-data { border-bottom: 2px solid #3b82f6; }
-
-        /* LOADER */
-        .thinking-matrix { display: flex; gap: 4px; align-items: center; justify-content: center; height: 20px; }
-        .thinking-bar { width: 3px; background: #3b82f6; animation: think 1s ease-in-out infinite; }
-        .thinking-bar:nth-child(2) { animation-delay: 0.1s; }
-        .thinking-bar:nth-child(3) { animation-delay: 0.2s; }
-        @keyframes think { 0%, 100% { height: 5px; opacity: 0.3; } 50% { height: 20px; opacity: 1; box-shadow: 0 0 10px #3b82f6; } }
+        /* INPUT AREA */
+        .input-glow:focus-within { box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3); border-color: rgba(59, 130, 246, 0.5); }
+        
+        /* CALENDAR */
+        .cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .cal-day:hover { background: rgba(255,255,255,0.05); }
+        .cal-day.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.2); transform: scale(1.05); }
+        .cal-dot { width: 4px; height: 4px; border-radius: 50%; margin-top: 4px; }
     </style>
 </head>
-<body class="p-4 md:p-8 selection:bg-blue-500 selection:text-white">
+<body class="antialiased min-h-screen flex flex-col lg:flex-row p-4 gap-4 max-w-[1800px] mx-auto">
 
-    <div class="god-bg"></div>
-    <div class="grid-overlay"></div>
+    <aside class="w-full lg:w-80 flex flex-col gap-4 shrink-0">
+        <div class="bento-card p-6 flex justify-between items-center">
+            <div>
+                <h1 class="font-bold text-xl tracking-tight">Life<span class="text-blue-500">OS</span></h1>
+                <p class="text-[10px] text-zinc-500 font-mono">V76 CHRONOS</p>
+            </div>
+            <button onclick="toggleSettings()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 transition">⚙️</button>
+        </div>
 
-    <div class="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+        <div class="bento-card p-6 flex-1 min-h-[300px]">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-xs font-bold uppercase text-zinc-500 tracking-wider">Planning</span>
+                <span id="monthLabel" class="text-sm font-semibold">...</span>
+            </div>
+            <div id="calendarGrid" class="grid grid-cols-7 gap-1 text-sm font-medium text-zinc-400">
+                </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bento-card p-5 relative overflow-hidden group cursor-pointer" onclick="addWater()">
+                <div class="absolute inset-0 bg-blue-500/10 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-500"></div>
+                <p class="text-[10px] font-bold uppercase text-blue-400 mb-1">Hydratation</p>
+                <p id="waterVal" class="text-2xl font-bold text-white">0.0L</p>
+                <div class="w-full bg-zinc-800 h-1 mt-3 rounded-full overflow-hidden"><div id="waterBar" class="h-full bg-blue-500 w-0 transition-all"></div></div>
+            </div>
+            <div class="bento-card p-5">
+                <p class="text-[10px] font-bold uppercase text-green-400 mb-1">Calories</p>
+                <p id="calVal" class="text-2xl font-bold text-white">--</p>
+                <p class="text-[10px] text-zinc-600">Objectif dynamique</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col gap-4 h-[calc(100vh-2rem)]">
         
-        <aside class="lg:col-span-3 flex flex-col gap-6 h-fit lg:sticky lg:top-8">
+        <div class="bento-card p-1 relative group shrink-0">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-focus-within:opacity-100 transition duration-500 pointer-events-none"></div>
+            <div class="relative bg-[#09090b] rounded-[1.3rem] flex items-center p-2 border border-white/5 input-glow transition-all">
+                <textarea id="aiInput" rows="1" class="w-full bg-transparent text-sm p-4 outline-none resize-none text-white placeholder-zinc-600 font-medium" placeholder="Parlez à l'Architecte... (Ex: 'Match dans 3 jours à 20h, et prépare ma nutrition pour la semaine')"></textarea>
+                <button onclick="runChronos()" id="sendBtn" class="h-10 px-6 rounded-xl bg-white text-black font-bold text-xs uppercase hover:bg-zinc-200 transition shrink-0 flex items-center gap-2">
+                    <span>Exécuter</span>
+                    <span id="loader" class="hidden animate-spin">⟳</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden">
             
-            <div class="glass-panel p-6 flex justify-between items-center">
-                <div>
-                    <h1 class="text-xl font-black tracking-tight">LIFE<span class="text-blue-500 italic">OS</span></h1>
-                    <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">V75 SINGULARITY</p>
-                </div>
-                <button onclick="toggleConfig()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition">⚙️</button>
-            </div>
+            <div class="flex-1 bento-card p-8 overflow-y-auto relative">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div class="glass-panel p-6">
-                <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
-            </div>
-
-            <div class="glass-panel p-1 flex-1 flex flex-col relative group">
-                <div class="absolute inset-0 bg-blue-600/5 blur-xl group-hover:bg-blue-600/10 transition duration-700 rounded-3xl"></div>
-                <textarea id="userInput" class="w-full bg-transparent p-5 text-sm outline-none resize-none h-40 relative z-10 placeholder-zinc-600 font-medium" placeholder="Parle à l'Architecte.&#10;Ex: 'Semaine chargée. Optimise mon sommeil et mes repas pour une récupération maximale.'"></textarea>
-                
-                <div class="p-2 relative z-10">
-                    <button onclick="executeGodMode()" id="actionBtn" class="neon-btn w-full py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3">
-                        <span>Initialiser Optimisation</span>
-                    </button>
-                </div>
-
-                <div id="aiOverlay" class="hidden absolute inset-0 z-20 bg-black/90 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center gap-4">
-                    <div class="thinking-matrix">
-                        <div class="thinking-bar"></div><div class="thinking-bar"></div><div class="thinking-bar"></div>
+                <div class="relative z-10 mb-8">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span id="currentDateTitle" class="text-xs font-mono text-zinc-400 uppercase tracking-widest">AUJOURD'HUI</span>
                     </div>
-                    <p class="text-[10px] font-mono text-blue-400 animate-pulse">ANALYSE BIOMETRIQUE EN COURS...</p>
-                </div>
-            </div>
-
-            <div class="glass-panel p-6 flex items-center justify-between">
-                <div>
-                    <p class="text-[9px] font-bold uppercase text-zinc-500">Hydratation</p>
-                    <p id="waterDisplay" class="text-2xl font-bold">0L</p>
-                </div>
-                <button onclick="addWater(0.25)" class="h-10 w-10 rounded-full border border-blue-500/30 text-blue-500 hover:bg-blue-500 hover:text-white transition flex items-center justify-center">+</button>
-            </div>
-
-        </aside>
-
-        <main class="lg:col-span-9 space-y-6">
-            
-            <div class="glass-panel p-8 md:p-10 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-32 bg-blue-600/10 blur-[100px] rounded-full pointer-events-none"></div>
-                
-                <div class="flex flex-col md:flex-row justify-between md:items-end gap-8 relative z-10">
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                            <span id="systemStatus" class="w-2 h-2 rounded-full bg-green-500 ai-pulse"></span>
-                            <span class="text-[10px] font-bold font-mono text-blue-400">ONLINE</span>
-                        </div>
-                        <h2 id="currentDateDisplay" class="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-500">Aujourd'hui</h2>
-                        <p id="aiStrategy" class="text-sm md:text-base text-zinc-400 max-w-2xl leading-relaxed italic border-l-2 border-blue-500/30 pl-4 mt-4">
-                            "En attente de directives. Le système est prêt à structurer votre réalité."
-                        </p>
-                    </div>
-
-                    <div class="flex gap-4">
-                        <div class="glass-card p-4 text-right min-w-[120px]">
-                            <p class="text-[9px] font-bold uppercase text-zinc-500">Cible Jour</p>
-                            <p id="tdeeDisplay" class="text-2xl font-mono font-bold">--</p>
-                            <p class="text-[10px] text-zinc-600">kcal</p>
-                        </div>
-                        <div class="glass-card p-4 text-right min-w-[120px] border-blue-500/20 bg-blue-900/5">
-                            <p class="text-[9px] font-bold uppercase text-blue-400">Bio-Stack</p>
-                            <p id="stackDisplay" class="text-sm font-bold mt-1">--</p>
-                        </div>
+                    <h2 id="strategyTitle" class="text-3xl md:text-4xl font-bold text-white mb-2">En attente...</h2>
+                    <p id="strategyText" class="text-zinc-500 text-sm leading-relaxed max-w-2xl">L'IA n'a pas encore défini de stratégie pour cette date.</p>
+                    
+                    <div id="supplementsBox" class="hidden mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/5">
+                        <span class="text-xs">💊</span>
+                        <span id="supplementsText" class="text-xs font-mono text-zinc-300">--</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="glass-panel p-8 md:p-12 min-h-[500px]">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-12 pl-12">Séquence Temporelle</h3>
-                <div id="timelineFeed" class="timeline-container space-y-8">
+                <div id="timeline" class="space-y-0 relative pl-2">
                     </div>
             </div>
 
-        </main>
-    </div>
+            <div class="w-full lg:w-72 hidden lg:flex flex-col gap-4">
+                <div class="bento-card p-6 flex-1 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-opacity-5">
+                    <h3 class="text-xs font-bold uppercase text-zinc-500 mb-4">Statistiques</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm"><span class="text-zinc-400">Charge Travail</span><span class="text-white font-mono">Modérée</span></div>
+                        <div class="flex justify-between text-sm"><span class="text-zinc-400">Intensité Sport</span><span class="text-white font-mono">Élevée</span></div>
+                        <div class="w-full h-px bg-white/10 my-2"></div>
+                        <p class="text-xs text-zinc-500 leading-relaxed italic">"La régularité bat l'intensité. Concentrez-vous sur le sommeil ce soir."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    <div id="configModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center">
-        <div class="glass-panel p-8 w-full max-w-md relative">
-            <button onclick="toggleConfig()" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
-            <h2 class="text-xl font-bold mb-6">Paramètres Système</h2>
-            
+    <div id="modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bento-card w-full max-w-md p-8 relative">
+            <button onclick="toggleSettings()" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
+            <h2 class="text-xl font-bold mb-6">Configuration Système</h2>
             <div class="space-y-4">
                 <div>
                     <label class="text-[10px] font-bold uppercase text-blue-400">Clé API OpenRouter</label>
-                    <input type="password" id="apiKeyInput" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm focus:border-blue-500 outline-none transition" placeholder="sk-or-v1-...">
+                    <input type="password" id="apiKey" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm focus:border-blue-500 outline-none text-white" placeholder="sk-or-v1-...">
                 </div>
-                
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-[10px] font-bold uppercase text-zinc-500">Poids (kg)</label><input type="number" id="weightInput" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center"></div>
-                    <div><label class="text-[10px] font-bold uppercase text-zinc-500">Taille (cm)</label><input type="number" id="heightInput" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center"></div>
+                    <div><label class="text-[10px] uppercase text-zinc-500">Poids (kg)</label><input id="weight" type="number" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center text-white"></div>
+                    <div><label class="text-[10px] uppercase text-zinc-500">Taille (cm)</label><input id="height" type="number" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center text-white"></div>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-[10px] font-bold uppercase text-zinc-500">Âge</label><input type="number" id="ageInput" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center"></div>
-                    <div><label class="text-[10px] font-bold uppercase text-zinc-500">Sexe</label><select id="sexInput" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 mt-1 text-sm text-center"><option value="male">Homme</option><option value="female">Femme</option></select></div>
-                </div>
-
-                <button onclick="saveConfig()" class="neon-btn w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest mt-4">Sauvegarder</button>
+                <button onclick="saveProfile()" class="w-full py-3 bg-white text-black font-bold rounded-lg text-xs uppercase tracking-widest hover:bg-zinc-200 transition">Sauvegarder</button>
             </div>
         </div>
     </div>
 
     <script>
-        /**
-         * LIFE OS V75 - GOD MODE CORE
-         * Architecture: Local Storage + Generative AI (OpenRouter)
-         */
+        // --- CHRONOS CORE ENGINE ---
 
-        // --- STATE MANAGEMENT ---
-        const State = {
-            db: JSON.parse(localStorage.getItem('lifeos_v75_db') || "{}"),
-            profile: JSON.parse(localStorage.getItem('lifeos_v75_profile') || '{"weight":75,"height":180,"age":25,"sex":"male","apiKey":""}'),
-            health: JSON.parse(localStorage.getItem('lifeos_v75_health') || '{"water":0}'),
-            selectedDate: new Date().toISOString().split('T')[0] // Format YYYY-MM-DD
+        // State
+        let store = {
+            db: JSON.parse(localStorage.getItem('chronos_db') || "{}"),
+            profile: JSON.parse(localStorage.getItem('chronos_profile') || '{"weight":80,"height":180,"apiKey":""}'),
+            water: 0
         };
+        let selectedDateStr = new Date().toISOString().split('T')[0];
 
-        const View = {
-            calendar: document.getElementById('calendarGrid'),
-            timeline: document.getElementById('timelineFeed'),
-            dateDisplay: document.getElementById('currentDateDisplay'),
-            strategy: document.getElementById('aiStrategy'),
-            tdee: document.getElementById('tdeeDisplay'),
-            stack: document.getElementById('stackDisplay'),
-            water: document.getElementById('waterDisplay'),
-            modal: document.getElementById('configModal')
-        };
-
-        // --- INITIALIZATION ---
-        function init() {
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
             renderCalendar();
-            renderDay();
+            renderView(selectedDateStr);
+            updateHydration(0);
             
-            // Listeners
-            document.getElementById('userInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); executeGodMode(); }
-            });
-        }
+            // Auto-resize textarea
+            const tx = document.getElementById('aiInput');
+            tx.addEventListener("input", function(){this.style.height = "auto";this.style.height = (this.scrollHeight) + "px";});
+            tx.addEventListener("keypress", (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runChronos(); }});
+        });
 
-        // --- NEURAL ENGINE (THE BRAIN) ---
-        async function executeGodMode() {
-            const prompt = document.getElementById('userInput').value;
-            if (!prompt.trim()) return;
-
-            const apiKey = State.profile.apiKey;
-            if (!apiKey) { alert("ERREUR: Clé API manquante. Allez dans les réglages."); return; }
-
-            // UI LOADING STATE
-            document.getElementById('aiOverlay').classList.remove('hidden');
+        // --- THE BRAIN (MULTI-DAY LOGIC) ---
+        async function runChronos() {
+            const prompt = document.getElementById('aiInput').value;
+            if(!prompt.trim()) return;
             
-            // CONTEXTE TEMPOREL (Ce que l'IA doit savoir)
-            // On envoie les tâches d'aujourd'hui et de demain pour qu'elle ait du contexte
-            const todayKey = State.selectedDate;
-            const contextData = {
-                profile: State.profile,
-                currentSchedule: State.db[todayKey] || [],
-                userRequest: prompt,
-                date: todayKey
-            };
+            if(!store.profile.apiKey) { alert("Clé API manquante (⚙️)"); return; }
+
+            toggleLoader(true);
+            const todayISO = new Date().toISOString().split('T')[0]; // ANCRE TEMPORELLE
+            const dayName = new Date().toLocaleDateString('fr-FR', {weekday:'long'});
 
             const systemPrompt = `
-                Tu es LIFE OS, une Superintelligence Artificielle dédiée à l'optimisation biologique et productive de l'utilisateur.
+                Tu es CHRONOS, une IA de planification temporelle. 
+                Nous sommes le : ${dayName} ${todayISO}.
                 
                 TA MISSION :
-                1. Analyser la demande de l'utilisateur et son profil biométrique.
-                2. Générer ou Modifier son emploi du temps pour la date : ${todayKey}.
-                3. Calculer précisément les besoins nutritionnels (TDEE) en fonction de l'activité générée.
-                4. Créer des repas sur-mesure (titre, ingrédients, macros) pour atteindre ces objectifs.
-                5. Fournir une "Stratégie" (texte court et percutant) expliquant tes choix.
+                1. Analyse l'input de l'utilisateur. Il peut mentionner des événements futurs (ex: "dans 3 jours", "mardi prochain").
+                2. Calcule les dates exactes (YYYY-MM-DD) pour chaque événement.
+                3. Génère une structure JSON multi-jours.
+                4. Pour chaque jour modifié, calcule le TDEE (Calories) selon l'activité et invente une stratégie.
+                5. Sois créatif sur les titres et descriptions (repas gastronomiques sains, routines précises).
 
-                FORMAT DE REPONSE ATTENDU (JSON STRICT SEULEMENT) :
+                FORMAT DE REPONSE ATTENDU (JSON PUR):
                 {
-                    "strategy": "Une phrase philosophique et stratégique sur la journée.",
-                    "tdee_target": 2500,
-                    "supplements": "Liste des compléments (ex: Créatine, Zinc...)",
-                    "tasks": [
-                        {
-                            "time": "08:00",
-                            "title": "Titre Court",
-                            "description": "Détails précis ou recette complète si c'est un repas (avec macros).",
-                            "type": "sport|focus|meal|routine|social",
-                            "duration": 60
-                        }
-                    ]
+                    "schedule": {
+                        "YYYY-MM-DD": {
+                            "strategy": "Titre court de la stratégie du jour",
+                            "summary": "Phrase explicative...",
+                            "tdee": 2500,
+                            "supplements": "Créatine, Zinc...",
+                            "events": [
+                                { "time": "08:00", "title": "...", "desc": "...", "type": "sport|work|meal|social", "duration": 60 }
+                            ]
+                        },
+                        "YYYY-MM-DD": { ... } (Si l'utilisateur parle d'autres jours)
+                    }
                 }
-                
-                Règles :
-                - Si c'est un repas, le "type" doit être "meal". Mets les macros (P/G/L) dans la description.
-                - Si c'est du sport, précise l'intensité.
-                - Sois créatif. Ne donne pas de plats génériques. Invente des recettes optimisées.
             `;
 
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${apiKey}`,
-                        "Content-Type": "application/json",
-                        "HTTP-Referer": window.location.href,
-                    },
+                    headers: { "Authorization": `Bearer ${store.profile.apiKey}`, "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        "model": "openai/gpt-4o-mini", // Ou un modèle plus puissant si dispo
-                        "messages": [
-                            {"role": "system", "content": systemPrompt},
-                            {"role": "user", "content": JSON.stringify(contextData)}
-                        ],
-                        "temperature": 0.7
+                        model: "openai/gpt-4o-mini",
+                        messages: [{role: "system", content: systemPrompt}, {role: "user", content: prompt}]
                     })
                 });
 
-                const data = await response.json();
-                let content = data.choices[0].message.content;
-                content = content.replace(/```json|```/g, '').trim(); // Nettoyage
-                
-                const result = JSON.parse(content);
-                
-                // APPLICATION DES RESULTATS (Fusion intelligente)
-                // On remplace ou on ajoute ? Pour cette version "God Mode", l'IA réécrit la journée pour l'optimiser.
-                State.db[todayKey] = {
-                    tasks: result.tasks,
-                    meta: {
-                        strategy: result.strategy,
-                        tdee: result.tdee_target,
-                        stack: result.supplements
-                    }
-                };
+                const json = await res.json();
+                let clean = json.choices[0].message.content.replace(/```json|```/g, '').trim();
+                const data = JSON.parse(clean);
 
-                saveState();
-                renderDay();
-                document.getElementById('userInput').value = '';
+                // UPDATE DATABASE (MERGE INTELLIGENT)
+                Object.keys(data.schedule).forEach(dateKey => {
+                    store.db[dateKey] = data.schedule[dateKey];
+                });
 
-            } catch (error) {
-                console.error(error);
-                alert("Echec critique du noyau neuronal: " + error.message);
+                save();
+                
+                // Si l'IA a modifié une date future, on change la vue vers cette date si c'est la seule
+                const modifiedKeys = Object.keys(data.schedule);
+                if(modifiedKeys.length === 1 && modifiedKeys[0] !== selectedDateStr) {
+                    selectedDateStr = modifiedKeys[0];
+                }
+
+                renderCalendar();
+                renderView(selectedDateStr);
+                document.getElementById('aiInput').value = '';
+
+            } catch (e) {
+                alert("Erreur Chronos: " + e.message);
+                console.error(e);
             } finally {
-                document.getElementById('aiOverlay').classList.add('hidden');
+                toggleLoader(false);
             }
         }
 
-        // --- RENDERING ENGINE ---
-        function renderDay() {
-            const dateKey = State.selectedDate;
-            const data = State.db[dateKey] || { tasks: [], meta: { strategy: "Système en attente...", tdee: "--", stack: "--" } };
+        // --- RENDERERS ---
+        function renderView(dateKey) {
+            // Header Infos
+            const d = new Date(dateKey);
+            document.getElementById('currentDateTitle').innerText = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
             
-            // Update Header
-            const dateObj = new Date(dateKey);
-            View.dateDisplay.innerText = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric' });
-            View.strategy.innerText = `"${data.meta.strategy}"`;
-            View.tdee.innerText = data.meta.tdee;
-            View.stack.innerText = data.meta.stack;
+            const dayData = store.db[dateKey];
 
-            // Sort Tasks
-            const sortedTasks = (data.tasks || []).sort((a, b) => {
-                return a.time.localeCompare(b.time);
-            });
+            if(!dayData) {
+                document.getElementById('strategyTitle').innerText = "Journée Vierge";
+                document.getElementById('strategyText').innerText = "Aucune donnée planifiée pour cette date.";
+                document.getElementById('supplementsBox').classList.add('hidden');
+                document.getElementById('calVal').innerText = "--";
+                document.getElementById('timeline').innerHTML = `<div class="p-8 text-center border border-dashed border-white/10 rounded-2xl text-zinc-600 italic">L'Architecte attend vos instructions...</div>`;
+                return;
+            }
 
-            // Build Timeline
-            View.timeline.innerHTML = sortedTasks.map((task, index) => {
-                let themeClass = '';
-                let icon = '';
-                
-                switch(task.type) {
-                    case 'sport': themeClass = 'theme-sport'; icon = '🔥'; break;
-                    case 'focus': themeClass = 'theme-focus'; icon = '🧠'; break;
-                    case 'meal': themeClass = 'theme-diet'; icon = '🥗'; break;
-                    case 'social': themeClass = 'theme-ai'; icon = '👥'; break;
-                    default: themeClass = 'theme-ai'; icon = '⚡';
-                }
+            // Populate Data
+            document.getElementById('strategyTitle').innerText = dayData.strategy || "Optimisation";
+            document.getElementById('strategyText').innerText = dayData.summary || "";
+            document.getElementById('calVal').innerText = (dayData.tdee || 2000) + " kcal";
+            
+            if(dayData.supplements) {
+                document.getElementById('supplementsBox').classList.remove('hidden');
+                document.getElementById('supplementsText').innerText = dayData.supplements;
+            }
 
-                // AI Generated Card
-                return `
-                    <div class="timeline-row ${themeClass} flex gap-6 relative animate-fade-in" style="animation-delay: ${index * 0.1}s">
-                        <div class="time-label">${task.time}</div>
-                        <div class="timeline-node"></div>
-                        
-                        <div class="glass-card p-5 flex-1 cursor-pointer group hover:border-blue-500/30">
-                            <div class="flex justify-between items-start mb-2">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-xl opacity-80">${icon}</span>
-                                    <h4 class="font-bold text-lg leading-none">${task.title}</h4>
-                                </div>
-                                <span class="text-[10px] font-mono opacity-40 uppercase border border-white/10 px-2 py-1 rounded">${task.type}</span>
-                            </div>
-                            <p class="text-sm text-zinc-400 font-medium leading-relaxed">${task.description}</p>
-                            
-                            ${task.type === 'meal' ? 
-                                `<button onclick="window.open('https://www.google.com/search?q=recette+${encodeURIComponent(task.title)}','_blank')" class="mt-3 text-[10px] font-bold text-green-400 hover:text-green-300 uppercase tracking-wider flex items-center gap-1">▶ Cuisiner</button>` : ''
-                            }
+            // Timeline Generation
+            let html = '';
+            const events = (dayData.events || []).sort((a,b) => a.time.localeCompare(b.time));
+            
+            events.forEach((evt, idx) => {
+                let colorClass = "bg-zinc-500";
+                let icon = "•";
+                if(evt.type === 'sport') { colorClass = "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]"; icon = "⚡"; }
+                if(evt.type === 'work') { colorClass = "bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)]"; icon = "🧠"; }
+                if(evt.type === 'meal') { colorClass = "bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]"; icon = "🥗"; }
+
+                html += `
+                <div class="relative pl-8 py-4 group animate-slide-up" style="animation-delay: ${idx * 0.05}s">
+                    <div class="timeline-line"></div>
+                    <div class="absolute left-[20px] top-6 w-3 h-3 rounded-full border-2 border-[#18181b] z-10 ${colorClass}"></div>
+                    
+                    <div class="bento-card p-4 hover:bg-white/5 transition border-l-2 border-l-transparent hover:border-l-blue-500 cursor-default">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="font-mono text-sm font-bold text-blue-400">${evt.time}</span>
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 border border-white/5 px-1.5 rounded">${evt.type}</span>
                         </div>
+                        <h4 class="font-bold text-white text-lg">${evt.title}</h4>
+                        <p class="text-sm text-zinc-400 leading-snug mt-1">${evt.desc}</p>
                     </div>
-                `;
-            }).join('');
+                </div>`;
+            });
+            document.getElementById('timeline').innerHTML = html;
         }
 
         function renderCalendar() {
-            View.calendar.innerHTML = '';
-            const today = new Date();
-            // Affiche 7 jours centrés sur aujourd'hui ou la date sélect
-            for (let i = 0; i < 7; i++) {
-                const d = new Date();
-                d.setDate(today.getDate() + i);
-                const dateStr = d.toISOString().split('T')[0];
-                const dayName = d.toLocaleDateString('fr-FR', { weekday: 'short' });
-                const dayNum = d.getDate();
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // Simple 2-week view centered on today or selection
+            const baseDate = new Date();
+            document.getElementById('monthLabel').innerText = baseDate.toLocaleDateString('fr-FR', {month:'long', year:'numeric'});
 
-                const el = document.createElement('div');
-                let classes = "day-cell flex flex-col gap-1";
-                if (dateStr === State.selectedDate) classes += " active";
-                if (State.db[dateStr]) classes += " has-data";
-                
-                el.className = classes;
-                el.innerHTML = `<span class="opacity-50 text-[9px] uppercase">${dayName}</span><span class="font-bold text-lg">${dayNum}</span>`;
-                el.onclick = () => {
-                    State.selectedDate = dateStr;
-                    renderCalendar(); // Re-render pour la class active
-                    renderDay();
-                };
-                View.calendar.appendChild(el);
+            // Get start of week
+            const startOfWeek = new Date(baseDate);
+            startOfWeek.setDate(baseDate.getDate() - baseDate.getDay() + 1); // Monday
+
+            const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+            days.forEach(d => grid.innerHTML += `<div class="text-center text-[10px] text-zinc-600 py-2">${d}</div>`);
+
+            for(let i=0; i<14; i++) { // 2 weeks
+                const d = new Date(startOfWeek);
+                d.setDate(startOfWeek.getDate() + i);
+                const iso = d.toISOString().split('T')[0];
+                const hasData = store.db[iso];
+                const isSelected = iso === selectedDateStr;
+                const isToday = iso === new Date().toISOString().split('T')[0];
+
+                let classes = "cal-day py-2";
+                if(isSelected) classes += " active";
+                else if(isToday) classes += " border border-blue-500/50 text-blue-400";
+                else classes += " text-zinc-400";
+
+                grid.innerHTML += `
+                <div class="${classes}" onclick="selectDate('${iso}')">
+                    <span>${d.getDate()}</span>
+                    ${hasData ? `<div class="cal-dot ${isSelected ? 'bg-black' : 'bg-blue-500'}"></div>` : ''}
+                </div>`;
             }
         }
 
         // --- UTILS ---
-        function saveState() {
-            localStorage.setItem('lifeos_v75_db', JSON.stringify(State.db));
-            localStorage.setItem('lifeos_v75_profile', JSON.stringify(State.profile));
-            localStorage.setItem('lifeos_v75_health', JSON.stringify(State.health));
+        function selectDate(iso) { selectedDateStr = iso; renderCalendar(); renderView(iso); }
+        function addWater() { store.water += 0.25; updateHydration(store.water); }
+        function updateHydration(val) {
+            document.getElementById('waterVal').innerText = val.toFixed(1) + "L";
+            document.getElementById('waterBar').style.width = Math.min((val/2.5)*100, 100) + "%";
         }
-
-        function toggleConfig() {
-            View.modal.classList.toggle('hidden');
-            if(!View.modal.classList.contains('hidden')) {
-                // Load values
-                document.getElementById('apiKeyInput').value = State.profile.apiKey || '';
-                document.getElementById('weightInput').value = State.profile.weight;
-                document.getElementById('heightInput').value = State.profile.height;
-                document.getElementById('ageInput').value = State.profile.age;
-                document.getElementById('sexInput').value = State.profile.sex;
+        function saveProfile() {
+            store.profile.apiKey = document.getElementById('apiKey').value;
+            store.profile.weight = document.getElementById('weight').value;
+            store.profile.height = document.getElementById('height').value;
+            localStorage.setItem('chronos_profile', JSON.stringify(store.profile));
+            toggleSettings();
+        }
+        function save() { localStorage.setItem('chronos_db', JSON.stringify(store.db)); }
+        function toggleSettings() { 
+            const m = document.getElementById('modal'); 
+            m.classList.toggle('hidden');
+            if(!m.classList.contains('hidden')) {
+                document.getElementById('apiKey').value = store.profile.apiKey || '';
+                document.getElementById('weight').value = store.profile.weight;
+                document.getElementById('height').value = store.profile.height;
             }
         }
-
-        function saveConfig() {
-            State.profile.apiKey = document.getElementById('apiKeyInput').value;
-            State.profile.weight = document.getElementById('weightInput').value;
-            State.profile.height = document.getElementById('heightInput').value;
-            State.profile.age = document.getElementById('ageInput').value;
-            State.profile.sex = document.getElementById('sexInput').value;
-            saveState();
-            toggleConfig();
-            alert("Système mis à jour.");
+        function toggleLoader(show) {
+            const btn = document.getElementById('sendBtn');
+            const loader = document.getElementById('loader');
+            if(show) { btn.disabled = true; loader.classList.remove('hidden'); }
+            else { btn.disabled = false; loader.classList.add('hidden'); }
         }
-
-        function addWater(amount) {
-            State.health.water = (parseFloat(State.health.water) + amount).toFixed(2);
-            document.getElementById('waterDisplay').innerText = State.health.water + 'L';
-            saveState();
-        }
-
-        // Start System
-        init();
 
     </script>
 </body>
