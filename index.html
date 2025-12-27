@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V78 - Omniscience</title>
+    <title>LifeOS V79 - Sovereign Wealth</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -49,7 +49,7 @@
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- STYLES BOURSE V78 (OPTIMISÉ) --- */
+        /* --- STYLES BOURSE V79 --- */
         .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; }
         
@@ -61,13 +61,21 @@
         .news-item:hover { background: rgba(255,255,255,0.05); }
         .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
         
-        .finder-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 200; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        
-        .pf-input-group { position: relative; }
-        .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #0f0f12; border-radius: 0 0 12px 12px; max-height: 250px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .autocomplete-item { padding: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.7rem; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
-        .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.2); color: white; }
-        .isin-badge { background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; opacity: 0.7; }
+        /* SEARCH BAR PRO */
+        .pro-search-container { position: relative; width: 100%; margin-bottom: 1rem; }
+        .pro-search-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 1rem; transition: 0.3s; }
+        .pro-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); outline: none; }
+        .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #09090b; border-radius: 0 0 12px 12px; max-height: 300px; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
+        .autocomplete-item { padding: 14px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.2); }
+        .isin-badge { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; font-weight: bold; }
+
+        /* SAVINGS TABLE */
+        .savings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .savings-rate { font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #4ade80; }
+        .risk-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: bold; }
+        .risk-low { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .risk-med { background: rgba(250, 204, 21, 0.2); color: #facc15; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -109,97 +117,74 @@
                 <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p><div id="masterTimeline"></div></div>
             </div>
 
-            <div id="view-market" class="hidden flex flex-col gap-4">
+            <div id="view-market" class="hidden flex flex-col gap-6">
                 
-                <div class="glass-panel p-2 flex flex-col gap-2">
-                    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{ "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }</script></div>
-                    <div class="flex items-center justify-between px-2">
-                        <div class="flex gap-2">
-                            <button onclick="setMarketTab('ACTIONS')" id="subnav-ACTIONS" class="sub-nav-btn sub-nav-active">ACTIONS</button>
-                            <button onclick="setMarketTab('CRYPTO')" id="subnav-CRYPTO" class="sub-nav-btn">CRYPTO</button>
-                            <button onclick="setMarketTab('METALS')" id="subnav-METALS" class="sub-nav-btn">MÉTAUX</button>
-                        </div>
-                        <button onclick="openFinder()" class="text-[10px] bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded flex items-center gap-1 font-bold text-white shadow-lg">🔎 CHERCHER (TOUT)</button>
-                    </div>
+                <div class="pro-search-container">
+                    <input id="pf-symbol" type="text" class="pro-search-input" placeholder="COMMANDER > Tapez Nom, ISIN ou Ticker (ex: Amundi World, FR0014..., BTC)..." autocomplete="off">
+                    <div id="autocomplete-list" class="autocomplete-items hidden"></div>
+                </div>
+
+                <div class="flex gap-2 mb-2">
+                    <button onclick="setMarketTab('ACTIONS')" id="subnav-ACTIONS" class="sub-nav-btn sub-nav-active">ACTIONS</button>
+                    <button onclick="setMarketTab('CRYPTO')" id="subnav-CRYPTO" class="sub-nav-btn">CRYPTO</button>
+                    <button onclick="setMarketTab('METALS')" id="subnav-METALS" class="sub-nav-btn">MÉTAUX</button>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     
-                    <div class="glass-panel p-1 h-[450px] border border-white/10 relative col-span-1 lg:col-span-2 flex flex-col">
-                        <div class="px-4 py-2 border-b border-white/5 flex justify-between">
-                            <h3 class="text-xs font-bold uppercase text-white" id="activeAnalysisLabel">ANALYSE ACTIVE : CAC 40</h3>
-                            <span class="text-[9px] text-zinc-500">Live Data</span>
-                        </div>
-                        <div class="tradingview-widget-container flex-1" style="height:100%;width:100%"><div id="tv_main_chart" style="height:100%;width:100%"></div></div>
+                    <div class="glass-panel p-1 h-[450px] border border-white/10 relative col-span-1 lg:col-span-2">
+                        <div class="absolute top-2 left-4 z-10 bg-black/50 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-blue-400" id="activeChartLabel">Analyse Active : CAC 40</div>
+                        <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_main_chart" style="height:100%;width:100%"></div></div>
                     </div>
 
-                    <div class="glass-panel p-4 flex flex-col h-[380px] relative z-20">
-                        <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">Ajouter Ordre (Nom ou ISIN)</h3>
-                        <p class="text-[9px] text-zinc-500 mb-2">Tapez le nom, le ticker (CW8) ou l'ISIN. Si introuvable, forcez l'ajout.</p>
+                    <div class="glass-panel p-4 flex flex-col h-[350px] relative z-20 bg-blue-900/5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">Ordre Immédiat</h3>
+                            <div class="flex gap-2 text-[10px] font-bold"><span id="stab-PEA" class="text-blue-400">PEA</span>|<span id="stab-CTO" class="opacity-50">CTO</span>|<span id="stab-CRYPTO" class="opacity-50">CRYPTO</span></div>
+                        </div>
                         
-                        <div class="bg-black/40 p-3 rounded-lg mb-2 border border-white/5 relative">
-                            <div class="pf-input-group mb-2">
-                                <input id="pf-symbol" type="text" placeholder="Recherche (ex: CW8, LU16810..., LVMH)" class="w-full bg-transparent text-xs font-bold uppercase outline-none placeholder-zinc-600 text-white" autocomplete="off">
-                                <div id="autocomplete-list" class="autocomplete-items hidden"></div>
+                        <div class="bg-black/40 p-4 rounded-xl mb-4 border border-white/5 space-y-3">
+                            <div class="flex justify-between text-xs opacity-70 mb-1"><span>Symbole Actif :</span><span id="order-symbol" class="font-mono font-bold text-white">--</span></div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input id="pf-price" type="number" placeholder="Prix Unitaire (€)" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
+                                <input id="pf-qty" type="number" placeholder="Quantité" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
                             </div>
-                            <div class="grid grid-cols-2 gap-2 mb-2">
-                                <input id="pf-price" type="number" placeholder="PRU (€)" class="bg-transparent border-b border-white/10 text-xs py-1 outline-none text-white">
-                                <input id="pf-qty" type="number" placeholder="Qté" class="bg-transparent border-b border-white/10 text-xs py-1 outline-none text-white">
-                            </div>
-                            <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-[10px] font-bold py-2 rounded uppercase transition">Ajouter / Forcer</button>
+                            <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold py-3 rounded-lg uppercase tracking-wider transition shadow-lg">Confirmer l'Ordre</button>
                         </div>
 
-                        <div class="flex gap-2 text-[9px] font-bold mb-2 opacity-60">
-                            <span id="stab-PEA">PEA</span>|<span id="stab-CTO">CTO</span>|<span id="stab-CRYPTO">CRYPTO</span>|<span id="stab-METALS">METAL</span>
-                        </div>
-                        <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1"></div>
+                        <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 border-t border-white/5 pt-2"></div>
                     </div>
 
-                    <div class="glass-panel p-2 h-[380px] flex flex-col">
-                        <h3 class="text-xs font-bold uppercase text-zinc-500 p-2 text-center">Jauge Technique (Active)</h3>
-                        <div class="tradingview-widget-container flex-1" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
+                    <div class="glass-panel p-6 flex flex-col h-[350px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">CIO Desk (Analyse Pro)</h3>
+                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
+                        </div>
+                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono">
+                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
+                        </div>
                     </div>
 
-                    <div class="glass-panel p-4 flex flex-col h-[300px] relative overflow-hidden">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-xs font-bold uppercase text-purple-400">IA Analyst (Pro)</h3>
-                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[9px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-2 py-1 rounded">AUDIT COMPLET</button>
-                        </div>
-                        <div id="auditContent" class="flex-1 overflow-y-auto text-[10px] leading-relaxed text-zinc-300">
-                            <div class="flex flex-col items-center justify-center h-full opacity-30"><span class="text-2xl">🧠</span><p>En attente d'ordres...</p></div>
-                        </div>
+                    <div class="glass-panel p-0 h-[300px] flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-white/5 bg-white/5"><h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Cash (France)</h3></div>
+                        <div class="flex-1 overflow-y-auto" id="savings-list">
+                            </div>
                     </div>
 
                     <div class="glass-panel p-4 h-[300px] overflow-y-auto">
-                        <h3 class="text-xs font-bold uppercase text-red-400 mb-2">Media Room</h3>
+                        <h3 class="text-xs font-bold uppercase text-red-400 mb-4 tracking-widest">Briefing Stratégique</h3>
                         <div class="space-y-2">
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><span class="font-bold text-[10px]">Matthieu Louvet</span> <span class="news-tag">PEA</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')"><span class="font-bold text-[10px]">Mathias Baccino</span> <span class="news-tag">Macro</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')"><span class="font-bold text-[10px]">Finary Talk</span> <span class="news-tag">Patrimoine</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=ZoneBourse', '_blank')"><span class="font-bold text-[10px]">ZoneBourse</span> <span class="news-tag">News</span></div>
+                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><span class="font-bold text-[10px]">Matthieu Louvet</span> <span class="news-tag text-blue-300">Fondamental</span></div>
+                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')"><span class="font-bold text-[10px]">Mathias Baccino</span> <span class="news-tag text-orange-300">Technique</span></div>
+                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')"><span class="font-bold text-[10px]">Finary Talk</span> <span class="news-tag text-green-300">Private Equity</span></div>
+                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=ZoneBourse', '_blank')"><span class="font-bold text-[10px]">ZoneBourse</span> <span class="news-tag text-zinc-300">Newsflow</span></div>
                         </div>
-                    </div>
-
-                    <div class="glass-panel p-2 h-[250px] col-span-1 lg:col-span-2">
-                         <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_profile" style="height:100%;width:100%"></div></div>
                     </div>
 
                 </div>
             </div>
 
         </main>
-    </div>
-
-    <div id="finderModal" class="hidden finder-modal">
-        <div class="w-[90%] h-[90%] bg-[#131722] rounded-xl overflow-hidden relative shadow-2xl border border-white/10 flex flex-col">
-            <div class="p-4 border-b border-white/5 flex justify-between items-center">
-                <div><h3 class="font-bold text-white">Recherche Mondiale</h3><p class="text-xs text-zinc-500">Trouvez le code (ex: "CW8") et copiez-le dans le portefeuille.</p></div>
-                <button onclick="closeFinder()" class="bg-red-500 text-white w-8 h-8 rounded flex items-center justify-center font-bold">✕</button>
-            </div>
-            <div class="flex-1">
-                <div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js" async>{ "width": "100%", "height": "100%", "defaultColumn": "overview", "defaultScreen": "general", "market": "france", "showToolbar": true, "colorTheme": "dark", "locale": "fr" }</script></div>
-            </div>
-        </div>
     </div>
 
     <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
@@ -222,7 +207,7 @@
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
 
-        // V70 Arrays
+        // V70 Arrays (Intacts)
         const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
         const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
         const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
@@ -234,118 +219,37 @@
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; return "Vitamines"; }
 
-        // --- DATABASE HUGE (TOP 500 TRADE REPUBLIC + VOTRE ETF) ---
+        // --- DATABASE HUGE (TOP 500 + VOTRE ETF) ---
         const hugeStockDatabase = [
-            // VOTRE ETF SPECIFIQUE
             { l: "Amundi MSCI World II (Dist)", s: "WLD", i: "FR001400U5Q4" },
             { l: "Amundi MSCI World (Acc)", s: "CW8", i: "LU1681043599" },
-            
-            // EMERGING MARKETS & MONDE
-            { l: "Amundi Emerging Markets (Acc)", s: "PAEEM", i: "LU1681045370" },
-            { l: "iShares MSCI EM IMI", s: "EMIM", i: "IE00BKM4GZ66" },
-            { l: "Lyxor MSCI Emerging Markets", s: "LEM", i: "FR0010429068" },
-            { l: "Amundi MSCI EM Asia", s: "AASI", i: "LU1681044480" },
-            
-            // INDICES & ETFS MAJEURS
             { l: "S&P 500 ETF (BNP)", s: "ESE", i: "FR0011550185" },
-            { l: "S&P 500 ETF (Vanguard)", s: "VUSA", i: "IE00B3XXRP09" },
             { l: "NASDAQ 100 ETF (Amundi)", s: "PANX", i: "LU1681038243" },
-            { l: "NASDAQ 100 ETF (Lyxor)", s: "UST", i: "FR0011871110" },
-            { l: "NASDAQ 100 (Levier x2) (LQQ)", s: "LQQ", i: "FR0010342592" },
             { l: "CAC 40 ETF (Amundi)", s: "C40", i: "LU1681046931" },
-            { l: "Euro Stoxx 50 ETF", s: "MSE", i: "FR0007054358" },
-            { l: "Japan Topix ETF", s: "PTPXE", i: "FR0013411980" },
-            { l: "Russell 2000 ETF", s: "RS2K", i: "FR0011869361" },
-            { l: "Water ETF (Lyrxor)", s: "WAT", i: "FR0010527275" },
-            { l: "New Energy ETF", s: "NRJ", i: "FR0010524777" },
-            { l: "Health Care ETF", s: "HLT", i: "FR0010344879" },
-            { l: "Robotics & AI ETF", s: "ROBO", i: "IE00BMW3QX54" },
-            
-            // ACTIONS FR
+            { l: "Emerging Markets ETF", s: "PAEEM", i: "LU1681045370" },
             { l: "LVMH", s: "MC", i: "FR0000121014" },
             { l: "TotalEnergies", s: "TTE", i: "FR0000120271" },
             { l: "Air Liquide", s: "AI", i: "FR0000120073" },
-            { l: "L'Oréal", s: "OR", i: "FR0000120321" },
-            { l: "Hermès", s: "RMS", i: "FR0000052292" },
-            { l: "Sanofi", s: "SAN", i: "FR0000120578" },
-            { l: "Schneider Electric", s: "SU", i: "FR0000121972" },
-            { l: "BNP Paribas", s: "BNP", i: "FR0000131104" },
-            { l: "Airbus", s: "AIR", i: "NL0000235190" },
-            { l: "AXA", s: "CS", i: "FR0000120628" },
-            { l: "Vinci", s: "DG", i: "FR0000125486" },
-            { l: "EssilorLuxottica", s: "EL", i: "FR0000121667" },
-            { l: "Pernod Ricard", s: "RI", i: "FR0000120693" },
-            { l: "Kering", s: "KER", i: "FR0000121485" },
-            { l: "Safran", s: "SAF", i: "FR0000073272" },
-            { l: "Capgemini", s: "CAP", i: "FR0000125338" },
-            { l: "STMicroelectronics", s: "STMPA", i: "NL0000226223" },
-            { l: "Danone", s: "BN", i: "FR0000120644" },
-            { l: "Michelin", s: "ML", i: "FR0000121261" },
-            { l: "Engie", s: "ENGI", i: "FR0010208488" },
-            { l: "Orange", s: "ORA", i: "FR0000133308" },
-            { l: "Legrand", s: "LR", i: "FR0010307819" },
-            { l: "Saint-Gobain", s: "SGO", i: "FR0000125007" },
-            { l: "Société Générale", s: "GLE", i: "FR0000130809" },
-            { l: "Veolia", s: "VIE", i: "FR0000124141" },
-            { l: "Publicis", s: "PUB", i: "FR0000130577" },
-            { l: "Crédit Agricole", s: "ACA", i: "FR0000045072" },
-            { l: "Thales", s: "HO", i: "FR0000121329" },
-            { l: "Teleperformance", s: "TEP", i: "FR0000051807" },
-            { l: "Renault", s: "RNO", i: "FR0000131906" },
-            { l: "Carrefour", s: "CA", i: "FR0000120172" },
-            { l: "Bouygues", s: "EN", i: "FR0000120503" },
-            { l: "Edenred", s: "EDEN", i: "FR0010908533" },
-            { l: "Unibail-Rodamco", s: "URW", i: "FR0013326246" },
-            
-            // US TECH (NASDAQ)
             { l: "Apple", s: "AAPL", i: "US0378331005" },
             { l: "Microsoft", s: "MSFT", i: "US5949181045" },
             { l: "Nvidia", s: "NVDA", i: "US67066G1040" },
             { l: "Amazon", s: "AMZN", i: "US0231351067" },
-            { l: "Alphabet A (Google)", s: "GOOGL", i: "US02079K3059" },
-            { l: "Meta Platforms", s: "META", i: "US30303M1027" },
             { l: "Tesla", s: "TSLA", i: "US88160R1014" },
-            { l: "Broadcom", s: "AVGO", i: "US11135F1012" },
-            { l: "AMD", s: "AMD", i: "US0079031078" },
-            { l: "Netflix", s: "NFLX", i: "US64110L1061" },
-            { l: "Adobe", s: "ADBE", i: "US00724F1012" },
-            { l: "Salesforce", s: "CRM", i: "US79466L3024" },
-            { l: "Oracle", s: "ORCL", i: "US68389X1054" },
-            { l: "Intel", s: "INTC", i: "US4581401001" },
-            { l: "Palantir", s: "PLTR", i: "US69608A1088" },
-            
-            // US DOW/S&P
-            { l: "Berkshire Hathaway", s: "BRK.B", i: "US0846707026" },
-            { l: "JPMorgan Chase", s: "JPM", i: "US46625H1005" },
-            { l: "Visa", s: "V", i: "US92826C8394" },
-            { l: "Mastercard", s: "MA", i: "US57636Q1040" },
-            { l: "Exxon Mobil", s: "XOM", i: "US30231G1022" },
-            { l: "UnitedHealth", s: "UNH", i: "US91324P1021" },
-            { l: "Walmart", s: "WMT", i: "US9311421039" },
-            { l: "Procter & Gamble", s: "PG", i: "US7427181091" },
-            { l: "Johnson & Johnson", s: "JNJ", i: "US4781601046" },
-            { l: "Coca-Cola", s: "KO", i: "US1912161007" },
-            { l: "PepsiCo", s: "PEP", i: "US7134481081" },
-            { l: "McDonald's", s: "MCD", i: "US5801351017" },
-            { l: "Costco", s: "COST", i: "US22160K1051" },
-            { l: "Disney", s: "DIS", i: "US2546871060" },
-            
-            // CRYPTO
             { l: "Bitcoin", s: "BTCUSD", i: "BTC" },
             { l: "Ethereum", s: "ETHUSD", i: "ETH" },
             { l: "Solana", s: "SOLUSD", i: "SOL" },
-            { l: "XRP", s: "XRPUSD", i: "XRP" },
-            { l: "Cardano", s: "ADAUSD", i: "ADA" },
-            { l: "Dogecoin", s: "DOGEUSD", i: "DOGE" },
-            { l: "Shiba Inu", s: "SHIBUSD", i: "SHIB" },
-            { l: "Binance Coin", s: "BNBUSD", i: "BNB" },
-            { l: "Polkadot", s: "DOTUSD", i: "DOT" },
-            
-            // MATIERES PREMIERES
-            { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" },
-            { l: "Argent (Silver)", s: "XAGUSD", i: "SILVER" },
-            { l: "Pétrole (WTI)", s: "USOIL", i: "OIL" },
-            { l: "Gaz Naturel", s: "NG1!", i: "GAS" }
+            { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" }
+        ];
+
+        // --- SAVINGS DATA (HARDCODED FRANCE) ---
+        const SAVINGS_RATES = [
+            { name: "LEP (Populaire)", rate: "4.00%", risk: "low", comment: "Max 10k€, sous condition" },
+            { name: "Livret A / LDDS", rate: "3.00%", risk: "low", comment: "Net d'impôt, liquide" },
+            { name: "Trade Republic", rate: "3.25%", risk: "low", comment: "Brut, liquidités" },
+            { name: "Bourso+ (BoursoBank)", rate: "2.50%", risk: "low", comment: "Boost possible" },
+            { name: "Fonds Euro (Moyen)", rate: "~2.50%", risk: "low", comment: "Assurance Vie" },
+            { name: "CAT (Terme)", rate: "~3.00%", risk: "med", comment: "Argent bloqué" },
+            { name: "Revolut (MMF)", rate: "~3.10%", risk: "med", comment: "Flexi, variable" }
         ];
 
         // --- AUTOCOMPLETE LOGIC ---
@@ -372,6 +276,7 @@
                     d.innerHTML = `<div><strong>${item.s}</strong> <span class="opacity-50 text-[10px] ml-1">${item.l}</span></div><span class="isin-badge">${item.i}</span>`;
                     d.addEventListener("click", function() {
                         inp.value = item.s;
+                        loadActiveAsset(item.s, item.l); // Load Chart immediately
                         list.innerHTML = "";
                         list.classList.add('hidden');
                     });
@@ -380,6 +285,13 @@
             }
         });
         document.addEventListener("click", function (e) { if(e.target !== inp) list.classList.add('hidden'); });
+
+        function loadActiveAsset(symbol, name) {
+            currentChartSymbol = symbol;
+            refreshMarketWidgets();
+            document.getElementById('activeChartLabel').innerText = `Analyse Active : ${name || symbol}`;
+            document.getElementById('order-symbol').innerText = symbol;
+        }
 
         // --- MARKET LOGIC ---
         function setMarketTab(tab) {
@@ -404,25 +316,12 @@
 
         function refreshMarketWidgets() {
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
-            createWidget('tv_gauge', 'gauge', currentChartSymbol);
-            createWidget('tv_profile', 'profile', currentChartSymbol);
-            document.getElementById('activeAnalysisLabel').innerText = `ANALYSE ACTIVE : ${currentChartSymbol}`;
         }
 
         function createWidget(containerId, type, symbol) {
             document.getElementById(containerId).innerHTML = "";
-            let config = {};
-            let scriptSrc = "";
             if(type === 'chart') { new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "toolbar_bg": "#f1f3f6", "enable_publishing": false, "container_id": containerId }); return; }
-            if(type === 'gauge') { scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js"; config = { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": symbol, "showIntervalTabs": false, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }; }
-            if(type === 'profile') { scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js"; config = { "width": "100%", "height": "100%", "colorTheme": "dark", "isTransparent": true, "symbol": symbol, "locale": "fr" }; }
-            const script = document.createElement('script'); script.type = 'text/javascript'; script.src = scriptSrc; script.async = true; script.innerHTML = JSON.stringify(config);
-            document.getElementById(containerId).appendChild(script);
         }
-
-        // --- PORTFOLIO & FINDER ---
-        function openFinder() { document.getElementById('finderModal').classList.remove('hidden'); }
-        function closeFinder() { document.getElementById('finderModal').classList.add('hidden'); }
 
         function addToPortfolio() {
             const sym = document.getElementById('pf-symbol').value.toUpperCase(); 
@@ -447,19 +346,41 @@
                 const total = (a.price * a.qty).toFixed(0);
                 const el = document.createElement('div'); el.className = 'flex justify-between items-center p-2 rounded hover:bg-white/5 border-b border-white/5 group cursor-pointer';
                 el.innerHTML = `<div class="flex items-center gap-2"><span class="text-[10px] font-bold bg-white/10 px-1 rounded text-blue-300 w-12 text-center truncate">${a.symbol}</span><div><p class="text-[10px] opacity-50">${a.qty} x ${a.price}</p></div></div><div class="flex items-center gap-2"><span class="text-xs font-mono font-bold">${total}€</span><button onclick="event.stopPropagation(); delAsset(${i})" class="text-red-500 text-[10px] opacity-0 group-hover:opacity-100">✕</button></div>`;
-                el.onclick = () => { currentChartSymbol = a.symbol; refreshMarketWidgets(); };
+                el.onclick = () => { loadActiveAsset(a.symbol, a.symbol); };
                 list.appendChild(el);
             });
+        }
+
+        function renderSavings() {
+            const container = document.getElementById('savings-list');
+            container.innerHTML = SAVINGS_RATES.map(s => `
+                <div class="savings-row">
+                    <div><p class="text-xs font-bold text-white">${s.name}</p><p class="text-[10px] text-zinc-500">${s.comment}</p></div>
+                    <div class="text-right"><p class="savings-rate">${s.rate}</p><span class="risk-badge ${s.risk==='low'?'risk-low':'risk-med'}">${s.risk==='low'?'SÛR':'MOYEN'}</span></div>
+                </div>
+            `).join('');
         }
 
         async function analyzePortfoliosIA() {
             if(!apiKey) { alert("Clé API manquante"); openProfile(); return; }
             let summary = ""; for (const [key, value] of Object.entries(portfolio)) { if(value.length > 0) summary += `${key}: [${value.map(a => a.symbol).join(', ')}]. `; }
             if(!summary) { alert("Portefeuille vide."); return; }
-            const container = document.getElementById('auditContent'); container.innerHTML = '<p class="animate-pulse">Analyse Analyste Senior...</p>';
-            const prompt = `Agis comme un Analyste Senior Wall Street. Analyse ce portefeuille global : ${summary}. Donne une critique constructive (risques, secteurs, volatilité). Format HTML simple (pas de markdown), style télégraphique.`;
+            const container = document.getElementById('auditContent'); container.innerHTML = '<p class="animate-pulse">Analyste Senior en cours...</p>';
+            
+            const prompt = `You are a Chief Investment Officer (CIO) at a top-tier Macro Hedge Fund. 
+            Analyze this portfolio: ${summary}.
+            
+            Be very direct, concise, and use professional financial terminology (Sharpe, Beta, Volatility, Sector Rotation, Drawdown).
+            
+            Structure:
+            1. **Macro View**: Exposure risks.
+            2. **Critique**: What is wrong? (Concentration? Over-leverage? Lack of defensive assets?).
+            3. **Verdict**: A rating out of 10.
+            
+            Format: HTML list (<ul>, <li>, <b>). No markdown. Keep it dark-mode friendly.`;
+
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V76" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V79" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
                 const data = await response.json(); container.innerHTML = data.choices[0].message.content;
             } catch(e) { container.innerHTML = "Erreur analyse."; }
         }
@@ -470,7 +391,7 @@
             if(viewName === 'planning') { plan.classList.remove('hidden'); market.classList.add('hidden'); btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active'); } 
             else { plan.classList.add('hidden'); market.classList.remove('hidden'); btnPlan.classList.remove('nav-active'); btnMarket.classList.add('nav-active'); initMarket(); }
         }
-        function initMarket() { setMarketTab('ACTIONS'); }
+        function initMarket() { setMarketTab('ACTIONS'); renderSavings(); }
 
         // --- AGENDA V70 LOGIC ---
         async function traiterBatchIA() { const raw = document.getElementById('userInput').value; if (!raw.trim()) return; if (!apiKey) { alert("Clé API manquante"); openProfile(); return; } const btn = document.getElementById('aiBtn'); const originalText = btn.innerHTML; btn.innerHTML = "<span>🧠</span> Analyse..."; btn.classList.add('ai-loading'); btn.disabled = true; try { const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": `Tu es l'IA de LifeOS. Date: ${new Date().toLocaleDateString()}. JSON strict: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":60,"dayOffset":0}].` }, { "role": "user", "content": raw }] }) }); const data = await response.json(); const tasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim()); tasks.forEach(t => { let d = new Date(); d.setDate(now.getDate() + (t.dayOffset || 0)); const day = d.getDate(); if (!db[day]) db[day] = []; db[day].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false }); }); save(); renderHUD(); document.getElementById('userInput').value = ''; } catch (e) { alert(e); } finally { btn.classList.remove('ai-loading'); btn.disabled = false; btn.innerHTML = originalText; } }
