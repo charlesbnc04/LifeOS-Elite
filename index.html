@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V73 - Elite</title>
+    <title>LifeOS Sovereign V74 - Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -11,29 +11,43 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 1.5rem; }
         
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.25rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.25rem; cursor: pointer; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
-        
+        /* TIMELINE STYLES */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.25rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-dot { position: absolute; left: 58px; top: 25px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
         
-        /* Context Styles */
-        .ctx-sport { border-left: 3px solid #f97316; } 
-        .ctx-focus { border-left: 3px solid #8b5cf6; }
-        .ctx-meal { border-left: 3px solid #10b981; }
-        .ctx-task { border-left: 3px solid #3b82f6; }
+        /* SESSION CONTAINER (NOUVEAU) */
+        .session-block {
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-left: 4px solid #3b82f6; /* Default Blue */
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .session-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
         
-        .badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.05em; }
-        .badge-vit { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
-        
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-        .ai-loading { animation: thinking 1.5s infinite; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
-        @keyframes thinking { 0% { border-color: #3b82f6; } 50% { border-color: #8b5cf6; } 100% { border-color: #3b82f6; } }
+        /* INNER TASKS (Nested) */
+        .nested-row { display: flex; gap: 1rem; margin-bottom: 1rem; position: relative; align-items: center; }
+        .nested-row:last-child { margin-bottom: 0; }
+        .nested-time { font-family: monospace; font-size: 0.75rem; opacity: 0.5; width: 40px; text-align: right; }
+        .nested-card { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 0.75rem; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .nested-card:hover { background: rgba(255,255,255,0.05); }
 
+        /* COLORS & THEMES */
+        .theme-work { border-left-color: #8b5cf6; background: linear-gradient(180deg, rgba(139,92,246,0.05) 0%, rgba(0,0,0,0) 100%); }
+        .theme-sport { border-left-color: #f97316; background: linear-gradient(180deg, rgba(249,115,22,0.05) 0%, rgba(0,0,0,0) 100%); }
+        .theme-chill { border-left-color: #10b981; }
+
+        .badge-vit { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; }
+        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
+        
+        /* LOADING */
+        .ai-loading { animation: thinking 1.5s infinite; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+        @keyframes thinking { 0% { border-color: #3b82f6; } 50% { border-color: #8b5cf6; } 100% { border-color: #3b82f6; } }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -43,7 +57,7 @@
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-6 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center">
-                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-white/10 text-zinc-300 px-2 py-0.5 rounded ml-2">V73</span></h1>
+                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-white/10 text-zinc-300 px-2 py-0.5 rounded ml-2">V74</span></h1>
                     <button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️</button>
                 </div>
 
@@ -55,9 +69,9 @@
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
                 
                 <div class="flex-1">
-                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Claude 3.5 Intelligence</p>
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Crossfit à 18h et Réunion projet à 14h'"></textarea>
-                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Planifier</button>
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Architecte IA (Claude 3.5)</p>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Essaie: 'Travail de 9h à 17h, et réunion à 10h, déjeuner à 12h30'"></textarea>
+                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Organiser</button>
                 </div>
             </div>
         </aside>
@@ -67,24 +81,18 @@
             <div id="view-planning" class="glass-base p-8 md:p-10 transition-colors duration-500">
                 <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 gap-6">
                     <div>
-                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Opérations</span></div>
+                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Architecte Temporel</span></div>
                         <h2 id="hudDate" class="text-4xl md:text-5xl font-black tracking-tight text-white">Date</h2>
-                        <div id="contextBanner" class="mt-4 inline-flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5"><span id="ctxIcon" class="text-2xl">⚖️</span><div><p class="text-sm font-bold text-white" id="contextTitle">Standard</p><p class="text-[10px] opacity-50 uppercase tracking-widest" id="contextSubtitle">Mode Activé</p></div></div>
+                        <div id="contextBanner" class="mt-4 inline-flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5"><span id="ctxIcon" class="text-2xl">⚡</span><div><p class="text-sm font-bold text-white" id="contextTitle">Standard</p><p class="text-[10px] opacity-50 uppercase tracking-widest" id="contextSubtitle">Mode Actif</p></div></div>
                     </div>
                     <div class="flex gap-6">
-                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32">
-                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible Calories</p>
-                            <p id="calTarget" class="text-xl font-mono font-medium text-white">--</p>
-                        </div>
-                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32">
-                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Suppléments</p>
-                            <p id="hudSupplements" class="text-xs font-bold text-green-400 leading-tight">--</p>
-                        </div>
+                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32"><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible Calories</p><p id="calTarget" class="text-xl font-mono font-medium text-white">--</p></div>
+                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32"><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-xs font-bold text-green-400 leading-tight">--</p></div>
                     </div>
                 </div>
 
-                <div class="relative pl-4 pt-4 border-t border-white/5">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12 mt-6">Timeline</p>
+                <div class="relative pt-4 border-t border-white/5">
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest mt-6">Flux de la journée</p>
                     <div id="masterTimeline"></div>
                 </div>
             </div>
@@ -96,13 +104,11 @@
                     { "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"},{"proName":"TVC:GOLD","title":"Or"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }
                     </script>
                 </div>
-
                 <div class="glass-base h-[500px] overflow-hidden p-1 border border-white/10">
                     <div class="tradingview-widget-container" style="height:100%;width:100%">
                         <div id="tradingview_advanced" style="height:100%;width:100%"></div>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-base p-6">
                         <div class="flex items-center gap-3 mb-4"><span class="text-xl">🧭</span><h3 class="font-bold">Recommandation Technique</h3></div>
@@ -113,7 +119,7 @@
                             </script>
                         </div>
                     </div>
-                    <div class="glass-base p-6">
+                     <div class="glass-base p-6">
                         <div class="flex items-center gap-3 mb-4"><span class="text-xl">🚀</span><h3 class="font-bold">Crypto Trend</h3></div>
                         <div class="tradingview-widget-container" style="height: 200px">
                              <div class="tradingview-widget-container__widget"></div>
@@ -130,7 +136,7 @@
 
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
         <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center">
-            <h2 class="text-xl font-bold mb-6">Système & Clé API</h2>
+            <h2 class="text-xl font-bold mb-6">Système</h2>
             <div class="space-y-3 mb-6">
                 <input type="password" id="inputApiKey" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-blue-500/30 focus:border-blue-500" placeholder="Clé OpenRouter (sk-or-...)">
                 <input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none" placeholder="Poids (kg)">
@@ -140,169 +146,188 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURATION & DONNÉES ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v73_db') || "{}");
+        // --- DATA & CONFIG ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v74_db') || "{}");
         let profile = JSON.parse(localStorage.getItem('lifeos_profile') || '{"weight":80}');
         let apiKey = localStorage.getItem('lifeos_apikey') || ""; 
         const now = new Date(); const todayNum = now.getDate(); let selectedDay = todayNum;
         const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
 
-        // BASE DE DONNÉES BIO-MOTEUR (Repas & Vitamines)
         const BIO_DB = {
-            sport: {
-                title: "Haute Performance", icon: "🔥", color: "text-orange-500",
-                lunch: ["Pâtes Complètes Poulet", "Riz Basmati Boeuf 5%", "Gnocchis Dinde", "Bowl Quinoa Saumon"],
-                dinner: ["Omelette PDT", "Cabillaud Riz", "Wrap Poulet Avocat", "Saucisse Lentilles"],
-                supps: "Magnésium, Créatine, BCAA",
-                desc: "Riche en glucides & protéines"
-            },
-            focus: {
-                title: "Deep Work", icon: "🧠", color: "text-purple-500",
-                lunch: ["Salade César Poulet", "Saumon Haricots Verts", "Bowl Tofu", "Carpaccio Boeuf"],
-                dinner: ["Wok Légumes", "Soupe Maison", "Poisson Papillote", "Salade Grecque"],
-                supps: "Omega-3, Vitamine D, Matcha",
-                desc: "Low Carb, High Fat (Cognition)"
-            },
-            chill: {
-                title: "Récupération", icon: "🌿", color: "text-green-500",
-                lunch: ["Taboulé Libanais", "Quiche Légumes", "Sandwich Dinde", "Poke Bowl"],
-                dinner: ["Velouté Potiron", "Oeufs Brouillés", "Avocado Toast", "Yaourt Fruits"],
-                supps: "Multivitamines, Probiotiques",
-                desc: "Équilibre & Digestion"
-            }
+            sport: { title: "Haute Performance", icon: "🔥", color: "text-orange-500", lunch: ["Pâtes Complètes Poulet", "Riz Basmati Boeuf 5%"], dinner: ["Omelette PDT", "Cabillaud Riz"], supps: "Magnésium, Créatine", desc: "Riche en glucides" },
+            focus: { title: "Deep Work", icon: "🧠", color: "text-purple-500", lunch: ["Salade César Poulet", "Saumon Haricots Verts"], dinner: ["Wok Légumes", "Soupe Maison"], supps: "Omega-3, Vitamine D", desc: "Low Carb Focus" },
+            chill: { title: "Récupération", icon: "🌿", color: "text-green-500", lunch: ["Taboulé Libanais", "Quiche Légumes"], dinner: ["Velouté Potiron", "Oeufs Brouillés"], supps: "Multivitamines", desc: "Équilibre" }
         };
 
-        // --- 2. LOGIQUE IA (CLAUDE 3.5 SONNET) ---
+        // --- IA CLAUDE 3.5 ---
         async function traiterBatchIA() {
             const raw = document.getElementById('userInput').value;
             if (!raw.trim() || !apiKey) { if(!apiKey) openProfile(); return; }
             const btn = document.getElementById('aiBtn'); const oldTxt = btn.innerHTML;
-            btn.innerHTML = "<span>🧠</span> Analyse..."; btn.disabled = true;
+            btn.innerHTML = "<span>🧠</span> Architecture..."; btn.classList.add('ai-loading'); btn.disabled = true;
 
             try {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V73" },
+                    method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V74" },
                     body: JSON.stringify({
                         "model": "anthropic/claude-3.5-sonnet",
                         "messages": [
-                            { "role": "system", "content": `Tu es LifeOS. Aujourd'hui: ${new Date().toLocaleDateString()}. Retourne un JSON strict des tâches. Si sport détecté, titre="Sport". Si réunion/travail, titre="Travail". Format: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":60,"dayOffset":0}]` },
+                            { "role": "system", "content": `Tu es LifeOS. Aujourd'hui: ${new Date().toLocaleDateString()}. Retourne un JSON strict. Pour les longues durées (>2h), type="session". Sinon type="task". Format: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":minutes_int,"dayOffset":0, "type":"session"|"task"}]` },
                             { "role": "user", "content": raw }
                         ]
                     })
                 });
                 const data = await response.json();
-                const tasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim());
+                const newTasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim());
                 
-                tasks.forEach(t => {
+                newTasks.forEach(t => {
                     const targetDate = new Date(); targetDate.setDate(now.getDate() + (t.dayOffset||0)); const d = targetDate.getDate();
                     if (!db[d]) db[d] = [];
-                    db[d].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false });
+                    db[d].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, type: t.type || (t.duration > 119 ? 'session' : 'task'), done: false });
                 });
-                save(); renderHUD();
-                document.getElementById('userInput').value = '';
+                save(); renderHUD(); document.getElementById('userInput').value = '';
             } catch (e) { alert("Erreur IA: " + e.message); } 
-            finally { btn.innerHTML = oldTxt; btn.disabled = false; }
+            finally { btn.innerHTML = oldTxt; btn.classList.remove('ai-loading'); btn.disabled = false; }
         }
 
-        // --- 3. MOTEUR D'AFFICHAGE & BIO-LOGIQUE ---
+        // --- RENDER ENGINE (TIME BLOCKING) ---
         function renderHUD() {
-            // Setup Date & Status
             document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
             
-            // 1. Détection du Contexte (Mode)
-            const tasks = db[selectedDay] || [];
-            let mode = 'chill';
-            tasks.forEach(t => {
-                const txt = (t.fullText + t.shortText).toLowerCase();
-                if(txt.match(/sport|gym|muscu|crossfit|foot|run/)) mode = 'sport';
-                else if(txt.match(/réunion|bureau|travail|projet|code/) && mode !== 'sport') mode = 'focus';
-            });
-            const theme = BIO_DB[mode];
+            // 1. Détection Mode Global
+            const rawTasks = db[selectedDay] || [];
+            let globalMode = 'chill';
+            if(rawTasks.some(t => (t.fullText||"").match(/sport|gym|crossfit/i))) globalMode = 'sport';
+            else if(rawTasks.some(t => (t.type === 'session' && (t.fullText||"").match(/travail|work|bureau/i)))) globalMode = 'focus';
 
-            // UI Updates based on Mode
+            // UI Update
+            const theme = BIO_DB[globalMode];
             document.getElementById('contextTitle').innerText = theme.title;
             document.getElementById('contextTitle').className = `text-sm font-bold ${theme.color}`;
             document.getElementById('contextSubtitle').innerText = theme.desc;
             document.getElementById('ctxIcon').innerText = theme.icon;
             document.getElementById('hudSupplements').innerText = theme.supps;
-            document.getElementById('calTarget').innerText = (mode === 'sport' ? Math.round(profile.weight * 32) : Math.round(profile.weight * 26)) + " kcal";
+            document.getElementById('calTarget').innerText = (globalMode === 'sport' ? Math.round(profile.weight * 32) : Math.round(profile.weight * 26)) + " kcal";
 
-            // 2. Construction Timeline (Flux)
-            let stream = [];
-            const rot = (selectedDay - 1) % 4; // Rotation des repas
+            // 2. Préparation des éléments (Mix Tâches + Repas Automatiques)
+            let allItems = [...rawTasks];
+            const rot = (selectedDay - 1) % 2; 
+            allItems.push({ type: 'meal', time: '12:30', shortText: theme.lunch[rot], fullText: "Déjeuner Performance", duration: 45 });
+            allItems.push({ type: 'meal', time: '20:00', shortText: theme.dinner[rot], fullText: "Dîner Récupération", duration: 45 });
             
-            // Repas Midi (Auto-injecté selon contexte)
-            stream.push({ 
-                type: 'meal', time: '12:30', 
-                name: theme.lunch[rot], 
-                desc: mode === 'sport' ? "Chargement Glycogène" : "Léger & Nutritif",
-                vit: theme.supps.split(',')[0] // Affiche la 1ere vitamine
-            });
+            // Tri par heure
+            allItems.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
 
-            // Repas Soir (Auto-injecté)
-            stream.push({ 
-                type: 'meal', time: '20:00', 
-                name: theme.dinner[rot], 
-                desc: "Reconstruction & Sommeil",
-                vit: "Hydratation"
-            });
+            // 3. LOGIQUE D'EMBOÎTEMENT (Session vs Items)
+            // On sépare les "Sessions" (Blocs Conteneurs) des "Items" (Taches unitaires)
+            let sessions = allItems.filter(t => t.type === 'session');
+            let standaloneItems = allItems.filter(t => t.type !== 'session');
+            
+            let finalHtml = '';
+            let processedItemIds = new Set(); // Pour ne pas afficher deux fois un item qui est imbriqué
 
-            // Tâches Utilisateur
-            tasks.forEach((t, i) => {
-                let style = "ctx-task";
-                if((t.fullText||"").match(/sport|gym/i)) style = "ctx-sport";
-                else if((t.fullText||"").match(/travail|réunion/i)) style = "ctx-focus";
+            // On parcourt la timeline "virtuelle"
+            // Pour simplifier l'affichage: on itère sur les Sessions, puis on affiche ce qui reste
+            // Mais pour garder l'ordre chronologique, on va reconstruire une liste ordonnée.
+            
+            let displayQueue = [];
+
+            // A. On place les sessions
+            sessions.forEach(session => {
+                const sStart = parseInt(session.time.replace(':',''));
+                const sEnd = addMinutes(sStart, session.duration);
                 
-                stream.push({ 
-                    type: 'task', time: t.time, 
-                    name: t.shortText, desc: t.fullText, 
-                    style: style, id: i, done: t.done 
+                // Trouver les enfants
+                let children = standaloneItems.filter(item => {
+                    const iStart = parseInt(item.time.replace(':',''));
+                    return iStart >= sStart && iStart < sEnd;
                 });
+                
+                children.forEach(c => processedItemIds.add(c)); // Mark as processed
+                
+                displayQueue.push({ isSession: true, data: session, children: children, sortTime: sStart });
             });
 
-            // Tri Chronologique
-            stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
-
-            // Rendu HTML
-            document.getElementById('masterTimeline').innerHTML = stream.map(item => {
-                let content = '';
-                if(item.type === 'meal') {
-                    content = `<div class="flex justify-between items-center"><div class="flex flex-col"><div class="flex items-center gap-2 mb-1"><span class="badge badge-vit">${item.vit}</span></div><span class="font-bold text-lg">${item.name}</span><span class="text-xs opacity-50">${item.desc}</span></div><div class="text-2xl opacity-20">🍽️</div></div>`;
-                } else {
-                    content = `<div class="flex items-center gap-4 group cursor-pointer" onclick="toggleTask(${selectedDay},${item.id})"><div class="w-5 h-5 rounded border border-white/20 flex items-center justify-center ${item.done?'bg-white text-black':''}">${item.done?'✓':''}</div><div class="${item.done?'line-through opacity-30':''}"><p class="font-bold text-lg">${item.name}</p><p class="text-xs opacity-50 truncate w-64">${item.desc}</p></div><button onclick="event.stopPropagation();delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 opacity-0 group-hover:opacity-100 text-xs">SUPPR</button></div>`;
+            // B. On place les items orphelins (ceux qui ne sont dans aucune session)
+            standaloneItems.forEach(item => {
+                if(!processedItemIds.has(item)) {
+                    displayQueue.push({ isSession: false, data: item, sortTime: parseInt(item.time.replace(':','')) });
                 }
-                
-                let borderClass = item.type === 'meal' ? 'ctx-meal' : item.style;
-                if(item.done) borderClass = "border-l-2 border-white/20";
+            });
 
-                return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot bg-black border border-white"></div><div class="flex-1 flow-card ${borderClass} ${item.done?'opacity-50':''}">${content}</div></div>`;
+            // C. Tri final pour l'affichage
+            displayQueue.sort((a,b) => a.sortTime - b.sortTime);
+
+            // D. Génération HTML
+            finalHtml = displayQueue.map(obj => {
+                if (obj.isSession) {
+                    // RENDU BLOC SESSION (COLONNE)
+                    const sessionTheme = (obj.data.fullText.match(/sport/i)) ? 'theme-sport' : 'theme-work';
+                    const sessionLabel = (obj.data.fullText.match(/sport/i)) ? 'SESSION SPORT' : 'SESSION DEEP WORK';
+                    
+                    let childrenHtml = obj.children.map(child => {
+                        let icon = child.type === 'meal' ? '🍽️' : (child.done ? '✅' : '⚡');
+                        let content = `<div class="nested-row"><div class="nested-time">${child.time}</div><div class="nested-card"><div><p class="text-sm font-bold">${child.shortText}</p><p class="text-[10px] opacity-50">${child.fullText}</p></div><div class="text-xs">${icon}</div></div></div>`;
+                        return content;
+                    }).join('');
+
+                    if(childrenHtml === '') childrenHtml = `<p class="text-xs opacity-30 italic text-center py-2">Focus continu...</p>`;
+
+                    const endTime = getEndTime(obj.data.time, obj.data.duration);
+
+                    return `
+                    <div class="flex gap-4 mb-8">
+                        <div class="w-[50px] text-right pt-2 opacity-50 font-mono text-xs font-bold">
+                            ${obj.data.time}<br>|<br>${endTime}
+                        </div>
+                        <div class="flex-1 session-block ${sessionTheme}">
+                            <div class="session-header">
+                                <span class="font-bold tracking-widest text-xs uppercase opacity-70 border border-white/20 px-2 py-1 rounded">${sessionLabel}</span>
+                                <span class="text-xs opacity-50">${formatDuration(obj.data.duration)}</span>
+                            </div>
+                            <div class="space-y-2">
+                                ${childrenHtml}
+                            </div>
+                        </div>
+                    </div>`;
+                } else {
+                    // RENDU ITEM SIMPLE (LIGNE)
+                    const item = obj.data;
+                    let content = '';
+                    if(item.type === 'meal') {
+                        content = `<div class="flex justify-between items-center"><div><div class="mb-1"><span class="badge-vit">${theme.supps.split(',')[0]}</span></div><p class="font-bold">${item.shortText}</p></div><span class="text-xl">🥗</span></div>`;
+                    } else {
+                        content = `<div class="flex justify-between items-center"><span class="${item.done?'line-through opacity-30':'font-bold'}">${item.shortText}</span><button onclick="delTask(${selectedDay}, '${item.shortText}')" class="text-xs text-red-500 opacity-50 hover:opacity-100">✕</button></div>`;
+                    }
+                    return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot bg-black border border-white"></div><div class="flex-1 flow-card">${content}</div></div>`;
+                }
             }).join('');
+
+            document.getElementById('masterTimeline').innerHTML = finalHtml || '<p class="text-center opacity-30 mt-10">Rien de prévu. Utilise l\'IA pour planifier.</p>';
         }
 
-        // --- 4. NAVIGATION & UTILITAIRES ---
-        let tvInit = false;
-        function switchView(v) {
-            document.getElementById('view-planning').classList.add('hidden');
-            document.getElementById('view-market').classList.add('hidden');
-            document.getElementById('nav-planning').classList.remove('nav-active');
-            document.getElementById('nav-market').classList.remove('nav-active');
-            
-            document.getElementById('view-'+v).classList.remove('hidden');
-            document.getElementById('nav-'+v).classList.add('nav-active');
-
-            if(v === 'market' && !tvInit) {
-                new TradingView.widget({ "autosize": true, "symbol": "TVC:CAC40", "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "enable_publishing": false, "container_id": "tradingview_advanced" });
-                tvInit = true;
-            }
+        // HELPERS
+        function addMinutes(timeInt, mins) {
+            let h = Math.floor(timeInt / 100);
+            let m = timeInt % 100;
+            let totalM = h * 60 + m + mins;
+            return (Math.floor(totalM / 60) * 100) + (totalM % 60);
         }
-
-        // Sauvegardes & Helpers
-        function save(){localStorage.setItem('lifeos_v73_db',JSON.stringify(db)); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
-        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
-        function delTask(d,i){db[d].splice(i,1);save();}
+        function getEndTime(startStr, dur) {
+            let [h, m] = startStr.split(':').map(Number);
+            let total = h*60 + m + dur;
+            let endH = Math.floor(total/60)%24;
+            let endM = total%60;
+            return `${endH.toString().padStart(2,'0')}:${endM.toString().padStart(2,'0')}`;
+        }
+        function formatDuration(m) { return m >= 60 ? `${Math.floor(m/60)}h${m%60>0?m%60:''}` : `${m}m`; }
+        
+        function save(){localStorage.setItem('lifeos_v74_db',JSON.stringify(db)); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
+        function delTask(d, txt){ db[d] = db[d].filter(t => t.shortText !== txt); save(); }
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('inputApiKey').value = apiKey; }
         function saveProfile(){apiKey=document.getElementById('inputApiKey').value; profile.weight=document.getElementById('inputWeight').value||80; localStorage.setItem('lifeos_profile',JSON.stringify(profile)); document.getElementById('profileModal').classList.add('hidden'); save();}
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderHUD();renderCal();};c.appendChild(d);}}
+        function switchView(v) { document.getElementById('view-planning').classList.add('hidden'); document.getElementById('view-market').classList.add('hidden'); document.getElementById('nav-planning').classList.remove('nav-active'); document.getElementById('nav-market').classList.remove('nav-active'); document.getElementById('view-'+v).classList.remove('hidden'); document.getElementById('nav-'+v).classList.add('nav-active'); if(v==='market') new TradingView.widget({ "autosize": true, "symbol": "TVC:CAC40", "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "enable_publishing": false, "container_id": "tradingview_advanced" }); }
 
         renderCal(); renderHUD();
     </script>
