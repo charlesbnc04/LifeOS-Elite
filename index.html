@@ -3,55 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V72 - Wealth & Time</title>
+    <title>LifeOS Sovereign V70 - Essence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
+        
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* NAVIGATION */
-        .nav-btn { text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
-        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-
-        /* AGENDA STYLES (V70) */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
         .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        .dot-important { background: #ef4444; animation: pulseRed 2s infinite; }
+        .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
         .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
         .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
+
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
         .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
         .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
         .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
         .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
 
-        /* MARKET STYLES */
-        .market-up { color: #10b981; } .market-down { color: #ef4444; }
-        .ticker-item { background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .bank-card { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 1.5rem; transition: 0.3s; }
-        .bank-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
-
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
         .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        
         .alert-box { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
         .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
         .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
@@ -64,87 +59,46 @@
         
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
             <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
-                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️</button></div>
-                
-                <div class="flex flex-col gap-2 bg-white/5 p-2 rounded-2xl border border-white/5">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">🗓️ Agenda & Life</button>
-                    <button onclick="switchTab('market')" id="nav-market" class="nav-btn">📈 Finance & Bourse</button>
-                </div>
-
+                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
+                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
                 <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
             </div>
         </aside>
 
         <main class="lg:col-span-9 space-y-6 pb-10">
-            
-            <div id="page-dashboard">
-                <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
-                    <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
-                        <div><div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div><h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2><div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div></div>
-                        <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
+            <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
+                
+                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
+                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
+                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                        <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
+                    <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
+                    <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
+                </div>
+                
+                <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                    <div class="flex items-center gap-6">
+                        <div class="text-4xl">🚨</div>
+                        <div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div>
                     </div>
-                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                        <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
-                    </div>
-                    <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
-                    <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
-                    <div class="relative pl-4 pt-4"><p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p><div id="masterTimeline"></div></div>
+                    <button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
+                </div>
+
+                <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
+                <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
+
+                <div class="relative pl-4 pt-4">
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
+                    <div id="masterTimeline"></div>
                 </div>
             </div>
-
-            <div id="page-market" class="hidden space-y-6">
-                <div class="glass-base p-6">
-                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">🌍 Indices Mondiaux</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">S&P 500</p><p class="font-bold">5,842.10</p></div><span class="text-xs font-bold market-up">+1.24%</span></div>
-                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">NASDAQ</p><p class="font-bold">18,673.40</p></div><span class="text-xs font-bold market-up">+0.89%</span></div>
-                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">CAC 40</p><p class="font-bold">7,421.15</p></div><span class="text-xs font-bold market-down">-0.12%</span></div>
-                        <div class="ticker-item"><div><p class="text-[10px] opacity-50 font-bold">BITCOIN</p><p class="font-bold">94,210$</p></div><span class="text-xs font-bold market-up">+4.5%</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-base p-6">
-                    <h3 class="text-xl font-bold mb-6">💎 Magnificent Seven</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-white text-black flex items-center justify-center font-bold"></div><span class="font-bold">Apple</span></div><span class="text-xs text-green-400">+0.5%</span></div>
-                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-green-500 text-black flex items-center justify-center font-bold">N</div><span class="font-bold">Nvidia</span></div><span class="text-xs text-green-400">+2.1%</span></div>
-                        <div class="flow-card flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-500 text-white flex items-center justify-center font-bold">M</div><span class="font-bold">Microsoft</span></div><span class="text-xs text-red-400">-0.2%</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-base p-8">
-                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">💼 Mon Portefeuille Global</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bank-card">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center font-bold">TR</div>
-                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded">Connecté</span>
-                            </div>
-                            <p class="text-sm opacity-50 uppercase tracking-widest mb-1">Trade Republic</p>
-                            <input type="text" id="input-tr" placeholder="0 €" class="bg-transparent text-3xl font-black w-full outline-none" onchange="updateTotalWealth()">
-                        </div>
-                        <div class="bank-card">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center font-bold">B</div>
-                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded">Connecté</span>
-                            </div>
-                            <p class="text-sm opacity-50 uppercase tracking-widest mb-1">BoursoBank</p>
-                            <input type="text" id="input-bourso" placeholder="0 €" class="bg-transparent text-3xl font-black w-full outline-none" onchange="updateTotalWealth()">
-                        </div>
-                    </div>
-                    <div class="mt-8 pt-6 border-t border-white/5 flex justify-between items-center">
-                        <p class="text-sm font-bold uppercase text-zinc-500">Patrimoine Total Estimé</p>
-                        <p id="total-wealth" class="text-4xl font-black text-blue-400">0 €</p>
-                    </div>
-                </div>
-            </div>
-
         </main>
     </div>
 
@@ -152,17 +106,18 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center"><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids"><input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille"><input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge"><select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select></div><button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button><div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div></div></div>
 
     <script>
-        // INIT DATA (V72)
+        // INIT
         let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
+        // Repair
+        Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].map(t => { if (!t.fullText) t.fullText = t.text || "Tâche"; if (!t.shortText) t.shortText = t.text || "Tâche"; if (!t.time) t.time = "09:00"; return t; }); } });
         let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
         let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
-        let wealth = JSON.parse(localStorage.getItem('lifeos_v72_wealth') || '{"tr":0, "bourso":0}'); // New Wealth Data
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
         let editingTaskId = null;
 
-        // DATASETS & PARSERS (V70 STRICT COPY)
+        // DATASETS
         const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
         const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
         const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
@@ -175,6 +130,7 @@
 
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
 
+        // --- V70: ESSENCE EXTRACTOR (KEYWORDS) ---
         function parseInput(text) {
             let startMin = 540; let duration = 0;
             const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
@@ -189,12 +145,18 @@
 
         function cleanTaskText(text) {
             const lower = text.toLowerCase();
+            // 1. Dictionary Priority
             const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "tennis":"Tennis", "gym":"Gym", "réunion":"Réunion", "meeting":"Meeting", "point":"Point", "dentiste":"Dentiste", "médecin":"Médecin", "docteur":"Médecin", "déjeuner":"Déjeuner", "dîner":"Dîner", "repas":"Repas", "apéro":"Apéro", "courses":"Courses", "shopping":"Shopping", "anniversaire":"Anniv", "fête":"Fête", "lessive":"Lessive", "ménage":"Ménage" };
             for(let k in dict) { if(lower.includes(k)) return dict[k]; }
+
+            // 2. Terminator Cleaning
             let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
             const junk = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "durée", "pendant", "de", "à partir", "heures", "heure", "grosse", "match", "séance", "rendez-vous", "rdv", "le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers", "j'ai", "il faut", "je dois", "aller", "faire", "voir", "prendre", "récupérer", "manger", "déjeuner", "et", "ou"];
             let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
+            
+            // 3. Keep Capitalized Word if possible
             if(words.length === 0) return "Tâche";
+            // Return first word capitalized
             return words[0].charAt(0).toUpperCase() + words[0].slice(1);
         }
 
@@ -217,6 +179,7 @@
             const parsed = parseInput(text);
             const cl = cleanTaskText(text); 
             
+            // CONFLICT ALERT V69+
             if(d === selectedDay) {
                 let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60;
                 let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
@@ -234,32 +197,6 @@
 
         function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
 
-        // --- NAVIGATION V72 ---
-        function switchTab(tab) {
-            document.getElementById('page-dashboard').classList.add('hidden');
-            document.getElementById('page-market').classList.add('hidden');
-            document.getElementById('nav-dashboard').classList.remove('active');
-            document.getElementById('nav-market').classList.remove('active');
-            
-            document.getElementById(`page-${tab}`).classList.remove('hidden');
-            document.getElementById(`nav-${tab}`).classList.add('active');
-        }
-
-        // --- WEALTH LOGIC V72 ---
-        function loadWealth() {
-            document.getElementById('input-tr').value = wealth.tr || '';
-            document.getElementById('input-bourso').value = wealth.bourso || '';
-            updateTotalWealth();
-        }
-        function updateTotalWealth() {
-            const tr = parseFloat(document.getElementById('input-tr').value) || 0;
-            const bourso = parseFloat(document.getElementById('input-bourso').value) || 0;
-            wealth = { tr, bourso };
-            localStorage.setItem('lifeos_v72_wealth', JSON.stringify(wealth));
-            document.getElementById('total-wealth').innerText = (tr + bourso).toLocaleString() + " €";
-        }
-
-        // --- RENDER HUD (V70 LOGIC) ---
         function renderHUD() {
             try {
                 const isToday = (selectedDay === todayNum);
@@ -268,8 +205,6 @@
                 document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
 
                 const tasks = db[selectedDay] || [];
-                const txt = tasks.map(t => (t.fullText||"").toLowerCase()).join(' ');
-                
                 let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
                 tasks.forEach(t => {
                     const fl = (t.fullText||"").toLowerCase();
@@ -282,7 +217,7 @@
                         occupiedSlots.push({start: startMin, end: startMin + dur});
                     }
                 });
-                if (mode === 'diet' && txt.match(/réunion|bureau|projet|travail|code|étude|cours|admin|compta/)) mode = 'focus';
+                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|projet|travail/i))) mode = 'focus';
 
                 if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
 
@@ -370,7 +305,7 @@
             } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur.</p>`; }
         }
 
-        // Helpers
+        // Helpers...
         function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
@@ -378,7 +313,7 @@
         function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderHUD(); checkHabits();}
+        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
         function setMusic(p){musicProvider=p;updateMusicUI();save();}
         function updateMusicUI(){['spotify','deezer','apple'].forEach(p=>document.getElementById(`btn-${p}`).classList.remove('border-green-500','border-purple-500','border-red-500')); if(musicProvider==='spotify')document.getElementById('btn-spotify').classList.add('border-green-500'); if(musicProvider==='deezer')document.getElementById('btn-deezer').classList.add('border-purple-500'); if(musicProvider==='apple')document.getElementById('btn-apple').classList.add('border-red-500');}
         function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
@@ -394,7 +329,7 @@
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
 
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
-        updateMusicUI(); renderCal(); renderHUD(); loadWealth(); checkHabits();
+        updateMusicUI(); renderCal(); renderHUD(); checkHabits();
     </script>
 </body>
 </html>
