@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V95 - Satisfaction Edition</title>
+    <title>LifeOS Sovereign V100 - Intelligence Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,59 +13,31 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         
-        /* === STYLED CHECKBOX (SATISFYING CLICK) === */
+        /* === CHECKBOX STYLE === */
         .task-checkbox-wrapper { position: relative; display: inline-block; width: 20px; height: 20px; cursor: pointer; }
         .task-checkbox-input { opacity: 0; width: 0; height: 0; position: absolute; }
-        .task-checkbox-box {
-            position: absolute; top: 0; left: 0; height: 20px; width: 20px;
-            background-color: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 6px;
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        .task-checkbox-wrapper:hover .task-checkbox-box { border-color: #3b82f6; transform: scale(1.1); }
-        .task-checkbox-input:checked ~ .task-checkbox-box {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
-            transform: scale(1.1) rotate(3deg);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
-        .task-checkbox-box::after {
-            content: ""; position: absolute; display: none;
-            left: 6px; top: 2px; width: 5px; height: 10px;
-            border: solid white; border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
+        .task-checkbox-box { position: absolute; top: 0; left: 0; height: 20px; width: 20px; background-color: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.3); border-radius: 6px; transition: all 0.3s; }
+        .task-checkbox-wrapper:hover .task-checkbox-box { border-color: #3b82f6; }
+        .task-checkbox-input:checked ~ .task-checkbox-box { background-color: #3b82f6; border-color: #3b82f6; transform: scale(1.1) rotate(3deg); }
+        .task-checkbox-box::after { content: ""; position: absolute; display: none; left: 6px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
         .task-checkbox-input:checked ~ .task-checkbox-box::after { display: block; }
-        
-        /* Text Strikethrough Animation */
-        .task-text { transition: all 0.4s ease; position: relative; display: inline-block; }
-        .task-text.completed { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+        .task-text { transition: 0.3s; } .task-text.completed { color: rgba(255,255,255,0.2); text-decoration: line-through; }
 
-        /* === CALENDAR STYLES === */
+        /* === CALENDAR === */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .cal-day {
-            aspect-ratio: 1; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s;
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-        }
-        .cal-day:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
-        .cal-day.today { color: #60a5fa; border-color: #60a5fa; font-weight: 800; box-shadow: 0 0 10px rgba(96, 165, 250, 0.2); }
-        .cal-day.selected { background: #fff !important; color: #000 !important; font-weight: 900; transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .cal-day { aspect-ratio: 1; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+        .cal-day:hover { background: rgba(255,255,255,0.1); }
+        .cal-day.today { color: #60a5fa; border-color: #60a5fa; font-weight: 800; }
+        .cal-day.selected { background: #fff !important; color: #000 !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
         .cal-day.has-event { border-bottom: 2px solid #a855f7; }
 
         /* === NEWS CARDS === */
-        .news-card {
-            background: #151516; border-radius: 1.2rem; overflow: hidden; position: relative; aspect-ratio: 4/3;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .news-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 10; }
-        .news-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 0.6; }
-        .news-card:hover .news-img { transform: scale(1.1); opacity: 0.4; }
+        .news-card { background: #151516; border-radius: 1.2rem; overflow: hidden; position: relative; aspect-ratio: 4/3; transition: transform 0.3s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+        .news-card:hover { transform: scale(1.02); z-index: 10; }
+        .news-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .news-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); }
 
-        /* === TIMELINE === */
+        /* === TIMELINE & ACCENTS === */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
@@ -76,11 +48,8 @@
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
 
-        /* === UI UTILS === */
         .nav-item { cursor: pointer; opacity: 0.5; transition: 0.3s; }
         .nav-item:hover, .nav-item.active { opacity: 1; color: #3b82f6; }
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -103,14 +72,14 @@
             <aside class="lg:col-span-3 flex flex-col gap-6">
                 <div class="glass-base p-6 space-y-6">
                     <div>
-                        <div class="flex justify-between items-end mb-3 px-1">
-                            <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p>
-                            <p id="calMonthName" class="text-sm font-bold text-white capitalize">Mois</p>
-                        </div>
+                        <div class="flex justify-between items-end mb-3 px-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p><p id="calMonthName" class="text-sm font-bold text-white capitalize">Mois</p></div>
                         <div id="calendar" class="calendar-grid"></div>
                     </div>
-
-                    <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Tennis demain 18h'"></textarea><button onclick="traiterBatch()" class="w-full bg-blue-600 hover:bg-blue-500 text-white mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition">Planifier</button></div>
+                    <div class="flex-1">
+                        <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p>
+                        <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Commandes IA:&#10;- 'Tennis demain 18h'&#10;- 'Optimiser le planning'&#10;- 'Nettoyer tâches finies'"></textarea>
+                        <button onclick="traiterBatch()" class="w-full bg-blue-600 hover:bg-blue-500 text-white mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition">Exécuter</button>
+                    </div>
                     <div class="pt-4 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-xl font-black">0L</span><span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="h-full bg-blue-500 w-0 transition-all duration-500"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Gourde</button></div></div>
                 </div>
             </aside>
@@ -143,14 +112,10 @@
 
         <div id="view-news" class="absolute inset-0 hidden overflow-y-auto pb-20 fade-in bg-[#050505]">
             <div class="glass-base min-h-full flex flex-col p-8 md:p-12">
-                
                 <header class="flex flex-col md:flex-row justify-between items-end mb-10 pb-6 border-b border-white/10">
                     <div>
                         <h2 class="text-4xl font-black tracking-tight text-white mb-2">À la Une</h2>
-                        <div class="flex items-center gap-2 text-zinc-400">
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            <p class="text-xs font-bold uppercase tracking-widest">En direct</p>
-                        </div>
+                        <div class="flex items-center gap-2 text-zinc-400"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span><p class="text-xs font-bold uppercase tracking-widest">En direct</p></div>
                     </div>
                     <div class="flex gap-2 mt-4 md:mt-0 bg-white/5 p-1 rounded-lg">
                         <button onclick="fetchRealNews('general')" class="px-4 py-2 rounded-md hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest transition">Monde</button>
@@ -158,33 +123,15 @@
                         <button onclick="fetchRealNews('eco')" class="px-4 py-2 rounded-md hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest text-green-400 transition">Éco</button>
                     </div>
                 </header>
-
                 <div id="news-loading" class="hidden flex justify-center py-20"><div class="loader"></div></div>
-                
-                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    </div>
-                <p class="text-center text-[10px] text-zinc-600 mt-10">Sources : Le Monde, Frandroid, Les Echos</p>
+                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <p class="text-center text-[10px] text-zinc-600 mt-10">Flux RSS : Le Monde, Frandroid, Les Echos</p>
             </div>
         </div>
-
     </div>
 
     <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
-        <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative">
-            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
-            <h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2>
-            <div class="space-y-3 mb-6 border-b border-white/10 pb-6">
-                <input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)">
-                <button onclick="saveProfile()" class="w-full bg-white/10 py-3 rounded-xl font-bold uppercase text-[10px] hover:bg-white/20">Enregistrer</button>
-            </div>
-            <div class="space-y-2">
-                <button onclick="copyDataToClipboard()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl text-[10px] font-bold text-white transition-colors">📤 COPIER DATA</button>
-                <button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors">📥 IMPORTER</button>
-            </div>
-        </div>
-    </div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative"><button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6 border-b border-white/10 pb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)"><button onclick="saveProfile()" class="w-full bg-white/10 py-3 rounded-xl font-bold uppercase text-[10px] hover:bg-white/20">Enregistrer</button></div><div class="space-y-2"><button onclick="copyDataToClipboard()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl text-[10px] font-bold text-white transition-colors">📤 COPIER DATA</button><button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors">📥 IMPORTER</button></div></div></div>
 
     <script>
         // === CORE INIT ===
@@ -197,16 +144,13 @@
         let selectedDay = todayNum;
         let editingTaskId = null;
 
-        // === REAL TIME NEWS ENGINE ===
+        // === NEWS ENGINE ===
         async function fetchRealNews(category) {
-            const grid = document.getElementById('news-grid');
-            const loader = document.getElementById('news-loading');
+            const grid = document.getElementById('news-grid'); const loader = document.getElementById('news-loading');
             grid.innerHTML = ''; loader.classList.remove('hidden');
-
             let rssUrl = 'https://www.lemonde.fr/rss/une.xml';
             if(category === 'tech') rssUrl = 'https://www.frandroid.com/feed';
             if(category === 'eco') rssUrl = 'https://investir.lesechos.fr/rss/marches.xml';
-
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
                 const data = await res.json();
@@ -215,22 +159,13 @@
                     data.items.slice(0, 9).forEach(item => {
                         let img = item.enclosure?.link || item.thumbnail || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop';
                         const timeStr = new Date(item.pubDate).getHours() + 'h' + new Date(item.pubDate).getMinutes().toString().padStart(2, '0');
-                        const card = `
-                        <div class="news-card group" onclick="window.open('${item.link}', '_blank')">
-                            <img src="${img}" class="news-img" alt="News">
-                            <div class="news-content">
-                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-1 bg-white/20 backdrop-blur-md rounded text-[9px] font-bold uppercase tracking-wider text-white">${category}</span><span class="text-[10px] font-mono text-zinc-300">${timeStr}</span></div>
-                                <h3 class="text-lg font-bold leading-tight text-white mb-1 line-clamp-2 group-hover:text-blue-400 transition-colors">${item.title}</h3>
-                                <p class="text-xs text-zinc-300 line-clamp-2 opacity-80">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 80)}...</p>
-                            </div>
-                        </div>`;
-                        grid.innerHTML += card;
+                        grid.innerHTML += `<div class="news-card group" onclick="window.open('${item.link}', '_blank')"><img src="${img}" class="news-img"><div class="news-content"><div class="flex justify-between items-center mb-2"><span class="px-2 py-1 bg-white/20 backdrop-blur-md rounded text-[9px] font-bold uppercase tracking-wider text-white">${category}</span><span class="text-[10px] font-mono text-zinc-300">${timeStr}</span></div><h3 class="text-lg font-bold leading-tight text-white mb-1 line-clamp-2 group-hover:text-blue-400 transition-colors">${item.title}</h3></div></div>`;
                     });
                 }
-            } catch (e) { loader.classList.add('hidden'); grid.innerHTML = '<p class="text-zinc-500 text-center col-span-3">Impossible de charger les actus.</p>'; }
+            } catch (e) { loader.classList.add('hidden'); grid.innerHTML = '<p class="text-zinc-500">Erreur flux.</p>'; }
         }
 
-        // === VIEW SWITCHING ===
+        // === VIEW CONTROL ===
         function switchView(viewName) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${viewName}`).classList.add('active');
@@ -238,16 +173,50 @@
             else { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-news').classList.remove('hidden'); fetchRealNews('general'); }
         }
 
-        // === LIFEOS LOGIC ===
-        const mealsDB = { sport: { lunch: ["Penne Bolognaise","Riz Steak"], dinner: ["Omelette","Cabillaud"] }, focus: { lunch: ["Saumon Quinoa","Salade César"], dinner: ["Velouté Potiron","Wok Légumes"] }, diet: { lunch: ["Saumon Quinoa"], dinner: ["Velouté"] } };
+        // === INTELLIGENCE ENGINE ===
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
+        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
         const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
         const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] }; const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
 
         function getVits(m) { if((m||"").includes("Saumon"))return "Omega-3"; if((m||"").includes("Pâtes"))return "Glucides"; return "Vitamines"; }
         function parseInput(text) { let startMin=540; let dur=0; let d=selectedDay; if(text.match(/demain/i))d=todayNum+1; const durM=text.match(/(\d{1,2})h/); if(durM)dur=parseInt(durM[1])*60; const startM=text.match(/(\d{1,2})[h:](\d{2})?/); if(startM)startMin=parseInt(startM[1])*60+(parseInt(startM[2]||0)); if(text.match(/midi/i))startMin=720; if(text.match(/soir/i))startMin=1140; return {d, startMin, dur}; }
         function cleanTaskText(t){ return t.split(' ')[0].charAt(0).toUpperCase()+t.split(' ')[0].slice(1); }
-        function traiterBatch() { const raw=document.getElementById('userInput').value; if(!raw.trim())return; const p=parseInput(raw); const cl=cleanTaskText(raw); const h=Math.floor(p.startMin/60)%24; const m=p.startMin%60; const ts=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; db[p.d]=[...(db[p.d]||[]), {shortText:cl, fullText:raw, time:ts, duration:p.dur, done:false}]; save(); document.getElementById('userInput').value=''; }
         
+        // === SMART COMMAND PROCESSOR ===
+        function traiterBatch() { 
+            const raw=document.getElementById('userInput').value; if(!raw.trim())return; 
+            const lower = raw.toLowerCase();
+            
+            // COMMAND: OPTIMIZE
+            if(lower.includes("optimi") || lower.includes("trier") || lower.includes("ranger")) {
+                if(db[selectedDay]) {
+                    db[selectedDay].sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+                    save(); alert("✅ Planning réorganisé chronologiquement.");
+                } else { alert("Rien à trier aujourd'hui."); }
+                document.getElementById('userInput').value='';
+                return;
+            }
+
+            // COMMAND: CLEAN
+            if(lower.includes("nettoyer") || lower.includes("clean") || lower.includes("supprimer fini")) {
+                if(db[selectedDay]) {
+                    db[selectedDay] = db[selectedDay].filter(t => !t.done);
+                    save(); alert("🧹 Tâches terminées supprimées.");
+                }
+                document.getElementById('userInput').value='';
+                return;
+            }
+
+            // DEFAULT: ADD TASK
+            const p=parseInput(raw); const cl=cleanTaskText(raw); const h=Math.floor(p.startMin/60)%24; const m=p.startMin%60; const ts=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; 
+            db[p.d]=[...(db[p.d]||[]), {shortText:cl, fullText:raw, time:ts, duration:p.dur, done:false}]; 
+            save(); document.getElementById('userInput').value=''; 
+        }
+
         function renderHUD() {
             try {
                 const isToday = (selectedDay === todayNum);
@@ -255,7 +224,7 @@
                 document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
                 document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
                 
-                // CALENDAR RENDER
+                // CALENDAR
                 const cal = document.getElementById('calendar'); cal.innerHTML='';
                 document.getElementById('calMonthName').innerText = monthNames[now.getMonth()];
                 const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
@@ -265,9 +234,10 @@
                     d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i;renderHUD();}; cal.appendChild(d);
                 }
 
+                // TASKS & MEALS
                 const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime=null; let occupiedSlots=[];
-                tasks.forEach(t=>{ if(t.fullText.match(/sport|gym|crossfit/i)){mode='sport';sportTaskTime=t.time;} if(t.time){const[h,m]=t.time.split(':').map(Number); occupiedSlots.push({s:h*60+m, e:h*60+m+(t.duration||60)});} });
+                let mode = 'diet'; tasks.forEach(t=>{ if(t.fullText.match(/sport|gym|crossfit/i)){mode='sport';} });
+                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|travail/i))) mode = 'focus';
                 
                 const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿"} };
                 document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
@@ -275,15 +245,14 @@
                 let tdee = Math.round(((10*profile.weight) + (6.25*profile.height) - (5*profile.age) + 5)*(mode==='sport'?1.7:1.3));
                 document.getElementById('calTarget').innerText = `${tdee}`; document.getElementById('hudSupplements').innerText = suppsDB[mode];
                 
-                let l = (manualMeals[selectedDay]?.lunch) || mealsDB[mode].lunch[0];
-                let d = (manualMeals[selectedDay]?.dinner) || mealsDB[mode].dinner[0];
-                
+                // MEAL ROTATION FIX
+                const mealRot = (selectedDay - 1) % 15;
+                let l = (manualMeals[selectedDay]?.lunch) || mealsDB[mode].lunch[mealRot] || mealsDB[mode].lunch[0];
+                let d = (manualMeals[selectedDay]?.dinner) || mealsDB[mode].dinner[mealRot] || mealsDB[mode].dinner[0];
+
                 let stream = [];
-                // Routine Matin
                 stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', dot: 'dot-routine', accent: 'accent-routine' });
-                // Repas Midi
                 stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), dot: 'dot-meal', accent: 'accent-meal', id: 'lunch' });
-                // Repas Soir
                 stream.push({ type: 'meal', time: '20:00', content: d, sub: getVits(d), kcal: Math.round(tdee*0.35), dot: 'dot-meal', accent: 'accent-meal', id: 'dinner' });
 
                 tasks.forEach((t, i) => {
@@ -294,7 +263,6 @@
                 stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
                 const container = document.getElementById('masterTimeline');
                 
-                // LIVE MARKER logic (simplified)
                 const curTime = now.getHours()*60+now.getMinutes();
                 const curTimeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
                 let liveInserted = false;
@@ -302,33 +270,28 @@
                 container.innerHTML = stream.map(item => {
                     const [h,m] = item.time.split(':').map(Number);
                     let html = '';
-                    if(isToday && !liveInserted && (h*60+m) > curTime) {
-                         html += `<div class="live-marker"><div class="live-time-label">${curTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                         liveInserted = true;
+                    if(isToday && !liveInserted && (h*60+m) > curTime) { html += `<div class="live-marker"><div class="live-time-label">${curTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveInserted = true; }
+                    
+                    let c = '';
+                    if (item.type === 'task') {
+                        c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})">
+                                <label class="task-checkbox-wrapper" onclick="event.stopPropagation()">
+                                    <input type="checkbox" class="task-checkbox-input" ${item.done?'checked':''} onchange="toggleTask(${selectedDay}, ${item.id})">
+                                    <span class="task-checkbox-box"></span>
+                                </label>
+                                <span class="task-text font-bold text-lg ${item.done?'completed':''}">${item.content}</span>
+                                <button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition">✕</button>
+                             </div>`;
+                    } else if (item.type === 'meal') {
+                         c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
+                    } else {
+                         c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
                     }
-                    return html + generateCard(item);
+                    return html + `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
                 }).join('');
                 
                 updateWaterUI(mode);
             } catch (e) { console.error(e); }
-        }
-
-        function generateCard(item) {
-            let c = '';
-            if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-            else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
-            else if (item.type === 'task') {
-                // STYLED CHECKBOX
-                c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})">
-                        <label class="task-checkbox-wrapper" onclick="event.stopPropagation()">
-                            <input type="checkbox" class="task-checkbox-input" ${item.done?'checked':''} onchange="toggleTask(${selectedDay}, ${item.id})">
-                            <span class="task-checkbox-box"></span>
-                        </label>
-                        <span class="task-text font-bold text-lg ${item.done?'completed':''}">${item.content}</span>
-                        <button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition">✕</button>
-                     </div>`;
-            }
-            return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
         }
 
         // HELPERS
