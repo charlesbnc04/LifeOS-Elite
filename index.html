@@ -3,25 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V76 - Universal Trader</title>
+    <title>LifeOS V77 - Universal Connector</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-        /* --- V70 CORE DESIGN --- */
+        /* --- V70 CORE DESIGN (INTACT) --- */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
-        
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
         .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
-        
         .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
@@ -30,52 +27,40 @@
         .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
         .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
         .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
-
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-
         .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
         .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
         .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
         .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
-
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-
         .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
         .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
         .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .has-event { border-bottom: 2px solid #a855f7; }
         .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        
         .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
         .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
         .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
         .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
-        
         .ai-loading { animation: thinking 1.5s infinite; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
         @keyframes thinking { 0% { border-color: #3b82f6; } 50% { border-color: #8b5cf6; } 100% { border-color: #3b82f6; } }
-        
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- STYLES BOURSE V76 --- */
+        /* --- BOURSE --- */
         .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; }
-        
         .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 0.5rem; transition: 0.2s; color: #71717a; }
         .sub-nav-active { background: #3b82f6; color: white; }
         .sub-nav-btn:hover:not(.sub-nav-active) { background: rgba(255,255,255,0.05); color: white; }
-
         .news-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
         .news-item:hover { background: rgba(255,255,255,0.05); }
         .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
-        
         .finder-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 200; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        
-        /* Autocomplete Amélioré */
         .pf-input-group { position: relative; }
-        .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #0f0f12; border-radius: 0 0 12px 12px; max-height: 200px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #0f0f12; border-radius: 0 0 12px 12px; max-height: 250px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .autocomplete-item { padding: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.7rem; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
         .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.2); color: white; }
         .isin-badge { background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; opacity: 0.7; }
@@ -123,14 +108,14 @@
             <div id="view-market" class="hidden flex flex-col gap-4">
                 
                 <div class="glass-panel p-2 flex flex-col gap-2">
-                    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{ "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }</script></div>
+                    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{ "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }</script></div>
                     <div class="flex items-center justify-between px-2">
                         <div class="flex gap-2">
                             <button onclick="setMarketTab('ACTIONS')" id="subnav-ACTIONS" class="sub-nav-btn sub-nav-active">ACTIONS</button>
                             <button onclick="setMarketTab('CRYPTO')" id="subnav-CRYPTO" class="sub-nav-btn">CRYPTO</button>
                             <button onclick="setMarketTab('METALS')" id="subnav-METALS" class="sub-nav-btn">MÉTAUX</button>
                         </div>
-                        <button onclick="openFinder()" class="text-[10px] bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded flex items-center gap-1 font-bold text-white shadow-lg">🔎 RECHERCHE AVANCÉE (TOUT)</button>
+                        <button onclick="openFinder()" class="text-[10px] bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded flex items-center gap-1 font-bold text-white shadow-lg">🔎 RECHERCHE AVANCÉE</button>
                     </div>
                 </div>
 
@@ -141,18 +126,19 @@
                     </div>
 
                     <div class="glass-panel p-4 flex flex-col h-[350px] relative z-20">
-                        <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">Ajouter Ordre (Nom ou ISIN)</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">Ajouter Ordre (Force Mode)</h3>
+                        <p class="text-[9px] text-zinc-500 mb-2">Si l'autocomplétion ne trouve pas, tapez le code (ex: WLD) et cliquez Ajouter.</p>
                         
                         <div class="bg-black/40 p-3 rounded-lg mb-2 border border-white/5 relative">
                             <div class="pf-input-group mb-2">
-                                <input id="pf-symbol" type="text" placeholder="Recherche (ex: CW8, LU16810..., LVMH)" class="w-full bg-transparent text-xs font-bold uppercase outline-none placeholder-zinc-600 text-white" autocomplete="off">
+                                <input id="pf-symbol" type="text" placeholder="Nom, ISIN ou Ticker (ex: FR0014...)" class="w-full bg-transparent text-xs font-bold uppercase outline-none placeholder-zinc-600 text-white" autocomplete="off">
                                 <div id="autocomplete-list" class="autocomplete-items hidden"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 mb-2">
                                 <input id="pf-price" type="number" placeholder="PRU (€)" class="bg-transparent border-b border-white/10 text-xs py-1 outline-none text-white">
                                 <input id="pf-qty" type="number" placeholder="Qté" class="bg-transparent border-b border-white/10 text-xs py-1 outline-none text-white">
                             </div>
-                            <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-[10px] font-bold py-2 rounded uppercase transition">Ajouter</button>
+                            <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-[10px] font-bold py-2 rounded uppercase transition">Ajouter / Forcer</button>
                         </div>
 
                         <div class="flex gap-2 text-[9px] font-bold mb-2 opacity-60">
@@ -198,7 +184,7 @@
     <div id="finderModal" class="hidden finder-modal">
         <div class="w-[90%] h-[90%] bg-[#131722] rounded-xl overflow-hidden relative shadow-2xl border border-white/10 flex flex-col">
             <div class="p-4 border-b border-white/5 flex justify-between items-center">
-                <div><h3 class="font-bold text-white">Recherche Mondiale (Deep Search)</h3><p class="text-xs text-zinc-500">Trouvez n'importe quel actif, copiez son Ticker (ex: "CW8"), et collez-le dans votre portefeuille.</p></div>
+                <div><h3 class="font-bold text-white">Recherche Mondiale</h3><p class="text-xs text-zinc-500">Trouvez le code (ex: "CW8") et copiez-le dans le portefeuille.</p></div>
                 <button onclick="closeFinder()" class="bg-red-500 text-white w-8 h-8 rounded flex items-center justify-center font-bold">✕</button>
             </div>
             <div class="flex-1">
@@ -239,48 +225,106 @@
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; return "Vitamines"; }
 
-        // --- DICTIONNAIRE UNIVERSEL (TRADE REPUBLIC TOP 500) ---
+        // --- DATABASE HUGE (TOP 500 TRADE REPUBLIC + VOTRE ETF) ---
         const hugeStockDatabase = [
-            // ETFS POPULAIRES (ISIN + NOM)
-            { l: "Amundi MSCI World (CW8)", s: "CW8", i: "LU1681043599" },
-            { l: "BNP S&P 500 (ESE)", s: "ESE", i: "FR0011550185" },
-            { l: "Amundi NASDAQ-100 (PANX)", s: "PANX", i: "LU1681038243" },
-            { l: "Lyxor NASDAQ-100 Daily (2x) (LQQ)", s: "LQQ", i: "FR0010342592" },
-            { l: "Amundi CAC 40 (C40)", s: "C40", i: "LU1681046931" },
-            { l: "iShares Core MSCI World (IWDA)", s: "IWDA", i: "IE00B4L5Y983" },
-            { l: "Vanguard S&P 500 (VUSA)", s: "VUSA", i: "IE00B3XXRP09" },
-            { l: "Amundi Emerging Markets (PAEEM)", s: "PAEEM", i: "LU1681045370" },
-            { l: "Lyxor Euro Stoxx 50 (MSE)", s: "MSE", i: "FR0007054358" },
-            { l: "Amundi PEA S&P 500 (PSP5)", s: "PSP5", i: "FR0013412285" },
-            // ACTIONS FR
+            // VOTRE ETF SPECIFIQUE
+            { l: "Amundi MSCI World II (Dist)", s: "WLD", i: "FR001400U5Q4" },
+            { l: "Amundi MSCI World (Acc)", s: "CW8", i: "LU1681043599" },
+            
+            // INDICES & ETFS MAJEURS
+            { l: "S&P 500 ETF (BNP)", s: "ESE", i: "FR0011550185" },
+            { l: "NASDAQ 100 ETF (Amundi)", s: "PANX", i: "LU1681038243" },
+            { l: "CAC 40 ETF (Amundi)", s: "C40", i: "LU1681046931" },
+            { l: "Euro Stoxx 50 ETF", s: "MSE", i: "FR0007054358" },
+            { l: "Emerging Markets ETF", s: "PAEEM", i: "LU1681045370" },
+            { l: "Japan Topix ETF", s: "PTPXE", i: "FR0013411980" },
+            { l: "Russell 2000 ETF", s: "RS2K", i: "FR0011869361" },
+            { l: "Water ETF (Lyrxor)", s: "WAT", i: "FR0010527275" },
+            { l: "New Energy ETF", s: "NRJ", i: "FR0010524777" },
+            
+            // ACTIONS CAC 40 (FRANCE)
             { l: "LVMH", s: "MC", i: "FR0000121014" },
             { l: "TotalEnergies", s: "TTE", i: "FR0000120271" },
             { l: "Air Liquide", s: "AI", i: "FR0000120073" },
             { l: "L'Oréal", s: "OR", i: "FR0000120321" },
             { l: "Hermès", s: "RMS", i: "FR0000052292" },
             { l: "Sanofi", s: "SAN", i: "FR0000120578" },
+            { l: "Schneider Electric", s: "SU", i: "FR0000121972" },
             { l: "BNP Paribas", s: "BNP", i: "FR0000131104" },
+            { l: "Airbus", s: "AIR", i: "NL0000235190" },
             { l: "AXA", s: "CS", i: "FR0000120628" },
             { l: "Vinci", s: "DG", i: "FR0000125486" },
-            { l: "Dassault Systèmes", s: "DSY", i: "FR0014003TT8" },
-            // ACTIONS US
+            { l: "EssilorLuxottica", s: "EL", i: "FR0000121667" },
+            { l: "Pernod Ricard", s: "RI", i: "FR0000120693" },
+            { l: "Kering", s: "KER", i: "FR0000121485" },
+            { l: "Safran", s: "SAF", i: "FR0000073272" },
+            { l: "Capgemini", s: "CAP", i: "FR0000125338" },
+            { l: "STMicroelectronics", s: "STMPA", i: "NL0000226223" },
+            { l: "Danone", s: "BN", i: "FR0000120644" },
+            { l: "Michelin", s: "ML", i: "FR0000121261" },
+            { l: "Engie", s: "ENGI", i: "FR0010208488" },
+            { l: "Orange", s: "ORA", i: "FR0000133308" },
+            { l: "Legrand", s: "LR", i: "FR0010307819" },
+            { l: "Saint-Gobain", s: "SGO", i: "FR0000125007" },
+            { l: "Société Générale", s: "GLE", i: "FR0000130809" },
+            { l: "Veolia", s: "VIE", i: "FR0000124141" },
+            { l: "Publicis", s: "PUB", i: "FR0000130577" },
+            { l: "Crédit Agricole", s: "ACA", i: "FR0000045072" },
+            { l: "Thales", s: "HO", i: "FR0000121329" },
+            { l: "Teleperformance", s: "TEP", i: "FR0000051807" },
+            { l: "Renault", s: "RNO", i: "FR0000131906" },
+            { l: "Carrefour", s: "CA", i: "FR0000120172" },
+            { l: "Bouygues", s: "EN", i: "FR0000120503" },
+            { l: "Edenred", s: "EDEN", i: "FR0010908533" },
+            { l: "Unibail-Rodamco", s: "URW", i: "FR0013326246" },
+            
+            // US TECH (NASDAQ)
             { l: "Apple", s: "AAPL", i: "US0378331005" },
             { l: "Microsoft", s: "MSFT", i: "US5949181045" },
             { l: "Nvidia", s: "NVDA", i: "US67066G1040" },
             { l: "Amazon", s: "AMZN", i: "US0231351067" },
-            { l: "Tesla", s: "TSLA", i: "US88160R1014" },
-            { l: "Alphabet (Google) A", s: "GOOGL", i: "US02079K3059" },
+            { l: "Alphabet A (Google)", s: "GOOGL", i: "US02079K3059" },
             { l: "Meta Platforms", s: "META", i: "US30303M1027" },
-            { l: "Berkshire Hathaway B", s: "BRK.B", i: "US0846707026" },
+            { l: "Tesla", s: "TSLA", i: "US88160R1014" },
+            { l: "Broadcom", s: "AVGO", i: "US11135F1012" },
+            { l: "AMD", s: "AMD", i: "US0079031078" },
+            { l: "Netflix", s: "NFLX", i: "US64110L1061" },
+            { l: "Adobe", s: "ADBE", i: "US00724F1012" },
+            { l: "Salesforce", s: "CRM", i: "US79466L3024" },
+            { l: "Oracle", s: "ORCL", i: "US68389X1054" },
+            { l: "Intel", s: "INTC", i: "US4581401001" },
+            { l: "Palantir", s: "PLTR", i: "US69608A1088" },
+            
+            // US DOW/S&P
+            { l: "Berkshire Hathaway", s: "BRK.B", i: "US0846707026" },
+            { l: "JPMorgan Chase", s: "JPM", i: "US46625H1005" },
+            { l: "Visa", s: "V", i: "US92826C8394" },
+            { l: "Mastercard", s: "MA", i: "US57636Q1040" },
+            { l: "Exxon Mobil", s: "XOM", i: "US30231G1022" },
+            { l: "UnitedHealth", s: "UNH", i: "US91324P1021" },
+            { l: "Walmart", s: "WMT", i: "US9311421039" },
+            { l: "Procter & Gamble", s: "PG", i: "US7427181091" },
+            { l: "Johnson & Johnson", s: "JNJ", i: "US4781601046" },
             { l: "Coca-Cola", s: "KO", i: "US1912161007" },
+            { l: "PepsiCo", s: "PEP", i: "US7134481081" },
             { l: "McDonald's", s: "MCD", i: "US5801351017" },
+            { l: "Costco", s: "COST", i: "US22160K1051" },
+            { l: "Disney", s: "DIS", i: "US2546871060" },
+            
             // CRYPTO
             { l: "Bitcoin", s: "BTCUSD", i: "BTC" },
             { l: "Ethereum", s: "ETHUSD", i: "ETH" },
             { l: "Solana", s: "SOLUSD", i: "SOL" },
-            // METAL
+            { l: "XRP", s: "XRPUSD", i: "XRP" },
+            { l: "Cardano", s: "ADAUSD", i: "ADA" },
+            { l: "Dogecoin", s: "DOGEUSD", i: "DOGE" },
+            { l: "Shiba Inu", s: "SHIBUSD", i: "SHIB" },
+            
+            // MATIERES PREMIERES
             { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" },
-            { l: "Argent (Silver)", s: "XAGUSD", i: "SILVER" }
+            { l: "Argent (Silver)", s: "XAGUSD", i: "SILVER" },
+            { l: "Pétrole (WTI)", s: "USOIL", i: "OIL" },
+            { l: "Gaz Naturel", s: "NG1!", i: "GAS" }
         ];
 
         // --- AUTOCOMPLETE LOGIC ---
@@ -293,7 +337,6 @@
             list.classList.add('hidden');
             if (!val) return;
 
-            // Filtre Hybride (Nom, Ticker ou ISIN)
             const matches = hugeStockDatabase.filter(item => 
                 item.l.toUpperCase().includes(val) || 
                 item.s.toUpperCase().includes(val) || 
@@ -302,7 +345,7 @@
 
             if (matches.length > 0) {
                 list.classList.remove('hidden');
-                matches.slice(0, 8).forEach(item => { // Limite à 8 résultats
+                matches.slice(0, 8).forEach(item => { 
                     const d = document.createElement("DIV");
                     d.className = "autocomplete-item";
                     d.innerHTML = `<div><strong>${item.s}</strong> <span class="opacity-50 text-[10px] ml-1">${item.l}</span></div><span class="isin-badge">${item.i}</span>`;
@@ -360,12 +403,17 @@
         function closeFinder() { document.getElementById('finderModal').classList.add('hidden'); }
 
         function addToPortfolio() {
-            const sym = document.getElementById('pf-symbol').value.toUpperCase(); const pr = parseFloat(document.getElementById('pf-price').value); const qt = parseFloat(document.getElementById('pf-qty').value);
+            // Force Mode: Si l'utilisateur tape un truc, on le prend, même s'il n'est pas dans la liste.
+            const sym = document.getElementById('pf-symbol').value.toUpperCase(); 
+            const pr = parseFloat(document.getElementById('pf-price').value); 
+            const qt = parseFloat(document.getElementById('pf-qty').value);
+            
             if(sym && pr && qt) {
                 if(!portfolio[activeSubTab]) portfolio[activeSubTab] = [];
                 portfolio[activeSubTab].push({ symbol: sym, price: pr, qty: qt });
                 localStorage.setItem('lifeos_portfolio_v4', JSON.stringify(portfolio));
-                renderPortfolio(); document.getElementById('pf-symbol').value = '';
+                renderPortfolio(); 
+                document.getElementById('pf-symbol').value = '';
             }
         }
         function delAsset(idx) { portfolio[activeSubTab].splice(idx, 1); localStorage.setItem('lifeos_portfolio_v4', JSON.stringify(portfolio)); renderPortfolio(); }
