@@ -3,38 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V90 - Real Time</title>
+    <title>LifeOS Sovereign V95 - Satisfaction Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* === BASE DESIGN (V70 CLASSIC) === */
+        /* === CORE THEME === */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
-        /* === NEWS CARDS (APPLE STYLE) === */
+        /* === STYLED CHECKBOX (SATISFYING CLICK) === */
+        .task-checkbox-wrapper { position: relative; display: inline-block; width: 20px; height: 20px; cursor: pointer; }
+        .task-checkbox-input { opacity: 0; width: 0; height: 0; position: absolute; }
+        .task-checkbox-box {
+            position: absolute; top: 0; left: 0; height: 20px; width: 20px;
+            background-color: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        .task-checkbox-wrapper:hover .task-checkbox-box { border-color: #3b82f6; transform: scale(1.1); }
+        .task-checkbox-input:checked ~ .task-checkbox-box {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        .task-checkbox-box::after {
+            content: ""; position: absolute; display: none;
+            left: 6px; top: 2px; width: 5px; height: 10px;
+            border: solid white; border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .task-checkbox-input:checked ~ .task-checkbox-box::after { display: block; }
+        
+        /* Text Strikethrough Animation */
+        .task-text { transition: all 0.4s ease; position: relative; display: inline-block; }
+        .task-text.completed { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+
+        /* === CALENDAR STYLES === */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .cal-day {
+            aspect-ratio: 1; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+        }
+        .cal-day:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+        .cal-day.today { color: #60a5fa; border-color: #60a5fa; font-weight: 800; box-shadow: 0 0 10px rgba(96, 165, 250, 0.2); }
+        .cal-day.selected { background: #fff !important; color: #000 !important; font-weight: 900; transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .cal-day.has-event { border-bottom: 2px solid #a855f7; }
+
+        /* === NEWS CARDS === */
         .news-card {
-            background: #1c1c1e;
-            border-radius: 1.2rem;
-            overflow: hidden;
-            position: relative;
-            aspect-ratio: 4/3;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: #151516; border-radius: 1.2rem; overflow: hidden; position: relative; aspect-ratio: 4/3;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
         }
         .news-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 10; }
         .news-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 0.6; }
         .news-card:hover .news-img { transform: scale(1.1); opacity: 0.4; }
-        .news-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
-        
-        /* === UI ELEMENTS === */
-        .nav-item { cursor: pointer; opacity: 0.5; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { opacity: 1; color: #3b82f6; }
-        
+        .news-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); }
+
+        /* === TIMELINE === */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
@@ -45,6 +76,11 @@
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
 
+        /* === UI UTILS === */
+        .nav-item { cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { opacity: 1; color: #3b82f6; }
+        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
+        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -66,7 +102,14 @@
             
             <aside class="lg:col-span-3 flex flex-col gap-6">
                 <div class="glass-base p-6 space-y-6">
-                    <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
+                    <div>
+                        <div class="flex justify-between items-end mb-3 px-1">
+                            <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p>
+                            <p id="calMonthName" class="text-sm font-bold text-white capitalize">Mois</p>
+                        </div>
+                        <div id="calendar" class="calendar-grid"></div>
+                    </div>
+
                     <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Tennis demain 18h'"></textarea><button onclick="traiterBatch()" class="w-full bg-blue-600 hover:bg-blue-500 text-white mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition">Planifier</button></div>
                     <div class="pt-4 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-xl font-black">0L</span><span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="h-full bg-blue-500 w-0 transition-all duration-500"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Gourde</button></div></div>
                 </div>
@@ -120,8 +163,7 @@
                 
                 <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     </div>
-
-                <p class="text-center text-[10px] text-zinc-600 mt-10">Flux fournis par RSS2JSON (Le Monde, Les Echos, Frandroid)</p>
+                <p class="text-center text-[10px] text-zinc-600 mt-10">Sources : Le Monde, Frandroid, Les Echos</p>
             </div>
         </div>
 
@@ -151,95 +193,60 @@
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
         let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
-        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
+        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; 
+        let selectedDay = todayNum;
         let editingTaskId = null;
 
         // === REAL TIME NEWS ENGINE ===
         async function fetchRealNews(category) {
             const grid = document.getElementById('news-grid');
             const loader = document.getElementById('news-loading');
-            
-            grid.innerHTML = '';
-            loader.classList.remove('hidden');
+            grid.innerHTML = ''; loader.classList.remove('hidden');
 
-            // RSS SOURCES
-            let rssUrl = 'https://www.lemonde.fr/rss/une.xml'; // Default General
+            let rssUrl = 'https://www.lemonde.fr/rss/une.xml';
             if(category === 'tech') rssUrl = 'https://www.frandroid.com/feed';
             if(category === 'eco') rssUrl = 'https://investir.lesechos.fr/rss/marches.xml';
 
             try {
-                // Using rss2json to bypass CORS and get JSON
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
                 const data = await res.json();
-                
                 loader.classList.add('hidden');
-
                 if(data.status === 'ok') {
                     data.items.slice(0, 9).forEach(item => {
-                        // Try to find an image
-                        let img = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop'; // fallback
-                        if(item.enclosure && item.enclosure.link) img = item.enclosure.link;
-                        else if(item.thumbnail) img = item.thumbnail;
-                        
-                        // Clean Date
-                        const dateObj = new Date(item.pubDate);
-                        const timeStr = dateObj.getHours() + 'h' + dateObj.getMinutes().toString().padStart(2, '0');
-
+                        let img = item.enclosure?.link || item.thumbnail || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop';
+                        const timeStr = new Date(item.pubDate).getHours() + 'h' + new Date(item.pubDate).getMinutes().toString().padStart(2, '0');
                         const card = `
                         <div class="news-card group" onclick="window.open('${item.link}', '_blank')">
-                            <img src="${img}" class="news-img" alt="News Image">
+                            <img src="${img}" class="news-img" alt="News">
                             <div class="news-content">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="px-2 py-1 bg-white/20 backdrop-blur-md rounded text-[9px] font-bold uppercase tracking-wider text-white">${category}</span>
-                                    <span class="text-[10px] font-mono text-zinc-300">${timeStr}</span>
-                                </div>
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-1 bg-white/20 backdrop-blur-md rounded text-[9px] font-bold uppercase tracking-wider text-white">${category}</span><span class="text-[10px] font-mono text-zinc-300">${timeStr}</span></div>
                                 <h3 class="text-lg font-bold leading-tight text-white mb-1 line-clamp-2 group-hover:text-blue-400 transition-colors">${item.title}</h3>
                                 <p class="text-xs text-zinc-300 line-clamp-2 opacity-80">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 80)}...</p>
                             </div>
                         </div>`;
                         grid.innerHTML += card;
                     });
-                } else {
-                    grid.innerHTML = '<p class="text-red-500 text-center col-span-3">Erreur de flux. Réessayez plus tard.</p>';
                 }
-            } catch (e) {
-                console.error(e);
-                loader.classList.add('hidden');
-                grid.innerHTML = '<p class="text-zinc-500 text-center col-span-3">Impossible de charger les actus (Bloqueur de pub ?).</p>';
-            }
+            } catch (e) { loader.classList.add('hidden'); grid.innerHTML = '<p class="text-zinc-500 text-center col-span-3">Impossible de charger les actus.</p>'; }
         }
 
         // === VIEW SWITCHING ===
         function switchView(viewName) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${viewName}`).classList.add('active');
-            
-            if(viewName === 'dashboard') {
-                document.getElementById('view-dashboard').classList.remove('hidden');
-                document.getElementById('view-news').classList.add('hidden');
-            } else {
-                document.getElementById('view-dashboard').classList.add('hidden');
-                document.getElementById('view-news').classList.remove('hidden');
-                fetchRealNews('general'); // Load news on open
-            }
+            if(viewName === 'dashboard') { document.getElementById('view-dashboard').classList.remove('hidden'); document.getElementById('view-news').classList.add('hidden'); }
+            else { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-news').classList.remove('hidden'); fetchRealNews('general'); }
         }
 
-        // === LIFEOS LOGIC (CLASSIC) ===
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } };
-        ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
+        // === LIFEOS LOGIC ===
+        const mealsDB = { sport: { lunch: ["Penne Bolognaise","Riz Steak"], dinner: ["Omelette","Cabillaud"] }, focus: { lunch: ["Saumon Quinoa","Salade César"], dinner: ["Velouté Potiron","Wok Légumes"] }, diet: { lunch: ["Saumon Quinoa"], dinner: ["Velouté"] } };
+        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
+        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] }; const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
 
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides"; return "Vitamines"; }
-        function parseInput(text) { let startMin = 540; let duration = 0; const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i); let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; } const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i; const startMatch = text.match(startRegex); if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; } else { const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)]; for (const m of allNums) { const val = parseInt(m[1]); if (durValue !== -1 && val === durValue) continue; let mVal = m[2] ? parseInt(m[2]) : 0; startMin = val * 60 + mVal; break; } } if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; return { startMin, duration }; }
-        function cleanTaskText(text) { let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim(); let words = clean.split(/\s+/).filter(w => w.length > 2); if(words.length === 0) return "Tâche"; return words[0].charAt(0).toUpperCase() + words[0].slice(1); }
-        function traiterBatch() { const raw = document.getElementById('userInput').value; if(!raw.trim()) return; const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3); tasks.forEach(taskStr => injectTaskSmartly(taskStr)); save(); document.getElementById('userInput').value = ''; renderHUD(); }
-        function injectTaskSmartly(text) { const lower = text.toLowerCase(); let d = selectedDay; if (lower.includes('demain')) d = todayNum + 1; const parsed = parseInput(text); const cl = cleanTaskText(text); if(d === selectedDay) { let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60; let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60); if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé: "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); } } const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60; const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }]; }
+        function getVits(m) { if((m||"").includes("Saumon"))return "Omega-3"; if((m||"").includes("Pâtes"))return "Glucides"; return "Vitamines"; }
+        function parseInput(text) { let startMin=540; let dur=0; let d=selectedDay; if(text.match(/demain/i))d=todayNum+1; const durM=text.match(/(\d{1,2})h/); if(durM)dur=parseInt(durM[1])*60; const startM=text.match(/(\d{1,2})[h:](\d{2})?/); if(startM)startMin=parseInt(startM[1])*60+(parseInt(startM[2]||0)); if(text.match(/midi/i))startMin=720; if(text.match(/soir/i))startMin=1140; return {d, startMin, dur}; }
+        function cleanTaskText(t){ return t.split(' ')[0].charAt(0).toUpperCase()+t.split(' ')[0].slice(1); }
+        function traiterBatch() { const raw=document.getElementById('userInput').value; if(!raw.trim())return; const p=parseInput(raw); const cl=cleanTaskText(raw); const h=Math.floor(p.startMin/60)%24; const m=p.startMin%60; const ts=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; db[p.d]=[...(db[p.d]||[]), {shortText:cl, fullText:raw, time:ts, duration:p.dur, done:false}]; save(); document.getElementById('userInput').value=''; }
         
         function renderHUD() {
             try {
@@ -247,60 +254,93 @@
                 document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
                 document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
                 document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+                
+                // CALENDAR RENDER
+                const cal = document.getElementById('calendar'); cal.innerHTML='';
+                document.getElementById('calMonthName').innerText = monthNames[now.getMonth()];
+                const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+                for(let i=1; i<=daysInMonth; i++) {
+                    const d=document.createElement('div');
+                    let cls="cal-day"; if(i===todayNum)cls+=" today"; if(i===selectedDay)cls+=" selected"; if(db[i]&&db[i].length)cls+=" has-event";
+                    d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i;renderHUD();}; cal.appendChild(d);
+                }
+
                 const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime = null; let occupiedSlots = [];
-                tasks.forEach(t => { const fl = (t.fullText||"").toLowerCase(); if (fl.match(/sport|crossfit|gym|foot/)) { mode = 'sport'; sportTaskTime = t.time; } if (t.time) { const [h, m] = t.time.split(':').map(Number); const startMin = h*60 + m; const dur = t.duration || 60; occupiedSlots.push({start: startMin, end: startMin + dur}); } });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|travail/i))) mode = 'focus';
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
+                let mode = 'diet'; let sportTaskTime=null; let occupiedSlots=[];
+                tasks.forEach(t=>{ if(t.fullText.match(/sport|gym|crossfit/i)){mode='sport';sportTaskTime=t.time;} if(t.time){const[h,m]=t.time.split(':').map(Number); occupiedSlots.push({s:h*60+m, e:h*60+m+(t.duration||60)});} });
+                
+                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿"} };
                 document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `flow-card flex justify-between items-center py-4 cursor-pointer ${styles[mode].b}`;
                 document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
                 let tdee = Math.round(((10*profile.weight) + (6.25*profile.height) - (5*profile.age) + 5)*(mode==='sport'?1.7:1.3));
                 document.getElementById('calTarget').innerText = `${tdee}`; document.getElementById('hudSupplements').innerText = suppsDB[mode];
-                const rIndex = (selectedDay - 1) % 1; 
-                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rIndex]);
-                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rIndex]);
-                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = [];
-                occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) { dinnerMin = slot.end + 15; if(dinnerMin >= 24*60) dinnerMin -= 24*60; } });
-                if (mode === 'sport' && sportTaskTime) { const [h, m] = sportTaskTime.split(':').map(Number); if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH}:30`, content: "Collation", sub: "Banane & Miel", dot: 'dot-snack', accent: 'accent-snack' }); } }
+                
+                let l = (manualMeals[selectedDay]?.lunch) || mealsDB[mode].lunch[0];
+                let d = (manualMeals[selectedDay]?.dinner) || mealsDB[mode].dinner[0];
+                
                 let stream = [];
-                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                stream.push({ type: 'meal', time: `${Math.floor(lunchMin/60)}:${lunchMin%60}`, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-                stream.push(...injectedItems);
-                stream.push({ type: 'meal', time: `${Math.floor(dinnerMin/60)}:${dinnerMin%60}`, content: d, sub: getVits(d), kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-                tasks.forEach((t, i) => { stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: t.fullText.match(/sport/i)?'accent-sport':'accent-task', dot: t.fullText.match(/sport/i)?'dot-sport':'dot-task', id: i, done: t.done }); });
-                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
+                // Routine Matin
+                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', dot: 'dot-routine', accent: 'accent-routine' });
+                // Repas Midi
+                stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), dot: 'dot-meal', accent: 'accent-meal', id: 'lunch' });
+                // Repas Soir
+                stream.push({ type: 'meal', time: '20:00', content: d, sub: getVits(d), kcal: Math.round(tdee*0.35), dot: 'dot-meal', accent: 'accent-meal', id: 'dinner' });
+
+                tasks.forEach((t, i) => {
+                    let isSport = t.fullText.match(/sport/i);
+                    stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, dot: isSport?'dot-sport':'dot-task', accent: isSport?'accent-sport':'accent-task', id: i, done: t.done });
+                });
+
+                stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
                 const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes(); const currentTimeVal = currentHour * 60 + currentMin; const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`; let liveLineInserted = false;
+                
+                // LIVE MARKER logic (simplified)
+                const curTime = now.getHours()*60+now.getMinutes();
+                const curTimeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+                let liveInserted = false;
+
                 container.innerHTML = stream.map(item => {
-                    const [h, m] = item.time.split(':').map(Number);
-                    if(isToday && !liveLineInserted && (h*60+m) > currentTimeVal) { liveLineInserted = true; return `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>` + generateCard(item); }
-                    return generateCard(item);
+                    const [h,m] = item.time.split(':').map(Number);
+                    let html = '';
+                    if(isToday && !liveInserted && (h*60+m) > curTime) {
+                         html += `<div class="live-marker"><div class="live-time-label">${curTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
+                         liveInserted = true;
+                    }
+                    return html + generateCard(item);
                 }).join('');
-                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
+                
                 updateWaterUI(mode);
             } catch (e) { console.error(e); }
         }
 
         function generateCard(item) {
-             let c = '';
-             if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-             else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
-             else if (item.type === 'snack') c = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Collation</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-             else if (item.type === 'task') c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100">✕</button></div>`;
-             return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
+            let c = '';
+            if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
+            else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
+            else if (item.type === 'task') {
+                // STYLED CHECKBOX
+                c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})">
+                        <label class="task-checkbox-wrapper" onclick="event.stopPropagation()">
+                            <input type="checkbox" class="task-checkbox-input" ${item.done?'checked':''} onchange="toggleTask(${selectedDay}, ${item.id})">
+                            <span class="task-checkbox-box"></span>
+                        </label>
+                        <span class="task-text font-bold text-lg ${item.done?'completed':''}">${item.content}</span>
+                        <button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition">✕</button>
+                     </div>`;
+            }
+            return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
         }
 
+        // HELPERS
         function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
         function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); }
+        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderHUD(); }
         function openProfile(){ document.getElementById('inputWeight').value = profile.weight; document.getElementById('profileModal').classList.remove('hidden'); }
-        function saveProfile(){ profile.weight=document.getElementById('inputWeight').value||80; save(); document.getElementById('profileModal').classList.add('hidden'); renderHUD(); }
+        function saveProfile(){ profile.weight=document.getElementById('inputWeight').value||80; save(); document.getElementById('profileModal').classList.add('hidden'); }
         function copyDataToClipboard() { navigator.clipboard.writeText(JSON.stringify({db,profile})).then(()=>alert("Copié!")); }
         function importDataFromClipboard() { const s = prompt("Coller data :"); if(s) { try { const d = JSON.parse(s); db = d.db; profile = d.profile; save(); location.reload(); } catch(e) { alert("Erreur"); } } }
         function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
@@ -309,7 +349,7 @@
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
         document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
         
-        renderCal(); renderHUD();
+        renderHUD();
     </script>
 </body>
 </html>
