@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>LifeOS Sovereign V75 - Stable</title>
+    <title>LifeOS Sovereign V76 - Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -14,22 +14,31 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #e5e5e5; min-height: 100vh; padding-bottom: 80px; 
                background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(225,39%,15%,1) 0, transparent 50%); }
 
+        /* UI SYSTEM */
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; }
         .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 1.25rem; transition: all 0.2s; position: relative; overflow: hidden; }
         .bento-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
         
+        /* TIMELINE */
         .timeline-row { display: flex; gap: 1rem; position: relative; padding-bottom: 1.5rem; }
         .timeline-line { position: absolute; left: 56px; top: 15px; bottom: -15px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 45px; text-align: right; font-family: monospace; font-size: 0.75rem; font-weight: 700; opacity: 0.6; padding-top: 1rem; }
         .timeline-dot { position: absolute; left: 50px; top: 22px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #050505; z-index: 10; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
         
+        /* CONTEXT COLORS */
         .ctx-sport { border-left: 3px solid #f97316; } .dot-sport { background: #f97316; }
         .ctx-focus { border-left: 3px solid #8b5cf6; } .dot-focus { background: #8b5cf6; }
         .ctx-meal { border-left: 3px solid #10b981; } .dot-meal { background: #10b981; }
         
+        /* COMPONENTS */
         .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; font-weight: 700; border-radius: 0.75rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
-        .day-pill { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 0.75rem; font-size: 0.75rem; background: rgba(255,255,255,0.03); cursor: pointer; }
-        .day-pill.active { background: #fff; color: #000; font-weight: 800; }
+        
+        .day-pill { 
+            aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            border-radius: 0.5rem; font-size: 0.75rem; background: rgba(255,255,255,0.03); cursor: pointer; border: 1px solid transparent;
+        }
+        .day-pill:hover { background: rgba(255,255,255,0.1); }
+        .day-pill.active { background: #fff; color: #000; font-weight: 800; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
         .day-pill.has-event { border-bottom: 2px solid #8b5cf6; }
         
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -39,7 +48,7 @@
 <body class="p-4 md:p-8 max-w-[1600px] mx-auto">
 
     <header class="flex justify-between items-center mb-6">
-        <div><h1 class="text-xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] opacity-50 uppercase tracking-widest ml-2">V75 Stable</span></h1></div>
+        <div><h1 class="text-xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] opacity-50 uppercase tracking-widest ml-2">V76 Ultimate</span></h1></div>
         <button onclick="openProfile()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-xs">⚙️</button>
     </header>
 
@@ -52,8 +61,9 @@
                     <div id="contextBadge" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400">Loading</div>
                 </div>
                 <div id="calendar" class="grid grid-cols-7 gap-2"></div>
+                
                 <div class="relative">
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-sm h-24 outline-none focus:border-blue-500 transition" placeholder="Ex: 'Gym à 18h', 'Réunion 10h'"></textarea>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-sm h-24 outline-none focus:border-blue-500 transition" placeholder="IA: 'Gym 18h', 'Lecture 20h'"></textarea>
                     <button onclick="traiterBatch()" class="absolute bottom-3 right-3 btn-primary px-3 py-1 text-[10px] uppercase">Planifier</button>
                 </div>
             </div>
@@ -128,19 +138,19 @@
     </div>
 
     <script>
-        // CONFIG & DB
-        let db = JSON.parse(localStorage.getItem('lifeos_v75_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v75_profile') || "null");
-        let health = JSON.parse(localStorage.getItem('lifeos_v75_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v75_manual_meals') || "{}");
+        // --- 1. CONFIG ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v76_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v76_profile') || "null");
+        let health = JSON.parse(localStorage.getItem('lifeos_v76_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v76_manual_meals') || "{}");
         
         const now = new Date();
         let selectedDay = now.getDate();
         const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
 
-        // DATABASE: KITCHEN (V74 Expanded)
+        // --- 2. DATABASES ---
         const KITCHEN = {
-            breakfast: ["Oeufs Brouillés & Avocat", "Porridge Avoine & Baies", "Pancakes Banane Protéinés", "Yaourt Grec & Granola", "Omelette Fromage", "Toast Avocat Saumon", "Smoothie Bowl", "Tartines Complet & Beurre Cacahuète"],
+            breakfast: ["Oeufs Brouillés & Avocat", "Porridge Avoine & Baies", "Pancakes Banane Protéinés", "Yaourt Grec & Granola", "Omelette Fromage", "Toast Avocat Saumon", "Smoothie Bowl"],
             heavy: ["Pâtes Carbonara (Dinde)", "Riz Basmati & Steak Haché", "Couscous Royal Light", "Chili Con Carne & Riz", "Penne Bolo Maison", "Poulet Curry Coco & Riz", "Burger Maison & Patates Douces", "Lasagnes Epinards"],
             light: ["Pavé de Saumon & Haricots", "Salade César Poulet", "Wok Légumes & Tofu", "Cabillaud Rôti & Purée", "Omelette Champignons", "Salade Grecque Feta", "Poke Bowl Saumon", "Soupe Minestrone"],
             energy: ["Salade de Riz Niçoise", "Taboulé Poulet Menthe", "Spaghetti Tomate Basilic", "Dahl Lentilles Corail", "Quinoa & Crevettes", "Sandwich Club Complet", "Wok Nouilles Chinoises"]
@@ -149,9 +159,20 @@
         const MUSIC_DB = { sport: ["Workout Phonk", "Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Acoustic Chill", "Jazz Vibes"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // HELPERS
-        function getVits(m) { if(!m) return "Vitamines"; if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Nutriments Essentiels"; }
-        function getMeal(cat, seed) { const arr = KITCHEN[cat] || KITCHEN['light']; return arr[(selectedDay * 7 + seed) % arr.length]; }
+        // --- 3. LOGIC ---
+        function getVits(m) { 
+            if(!m) return "Nutrition"; 
+            if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; 
+            if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; 
+            if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; 
+            return "Nutriments Essentiels"; 
+        }
+        
+        // Randomisation intelligente des plats (Day Seed)
+        function getMeal(cat, seed) { 
+            const arr = KITCHEN[cat] || KITCHEN['light']; 
+            return arr[(selectedDay * 7 + seed) % arr.length]; 
+        }
 
         function parseInput(text) {
             let startMin = 540; let duration = 60;
@@ -166,6 +187,8 @@
             const parsed = parseInput(text);
             const cl = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim().split(/\s+/)[0];
             const cleanTitle = cl.charAt(0).toUpperCase() + cl.slice(1);
+            
+            // Conflict
             if(d === selectedDay) {
                 let dinnerTime = 20 * 60; let tEnd = parsed.startMin + parsed.duration;
                 if (parsed.startMin < (dinnerTime + 60) && tEnd > dinnerTime) {
@@ -173,6 +196,7 @@
                     document.getElementById('conflictAlertBox').classList.remove('hidden');
                 }
             }
+            
             const h = Math.floor(parsed.startMin/60)%24; const m = parsed.startMin%60;
             const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
             if(!db[d]) db[d] = [];
@@ -186,7 +210,7 @@
             save(); document.getElementById('userInput').value = ''; renderHUD();
         }
 
-        // CORE
+        // --- 4. RENDERER (THE CORE) ---
         function renderHUD() {
             if(!profile) { document.getElementById('profileModal').classList.remove('hidden'); return; }
             document.getElementById('mainDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
@@ -194,6 +218,7 @@
             const tasks = db[selectedDay] || [];
             let mode = 'diet'; let intensity = 'low'; let sportTaskTime = null; let occupiedSlots = [];
 
+            // AI Context Analysis
             tasks.forEach(t => {
                 const fl = (t.fullText||"").toLowerCase();
                 if (fl.match(/muscu|gym|crossfit|force/)) { mode = 'sport'; intensity = 'heavy'; sportTaskTime = t.time; }
@@ -202,29 +227,34 @@
                 if (t.time) { const [h, m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); }
             });
 
-            // STATS
+            // Update UI Context
             const styles = { sport: {t: intensity==='heavy'?"Force": "Cardio", c:"text-orange-500", b:"border-orange-500"}, focus: {t:"Deep Work", c:"text-purple-500", b:"border-purple-500"}, diet: {t:"Récupération", c:"text-green-500", b:"border-green-500"} };
             const badge = document.getElementById('contextBadge');
-            badge.innerText = styles[mode].t; badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 ${styles[mode].c} border ${styles[mode].b}`;
+            badge.innerText = styles[mode].t; 
+            badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 ${styles[mode].c} border ${styles[mode].b}`;
             document.getElementById('sonicLabel').innerText = MUSIC_DB[mode][selectedDay % MUSIC_DB[mode].length];
             document.getElementById('hudSupplements').innerText = suppsDB[mode];
 
+            // Calories & Profile
             let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
             let tdee = Math.round(bmr * (mode==='sport'?1.6:1.3));
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
             document.getElementById('calContext').innerText = profile.breakfast ? "3 Repas (Avec Petit-Dej)" : "2 Repas (Jeûne)";
 
-            // LOGIC MODULES (RESTORED)
+            // Modules Logic
             const hasSportRecently = [0,1,2].some(d => (db[selectedDay-d]||[]).some(t=>t.fullText.match(/sport|gym/i)));
             document.getElementById('coachAlertBox').className = (!hasSportRecently && selectedDay===now.getDate()) ? "bento-card border-orange-500/30 bg-orange-900/10 flex items-center justify-between mb-4" : "hidden";
+            // Culture trigger: less than 3 tasks
             document.getElementById('knowledgeHub').className = (tasks.length < 3) ? "bento-card border-blue-500/30 bg-blue-900/10" : "hidden";
 
-            // TIMELINE
+            // --- BUILD TIMELINE STREAM ---
             let stream = [];
             stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m.l, query: ROUTINES[mode].m.q, icon: '☀️' });
             
+            // BREAKFAST OPTION
             if(profile.breakfast) stream.push({ type: 'meal', time: '08:00', content: getMeal('breakfast', 1), sub: "Énergie Matin", id: 'bf' });
 
+            // SMART MEAL SELECTOR
             let lunchCat = intensity==='heavy'?'heavy':(intensity==='cardio'?'energy':'light');
             let dinnerCat = intensity==='heavy'?'heavy':'light';
             if(mode === 'focus') { lunchCat='light'; dinnerCat='light'; }
@@ -232,25 +262,30 @@
             let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : getMeal(lunchCat, 2);
             stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), id: 'lunch' });
 
+            // Dinner Timing
             let dinnerMin = 20 * 60;
             let dContent = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : getMeal(dinnerCat, 3);
             occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + 45) && slot.end > dinnerMin) dinnerMin = slot.end + 15; });
             const dTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
             stream.push({ type: 'meal', time: dTime, content: dContent, sub: getVits(dContent), id: 'dinner' });
 
+            // Sport Snack
             if(mode === 'sport' && sportTaskTime) {
                 const [h, m] = sportTaskTime.split(':').map(Number);
                 if(h >= 17) stream.push({ type: 'snack', time: `${h-2}:00`, content: "Collation Pré-Workout", sub: "Banane & Amandes" });
             }
 
+            // Tasks
             tasks.forEach((t, i) => {
                 let style = 'dot-focus'; let accent = 'ctx-focus';
                 if(t.fullText.match(/sport|gym|run/i)) { style='dot-sport'; accent='ctx-sport'; }
                 stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, style: style, accent: accent, id: i, done: t.done });
             });
 
+            // Sorting
             stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
             
+            // HTML Generation
             document.getElementById('masterTimeline').innerHTML = stream.map(item => {
                 let cardHTML = '';
                 if(item.type === 'task') {
@@ -267,35 +302,38 @@
             renderCal(); updateWaterUI();
         }
 
+        // --- 5. FIXED CALENDAR FUNCTION ---
         function renderCal() {
             const c = document.getElementById('calendar'); c.innerHTML='';
-            const last = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-            let start = Math.max(1, selectedDay - 2); let end = Math.min(last, start+6);
-            if(end-start < 6) start = Math.max(1, end-6);
-            for(let i=start; i<=end; i++){
-                const d = document.createElement('div'); d.className = `day-pill ${i===selectedDay?'active':''} ${db[i]&&db[i].length?'has-event':''}`;
-                d.innerHTML = `<span class="opacity-50 text-[9px]">${i===now.getDate()?'AUJ':'J'+i}</span><span class="font-bold">${i}</span>`;
-                d.onclick=()=>{selectedDay=i; renderHUD();}; c.appendChild(d);
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            
+            for(let i=1; i<=daysInMonth; i++){
+                const d = document.createElement('div'); 
+                d.className = `day-pill ${i===selectedDay?'active':''} ${db[i]&&db[i].length?'has-event':''}`;
+                d.innerHTML = `<span class="opacity-50 text-[9px]">${i}</span>`;
+                d.onclick=()=>{selectedDay=i; renderHUD();}; 
+                c.appendChild(d);
             }
         }
 
+        // --- 6. UTILS ---
         function saveProfile() {
             profile={ weight:document.getElementById('inputWeight').value, height:document.getElementById('inputHeight').value, age:document.getElementById('inputAge').value, sex:document.getElementById('inputSex').value, breakfast: document.getElementById('inputBf').checked };
-            localStorage.setItem('lifeos_v75_profile', JSON.stringify(profile));
+            localStorage.setItem('lifeos_v76_profile', JSON.stringify(profile));
             document.getElementById('profileModal').classList.add('hidden'); renderHUD();
         }
-
         function toggleTask(i){ db[selectedDay][i].done=!db[selectedDay][i].done; save(); }
         function delTask(i){ db[selectedDay].splice(i,1); save(); }
-        function save(){ localStorage.setItem('lifeos_v75_db',JSON.stringify(db)); localStorage.setItem('lifeos_v75_health',JSON.stringify(health)); renderHUD(); }
+        function save(){ localStorage.setItem('lifeos_v76_db',JSON.stringify(db)); localStorage.setItem('lifeos_v76_health',JSON.stringify(health)); renderHUD(); }
         function addWater(n){ health.water+=n; save(); document.getElementById('waterText').classList.add('animate-pop'); setTimeout(()=>document.getElementById('waterText').classList.remove('animate-pop'),300); }
         function updateWaterUI(){ document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/2.5)*100)}%`; }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText; window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function editMeal(id){ const n=prompt("Changer repas:"); if(n){ if(!manualMeals[selectedDay])manualMeals[selectedDay]={}; manualMeals[selectedDay][id]=n; localStorage.setItem('lifeos_v75_manual_meals',JSON.stringify(manualMeals)); renderHUD(); }}
+        function editMeal(id){ const n=prompt("Changer repas:"); if(n){ if(!manualMeals[selectedDay])manualMeals[selectedDay]={}; manualMeals[selectedDay][id]=n; localStorage.setItem('lifeos_v76_manual_meals',JSON.stringify(manualMeals)); renderHUD(); }}
         function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
         function openProfile() { if(confirm('Reset?')) { localStorage.clear(); location.reload(); } }
 
+        // STARTUP
         if(!profile) document.getElementById('profileModal').classList.remove('hidden'); else renderHUD();
     </script>
 </body>
