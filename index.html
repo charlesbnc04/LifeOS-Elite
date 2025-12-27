@@ -3,334 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V80 - Unified</title>
+    <title>LifeOS Sovereign V85 - Cupertino Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000; 
+            color: #fff; 
+            -webkit-font-smoothing: antialiased; 
+            overflow: hidden; /* App-like feel */
+        }
         
-        /* GLASS SYSTEM */
-        .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        /* === APPLE-STYLE GLASS === */
+        .glass-panel { 
+            background: rgba(28, 28, 30, 0.65); 
+            backdrop-filter: blur(50px); 
+            -webkit-backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
         
-        /* TIMELINE STYLES */
+        .nav-glass {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(40px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* === CARDS & ANIMATIONS === */
+        .bento-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem; /* Apple Rounded */
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .bento-card:hover { transform: scale(0.98); filter: brightness(1.1); }
+        .bento-card img { transition: transform 0.8s ease; }
+        .bento-card:hover img { transform: scale(1.05); }
+
+        /* === UTILS === */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* === TIMELINE === */
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
-        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: rgba(255,255,255,0.1); }
+        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 600; opacity: 0.5; padding-top: 1.5rem; }
+        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 10px rgba(255,255,255,0.5); z-index: 10; }
         
-        /* ACCENTS */
-        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
-        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
-        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
-        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
-        .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
-        .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
-        
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        /* COLORS & ACCENTS */
+        .accent-blue { color: #0A84FF; } .bg-blue { background: #0A84FF; }
+        .accent-green { color: #30D158; } .bg-green { background: #30D158; }
+        .accent-orange { color: #FF9F0A; } .bg-orange { background: #FF9F0A; }
+        .accent-red { color: #FF453A; } .bg-red { background: #FF453A; }
+        .accent-purple { color: #BF5AF2; } .bg-purple { background: #BF5AF2; }
 
         .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
-        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
-        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
+        .live-line { flex-grow: 1; height: 1px; background: #FF453A; margin-left: 63px; }
+        .live-dot { width: 6px; height: 6px; background: #FF453A; border-radius: 50%; position: absolute; left: 61px; }
 
-        /* NAV & UI */
-        .nav-item { cursor: pointer; transition: all 0.3s; opacity: 0.5; }
-        .nav-item:hover { opacity: 1; }
-        .nav-item.active { opacity: 1; color: #60a5fa; border-right: 2px solid #60a5fa; }
-        
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        
-        /* NEWS TICKER */
-        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; box-sizing: border-box; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 1rem 1rem 0 0; }
+        /* TICKER */
+        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; background: rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
         .ticker { display: inline-block; padding-left: 100%; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0.5rem 2rem; color: #9ca3af; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .ticker-item { display: inline-block; padding: 0.8rem 2rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-
-        /* NEWS TAGS */
-        .tag-geo { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.2); }
-        .tag-eco { color: #34d399; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.2); }
-        .tag-tech { color: #60a5fa; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.2); }
-        .tag-pol { color: #fbbf24; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); }
-        
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="p-4 md:p-6 h-screen flex flex-col md:flex-row gap-6 overflow-hidden">
+<body class="h-screen w-screen flex text-sm">
 
-    <nav class="md:w-20 glass-base flex md:flex-col justify-between items-center py-6 px-4 md:px-0 z-50 shrink-0">
-        <div class="md:space-y-8 flex md:flex-col gap-8 md:gap-0">
-            <div class="text-xl font-bold mb-4 md:mb-8 text-center text-blue-500">OS</div>
-            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-item active text-2xl" title="Cockpit"><i class="fas fa-home"></i></button>
-            <button onclick="switchView('news')" id="nav-news" class="nav-item text-2xl" title="Actualités"><i class="fas fa-globe-americas"></i></button>
+    <nav class="w-20 md:w-64 nav-glass flex flex-col justify-between py-8 px-4 z-50 shrink-0">
+        <div>
+            <div class="flex items-center gap-3 px-2 mb-10">
+                <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold text-lg">OS</div>
+                <span class="text-lg font-semibold tracking-tight hidden md:block">Sovereign</span>
+            </div>
+            
+            <div class="space-y-2">
+                <button onclick="switchView('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-4 p-3 rounded-xl transition-all hover:bg-white/10 active text-white/50 hover:text-white">
+                    <i class="fas fa-calendar-alt text-lg w-6 text-center"></i>
+                    <span class="font-medium hidden md:block">Planning</span>
+                </button>
+                <button onclick="switchView('news')" id="nav-news" class="w-full flex items-center gap-4 p-3 rounded-xl transition-all hover:bg-white/10 text-white/50 hover:text-white">
+                    <i class="fas fa-newspaper text-lg w-6 text-center"></i>
+                    <span class="font-medium hidden md:block">Actualités</span>
+                </button>
+            </div>
         </div>
-        <div class="md:space-y-8 flex md:flex-col gap-6 md:gap-0">
-             <button onclick="openProfile()" class="nav-item text-xl hover:text-white" title="Profil"><i class="fas fa-cog"></i></button>
+
+        <div class="space-y-2">
+            <button onclick="openProfile()" class="w-full flex items-center gap-4 p-3 rounded-xl transition-all hover:bg-white/10 text-white/50 hover:text-white">
+                <i class="fas fa-user-circle text-lg w-6 text-center"></i>
+                <span class="font-medium hidden md:block">Profil</span>
+            </button>
         </div>
     </nav>
 
-    <div class="flex-1 relative h-full overflow-hidden">
+    <div class="flex-1 relative bg-[#050505] overflow-hidden">
         
-        <div id="view-dashboard" class="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-y-auto pb-20 pr-2">
+        <div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div id="view-dashboard" class="absolute inset-0 flex flex-col md:flex-row p-4 md:p-8 gap-6 overflow-hidden fade-in">
             
-            <aside class="lg:col-span-3 flex flex-col gap-6">
-                <div class="glass-base p-6 space-y-6">
-                    <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                    <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Tennis demain 18h'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                    <div class="pt-4 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-xl font-black">0L</span><span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+            <aside class="md:w-80 flex flex-col gap-6 shrink-0 overflow-y-auto scrollbar-hide">
+                <div class="glass-panel p-6 rounded-[2rem]">
+                    <h2 class="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1" id="hudStatus">Aujourd'hui</h2>
+                    <h1 class="text-3xl font-bold mb-4" id="hudDate">Date</h1>
+                    <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
+                        <span class="text-2xl">🔥</span>
+                        <div>
+                            <p class="text-xs font-bold text-orange-400" id="contextTitle">Standard</p>
+                            <p class="text-[10px] text-zinc-500">Mode actuel</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-1 rounded-[2rem]">
+                    <textarea id="userInput" class="w-full bg-transparent p-5 text-sm outline-none resize-none placeholder-zinc-600 h-24" placeholder="IA: 'Tennis à 18h...'"></textarea>
+                    <button onclick="traiterBatch()" class="w-full bg-white text-black font-bold py-3 rounded-[1.5rem] hover:bg-gray-200 transition">Planifier</button>
+                </div>
+
+                <div class="glass-panel p-6 rounded-[2rem] flex-1">
+                    <p class="text-[10px] font-bold uppercase text-zinc-500 mb-4">Mois en cours</p>
+                    <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-xs"></div>
                 </div>
             </aside>
 
-            <main class="lg:col-span-9 space-y-6">
-                <div class="glass-base p-8 transition-colors duration-500 min-h-full">
-                    <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
-                        <div>
-                            <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
-                            <h2 id="hudDate" class="text-4xl md:text-5xl font-black tracking-tight text-white">Date</h2>
-                            <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
-                        </div>
-                        <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-xl font-mono font-medium text-white">--</p></div></div>
-                    </div>
-
-                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center justify-between bg-red-900/40 border border-red-500"><div class="flex items-center gap-4"><div class="text-2xl">🚨</div><div><p class="text-[10px] font-bold uppercase text-red-400">Conflit</p><p id="conflictMsg" class="text-sm font-bold text-white">...</p></div></div><button onclick="closeAlert()" class="text-white hover:text-red-300">✕</button></div>
-                    <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between py-3"><div class="flex items-center gap-4"><div class="text-xl">⚠️</div><div><p class="text-[10px] font-bold uppercase text-orange-400">Coach</p><p class="text-xs">Pause trop longue.</p></div></div><button onclick="injectSport()" class="bg-orange-500 text-black px-3 py-1 rounded text-[10px] font-bold hover:bg-white">Planifier</button></div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer py-4"><div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-xs font-bold">Chargement...</p></div></div><div class="text-xs">▶</div></div>
-                        <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10 py-4"><div class="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-lg">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-xs font-medium">--</p></div></div>
-                    </div>
-                    
-                    <div class="relative pl-4 pt-4">
-                        <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
-                        <div id="masterTimeline"></div>
+            <main class="flex-1 glass-panel rounded-[2.5rem] p-8 overflow-y-auto relative">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="font-bold text-lg">Timeline</h3>
+                    <div class="flex gap-4 text-xs font-mono">
+                        <span class="text-zinc-500">Objectif: <span id="calTarget" class="text-white">--</span></span>
+                        <span class="text-blue-400">Eau: <span id="waterText">0L</span></span>
                     </div>
                 </div>
+                
+                <div id="conflictAlertBox" class="hidden mb-4 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 flex justify-between items-center">
+                    <span id="conflictMsg" class="text-xs font-bold">Conflit détecté</span>
+                    <button onclick="closeAlert()">✕</button>
+                </div>
+
+                <div id="masterTimeline" class="pb-20"></div>
             </main>
         </div>
 
-        <div id="view-news" class="absolute inset-0 hidden overflow-y-auto pb-20 fade-in">
-            <div class="glass-base min-h-full flex flex-col">
-                
-                <div class="ticker-wrap shrink-0">
-                    <div class="ticker">
-                        <span class="ticker-item"><span class="text-green-500">▲</span> CAC 40: +0.4%</span>
-                        <span class="ticker-item"><span class="text-red-500">▼</span> S&P 500: -0.2%</span>
-                        <span class="ticker-item"><span class="text-green-500">▲</span> BTC: $64,200</span>
-                        <span class="ticker-item"><span class="text-blue-400">INFO</span> BCE : Taux inchangés</span>
-                        <span class="ticker-item"><span class="text-green-500">▲</span> EUR/USD: 1.09</span>
-                        <span class="ticker-item"><span class="text-blue-400">ALERT</span> Tensions Mer Rouge</span>
+        <div id="view-news" class="absolute inset-0 hidden flex flex-col bg-[#000] overflow-hidden fade-in">
+            
+            <div class="ticker-wrap shrink-0 z-20">
+                <div class="ticker">
+                    <span class="ticker-item"><span class="accent-green">▲</span> CAC 40: +0.45%</span>
+                    <span class="ticker-item"><span class="accent-red">▼</span> NASDAQ: -0.12%</span>
+                    <span class="ticker-item"><span class="accent-orange">₿</span> BTC: $64,300</span>
+                    <span class="ticker-item text-blue-400">BREAKING: Nvidia dévoile Blackwell B200</span>
+                    <span class="ticker-item"><span class="accent-green">▲</span> EUR/USD: 1.089</span>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 md:p-10 scrollbar-hide">
+                <header class="flex justify-between items-end mb-8 max-w-7xl mx-auto w-full">
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">À la une</h1>
+                        <p class="text-zinc-500 font-medium">L'essentiel ce <span id="newsDate">...</span></p>
                     </div>
-                </div>
+                    <div class="hidden md:flex gap-2 bg-white/10 p-1 rounded-full backdrop-blur-md">
+                        <button onclick="renderNews('all')" class="px-4 py-1.5 rounded-full text-xs font-bold bg-white text-black shadow-lg">Tout</button>
+                        <button onclick="renderNews('tech')" class="px-4 py-1.5 rounded-full text-xs font-bold text-zinc-400 hover:text-white transition">Tech</button>
+                        <button onclick="renderNews('eco')" class="px-4 py-1.5 rounded-full text-xs font-bold text-zinc-400 hover:text-white transition">Finance</button>
+                        <button onclick="renderNews('geo')" class="px-4 py-1.5 rounded-full text-xs font-bold text-zinc-400 hover:text-white transition">Monde</button>
+                    </div>
+                </header>
 
-                <div class="p-8">
-                    <header class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-white/5 pb-6">
-                        <div>
-                            <h2 class="text-3xl font-black tracking-tight text-white">Nexus<span class="text-blue-500">.</span></h2>
-                            <p class="text-sm text-zinc-500 mt-1">Intelligence Globale & Marchés</p>
-                        </div>
-                        <div class="flex gap-2 mt-4 md:mt-0">
-                            <button onclick="renderNews('all')" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest">Global</button>
-                            <button onclick="renderNews('eco')" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest text-green-400">Éco</button>
-                            <button onclick="renderNews('geo')" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest text-red-400">Géo</button>
-                            <button onclick="renderNews('tech')" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest text-blue-400">Tech</button>
-                        </div>
-                    </header>
-
-                    <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        </div>
-                </div>
+                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full pb-20">
+                    </div>
             </div>
         </div>
 
     </div>
 
-    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
-        <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative">
-            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
-            <h2 class="text-xl font-bold mb-6">Profil & Données</h2>
-            <div class="space-y-3 mb-6 border-b border-white/10 pb-6">
-                <input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)">
-                <input type="number" id="inputHeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Taille (cm)">
-                <div class="flex gap-2">
-                    <input type="number" id="inputAge" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Âge">
-                    <select id="inputSex" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm"><option value="male">Homme</option><option value="female">Femme</option></select>
-                </div>
-                <button onclick="saveProfile()" class="primary-btn w-full py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest">Enregistrer</button>
-            </div>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="bg-[#1c1c1e] w-full max-w-sm rounded-[2rem] p-8 border border-white/10 text-center relative">
+            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full text-zinc-400">✕</button>
+            <h2 class="text-xl font-bold mb-6">Synchronisation</h2>
             <div class="space-y-3">
-                <p class="text-[9px] font-bold uppercase text-zinc-500 tracking-widest mb-2">Synchronisation</p>
-                <button onclick="copyDataToClipboard()" class="w-full bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/50 py-3 rounded-xl text-[10px] font-bold text-blue-200 transition-colors flex items-center justify-center gap-2">📤 COPIER DATA</button>
-                <button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors flex items-center justify-center gap-2">📥 IMPORTER</button>
+                <button onclick="copyDataToClipboard()" class="w-full py-4 bg-blue-600 rounded-xl font-bold text-sm hover:bg-blue-500 transition">📤 Copier mes données</button>
+                <button onclick="importDataFromClipboard()" class="w-full py-4 bg-white/10 rounded-xl font-bold text-sm hover:bg-white/20 transition">📥 Importer une sauvegarde</button>
+            </div>
+            <div class="mt-8 border-t border-white/5 pt-6 grid grid-cols-2 gap-3">
+                <input type="number" id="inputWeight" placeholder="Poids" class="bg-black/30 p-3 rounded-xl text-center text-white outline-none">
+                <button onclick="saveProfile()" class="bg-white/10 p-3 rounded-xl font-bold text-xs">Sauvegarder Profil</button>
             </div>
         </div>
     </div>
 
     <script>
-        // === CORE INIT ===
+        // === CORE DATA ===
         let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
-        Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].map(t => { if (!t.fullText) t.fullText = t.text || "Tâche"; if (!t.shortText) t.shortText = t.text || "Tâche"; if (!t.time) t.time = "09:00"; return t; }); } });
-        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
+        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80,"height":180,"age":30,"sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
-        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
-        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
-        let editingTaskId = null;
+        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"]; 
+        let selectedDay = todayNum;
 
-        // === NEWS DATA (NEXUS) ===
+        // === NEWS DATA (IMAGES + LINKS) ===
+        // Images are from Unsplash Source API for realistic placeholders
         const articles = [
-            { title: "BCE & Taux Directeurs", summary: "Lagarde maintient le cap : l'inflation ralentit mais reste structurelle. Pivot espéré en Juin.", cat: "eco", tag: "Finance", src: "Les Echos", time: "14 min" },
-            { title: "Tensions Indopacifique", summary: "Déploiement naval majeur en Mer de Chine. Les tensions commerciales s'intensifient.", cat: "geo", tag: "Géopolitique", src: "Reuters", time: "1h" },
-            { title: "Nvidia B100 Reveal", summary: "La nouvelle puce promet une puissance x3 pour l'entraînement des LLM. L'action bondit.", cat: "tech", tag: "Tech", src: "TechCrunch", time: "2h" },
-            { title: "Pétrole Brent sous $78", summary: "Inquiétudes sur la demande industrielle chinoise. L'OPEP+ maintient ses quotas.", cat: "eco", tag: "Énergie", src: "Bloomberg", time: "4h" },
-            { title: "IA & Médecine", summary: "Google DeepMind dévoile une percée dans la prédiction des structures protéiques.", cat: "tech", tag: "Science", src: "Nature", time: "5h" },
-            { title: "Élections US 2024", summary: "Les sondages se resserrent dans les Swing States clés à 6 mois du scrutin.", cat: "geo", tag: "Politique", src: "NYT", time: "6h" }
+            { 
+                title: "Nvidia dévoile sa nouvelle puce IA", 
+                summary: "La puce Blackwell B200 promet une puissance de calcul exponentielle pour les modèles LLM.", 
+                cat: "tech", tag: "Technologie", 
+                src: "TechCrunch", time: "2h",
+                img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop",
+                url: "https://techcrunch.com"
+            },
+            { 
+                title: "La FED maintient ses taux directeurs", 
+                summary: "Jerome Powell signale que la baisse des taux attendra que l'inflation soit maîtrisée.", 
+                cat: "eco", tag: "Finance", 
+                src: "Bloomberg", time: "4h",
+                img: "https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=800&auto=format&fit=crop",
+                url: "https://www.bloomberg.com"
+            },
+            { 
+                title: "Exploration Spatiale: Mars 2030", 
+                summary: "La NASA confirme le calendrier pour la première mission habitée vers la planète rouge.", 
+                cat: "tech", tag: "Espace", 
+                src: "Science Daily", time: "5h",
+                img: "https://images.unsplash.com/photo-1541873676-a18131494184?q=80&w=800&auto=format&fit=crop",
+                url: "https://www.nasa.gov"
+            },
+            { 
+                title: "Tensions diplomatiques en Asie", 
+                summary: "De nouvelles manœuvres navales intensifient les relations dans la région Pacifique.", 
+                cat: "geo", tag: "Monde", 
+                src: "Reuters", time: "6h",
+                img: "https://images.unsplash.com/photo-1554232682-b9ef9c92f8de?q=80&w=800&auto=format&fit=crop",
+                url: "https://www.reuters.com"
+            },
+            { 
+                title: "Le Bitcoin repasse les 64k$", 
+                summary: "L'approbation des nouveaux ETF continue de pousser la cryptomonnaie vers des sommets.", 
+                cat: "eco", tag: "Crypto", 
+                src: "CoinDesk", time: "30 min",
+                img: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=800&auto=format&fit=crop",
+                url: "https://www.coindesk.com"
+            },
+            { 
+                title: "Révolution dans l'énergie solaire", 
+                summary: "Un nouveau matériau permet d'atteindre 40% d'efficacité sur les panneaux photovoltaïques.", 
+                cat: "tech", tag: "Énergie", 
+                src: "Wired", time: "8h",
+                img: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=800&auto=format&fit=crop",
+                url: "https://www.wired.com"
+            }
         ];
 
-        // === NAVIGATION LOGIC ===
-        function switchView(viewName) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`nav-${viewName}`).classList.add('active');
-            
-            if(viewName === 'dashboard') {
-                document.getElementById('view-dashboard').classList.remove('hidden');
-                document.getElementById('view-news').classList.add('hidden');
-            } else {
-                document.getElementById('view-dashboard').classList.add('hidden');
-                document.getElementById('view-news').classList.remove('hidden');
+        // === VIEW SWITCHING ===
+        function switchView(view) {
+            // Update Nav UI
+            document.querySelectorAll('nav button').forEach(b => b.classList.replace('text-white', 'text-white/50'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('bg-white/10'));
+            const btn = document.getElementById(`nav-${view}`);
+            btn.classList.replace('text-white/50', 'text-white');
+            btn.classList.add('bg-white/10');
+
+            // Hide/Show containers
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-news').classList.add('hidden');
+            document.getElementById(`view-${view}`).classList.remove('hidden');
+
+            if(view === 'news') {
                 renderNews('all');
+                document.getElementById('newsDate').innerText = new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
             }
         }
 
-        // === NEWS RENDER LOGIC ===
-        function renderNews(filterKey) {
+        // === NEWS RENDERER (APPLE STYLE) ===
+        function renderNews(filter) {
             const grid = document.getElementById('news-grid');
             grid.innerHTML = '';
             
-            const filtered = filterKey === 'all' ? articles : articles.filter(a => a.cat === filterKey);
-            
-            filtered.forEach(art => {
-                let colorClass = 'tag-eco';
-                if(art.cat === 'geo') colorClass = 'tag-geo';
-                if(art.cat === 'tech') colorClass = 'tag-tech';
+            const list = filter === 'all' ? articles : articles.filter(a => a.cat === filter);
 
-                const card = `
-                <div class="flow-card flex flex-col h-full group">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${colorClass}">${art.tag}</span>
-                        <span class="text-[10px] text-zinc-500 font-mono">${art.time}</span>
+            list.forEach((art, idx) => {
+                // Feature the first article (span 2 cols) if displaying all
+                const isFeatured = (idx === 0 && filter === 'all');
+                const spanClass = isFeatured ? 'md:col-span-2 md:row-span-2' : '';
+                const heightClass = isFeatured ? 'h-96' : 'h-64';
+
+                const html = `
+                <div class="bento-card group ${spanClass} ${heightClass}" onclick="window.open('${art.url}', '_blank')">
+                    <img src="${art.img}" class="absolute inset-0 w-full h-full object-cover" alt="${art.title}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
+                    
+                    <div class="absolute top-4 left-4">
+                         <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-[10px] font-bold uppercase tracking-wider text-white">${art.tag}</span>
                     </div>
-                    <h4 class="text-lg font-bold leading-snug mb-2 text-zinc-100 group-hover:text-blue-400 transition-colors">${art.title}</h4>
-                    <p class="text-xs text-zinc-400 leading-relaxed mb-4 flex-1">${art.summary}</p>
-                    <div class="flex items-center gap-2 pt-4 border-t border-white/5 mt-auto">
-                        <div class="w-2 h-2 rounded-full bg-zinc-600"></div>
-                        <span class="text-[10px] font-bold text-zinc-500 uppercase">${art.src}</span>
+
+                    <div class="absolute bottom-0 left-0 p-6 w-full">
+                        <div class="flex items-center gap-2 mb-2 opacity-70 text-xs font-medium">
+                            <span>${art.src}</span>
+                            <span>•</span>
+                            <span>${art.time}</span>
+                        </div>
+                        <h3 class="${isFeatured ? 'text-3xl' : 'text-xl'} font-bold leading-tight mb-2 text-white group-hover:text-blue-400 transition-colors">${art.title}</h3>
+                        ${isFeatured ? `<p class="text-zinc-300 text-sm line-clamp-2 max-w-lg">${art.summary}</p>` : ''}
                     </div>
-                </div>`;
-                grid.innerHTML += card;
+                </div>
+                `;
+                grid.innerHTML += html;
             });
         }
 
-        // === LIFEOS LOGIC ===
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } };
-        ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
-
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides"; return "Vitamines"; }
-        function parseInput(text) { let startMin = 540; let duration = 0; const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i); let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; } const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i; const startMatch = text.match(startRegex); if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; } else { const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)]; for (const m of allNums) { const val = parseInt(m[1]); if (durValue !== -1 && val === durValue) continue; let mVal = m[2] ? parseInt(m[2]) : 0; startMin = val * 60 + mVal; break; } } if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; return { startMin, duration }; }
-        function cleanTaskText(text) { let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim(); let words = clean.split(/\s+/).filter(w => w.length > 2); if(words.length === 0) return "Tâche"; return words[0].charAt(0).toUpperCase() + words[0].slice(1); }
-        function traiterBatch() { const raw = document.getElementById('userInput').value; if(!raw.trim()) return; const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3); tasks.forEach(taskStr => injectTaskSmartly(taskStr)); save(); document.getElementById('userInput').value = ''; renderHUD(); }
-        function injectTaskSmartly(text) { const lower = text.toLowerCase(); let d = selectedDay; if (lower.includes('demain')) d = todayNum + 1; const parsed = parseInput(text); const cl = cleanTaskText(text); if(d === selectedDay) { let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60; let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60); if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé: "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); } } const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60; const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }]; }
-        function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
-        
+        // === DASHBOARD LOGIC (Simplified for V85) ===
         function renderHUD() {
-            try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-                const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime = null; let occupiedSlots = [];
-                tasks.forEach(t => { const fl = (t.fullText||"").toLowerCase(); if (fl.match(/sport|crossfit|gym|foot/)) { mode = 'sport'; sportTaskTime = t.time; } if (t.time) { const [h, m] = t.time.split(':').map(Number); const startMin = h*60 + m; const dur = t.duration || 60; occupiedSlots.push({start: startMin, end: startMin + dur}); } });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|travail/i))) mode = 'focus';
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `flow-card flex justify-between items-center py-4 cursor-pointer ${styles[mode].b}`;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
-                let tdee = Math.round(((10*profile.weight) + (6.25*profile.height) - (5*profile.age) + 5)*(mode==='sport'?1.7:1.3));
-                document.getElementById('calTarget').innerText = `${tdee}`; document.getElementById('hudSupplements').innerText = suppsDB[mode];
-                const rIndex = (selectedDay - 1) % 1; 
-                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rIndex]);
-                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rIndex]);
-                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = [];
-                occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) { dinnerMin = slot.end + 15; if(dinnerMin >= 24*60) dinnerMin -= 24*60; } });
-                if (mode === 'sport' && sportTaskTime) { const [h, m] = sportTaskTime.split(':').map(Number); if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH}:30`, content: "Collation", sub: "Banane & Miel", dot: 'dot-snack', accent: 'accent-snack' }); } }
-                let stream = [];
-                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                stream.push({ type: 'meal', time: `${Math.floor(lunchMin/60)}:${lunchMin%60}`, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-                stream.push(...injectedItems);
-                stream.push({ type: 'meal', time: `${Math.floor(dinnerMin/60)}:${dinnerMin%60}`, content: d, sub: getVits(d), kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-                tasks.forEach((t, i) => { stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: t.fullText.match(/sport/i)?'accent-sport':'accent-task', dot: t.fullText.match(/sport/i)?'dot-sport':'dot-task', id: i, done: t.done }); });
-                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
-                const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes(); const currentTimeVal = currentHour * 60 + currentMin; const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`; let liveLineInserted = false;
-                container.innerHTML = stream.map(item => {
-                    const [h, m] = item.time.split(':').map(Number);
-                    if(isToday && !liveLineInserted && (h*60+m) > currentTimeVal) { liveLineInserted = true; return `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>` + generateCard(item); }
-                    return generateCard(item);
-                }).join('');
-                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                updateWaterUI(mode);
-            } catch (e) { console.error(e); }
+            document.getElementById('hudDate').innerText = now.toLocaleDateString('fr-FR', {day:'numeric', month:'short'});
+            document.getElementById('calTarget').innerText = Math.round((10*profile.weight + 6.25*profile.height - 5*profile.age + 5)*1.4) + " kcal";
+            
+            // Build Timeline
+            const tl = document.getElementById('masterTimeline');
+            tl.innerHTML = '';
+            const tasks = db[selectedDay] || [];
+            
+            // Sort by time
+            tasks.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+
+            // Add Items
+            let html = '';
+            tasks.forEach(t => {
+                const isSport = t.fullText.match(/sport|gym|crossfit/i);
+                const dotColor = isSport ? 'bg-orange-500' : 'bg-blue-500';
+                const borderColor = isSport ? 'border-orange-500' : 'border-blue-500';
+                
+                html += `
+                <div class="timeline-row group">
+                    <div class="timeline-time">${t.time}</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-dot" style="border-color:${isSport?'#f97316':'#3b82f6'}"></div>
+                    <div class="flex-1 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all cursor-pointer relative overflow-hidden ${isSport ? 'border-l-4 border-l-orange-500' : 'border-l-4 border-l-blue-500'}">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-lg">${t.shortText}</h4>
+                            <button onclick="delTask(${selectedDay}, '${t.time}')" class="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition">✕</button>
+                        </div>
+                        <p class="text-xs text-zinc-500 mt-1">${t.fullText}</p>
+                    </div>
+                </div>`;
+            });
+
+            if(tasks.length === 0) html = `<div class="text-center p-10 text-zinc-600">Aucune activité planifiée.</div>`;
+            tl.innerHTML = html;
+            
+            // Render Calendar
+            const cal = document.getElementById('calendar');
+            cal.innerHTML = '';
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            for(let i=1; i<=daysInMonth; i++) {
+                const hasTask = db[i] && db[i].length > 0;
+                const isSel = i === selectedDay;
+                const isTod = i === todayNum;
+                let bg = 'bg-transparent text-zinc-500';
+                if(isTod) bg = 'text-blue-400 font-bold';
+                if(isSel) bg = 'bg-white text-black font-bold shadow-lg shadow-white/20';
+                
+                cal.innerHTML += `<div onclick="selectDay(${i})" class="aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all ${bg} ${hasTask && !isSel ? 'border-b-2 border-blue-500' : ''}">${i}</div>`;
+            }
         }
 
-        function generateCard(item) {
-             let c = '';
-             if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-             else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
-             else if (item.type === 'snack') c = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Collation</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-             else if (item.type === 'task') c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100">✕</button></div>`;
-             return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
+        // === LOGIC HELPERS ===
+        function selectDay(d) { selectedDay = d; renderHUD(); }
+        function parseInput(txt) { 
+            const timeMatch = txt.match(/(\d{1,2})[h:](\d{2})?/);
+            let time = "09:00";
+            if(timeMatch) time = `${timeMatch[1].padStart(2,'0')}:${(timeMatch[2]||'00').padStart(2,'0')}`;
+            
+            let day = selectedDay;
+            if(txt.match(/demain/i)) day = todayNum + 1;
+            
+            return { day, time, text: txt }; 
         }
-
-        // Helpers
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
-        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function addWater(n){health.water+=n; save();}
-        function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
-        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
-        function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
-        function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
-        function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
-        function openProfile(){ document.getElementById('inputWeight').value = profile.weight; document.getElementById('inputHeight').value = profile.height; document.getElementById('inputAge').value = profile.age; document.getElementById('inputSex').value = profile.sex; document.getElementById('profileModal').classList.remove('hidden'); }
-        function saveProfile(){ profile.weight=document.getElementById('inputWeight').value||80; profile.height=document.getElementById('inputHeight').value||180; profile.age=document.getElementById('inputAge').value||30; profile.sex=document.getElementById('inputSex').value; save(); alert("Sauvegardé!"); }
-        function copyDataToClipboard() { const str = JSON.stringify({ db, profile, health, manualMeals, musicProvider }); navigator.clipboard.writeText(str).then(() => alert("Copié !")).catch(() => prompt("Copier :", str)); }
-        function importDataFromClipboard() { const str = prompt("Coller data :"); if(str) { try { const d = JSON.parse(str); db = d.db; profile = d.profile; health = d.health; manualMeals = d.manualMeals; save(); location.reload(); } catch(e) { alert("Erreur"); } } }
-        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
-        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
-        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
-        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
+        function traiterBatch() {
+            const raw = document.getElementById('userInput').value;
+            if(!raw) return;
+            const p = parseInput(raw);
+            if(!db[p.day]) db[p.day] = [];
+            db[p.day].push({ time: p.time, shortText: raw.split(' ')[0], fullText: raw });
+            save(); document.getElementById('userInput').value = '';
+        }
+        function delTask(d, t) { db[d] = db[d].filter(x => x.time !== t); save(); }
+        function save() { localStorage.setItem('lifeos_v70_db', JSON.stringify(db)); renderHUD(); }
         
-        // BOOTSTRAP
-        renderCal(); renderHUD(); checkHabits();
+        // Profile Sync
+        function openProfile() { 
+            document.getElementById('profileModal').classList.remove('hidden'); 
+            document.getElementById('inputWeight').value = profile.weight;
+        }
+        function saveProfile() {
+            profile.weight = document.getElementById('inputWeight').value;
+            localStorage.setItem('lifeos_v70_profile', JSON.stringify(profile));
+            document.getElementById('profileModal').classList.add('hidden');
+            renderHUD();
+        }
+        function copyDataToClipboard() { navigator.clipboard.writeText(JSON.stringify({db,profile})).then(()=>alert("Copié!")); }
+        function importDataFromClipboard() {
+            const s = prompt("Coller data JSON:");
+            if(s) { const d = JSON.parse(s); db = d.db; profile = d.profile; save(); localStorage.setItem('lifeos_v70_profile', JSON.stringify(profile)); location.reload(); }
+        }
+
+        // Init
+        document.getElementById('nav-dashboard').click(); // Default View
+        renderHUD();
+
+        // Music Trigger (Mock)
+        document.getElementById('hudStatus').innerText = now.getHours() < 12 ? "Bonjour" : "Bonsoir";
+
     </script>
 </body>
 </html>
