@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>LifeOS Sovereign V76 - Ultimate</title>
+    <title>LifeOS Sovereign V73 - Fusion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -14,12 +14,12 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #e5e5e5; min-height: 100vh; padding-bottom: 80px; 
                background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(225,39%,15%,1) 0, transparent 50%); }
 
-        /* UI SYSTEM */
+        /* BENTO UI SYSTEM */
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; }
         .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 1.25rem; transition: all 0.2s; position: relative; overflow: hidden; }
         .bento-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
         
-        /* TIMELINE */
+        /* TIMELINE STYLES */
         .timeline-row { display: flex; gap: 1rem; position: relative; padding-bottom: 1.5rem; }
         .timeline-line { position: absolute; left: 56px; top: 15px; bottom: -15px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
         .timeline-time { width: 45px; text-align: right; font-family: monospace; font-size: 0.75rem; font-weight: 700; opacity: 0.6; padding-top: 1rem; }
@@ -29,18 +29,15 @@
         .ctx-sport { border-left: 3px solid #f97316; } .dot-sport { background: #f97316; }
         .ctx-focus { border-left: 3px solid #8b5cf6; } .dot-focus { background: #8b5cf6; }
         .ctx-meal { border-left: 3px solid #10b981; } .dot-meal { background: #10b981; }
+        .ctx-alert { border-left: 3px solid #ef4444; background: rgba(239,68,68,0.1); }
         
-        /* COMPONENTS */
+        /* UI ELEMENTS */
         .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; font-weight: 700; border-radius: 0.75rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
-        
-        .day-pill { 
-            aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            border-radius: 0.5rem; font-size: 0.75rem; background: rgba(255,255,255,0.03); cursor: pointer; border: 1px solid transparent;
-        }
-        .day-pill:hover { background: rgba(255,255,255,0.1); }
-        .day-pill.active { background: #fff; color: #000; font-weight: 800; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        .day-pill { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 0.75rem; font-size: 0.75rem; background: rgba(255,255,255,0.03); cursor: pointer; }
+        .day-pill.active { background: #fff; color: #000; font-weight: 800; }
         .day-pill.has-event { border-bottom: 2px solid #8b5cf6; }
         
+        /* ANIMATIONS */
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .animate-pop { animation: pop 0.3s ease-out; }
     </style>
@@ -48,13 +45,21 @@
 <body class="p-4 md:p-8 max-w-[1600px] mx-auto">
 
     <header class="flex justify-between items-center mb-6">
-        <div><h1 class="text-xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] opacity-50 uppercase tracking-widest ml-2">V76 Ultimate</span></h1></div>
-        <button onclick="openProfile()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-xs">⚙️</button>
+        <div>
+            <h1 class="text-xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] opacity-50 uppercase tracking-widest ml-2">Sovereign V73</span></h1>
+        </div>
+        <div class="flex gap-3">
+            <div id="streakBadge" class="hidden md:flex items-center gap-2 bg-white/5 px-3 rounded-full border border-white/5">
+                <span class="text-orange-500">🔥</span><span id="streakCount" class="text-xs font-bold">0 Jours</span>
+            </div>
+            <button onclick="openProfile()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-xs">⚙️</button>
+        </div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         <aside class="lg:col-span-4 space-y-6">
+            
             <div class="glass-panel p-5 space-y-4">
                 <div class="flex justify-between items-end">
                     <h2 id="mainDate" class="text-2xl font-black">Date</h2>
@@ -63,7 +68,7 @@
                 <div id="calendar" class="grid grid-cols-7 gap-2"></div>
                 
                 <div class="relative">
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-sm h-24 outline-none focus:border-blue-500 transition" placeholder="IA: 'Gym 18h', 'Lecture 20h'"></textarea>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-sm h-24 outline-none focus:border-blue-500 transition" placeholder="Ex: 'Gym à 18h', 'Réunion 10h'"></textarea>
                     <button onclick="traiterBatch()" class="absolute bottom-3 right-3 btn-primary px-3 py-1 text-[10px] uppercase">Planifier</button>
                 </div>
             </div>
@@ -72,15 +77,20 @@
                 <div class="bento-card group" onclick="addWater(0.25)">
                     <div class="flex justify-between items-start mb-2"><span class="text-xl">💧</span><span id="waterText" class="font-bold">0L</span></div>
                     <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden"><div id="waterBar" class="bg-blue-500 h-full w-0 transition-all"></div></div>
+                    <p class="text-[9px] text-zinc-500 mt-2 text-center group-hover:text-blue-400">Tap to Hydrate</p>
                 </div>
                 <div class="bento-card">
                     <div class="flex justify-between items-start mb-2"><span class="text-xl">🔥</span><span id="calTarget" class="font-bold text-sm">--</span></div>
+                    <p class="text-[10px] text-zinc-500">Cible Journalière</p>
                     <p id="calContext" class="text-[9px] text-zinc-600 mt-1">Maintenance</p>
                 </div>
                 <div class="bento-card col-span-2 flex items-center justify-between cursor-pointer" onclick="playContextMusic()">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">🎵</div>
-                        <div><p class="text-[9px] font-bold uppercase text-zinc-500">Ambiance</p><p id="sonicLabel" class="text-xs font-bold">Chargement...</p></div>
+                        <div>
+                            <p class="text-[9px] font-bold uppercase text-zinc-500">Ambiance</p>
+                            <p id="sonicLabel" class="text-xs font-bold">Chargement...</p>
+                        </div>
                     </div>
                     <div class="text-xs">▶</div>
                 </div>
@@ -96,31 +106,38 @@
             </div>
             
             <div id="knowledgeHub" class="hidden bento-card border-blue-500/30 bg-blue-900/10">
-                <div class="flex justify-between items-center mb-2"><p class="text-[9px] font-bold uppercase text-blue-400">Temps Libre détecté</p><span class="text-lg">📚</span></div>
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-[9px] font-bold uppercase text-blue-400">Temps Libre détecté</p>
+                    <span class="text-lg">📚</span>
+                </div>
                 <p class="text-xs font-bold mb-3">On s'instruit ? Finance ou Culture.</p>
                 <div class="flex gap-2">
                     <button onclick="learn('finance')" class="flex-1 bg-white/10 py-1.5 rounded text-[10px] font-bold hover:bg-white/20">Finance</button>
                     <button onclick="learn('culture')" class="flex-1 bg-white/10 py-1.5 rounded text-[10px] font-bold hover:bg-white/20">Culture</button>
                 </div>
             </div>
+
         </aside>
 
         <main class="lg:col-span-8">
             <div class="glass-panel p-6 md:p-8 min-h-[80vh]">
                 <h3 class="text-sm font-bold uppercase opacity-40 tracking-widest mb-8 pl-12">Flux Chronologique</h3>
+                
                 <div id="conflictAlertBox" class="hidden mb-6 ml-12 p-4 rounded-xl bg-red-900/20 border border-red-500/50 flex items-center gap-4">
                     <span class="text-2xl">🚨</span>
                     <div><p class="text-[10px] font-bold text-red-400 uppercase">Conflit</p><p id="conflictMsg" class="text-sm font-bold">Message</p></div>
                     <button onclick="document.getElementById('conflictAlertBox').classList.add('hidden')" class="ml-auto">✕</button>
                 </div>
-                <div id="masterTimeline"></div>
+
+                <div id="masterTimeline">
+                    </div>
             </div>
         </main>
     </div>
 
     <div id="profileModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur">
         <div class="glass-panel p-8 max-w-sm w-full text-center">
-            <h2 class="text-xl font-bold mb-6">Profil</h2>
+            <h2 class="text-xl font-bold mb-6">Profil & Setup</h2>
             <div class="space-y-3">
                 <input type="number" id="inputWeight" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Poids (kg)">
                 <input type="number" id="inputHeight" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Taille (cm)">
@@ -128,79 +145,82 @@
                     <input type="number" id="inputAge" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Âge">
                     <select id="inputSex" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none"><option value="male">Homme</option><option value="female">Femme</option></select>
                 </div>
-                <div class="flex items-center justify-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer" onclick="document.getElementById('inputBf').click()">
-                    <input type="checkbox" id="inputBf" class="w-5 h-5 rounded accent-blue-500 cursor-pointer">
-                    <label class="text-sm font-bold cursor-pointer">Avec Petit-Déjeuner</label>
-                </div>
                 <button onclick="saveProfile()" class="btn-primary w-full py-3 text-xs font-bold uppercase">Sauvegarder</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIG ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v76_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v76_profile') || "null");
-        let health = JSON.parse(localStorage.getItem('lifeos_v76_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v76_manual_meals') || "{}");
+        // --- 1. DATABASES & CONFIG (Restored from V71) ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v73_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_v73_profile') || "null");
+        let health = JSON.parse(localStorage.getItem('lifeos_v73_health') || '{"water":0}');
+        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v73_manual_meals') || "{}");
         
         const now = new Date();
         let selectedDay = now.getDate();
         const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
 
-        // --- 2. DATABASES ---
-        const KITCHEN = {
-            breakfast: ["Oeufs Brouillés & Avocat", "Porridge Avoine & Baies", "Pancakes Banane Protéinés", "Yaourt Grec & Granola", "Omelette Fromage", "Toast Avocat Saumon", "Smoothie Bowl"],
-            heavy: ["Pâtes Carbonara (Dinde)", "Riz Basmati & Steak Haché", "Couscous Royal Light", "Chili Con Carne & Riz", "Penne Bolo Maison", "Poulet Curry Coco & Riz", "Burger Maison & Patates Douces", "Lasagnes Epinards"],
-            light: ["Pavé de Saumon & Haricots", "Salade César Poulet", "Wok Légumes & Tofu", "Cabillaud Rôti & Purée", "Omelette Champignons", "Salade Grecque Feta", "Poke Bowl Saumon", "Soupe Minestrone"],
-            energy: ["Salade de Riz Niçoise", "Taboulé Poulet Menthe", "Spaghetti Tomate Basilic", "Dahl Lentilles Corail", "Quinoa & Crevettes", "Sandwich Club Complet", "Wok Nouilles Chinoises"]
+        // COMPLEX DATASETS (Restored)
+        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
+        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
+        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
+        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
+        
+        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
+        const ROUTINES = { 
+            sport: { m: {l:"Mobilité Articulaire", q:"mobility routine"}, e: {l:"Automassage", q:"foam rolling"} }, 
+            focus: { m: {l:"Méditation Focus", q:"meditation focus"}, e: {l:"Lecture Papier", q:"reading"} } 
         };
-        const ROUTINES = { sport: {m:{l:"Mobilité Articulaire",q:"mobility routine"},e:{l:"Automassage",q:"foam rolling"}}, focus: {m:{l:"Méditation Focus",q:"meditation focus"},e:{l:"Lecture Papier",q:"reading"}} };
+        ROUTINES.diet = ROUTINES.focus;
         const MUSIC_DB = { sport: ["Workout Phonk", "Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Acoustic Chill", "Jazz Vibes"] };
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
 
-        // --- 3. LOGIC ---
-        function getVits(m) { 
-            if(!m) return "Nutrition"; 
-            if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; 
-            if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; 
-            if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; 
-            return "Nutriments Essentiels"; 
-        }
+        // --- 2. LOGIC FUNCTIONS (Restored) ---
+        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines Essentielles"; }
         
-        // Randomisation intelligente des plats (Day Seed)
-        function getMeal(cat, seed) { 
-            const arr = KITCHEN[cat] || KITCHEN['light']; 
-            return arr[(selectedDay * 7 + seed) % arr.length]; 
-        }
-
         function parseInput(text) {
             let startMin = 540; let duration = 60;
-            const durMatch = text.match(/(?:durée|pendant)\s*(\d{1,2})/i); if(durMatch) duration = parseInt(durMatch[1])*60;
-            const simpleNum = text.match(/(\d{1,2})[h:](\d{2})?/); if(simpleNum) startMin = parseInt(simpleNum[1])*60 + (simpleNum[2]?parseInt(simpleNum[2]):0);
-            if(text.match(/\bmidi\b/i)) startMin = 720; if(text.match(/\bsoir\b/i)) startMin = 1200;
+            const durMatch = text.match(/(?:durée|pendant)\s*(\d{1,2})/i);
+            if (durMatch) duration = parseInt(durMatch[1]) * 60;
+            const startRegex = /(?:à|vers|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
+            const startMatch = text.match(startRegex);
+            if (startMatch) startMin = parseInt(startMatch[1]) * 60 + (startMatch[2] ? parseInt(startMatch[2]) : 0);
+            else { const simpleNum = text.match(/(\d{1,2})[h:](\d{2})?/); if(simpleNum) startMin = parseInt(simpleNum[1])*60 + (simpleNum[2]?parseInt(simpleNum[2]):0); }
+            if (text.match(/\bmidi\b/i)) startMin = 720; 
+            if (text.match(/\bsoir\b/i) && !startMatch) startMin = 1140;
             return { startMin, duration };
         }
 
+        function cleanTaskText(text) {
+            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
+            const junk = ["midi", "minuit", "matin", "soir", "demain", "vers", "à", "pour", "avec"];
+            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
+            return words.length > 0 ? words[0].charAt(0).toUpperCase() + words[0].slice(1) : "Tâche";
+        }
+
         function injectTaskSmartly(text) {
-            const lower = text.toLowerCase(); let d = selectedDay; if (lower.includes('demain')) d = now.getDate() + 1;
-            const parsed = parseInput(text);
-            const cl = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim().split(/\s+/)[0];
-            const cleanTitle = cl.charAt(0).toUpperCase() + cl.slice(1);
+            const lower = text.toLowerCase();
+            let d = selectedDay;
+            if (lower.includes('demain')) d = now.getDate() + 1;
             
-            // Conflict
+            const parsed = parseInput(text);
+            const cl = cleanTaskText(text);
+            
+            // CONFLICT DETECTION
             if(d === selectedDay) {
-                let dinnerTime = 20 * 60; let tEnd = parsed.startMin + parsed.duration;
+                let dinnerTime = 20 * 60;
+                let tEnd = parsed.startMin + parsed.duration;
                 if (parsed.startMin < (dinnerTime + 60) && tEnd > dinnerTime) {
-                    document.getElementById('conflictMsg').innerText = `Dîner décalé par "${cleanTitle}".`;
+                    document.getElementById('conflictMsg').innerText = `Dîner décalé par "${cl}".`;
                     document.getElementById('conflictAlertBox').classList.remove('hidden');
                 }
             }
-            
+
             const h = Math.floor(parsed.startMin/60)%24; const m = parsed.startMin%60;
             const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
             if(!db[d]) db[d] = [];
-            db[d].push({ shortText: cleanTitle, fullText: text, time: timeStr, duration: parsed.duration, done: false });
+            db[d].push({ shortText: cl, fullText: text, time: timeStr, duration: parsed.duration, done: false });
         }
 
         function traiterBatch() {
@@ -210,131 +230,163 @@
             save(); document.getElementById('userInput').value = ''; renderHUD();
         }
 
-        // --- 4. RENDERER (THE CORE) ---
+        // --- 3. RENDER CORE (Hybrid: Logic V71 + UI Bento) ---
         function renderHUD() {
+            // INIT
             if(!profile) { document.getElementById('profileModal').classList.remove('hidden'); return; }
             document.getElementById('mainDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
             
             const tasks = db[selectedDay] || [];
-            let mode = 'diet'; let intensity = 'low'; let sportTaskTime = null; let occupiedSlots = [];
-
-            // AI Context Analysis
+            
+            // MODE DETECTION (INTELLIGENCE)
+            let mode = 'diet'; 
+            let sportTaskTime = null;
+            let occupiedSlots = [];
+            
             tasks.forEach(t => {
                 const fl = (t.fullText||"").toLowerCase();
-                if (fl.match(/muscu|gym|crossfit|force/)) { mode = 'sport'; intensity = 'heavy'; sportTaskTime = t.time; }
-                else if (fl.match(/run|course|foot|cardio/)) { mode = 'sport'; intensity = 'cardio'; sportTaskTime = t.time; }
-                else if (fl.match(/réunion|bureau|projet|travail/i) && mode !== 'sport') mode = 'focus';
-                if (t.time) { const [h, m] = t.time.split(':').map(Number); occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); }
+                if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe/)) { mode = 'sport'; sportTaskTime = t.time; }
+                if (fl.match(/réunion|bureau|projet|travail|étude/i) && mode !== 'sport') mode = 'focus';
+                if (t.time) { 
+                    const [h, m] = t.time.split(':').map(Number); 
+                    occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); 
+                }
             });
 
-            // Update UI Context
-            const styles = { sport: {t: intensity==='heavy'?"Force": "Cardio", c:"text-orange-500", b:"border-orange-500"}, focus: {t:"Deep Work", c:"text-purple-500", b:"border-purple-500"}, diet: {t:"Récupération", c:"text-green-500", b:"border-green-500"} };
+            // UPDATE STATS UI
+            const styles = { sport: {t:"Athlète", c:"text-orange-500", b:"border-orange-500"}, focus: {t:"Deep Work", c:"text-purple-500", b:"border-purple-500"}, diet: {t:"Équilibre", c:"text-green-500", b:"border-green-500"} };
             const badge = document.getElementById('contextBadge');
-            badge.innerText = styles[mode].t; 
-            badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 ${styles[mode].c} border ${styles[mode].b}`;
+            badge.innerText = styles[mode].t; badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 ${styles[mode].c} border ${styles[mode].b}`;
+            
+            // Music & Supps
             document.getElementById('sonicLabel').innerText = MUSIC_DB[mode][selectedDay % MUSIC_DB[mode].length];
             document.getElementById('hudSupplements').innerText = suppsDB[mode];
 
-            // Calories & Profile
+            // Calories Calculation
             let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-            let tdee = Math.round(bmr * (mode==='sport'?1.6:1.3));
+            let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
             document.getElementById('calTarget').innerText = `${tdee} kcal`;
-            document.getElementById('calContext').innerText = profile.breakfast ? "3 Repas (Avec Petit-Dej)" : "2 Repas (Jeûne)";
+            document.getElementById('calContext').innerText = mode==='sport' ? "Surplus (Activité)" : "Maintenance";
 
-            // Modules Logic
+            // Coach Logic (Check Habits)
             const hasSportRecently = [0,1,2].some(d => (db[selectedDay-d]||[]).some(t=>t.fullText.match(/sport|gym/i)));
-            document.getElementById('coachAlertBox').className = (!hasSportRecently && selectedDay===now.getDate()) ? "bento-card border-orange-500/30 bg-orange-900/10 flex items-center justify-between mb-4" : "hidden";
-            // Culture trigger: less than 3 tasks
-            document.getElementById('knowledgeHub').className = (tasks.length < 3) ? "bento-card border-blue-500/30 bg-blue-900/10" : "hidden";
+            if(!hasSportRecently && selectedDay === now.getDate()) document.getElementById('coachAlertBox').classList.remove('hidden');
+            else document.getElementById('coachAlertBox').classList.add('hidden');
+
+            // Free Time Logic
+            if(tasks.length < 3) document.getElementById('knowledgeHub').classList.remove('hidden'); 
+            else document.getElementById('knowledgeHub').classList.add('hidden');
 
             // --- BUILD TIMELINE STREAM ---
             let stream = [];
+            const rot = selectedDay % 5;
+            
+            // 1. Routine Morning
             stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m.l, query: ROUTINES[mode].m.q, icon: '☀️' });
             
-            // BREAKFAST OPTION
-            if(profile.breakfast) stream.push({ type: 'meal', time: '08:00', content: getMeal('breakfast', 1), sub: "Énergie Matin", id: 'bf' });
-
-            // SMART MEAL SELECTOR
-            let lunchCat = intensity==='heavy'?'heavy':(intensity==='cardio'?'energy':'light');
-            let dinnerCat = intensity==='heavy'?'heavy':'light';
-            if(mode === 'focus') { lunchCat='light'; dinnerCat='light'; }
-
-            let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : getMeal(lunchCat, 2);
+            // 2. Lunch (Smart Selection)
+            let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : mealsDB[mode].lunch[rot];
             stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), id: 'lunch' });
 
-            // Dinner Timing
+            // 3. Dinner (With Conflict Logic)
             let dinnerMin = 20 * 60;
-            let dContent = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : getMeal(dinnerCat, 3);
+            let dContent = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : mealsDB[mode].dinner[rot];
             occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + 45) && slot.end > dinnerMin) dinnerMin = slot.end + 15; });
             const dTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
             stream.push({ type: 'meal', time: dTime, content: dContent, sub: getVits(dContent), id: 'dinner' });
 
-            // Sport Snack
-            if(mode === 'sport' && sportTaskTime) {
+            // 4. Injected Snacks (Sport)
+            if (mode === 'sport' && sportTaskTime) {
                 const [h, m] = sportTaskTime.split(':').map(Number);
-                if(h >= 17) stream.push({ type: 'snack', time: `${h-2}:00`, content: "Collation Pré-Workout", sub: "Banane & Amandes" });
+                if (h >= 17) stream.push({ type: 'snack', time: `${h-2}:00`, content: "Collation Pré-Workout", sub: "Banane & Amandes" });
             }
 
-            // Tasks
+            // 5. User Tasks
             tasks.forEach((t, i) => {
                 let style = 'dot-focus'; let accent = 'ctx-focus';
-                if(t.fullText.match(/sport|gym|run/i)) { style='dot-sport'; accent='ctx-sport'; }
+                if(t.fullText.match(/sport|gym/i)) { style='dot-sport'; accent='ctx-sport'; }
                 stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, style: style, accent: accent, id: i, done: t.done });
             });
 
-            // Sorting
+            // Sort & Render
             stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
             
-            // HTML Generation
-            document.getElementById('masterTimeline').innerHTML = stream.map(item => {
+            const container = document.getElementById('masterTimeline');
+            container.innerHTML = stream.map(item => {
                 let cardHTML = '';
+                
                 if(item.type === 'task') {
-                    cardHTML = `<div class="bento-card ${item.accent} flex items-center gap-4 ${item.done ? 'opacity-40 grayscale' : ''}" onclick="toggleTask(${item.id})"><div class="w-5 h-5 rounded border border-white/20 flex items-center justify-center">${item.done?'✓':''}</div><div><p class="font-bold text-sm ${item.done?'line-through':''}">${item.content}</p></div><button onclick="event.stopPropagation(); delTask(${item.id})" class="ml-auto text-red-500 opacity-50 text-xs">✕</button></div>`;
+                    cardHTML = `
+                    <div class="bento-card ${item.accent} flex items-center gap-4 ${item.done ? 'opacity-40 grayscale' : ''}" onclick="toggleTask(${item.id})">
+                        <div class="w-5 h-5 rounded border border-white/20 flex items-center justify-center">${item.done ? '✓' : ''}</div>
+                        <div><p class="font-bold text-sm ${item.done ? 'line-through' : ''}">${item.content}</p></div>
+                        <button onclick="event.stopPropagation(); delTask(${item.id})" class="ml-auto text-red-500 opacity-50 text-xs">✕</button>
+                    </div>`;
                 } else if(item.type === 'meal') {
-                    let emoji = item.id==='bf' ? '🥐' : '🥗';
-                    cardHTML = `<div class="bento-card ctx-meal flex items-center gap-4" onclick="editMeal('${item.id}')"><div class="text-xl">${emoji}</div><div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] text-green-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="ml-auto bg-white/10 p-1.5 rounded text-[9px]">COOK</button></div>`;
-                } else {
-                    cardHTML = `<div class="bento-card flex items-center gap-4 border-l border-white/20"><div class="text-xl">${item.type==='snack'?'🍌':item.icon}</div><div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] opacity-50 font-mono">${item.sub || 'Routine'}</p></div></div>`;
+                    cardHTML = `
+                    <div class="bento-card ctx-meal flex items-center gap-4" onclick="editMeal('${item.id}')">
+                        <div class="text-xl">🥗</div>
+                        <div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] text-green-400 font-mono">${item.sub}</p></div>
+                        <button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="ml-auto bg-white/10 p-1.5 rounded text-[9px]">COOK</button>
+                    </div>`;
+                } else if(item.type === 'routine' || item.type === 'snack') {
+                    cardHTML = `
+                    <div class="bento-card flex items-center gap-4 border-l border-white/20">
+                        <div class="text-xl">${item.type==='snack'?'🍌':item.icon}</div>
+                        <div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] opacity-50 font-mono">${item.sub || 'Routine'}</p></div>
+                    </div>`;
                 }
-                return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.style || 'dot-meal'}" style="background-color: ${item.type==='meal'?'#10b981':''}"></div><div class="flex-1">${cardHTML}</div></div>`;
+
+                return `
+                <div class="timeline-row">
+                    <div class="timeline-time">${item.time}</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-dot ${item.style || 'dot-meal'}" style="background-color: ${item.type==='meal'?'#10b981':''}"></div>
+                    <div class="flex-1">${cardHTML}</div>
+                </div>`;
             }).join('');
             
-            renderCal(); updateWaterUI();
+            renderCal();
+            updateWaterUI();
         }
 
-        // --- 5. FIXED CALENDAR FUNCTION ---
+        // --- 4. HELPERS ---
         function renderCal() {
             const c = document.getElementById('calendar'); c.innerHTML='';
-            const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            const last = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            // Show a scrolling view around selected day
+            let start = Math.max(1, selectedDay - 2); let end = Math.min(last, start+6);
+            if(end-start < 6) start = Math.max(1, end-6);
             
-            for(let i=1; i<=daysInMonth; i++){
-                const d = document.createElement('div'); 
+            for(let i=start; i<=end; i++){
+                const d = document.createElement('div');
                 d.className = `day-pill ${i===selectedDay?'active':''} ${db[i]&&db[i].length?'has-event':''}`;
-                d.innerHTML = `<span class="opacity-50 text-[9px]">${i}</span>`;
-                d.onclick=()=>{selectedDay=i; renderHUD();}; 
+                d.innerHTML = `<span class="opacity-50 text-[9px]">${i===now.getDate()?'AUJ':'J'+i}</span><span class="font-bold">${i}</span>`;
+                d.onclick=()=>{selectedDay=i; renderHUD();};
                 c.appendChild(d);
             }
         }
 
-        // --- 6. UTILS ---
         function saveProfile() {
-            profile={ weight:document.getElementById('inputWeight').value, height:document.getElementById('inputHeight').value, age:document.getElementById('inputAge').value, sex:document.getElementById('inputSex').value, breakfast: document.getElementById('inputBf').checked };
-            localStorage.setItem('lifeos_v76_profile', JSON.stringify(profile));
-            document.getElementById('profileModal').classList.add('hidden'); renderHUD();
+            profile={weight:document.getElementById('inputWeight').value, height:document.getElementById('inputHeight').value, age:document.getElementById('inputAge').value, sex:document.getElementById('inputSex').value};
+            localStorage.setItem('lifeos_v73_profile', JSON.stringify(profile));
+            document.getElementById('profileModal').classList.add('hidden');
+            renderHUD();
         }
         function toggleTask(i){ db[selectedDay][i].done=!db[selectedDay][i].done; save(); }
         function delTask(i){ db[selectedDay].splice(i,1); save(); }
-        function save(){ localStorage.setItem('lifeos_v76_db',JSON.stringify(db)); localStorage.setItem('lifeos_v76_health',JSON.stringify(health)); renderHUD(); }
+        function save(){ localStorage.setItem('lifeos_v73_db',JSON.stringify(db)); localStorage.setItem('lifeos_v73_health',JSON.stringify(health)); renderHUD(); }
         function addWater(n){ health.water+=n; save(); document.getElementById('waterText').classList.add('animate-pop'); setTimeout(()=>document.getElementById('waterText').classList.remove('animate-pop'),300); }
         function updateWaterUI(){ document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/2.5)*100)}%`; }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText; window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function editMeal(id){ const n=prompt("Changer repas:"); if(n){ if(!manualMeals[selectedDay])manualMeals[selectedDay]={}; manualMeals[selectedDay][id]=n; localStorage.setItem('lifeos_v76_manual_meals',JSON.stringify(manualMeals)); renderHUD(); }}
+        function editMeal(id){ const n=prompt("Changer repas:"); if(n){ if(!manualMeals[selectedDay])manualMeals[selectedDay]={}; manualMeals[selectedDay][id]=n; localStorage.setItem('lifeos_v73_manual_meals',JSON.stringify(manualMeals)); renderHUD(); }}
         function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
         function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        function openProfile() { if(confirm('Reset?')) { localStorage.clear(); location.reload(); } }
+        function openProfile() { if(confirm('Reset tout?')) { localStorage.clear(); location.reload(); } }
 
-        // STARTUP
-        if(!profile) document.getElementById('profileModal').classList.remove('hidden'); else renderHUD();
+        // START
+        if(!profile) document.getElementById('profileModal').classList.remove('hidden');
+        renderHUD();
     </script>
 </body>
 </html>
