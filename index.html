@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V77 - Universal Connector</title>
+    <title>LifeOS V78 - Omniscience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -49,16 +49,20 @@
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- BOURSE --- */
+        /* --- STYLES BOURSE V78 (OPTIMISÉ) --- */
         .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; }
+        
         .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 0.5rem; transition: 0.2s; color: #71717a; }
         .sub-nav-active { background: #3b82f6; color: white; }
         .sub-nav-btn:hover:not(.sub-nav-active) { background: rgba(255,255,255,0.05); color: white; }
+
         .news-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
         .news-item:hover { background: rgba(255,255,255,0.05); }
         .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
+        
         .finder-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 200; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        
         .pf-input-group { position: relative; }
         .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #0f0f12; border-radius: 0 0 12px 12px; max-height: 250px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .autocomplete-item { padding: 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.7rem; color: #ccc; display: flex; justify-content: space-between; align-items: center; }
@@ -108,30 +112,34 @@
             <div id="view-market" class="hidden flex flex-col gap-4">
                 
                 <div class="glass-panel p-2 flex flex-col gap-2">
-                    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{ "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }</script></div>
+                    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{ "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }</script></div>
                     <div class="flex items-center justify-between px-2">
                         <div class="flex gap-2">
                             <button onclick="setMarketTab('ACTIONS')" id="subnav-ACTIONS" class="sub-nav-btn sub-nav-active">ACTIONS</button>
                             <button onclick="setMarketTab('CRYPTO')" id="subnav-CRYPTO" class="sub-nav-btn">CRYPTO</button>
                             <button onclick="setMarketTab('METALS')" id="subnav-METALS" class="sub-nav-btn">MÉTAUX</button>
                         </div>
-                        <button onclick="openFinder()" class="text-[10px] bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded flex items-center gap-1 font-bold text-white shadow-lg">🔎 RECHERCHE AVANCÉE</button>
+                        <button onclick="openFinder()" class="text-[10px] bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded flex items-center gap-1 font-bold text-white shadow-lg">🔎 CHERCHER (TOUT)</button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     
-                    <div class="glass-panel p-1 h-[400px] border border-white/10 relative col-span-1 lg:col-span-2">
-                        <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_main_chart" style="height:100%;width:100%"></div></div>
+                    <div class="glass-panel p-1 h-[450px] border border-white/10 relative col-span-1 lg:col-span-2 flex flex-col">
+                        <div class="px-4 py-2 border-b border-white/5 flex justify-between">
+                            <h3 class="text-xs font-bold uppercase text-white" id="activeAnalysisLabel">ANALYSE ACTIVE : CAC 40</h3>
+                            <span class="text-[9px] text-zinc-500">Live Data</span>
+                        </div>
+                        <div class="tradingview-widget-container flex-1" style="height:100%;width:100%"><div id="tv_main_chart" style="height:100%;width:100%"></div></div>
                     </div>
 
-                    <div class="glass-panel p-4 flex flex-col h-[350px] relative z-20">
-                        <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">Ajouter Ordre (Force Mode)</h3>
-                        <p class="text-[9px] text-zinc-500 mb-2">Si l'autocomplétion ne trouve pas, tapez le code (ex: WLD) et cliquez Ajouter.</p>
+                    <div class="glass-panel p-4 flex flex-col h-[380px] relative z-20">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2">Ajouter Ordre (Nom ou ISIN)</h3>
+                        <p class="text-[9px] text-zinc-500 mb-2">Tapez le nom, le ticker (CW8) ou l'ISIN. Si introuvable, forcez l'ajout.</p>
                         
                         <div class="bg-black/40 p-3 rounded-lg mb-2 border border-white/5 relative">
                             <div class="pf-input-group mb-2">
-                                <input id="pf-symbol" type="text" placeholder="Nom, ISIN ou Ticker (ex: FR0014...)" class="w-full bg-transparent text-xs font-bold uppercase outline-none placeholder-zinc-600 text-white" autocomplete="off">
+                                <input id="pf-symbol" type="text" placeholder="Recherche (ex: CW8, LU16810..., LVMH)" class="w-full bg-transparent text-xs font-bold uppercase outline-none placeholder-zinc-600 text-white" autocomplete="off">
                                 <div id="autocomplete-list" class="autocomplete-items hidden"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 mb-2">
@@ -147,21 +155,22 @@
                         <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1"></div>
                     </div>
 
-                    <div class="glass-panel p-4 flex flex-col h-[350px] relative overflow-hidden">
+                    <div class="glass-panel p-2 h-[380px] flex flex-col">
+                        <h3 class="text-xs font-bold uppercase text-zinc-500 p-2 text-center">Jauge Technique (Active)</h3>
+                        <div class="tradingview-widget-container flex-1" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
+                    </div>
+
+                    <div class="glass-panel p-4 flex flex-col h-[300px] relative overflow-hidden">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-xs font-bold uppercase text-purple-400">IA Analyst (Pro)</h3>
-                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[9px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-2 py-1 rounded">AUDIT</button>
+                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[9px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-2 py-1 rounded">AUDIT COMPLET</button>
                         </div>
                         <div id="auditContent" class="flex-1 overflow-y-auto text-[10px] leading-relaxed text-zinc-300">
                             <div class="flex flex-col items-center justify-center h-full opacity-30"><span class="text-2xl">🧠</span><p>En attente d'ordres...</p></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-2 h-[200px]">
-                        <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
-                    </div>
-
-                    <div class="glass-panel p-4 h-[200px] overflow-y-auto">
+                    <div class="glass-panel p-4 h-[300px] overflow-y-auto">
                         <h3 class="text-xs font-bold uppercase text-red-400 mb-2">Media Room</h3>
                         <div class="space-y-2">
                             <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><span class="font-bold text-[10px]">Matthieu Louvet</span> <span class="news-tag">PEA</span></div>
@@ -171,7 +180,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel p-2 h-[200px] col-span-1 lg:col-span-2">
+                    <div class="glass-panel p-2 h-[250px] col-span-1 lg:col-span-2">
                          <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_profile" style="height:100%;width:100%"></div></div>
                     </div>
 
@@ -231,18 +240,28 @@
             { l: "Amundi MSCI World II (Dist)", s: "WLD", i: "FR001400U5Q4" },
             { l: "Amundi MSCI World (Acc)", s: "CW8", i: "LU1681043599" },
             
+            // EMERGING MARKETS & MONDE
+            { l: "Amundi Emerging Markets (Acc)", s: "PAEEM", i: "LU1681045370" },
+            { l: "iShares MSCI EM IMI", s: "EMIM", i: "IE00BKM4GZ66" },
+            { l: "Lyxor MSCI Emerging Markets", s: "LEM", i: "FR0010429068" },
+            { l: "Amundi MSCI EM Asia", s: "AASI", i: "LU1681044480" },
+            
             // INDICES & ETFS MAJEURS
             { l: "S&P 500 ETF (BNP)", s: "ESE", i: "FR0011550185" },
+            { l: "S&P 500 ETF (Vanguard)", s: "VUSA", i: "IE00B3XXRP09" },
             { l: "NASDAQ 100 ETF (Amundi)", s: "PANX", i: "LU1681038243" },
+            { l: "NASDAQ 100 ETF (Lyxor)", s: "UST", i: "FR0011871110" },
+            { l: "NASDAQ 100 (Levier x2) (LQQ)", s: "LQQ", i: "FR0010342592" },
             { l: "CAC 40 ETF (Amundi)", s: "C40", i: "LU1681046931" },
             { l: "Euro Stoxx 50 ETF", s: "MSE", i: "FR0007054358" },
-            { l: "Emerging Markets ETF", s: "PAEEM", i: "LU1681045370" },
             { l: "Japan Topix ETF", s: "PTPXE", i: "FR0013411980" },
             { l: "Russell 2000 ETF", s: "RS2K", i: "FR0011869361" },
             { l: "Water ETF (Lyrxor)", s: "WAT", i: "FR0010527275" },
             { l: "New Energy ETF", s: "NRJ", i: "FR0010524777" },
+            { l: "Health Care ETF", s: "HLT", i: "FR0010344879" },
+            { l: "Robotics & AI ETF", s: "ROBO", i: "IE00BMW3QX54" },
             
-            // ACTIONS CAC 40 (FRANCE)
+            // ACTIONS FR
             { l: "LVMH", s: "MC", i: "FR0000121014" },
             { l: "TotalEnergies", s: "TTE", i: "FR0000120271" },
             { l: "Air Liquide", s: "AI", i: "FR0000120073" },
@@ -319,6 +338,8 @@
             { l: "Cardano", s: "ADAUSD", i: "ADA" },
             { l: "Dogecoin", s: "DOGEUSD", i: "DOGE" },
             { l: "Shiba Inu", s: "SHIBUSD", i: "SHIB" },
+            { l: "Binance Coin", s: "BNBUSD", i: "BNB" },
+            { l: "Polkadot", s: "DOTUSD", i: "DOT" },
             
             // MATIERES PREMIERES
             { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" },
@@ -345,7 +366,7 @@
 
             if (matches.length > 0) {
                 list.classList.remove('hidden');
-                matches.slice(0, 8).forEach(item => { 
+                matches.slice(0, 10).forEach(item => { 
                     const d = document.createElement("DIV");
                     d.className = "autocomplete-item";
                     d.innerHTML = `<div><strong>${item.s}</strong> <span class="opacity-50 text-[10px] ml-1">${item.l}</span></div><span class="isin-badge">${item.i}</span>`;
@@ -385,6 +406,7 @@
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
             createWidget('tv_gauge', 'gauge', currentChartSymbol);
             createWidget('tv_profile', 'profile', currentChartSymbol);
+            document.getElementById('activeAnalysisLabel').innerText = `ANALYSE ACTIVE : ${currentChartSymbol}`;
         }
 
         function createWidget(containerId, type, symbol) {
@@ -403,7 +425,6 @@
         function closeFinder() { document.getElementById('finderModal').classList.add('hidden'); }
 
         function addToPortfolio() {
-            // Force Mode: Si l'utilisateur tape un truc, on le prend, même s'il n'est pas dans la liste.
             const sym = document.getElementById('pf-symbol').value.toUpperCase(); 
             const pr = parseFloat(document.getElementById('pf-price').value); 
             const qt = parseFloat(document.getElementById('pf-qty').value);
