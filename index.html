@@ -3,52 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V72 - Ultimate</title>
+    <title>LifeOS Sovereign V73 - Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
-        .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
+        .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 1.5rem; }
         
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
+        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.25rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.25rem; cursor: pointer; }
         .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
         
         .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
+        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.25rem; }
         .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
+        .timeline-dot { position: absolute; left: 58px; top: 25px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
         
-        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
-        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
-        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
-        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
-        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
-        .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
-        .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
-
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        @keyframes thinking { 0% { border-color: #3b82f6; } 50% { border-color: #8b5cf6; } 100% { border-color: #3b82f6; } }
-
-        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
-        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
-        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
-        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
-
+        /* Context Styles */
+        .ctx-sport { border-left: 3px solid #f97316; } 
+        .ctx-focus { border-left: 3px solid #8b5cf6; }
+        .ctx-meal { border-left: 3px solid #10b981; }
+        .ctx-task { border-left: 3px solid #3b82f6; }
+        
+        .badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.05em; }
+        .badge-vit { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+        
         .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
         .ai-loading { animation: thinking 1.5s infinite; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
-        
-        .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        @keyframes thinking { 0% { border-color: #3b82f6; } 50% { border-color: #8b5cf6; } 100% { border-color: #3b82f6; } }
 
-        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        
-        .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
+        .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -56,29 +41,23 @@
     <div class="max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
-            <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
+            <div class="glass-base p-6 space-y-6 flex-1 flex flex-col">
                 <div class="flex justify-between items-center">
-                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded ml-2">V72 ULTRA</span></h1>
-                    <button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button>
+                    <h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] bg-white/10 text-zinc-300 px-2 py-0.5 rounded ml-2">V73</span></h1>
+                    <button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️</button>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="switchView('planning')" id="nav-planning" class="nav-active py-2 rounded-xl text-xs font-bold border border-transparent transition-all">📅 Planning</button>
-                    <button onclick="switchView('market')" id="nav-market" class="py-2 rounded-xl text-xs font-bold border border-transparent hover:bg-white/5 transition-all">📈 Bourse</button>
+                <div class="grid grid-cols-2 gap-2 bg-black/20 p-1 rounded-2xl">
+                    <button onclick="switchView('planning')" id="nav-planning" class="nav-btn nav-active py-2 rounded-xl text-xs font-bold transition-all">📅 Planning</button>
+                    <button onclick="switchView('market')" id="nav-market" class="nav-btn py-2 rounded-xl text-xs font-bold transition-all">📈 Bourse</button>
                 </div>
 
                 <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
                 
                 <div class="flex-1">
-                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">IA Claude 3.5 (Planification)</p>
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Entraînement de foot mardi à 19h et déjeuner avec le patron vendredi à 13h'"></textarea>
-                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Exécuter</button>
-                </div>
-
-                <div class="pt-6 border-t border-white/5">
-                    <div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div>
-                    <div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div>
-                    <div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div>
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Claude 3.5 Intelligence</p>
+                    <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Crossfit à 18h et Réunion projet à 14h'"></textarea>
+                    <button id="aiBtn" onclick="traiterBatchIA()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex justify-center gap-2"><span>✨</span> Planifier</button>
                 </div>
             </div>
         </aside>
@@ -86,26 +65,26 @@
         <main class="lg:col-span-9 space-y-6 pb-10">
             
             <div id="view-planning" class="glass-base p-8 md:p-10 transition-colors duration-500">
-                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
+                <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 gap-6">
                     <div>
-                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
-                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
-                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
+                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Opérations</span></div>
+                        <h2 id="hudDate" class="text-4xl md:text-5xl font-black tracking-tight text-white">Date</h2>
+                        <div id="contextBanner" class="mt-4 inline-flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5"><span id="ctxIcon" class="text-2xl">⚖️</span><div><p class="text-sm font-bold text-white" id="contextTitle">Standard</p><p class="text-[10px] opacity-50 uppercase tracking-widest" id="contextSubtitle">Mode Activé</p></div></div>
                     </div>
-                    <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
+                    <div class="flex gap-6">
+                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32">
+                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible Calories</p>
+                            <p id="calTarget" class="text-xl font-mono font-medium text-white">--</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-2xl border border-white/5 text-right w-32">
+                            <p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Suppléments</p>
+                            <p id="hudSupplements" class="text-xs font-bold text-green-400 leading-tight">--</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                    <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
-                </div>
-                
-                <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                    <div class="flex items-center gap-6"><div class="text-4xl">🚨</div><div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div></div><button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
-                </div>
-
-                <div class="relative pl-4 pt-4">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
+                <div class="relative pl-4 pt-4 border-t border-white/5">
+                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12 mt-6">Timeline</p>
                     <div id="masterTimeline"></div>
                 </div>
             </div>
@@ -114,20 +93,34 @@
                 <div class="tradingview-widget-container">
                     <div class="tradingview-widget-container__widget"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                    {
-                    "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"BITSTAMP:ETHUSD","title":"Ethereum"},{"proName":"TVC:CAC40","title":"CAC 40"}],
-                    "showSymbolLogo": true,
-                    "colorTheme": "dark",
-                    "isTransparent": true,
-                    "displayMode": "adaptive",
-                    "locale": "fr"
-                    }
+                    { "symbols": [{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:CAC40","title":"CAC 40"},{"proName":"TVC:GOLD","title":"Or"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "fr" }
                     </script>
                 </div>
 
-                <div class="glass-base h-[750px] overflow-hidden p-1 border border-white/10">
+                <div class="glass-base h-[500px] overflow-hidden p-1 border border-white/10">
                     <div class="tradingview-widget-container" style="height:100%;width:100%">
                         <div id="tradingview_advanced" style="height:100%;width:100%"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-base p-6">
+                        <div class="flex items-center gap-3 mb-4"><span class="text-xl">🧭</span><h3 class="font-bold">Recommandation Technique</h3></div>
+                        <div class="tradingview-widget-container" style="height: 200px">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                            { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": "TVC:CAC40", "showIntervalTabs": true, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="glass-base p-6">
+                        <div class="flex items-center gap-3 mb-4"><span class="text-xl">🚀</span><h3 class="font-bold">Crypto Trend</h3></div>
+                        <div class="tradingview-widget-container" style="height: 200px">
+                             <div class="tradingview-widget-container__widget"></div>
+                             <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                             { "symbol": "BINANCE:BTCUSDT", "width": "100%", "height": "100%", "locale": "fr", "dateRange": "12M", "colorTheme": "dark", "isTransparent": true, "autosize": true, "largeChartUrl": "" }
+                             </script>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,258 +128,182 @@
         </main>
     </div>
 
-    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
         <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center">
-            <h2 class="text-xl font-bold mb-6">Profil & Système</h2>
+            <h2 class="text-xl font-bold mb-6">Système & Clé API</h2>
             <div class="space-y-3 mb-6">
-                <input type="password" id="inputApiKey" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-blue-500/30 focus:border-blue-500 transition-colors" placeholder="Clé API OpenRouter (sk-or-...)">
-                <p class="text-[9px] text-zinc-500 pb-2">Nécessaire pour l'intelligence artificielle.</p>
-                <input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Poids (kg)">
-                <input type="number" id="inputHeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Taille (cm)">
-                <input type="number" id="inputAge" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10" placeholder="Âge">
-                <select id="inputSex" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-white/10"><option value="male">Homme</option><option value="female">Femme</option></select>
+                <input type="password" id="inputApiKey" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none border border-blue-500/30 focus:border-blue-500" placeholder="Clé OpenRouter (sk-or-...)">
+                <input type="number" id="inputWeight" class="w-full bg-black/20 p-4 rounded-xl text-center text-white outline-none" placeholder="Poids (kg)">
             </div>
-            <button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs mb-4">Sauvegarder</button>
-            <div class="grid grid-cols-2 gap-2"><button onclick="exportData()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📥 Sauvegarder</button><button onclick="document.getElementById('importFile').click()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold">📤 Restaurer</button><input type="file" id="importFile" class="hidden" onchange="importData(this)"></div>
+            <button onclick="saveProfile()" class="primary-btn w-full py-4 rounded-xl font-bold uppercase text-xs">Sauvegarder</button>
         </div>
     </div>
 
     <script>
-        // INIT DATA
-        let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
-        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
+        // --- 1. CONFIGURATION & DONNÉES ---
+        let db = JSON.parse(localStorage.getItem('lifeos_v73_db') || "{}");
+        let profile = JSON.parse(localStorage.getItem('lifeos_profile') || '{"weight":80}');
         let apiKey = localStorage.getItem('lifeos_apikey') || ""; 
+        const now = new Date(); const todayNum = now.getDate(); let selectedDay = todayNum;
+        const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
 
-        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
-        let editingTaskId = null;
+        // BASE DE DONNÉES BIO-MOTEUR (Repas & Vitamines)
+        const BIO_DB = {
+            sport: {
+                title: "Haute Performance", icon: "🔥", color: "text-orange-500",
+                lunch: ["Pâtes Complètes Poulet", "Riz Basmati Boeuf 5%", "Gnocchis Dinde", "Bowl Quinoa Saumon"],
+                dinner: ["Omelette PDT", "Cabillaud Riz", "Wrap Poulet Avocat", "Saucisse Lentilles"],
+                supps: "Magnésium, Créatine, BCAA",
+                desc: "Riche en glucides & protéines"
+            },
+            focus: {
+                title: "Deep Work", icon: "🧠", color: "text-purple-500",
+                lunch: ["Salade César Poulet", "Saumon Haricots Verts", "Bowl Tofu", "Carpaccio Boeuf"],
+                dinner: ["Wok Légumes", "Soupe Maison", "Poisson Papillote", "Salade Grecque"],
+                supps: "Omega-3, Vitamine D, Matcha",
+                desc: "Low Carb, High Fat (Cognition)"
+            },
+            chill: {
+                title: "Récupération", icon: "🌿", color: "text-green-500",
+                lunch: ["Taboulé Libanais", "Quiche Légumes", "Sandwich Dinde", "Poke Bowl"],
+                dinner: ["Velouté Potiron", "Oeufs Brouillés", "Avocado Toast", "Yaourt Fruits"],
+                supps: "Multivitamines, Probiotiques",
+                desc: "Équilibre & Digestion"
+            }
+        };
 
-        // --- CORE: INTELLIGENCE ARTIFICIELLE (CLAUDE 3.5 SONNET) ---
+        // --- 2. LOGIQUE IA (CLAUDE 3.5 SONNET) ---
         async function traiterBatchIA() {
             const raw = document.getElementById('userInput').value;
-            if (!raw.trim()) return;
-            if (!apiKey) { alert("🚨 ERREUR : Clé API manquante.\n\n1. Va dans Profil ⚙️\n2. Colle ta clé OpenRouter\n3. Sauvegarde."); openProfile(); return; }
-
-            const btn = document.getElementById('aiBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "<span>🧠</span> Réflexion en cours...";
-            btn.classList.add('ai-loading');
-            btn.disabled = true;
-
-            // Prompt Système Renforcé pour Claude 3.5
-            const systemPrompt = `
-            Tu es l'intelligence centrale de LifeOS.
-            Date actuelle : ${new Date().toISOString()}.
-            Nous sommes le : ${new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}.
-            
-            TA MISSION : Analyser la demande de l'utilisateur et retourner un tableau JSON strict.
-            
-            RÈGLES IMPORTANTES :
-            1. Calcule le "dayOffset" (décalage en jours par rapport à aujourd'hui).
-               - "Aujourd'hui" = 0
-               - "Demain" = 1
-               - "Lundi prochain" = calcule le nombre de jours exacts.
-            2. Estime l'heure si absente (matin=09:00, midi=12:30, soir=19:00).
-            3. Estime la durée si absente (standard=60 min).
-            4. Ne réponds QUE du JSON. Pas de texte avant ou après.
-
-            FORMAT JSON ATTENDU :
-            [
-              {
-                "shortText": "Titre Court (ex: Sport)",
-                "fullText": "Description complète",
-                "time": "HH:MM",
-                "duration": 60,
-                "dayOffset": 0 
-              }
-            ]
-            `;
+            if (!raw.trim() || !apiKey) { if(!apiKey) openProfile(); return; }
+            const btn = document.getElementById('aiBtn'); const oldTxt = btn.innerHTML;
+            btn.innerHTML = "<span>🧠</span> Analyse..."; btn.disabled = true;
 
             try {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST",
-                    headers: { 
-                        "Authorization": `Bearer ${apiKey}`, 
-                        "Content-Type": "application/json",
-                        "HTTP-Referer": window.location.href,
-                        "X-Title": "LifeOS V72"
-                    },
+                    method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V73" },
                     body: JSON.stringify({
-                        "model": "anthropic/claude-3.5-sonnet", // Modèle le plus intelligent actuellement
+                        "model": "anthropic/claude-3.5-sonnet",
                         "messages": [
-                            { "role": "system", "content": systemPrompt },
+                            { "role": "system", "content": `Tu es LifeOS. Aujourd'hui: ${new Date().toLocaleDateString()}. Retourne un JSON strict des tâches. Si sport détecté, titre="Sport". Si réunion/travail, titre="Travail". Format: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":60,"dayOffset":0}]` },
                             { "role": "user", "content": raw }
                         ]
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`);
-                }
-                
                 const data = await response.json();
+                const tasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim());
                 
-                if (data.choices && data.choices.length > 0) {
-                    let content = data.choices[0].message.content;
-                    // Nettoyage radical du markdown
-                    content = content.replace(/```json/g, '').replace(/```/g, '').trim();
-                    
-                    const tasks = JSON.parse(content);
-
-                    tasks.forEach(t => {
-                        // Calcul de la date réelle basée sur le décalage
-                        const targetDate = new Date();
-                        targetDate.setDate(now.getDate() + (t.dayOffset || 0));
-                        const targetDayNum = targetDate.getDate(); // Récupère le jour (1-31)
-                        
-                        // Injection
-                        if (!db[targetDayNum]) db[targetDayNum] = [];
-                        db[targetDayNum].push({ 
-                            shortText: t.shortText, 
-                            fullText: t.fullText, 
-                            time: t.time, 
-                            duration: t.duration, 
-                            done: false 
-                        });
-                        
-                        // Si l'IA planifie pour un autre jour, on notifie l'utilisateur
-                        if (t.dayOffset > 0) {
-                            alert(`✅ Tâche planifiée pour le ${targetDayNum} : ${t.shortText}`);
-                        }
-                    });
-                    
-                    save();
-                    document.getElementById('userInput').value = '';
-                    renderHUD(); // Rafraichit l'affichage
-                    btn.innerHTML = "<span>✅</span> C'est fait !";
-                } else {
-                    throw new Error("Réponse vide de l'IA");
-                }
-
-            } catch (error) {
-                console.error("ERREUR IA:", error);
-                alert(`❌ Erreur IA : ${error.message}\nVérifie ta clé API et ta connexion.`);
-                btn.innerHTML = "❌ Échec";
-            } finally {
-                btn.classList.remove('ai-loading');
-                btn.disabled = false;
-                setTimeout(() => btn.innerHTML = originalText, 2500);
-            }
-        }
-
-        // --- TRADINGVIEW AVANCÉ (Vraie Bourse) ---
-        let tvInitialized = false;
-        function initTradingView() {
-            if(tvInitialized) return;
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": "TVC:CAC40",
-                "interval": "D",
-                "timezone": "Europe/Paris",
-                "theme": "dark",
-                "style": "1",
-                "locale": "fr",
-                "enable_publishing": false,
-                "withdateranges": true,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true, // Permet de chercher n'importe quelle action/crypto
-                "details": true,
-                "hotlist": true,
-                "calendar": true,
-                "container_id": "tradingview_advanced"
-            });
-            tvInitialized = true;
-        }
-
-        // --- DATA & RENDERING (Reste du système) ---
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
-        const M_SPORT_D = ["Omelette 3 oeufs PDT", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_SPORT_L, dinner: M_SPORT_D }, diet: { lunch: M_SPORT_L, dinner: M_SPORT_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Chill Lofi"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
-
-        function getVits(m) { return "Vitamines & Minéraux"; } // Simplifié pour lisibilité
-
-        function switchView(viewName) {
-            const plan = document.getElementById('view-planning');
-            const market = document.getElementById('view-market');
-            const btnPlan = document.getElementById('nav-planning');
-            const btnMarket = document.getElementById('nav-market');
-
-            if(viewName === 'planning') {
-                plan.classList.remove('hidden'); market.classList.add('hidden');
-                btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active');
-            } else {
-                plan.classList.add('hidden'); market.classList.remove('hidden');
-                btnPlan.classList.remove('nav-active'); btnMarket.classList.add('nav-active');
-                initTradingView();
-            }
-        }
-
-        function renderHUD() {
-            try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-
-                const tasks = db[selectedDay] || [];
-                let mode = 'diet';
-                tasks.forEach(t => { if ((t.fullText||"").match(/sport|gym|crossfit|muscu/i)) mode = 'sport'; if ((t.fullText||"").match(/bureau|travail|projet/i)) mode = 'focus'; });
-
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
-
-                // Logic Timeline (Simplifiée pour focus sur IA)
-                let stream = [];
-                // Routine Matin
-                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, query: ROUTINES[mode].m[0].q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                // Tâches
-                tasks.forEach((t, i) => {
-                    let accent = 'accent-task'; let dot = 'dot-task';
-                    if((t.fullText||"").match(/sport/i)) { accent='accent-sport'; dot='dot-sport'; }
-                    stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
+                tasks.forEach(t => {
+                    const targetDate = new Date(); targetDate.setDate(now.getDate() + (t.dayOffset||0)); const d = targetDate.getDate();
+                    if (!db[d]) db[d] = [];
+                    db[d].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false });
                 });
-                // Routine Soir
-                stream.push({ type: 'routine', time: '22:30', content: ROUTINES[mode].e[0].l, query: ROUTINES[mode].e[0].q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-
-                stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
-
-                document.getElementById('masterTimeline').innerHTML = stream.map(item => {
-                    let html = '';
-                    let cardContent = item.content;
-                    if(item.type === 'task') cardContent = `<div class="flex items-center gap-4" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white cursor-pointer"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs">✕</button></div>`;
-                    if(item.type === 'routine') cardContent = `<div class="flex justify-between items-center"><span class="font-bold text-lg">${item.content}</span><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶</button></div>`;
-                    
-                    return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done?'opacity-40':''}">${cardContent}</div></div>`;
-                }).join('');
-
-            } catch (e) { console.error(e); }
+                save(); renderHUD();
+                document.getElementById('userInput').value = '';
+            } catch (e) { alert("Erreur IA: " + e.message); } 
+            finally { btn.innerHTML = oldTxt; btn.disabled = false; }
         }
 
-        // HELPERS (Sauvegarde, etc)
+        // --- 3. MOTEUR D'AFFICHAGE & BIO-LOGIQUE ---
+        function renderHUD() {
+            // Setup Date & Status
+            document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+            
+            // 1. Détection du Contexte (Mode)
+            const tasks = db[selectedDay] || [];
+            let mode = 'chill';
+            tasks.forEach(t => {
+                const txt = (t.fullText + t.shortText).toLowerCase();
+                if(txt.match(/sport|gym|muscu|crossfit|foot|run/)) mode = 'sport';
+                else if(txt.match(/réunion|bureau|travail|projet|code/) && mode !== 'sport') mode = 'focus';
+            });
+            const theme = BIO_DB[mode];
+
+            // UI Updates based on Mode
+            document.getElementById('contextTitle').innerText = theme.title;
+            document.getElementById('contextTitle').className = `text-sm font-bold ${theme.color}`;
+            document.getElementById('contextSubtitle').innerText = theme.desc;
+            document.getElementById('ctxIcon').innerText = theme.icon;
+            document.getElementById('hudSupplements').innerText = theme.supps;
+            document.getElementById('calTarget').innerText = (mode === 'sport' ? Math.round(profile.weight * 32) : Math.round(profile.weight * 26)) + " kcal";
+
+            // 2. Construction Timeline (Flux)
+            let stream = [];
+            const rot = (selectedDay - 1) % 4; // Rotation des repas
+            
+            // Repas Midi (Auto-injecté selon contexte)
+            stream.push({ 
+                type: 'meal', time: '12:30', 
+                name: theme.lunch[rot], 
+                desc: mode === 'sport' ? "Chargement Glycogène" : "Léger & Nutritif",
+                vit: theme.supps.split(',')[0] // Affiche la 1ere vitamine
+            });
+
+            // Repas Soir (Auto-injecté)
+            stream.push({ 
+                type: 'meal', time: '20:00', 
+                name: theme.dinner[rot], 
+                desc: "Reconstruction & Sommeil",
+                vit: "Hydratation"
+            });
+
+            // Tâches Utilisateur
+            tasks.forEach((t, i) => {
+                let style = "ctx-task";
+                if((t.fullText||"").match(/sport|gym/i)) style = "ctx-sport";
+                else if((t.fullText||"").match(/travail|réunion/i)) style = "ctx-focus";
+                
+                stream.push({ 
+                    type: 'task', time: t.time, 
+                    name: t.shortText, desc: t.fullText, 
+                    style: style, id: i, done: t.done 
+                });
+            });
+
+            // Tri Chronologique
+            stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+
+            // Rendu HTML
+            document.getElementById('masterTimeline').innerHTML = stream.map(item => {
+                let content = '';
+                if(item.type === 'meal') {
+                    content = `<div class="flex justify-between items-center"><div class="flex flex-col"><div class="flex items-center gap-2 mb-1"><span class="badge badge-vit">${item.vit}</span></div><span class="font-bold text-lg">${item.name}</span><span class="text-xs opacity-50">${item.desc}</span></div><div class="text-2xl opacity-20">🍽️</div></div>`;
+                } else {
+                    content = `<div class="flex items-center gap-4 group cursor-pointer" onclick="toggleTask(${selectedDay},${item.id})"><div class="w-5 h-5 rounded border border-white/20 flex items-center justify-center ${item.done?'bg-white text-black':''}">${item.done?'✓':''}</div><div class="${item.done?'line-through opacity-30':''}"><p class="font-bold text-lg">${item.name}</p><p class="text-xs opacity-50 truncate w-64">${item.desc}</p></div><button onclick="event.stopPropagation();delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 opacity-0 group-hover:opacity-100 text-xs">SUPPR</button></div>`;
+                }
+                
+                let borderClass = item.type === 'meal' ? 'ctx-meal' : item.style;
+                if(item.done) borderClass = "border-l-2 border-white/20";
+
+                return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot bg-black border border-white"></div><div class="flex-1 flow-card ${borderClass} ${item.done?'opacity-50':''}">${content}</div></div>`;
+            }).join('');
+        }
+
+        // --- 4. NAVIGATION & UTILITAIRES ---
+        let tvInit = false;
+        function switchView(v) {
+            document.getElementById('view-planning').classList.add('hidden');
+            document.getElementById('view-market').classList.add('hidden');
+            document.getElementById('nav-planning').classList.remove('nav-active');
+            document.getElementById('nav-market').classList.remove('nav-active');
+            
+            document.getElementById('view-'+v).classList.remove('hidden');
+            document.getElementById('nav-'+v).classList.add('nav-active');
+
+            if(v === 'market' && !tvInit) {
+                new TradingView.widget({ "autosize": true, "symbol": "TVC:CAC40", "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "enable_publishing": false, "container_id": "tradingview_advanced" });
+                tvInit = true;
+            }
+        }
+
+        // Sauvegardes & Helpers
+        function save(){localStorage.setItem('lifeos_v73_db',JSON.stringify(db)); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
         function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
         function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_apikey',apiKey); renderCal(); renderHUD(); }
         function openProfile(){document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('inputApiKey').value = apiKey; }
-        function saveProfile(){apiKey=document.getElementById('inputApiKey').value; document.getElementById('profileModal').classList.add('hidden'); save();}
-        function exportData(){const data={db,apiKey};const blob=new Blob([JSON.stringify(data)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download="lifeos_backup.json";a.click();}
-        function importData(input){const file=input.files[0];const reader=new FileReader();reader.onload=(e)=>{const data=JSON.parse(e.target.result);db=data.db;apiKey=data.apiKey||"";save();alert("Restauré !");};reader.readAsText(file);}
-        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
-        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
-        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
+        function saveProfile(){apiKey=document.getElementById('inputApiKey').value; profile.weight=document.getElementById('inputWeight').value||80; localStorage.setItem('lifeos_profile',JSON.stringify(profile)); document.getElementById('profileModal').classList.add('hidden'); save();}
+        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderHUD();renderCal();};c.appendChild(d);}}
 
-        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter' && !e.shiftKey){e.preventDefault(); traiterBatchIA();}});
-        
-        // Démarrage
         renderCal(); renderHUD();
     </script>
 </body>
