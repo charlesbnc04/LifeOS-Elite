@@ -3,345 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V71 - Sync Edition</title>
+    <title>LifeOS Sovereign V75 - Dopamine Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
-        .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
-        
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
-        .flow-card:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
-        
-        .timeline-row { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
-        .timeline-line { position: absolute; left: 63px; top: 20px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 50px; text-align: right; font-family: monospace; font-size: 0.85rem; font-weight: 700; opacity: 0.6; padding-top: 1.5rem; }
-        .timeline-dot { position: absolute; left: 58px; top: 28px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 10; }
-        
-        .dot-routine { background: #eab308; } .accent-routine { border-left: 3px solid #eab308; }
-        .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
-        .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
-        .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
-        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
-        .dot-important { background: #ef4444; box-shadow: 0 0 20px #ef4444; animation: pulseRed 2s infinite; }
-        .accent-important { border-left: 3px solid #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.1), transparent); }
-        .dot-prep { background: #8b5cf6; } .accent-prep { border-left: 3px solid #8b5cf6; border-style: dashed; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-
-        .live-marker { position: absolute; left: 0; right: 0; display: flex; align-items: center; z-index: 20; pointer-events: none; margin-top: -10px; margin-bottom: 10px; }
-        .live-line { flex-grow: 1; height: 2px; background: #ef4444; box-shadow: 0 0 10px #ef4444; margin-left: 63px; }
-        .live-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; left: 60px; box-shadow: 0 0 10px #ef4444; }
-        .live-time-label { position: absolute; left: 10px; color: #ef4444; font-size: 0.7rem; font-weight: bold; font-family: monospace; }
-
-        .primary-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-        .video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .cook-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.6rem; padding: 4px 10px; border-radius: 6px; margin-left: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-        .action-btn { background: rgba(255, 255, 255, 0.1); padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; transition: 0.2s; border: 1px solid rgba(255,255,255,0.1); }
-        .action-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .day-today { color: #60a5fa; font-weight: 800; border-color: #60a5fa; }
-        .day-selected { background: white !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .has-event { border-bottom: 2px solid #a855f7; }
-        .water-progress { transition: width 1s ease; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        :root { --primary: #3b82f6; --accent: #8b5cf6; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030305; color: #fff; min-height: 100vh; overflow-x: hidden; }
         
-        .alert-box { animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Dynamic Background */
+        .bg-animate {
+            position: fixed; inset: 0; z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
+            animation: breathe 10s infinite alternate;
+        }
+        @keyframes breathe { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
+
+        .glass-panel { background: rgba(20, 20, 25, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border-radius: 1.5rem; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; overflow: hidden; }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+
+        /* Timeline Elements */
+        .timeline-container { position: relative; padding-left: 20px; }
+        .timeline-line { position: absolute; left: 85px; top: 30px; bottom: -30px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent); }
+        .timeline-time { width: 60px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; opacity: 0.5; padding-top: 1.5rem; }
         
-        .sonic-bar { cursor: pointer; transition: all 0.4s ease; }
-        .sonic-sport { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); }
-        .sonic-focus { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
-        .sonic-chill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
+        /* Status Dots */
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; position: absolute; left: 79px; top: 32px; z-index: 10; border: 2px solid #030305; box-shadow: 0 0 15px currentColor; transition: transform 0.3s; }
+        .group:hover .status-dot { transform: scale(1.3); }
+
+        /* Progress Circle (Life Score) */
+        .progress-ring__circle { transition: stroke-dashoffset 1s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
+
+        /* Task Animations */
+        @keyframes checkPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .checkbox-anim:checked { animation: checkPop 0.2s ease-in-out; background-color: #10b981; border-color: #10b981; }
+        .task-done { text-decoration: line-through; opacity: 0.4; filter: grayscale(1); }
+
+        /* Zen Mode Overlay */
+        #zenMode { transition: opacity 0.5s ease; pointer-events: none; opacity: 0; }
+        #zenMode.active { pointer-events: all; opacity: 1; }
+
+        /* Utilities */
+        .btn-gradient { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); transition: 0.3s; }
+        .btn-gradient:hover { box-shadow: 0 0 30px rgba(37, 99, 235, 0.5); transform: translateY(-1px); }
+        .btn-record { animation: pulseRed 2s infinite; }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-6 lg:p-8 selection:bg-blue-500/30">
+    <div class="bg-animate"></div>
 
-    <div class="max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         
         <aside class="lg:col-span-3 flex flex-col gap-6 h-[calc(100vh-4rem)] sticky top-8">
-            <div class="glass-base p-8 space-y-6 flex-1 flex flex-col">
-                <div class="flex justify-between items-center"><h1 class="text-2xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span></h1><button onclick="openProfile()" class="text-[10px] font-bold bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20">⚙️ PROFIL</button></div>
-                <div><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Calendrier</p><div id="calendar" class="grid grid-cols-7 gap-1"></div></div>
-                <div class="flex-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p><textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors h-32" placeholder="Ex: 'Match de foot à 20h'&#10;L'IA simplifie: 'Foot'"></textarea><button onclick="traiterBatch()" class="primary-btn w-full mt-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Planifier</button></div>
-                <div class="pt-6 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-2xl font-black">0L</span><span id="waterTarget" class="text-xs opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="water-progress h-full w-0"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-blue-500/20">+ Gourde</button></div></div>
+            <div class="glass-panel p-6 flex flex-col h-full relative overflow-hidden">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tighter">Life<span class="text-blue-500 italic">OS</span></h1>
+                        <p class="text-[10px] font-bold text-zinc-500 tracking-widest uppercase mt-1">Sovereign V75</p>
+                    </div>
+                    <div class="relative w-16 h-16 flex items-center justify-center cursor-pointer group" onclick="alert('Score de vie calculé sur: Tâches, Eau, Routines')">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="text-white/5" stroke-width="8" stroke="currentColor" fill="transparent" r="42" cx="50" cy="50"/>
+                            <circle id="scoreRing" class="text-blue-500 progress-ring__circle" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="transparent" r="42" cx="50" cy="50" stroke-dasharray="264" stroke-dashoffset="264"/>
+                        </svg>
+                        <span id="scoreText" class="absolute text-sm font-black group-hover:scale-110 transition-transform">0%</span>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between items-end mb-3">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p>
+                        <button onclick="goToToday()" class="text-[9px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded hover:bg-blue-500/20 transition">Aujourd'hui</button>
+                    </div>
+                    <div id="calendar" class="grid grid-cols-7 gap-1.5 text-center"></div>
+                </div>
+
+                <div class="flex-1 flex flex-col min-h-0 relative group">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA</p>
+                    <div class="relative flex-1">
+                        <textarea id="userInput" class="w-full h-full bg-black/30 border border-white/10 rounded-xl p-4 text-sm outline-none resize-none focus:border-blue-500/50 transition-colors placeholder:text-zinc-700 font-medium leading-relaxed" placeholder="Planifier ma journée... (ex: 'Gym à 18h, Lire 20min')"></textarea>
+                        <button onclick="toggleVoice()" id="micBtn" class="absolute bottom-3 right-3 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition text-zinc-400 hover:text-white">🎙️</button>
+                    </div>
+                    <button onclick="traiterBatch()" class="btn-gradient w-full mt-3 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all">Exécuter</button>
+                </div>
+
+                <div class="pt-6 mt-6 border-t border-white/5">
+                    <div class="flex justify-between items-end mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">💧</span>
+                            <span class="text-[10px] font-bold uppercase text-blue-400">Hydratation</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="waterText" class="text-xl font-black font-mono">0L</span>
+                            <span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span>
+                        </div>
+                    </div>
+                    <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden mb-3">
+                        <div id="waterBar" class="h-full w-0 bg-blue-500 shadow-[0_0_10px_#3b82f6] transition-all duration-700"></div>
+                    </div>
+                    <button onclick="addWater(0.25)" class="w-full py-2 bg-blue-500/10 border border-blue-500/20 rounded-lg text-[10px] font-bold hover:bg-blue-500/20 active:bg-blue-500/30 transition text-blue-300">+ 250ml (Verre)</button>
+                </div>
             </div>
         </aside>
 
-        <main class="lg:col-span-9 space-y-6 pb-10">
-            <div id="main-hud" class="glass-base p-8 md:p-10 transition-colors duration-500">
-                
-                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 pb-6 gap-6">
+        <main class="lg:col-span-9 space-y-6 pb-20">
+            <div class="glass-panel p-8 md:p-10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+                <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 relative z-10">
                     <div>
-                        <div class="flex items-center gap-2 mb-2"><span id="dayIndicator" class="w-2 h-2 rounded-full bg-blue-500"></span><span id="hudStatus" class="text-[10px] font-bold uppercase tracking-widest opacity-60">Planning</span></div>
-                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white">Date</h2>
-                        <div id="contextBanner" class="mt-4 flex items-center gap-3"><span class="text-3xl">⚖️</span><div><p class="text-lg font-bold text-blue-400" id="contextTitle">Standard</p><p class="text-xs opacity-50" id="contextSubtitle">Équilibre</p></div></div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="liveIndicator" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></span>
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">Tableau de Bord</span>
+                        </div>
+                        <h2 id="hudDate" class="text-4xl md:text-6xl font-black tracking-tight text-white mb-2">Date</h2>
+                        <div id="quoteBox" class="text-sm font-medium text-zinc-400 italic border-l-2 border-white/20 pl-3">"La discipline est la clé de la liberté."</div>
                     </div>
-                    <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible (TDEE)</p><p id="calTarget" class="text-2xl font-mono font-medium text-white">--</p></div></div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-sm font-bold">Chargement...</p></div></div><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div></div>
-                    <div class="flow-card flex items-center gap-4 border border-green-500/20 bg-green-900/10"><div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-xl">💊</div><div><p class="text-[9px] font-bold uppercase text-green-400 mb-1">Bio-Stack</p><p id="hudSupplements" class="text-sm font-medium">--</p></div></div>
-                </div>
-                
-                <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-6 flex items-center justify-between alert-box bg-red-900/40 border border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                    <div class="flex items-center gap-6">
-                        <div class="text-4xl">🚨</div>
-                        <div><p class="text-xs font-bold uppercase text-red-400 tracking-widest">Conflit Agenda</p><p id="conflictMsg" class="text-lg font-bold text-white mt-1">...</p></div>
+                    
+                    <div class="flex gap-4 mt-6 md:mt-0">
+                        <button onclick="toggleZenMode()" class="glass-card px-5 py-3 flex items-center gap-3 hover:bg-purple-500/20 border-purple-500/30 group">
+                            <span class="text-2xl group-hover:scale-110 transition">🧠</span>
+                            <div class="text-left">
+                                <p class="text-[9px] font-bold uppercase text-purple-400 tracking-wider">Deep Work</p>
+                                <p class="text-xs font-bold">Lancer Session</p>
+                            </div>
+                        </button>
+                        <div class="glass-card px-5 py-3 text-right border-orange-500/30 bg-orange-500/5">
+                            <p class="text-[9px] font-bold uppercase text-orange-400 tracking-wider mb-1">Cible (TDEE)</p>
+                            <p id="calTarget" class="text-xl font-mono font-bold text-white">2400 <span class="text-xs opacity-50">kcal</span></p>
+                        </div>
                     </div>
-                    <button onclick="closeAlert()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white text-white hover:text-red-900 font-bold transition-colors">✕</button>
                 </div>
 
-                <div id="coachAlertBox" class="hidden mb-6 flow-card border border-orange-500/30 bg-orange-900/10 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold uppercase text-orange-400">Coach</p><p id="coachMsg" class="text-sm">Pause trop longue.</p></div></div><button onclick="injectSport()" class="action-btn bg-orange-500 text-black border-none hover:bg-white">Planifier</button></div>
-                <div id="knowledgeHub" class="hidden mb-6 flow-card border border-blue-500/30 bg-blue-900/10 flex flex-col md:flex-row items-center gap-6"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">📚</div><div class="flex-1"><p class="text-[10px] font-black uppercase text-blue-400 mb-1">Temps Libre</p><p class="text-sm font-bold">On s'instruit ? Finance ou Culture.</p></div><div class="flex gap-2"><button onclick="learn('finance')" class="action-btn">Finance</button><button onclick="learn('culture')" class="action-btn">Culture</button></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div id="contextCard" class="glass-card p-4 flex items-center gap-4 border-l-4 border-l-blue-500">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-2xl">⚖️</div>
+                        <div>
+                            <p class="text-[9px] font-black uppercase tracking-widest text-blue-400">Mode Actif</p>
+                            <p id="contextTitle" class="text-lg font-bold">Standard</p>
+                        </div>
+                    </div>
+                    <div onclick="playMusic()" class="glass-card p-4 flex items-center justify-between group hover:border-green-500/50">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-xl group-hover:animate-spin">🎵</div>
+                            <div>
+                                <p class="text-[9px] font-black uppercase tracking-widest text-green-400">Ambiance</p>
+                                <p id="musicLabel" class="text-sm font-bold truncate max-w-[150px]">Lofi Focus</p>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-xs font-black">▶</div>
+                    </div>
+                </div>
 
-                <div class="relative pl-4 pt-4">
-                    <p class="text-xs font-bold uppercase opacity-30 mb-8 tracking-widest pl-12">Flux Chronologique</p>
+                <div class="relative mt-12">
+                    <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-600 mb-8 pl-12">Flux Chronologique</h3>
                     <div id="masterTimeline"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="taskModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl"><div class="glass-base p-8 max-w-lg w-full rounded-[2rem] border border-white/20 shadow-2xl relative"><button onclick="closeTaskModal()" class="absolute top-6 right-6 text-zinc-500 hover:text-white text-xl">✕</button><h2 class="text-2xl font-black italic mb-8">Détail & Édition</h2><div class="space-y-6"><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Horaire</label><input type="time" id="modalTime" class="w-full bg-white/5 p-4 rounded-xl text-white text-xl outline-none border border-white/10 focus:border-blue-500"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Titre</label><input type="text" id="modalShort" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 font-bold"></div><div><label class="text-[10px] font-bold uppercase text-blue-400 mb-2 block">Note Complète</label><textarea id="modalFull" class="w-full bg-white/5 p-4 rounded-xl text-white outline-none border border-white/10 focus:border-blue-500 h-32 resize-none"></textarea></div></div><div class="flex gap-4 mt-8"><button onclick="saveTaskModal()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Sauvegarder</button><button onclick="deleteTaskModal()" class="px-6 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all">Supprimer</button></div></div></div>
-    
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md">
-        <div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative">
-            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
-            <h2 class="text-xl font-bold mb-6">Profil & Données</h2>
+    <div id="zenMode" class="fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center">
+        <button onclick="toggleZenMode()" class="absolute top-8 right-8 text-zinc-500 hover:text-white transition text-sm font-bold uppercase tracking-widest">✕ Quitter</button>
+        
+        <div class="text-center space-y-8">
+            <div class="inline-block px-4 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Deep Work Station</div>
+            <div id="timerDisplay" class="text-[12rem] font-black leading-none font-mono tracking-tighter text-white tabular-nums">25:00</div>
             
-            <div class="space-y-3 mb-6 border-b border-white/10 pb-6">
-                <input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)">
-                <input type="number" id="inputHeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Taille (cm)">
-                <div class="flex gap-2">
-                    <input type="number" id="inputAge" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Âge">
-                    <select id="inputSex" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm"><option value="male">Homme</option><option value="female">Femme</option></select>
-                </div>
-                <button onclick="saveProfile()" class="primary-btn w-full py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest">Enregistrer Profil</button>
+            <div class="flex items-center justify-center gap-6">
+                <button onclick="adjustTimer(-5)" class="text-zinc-600 hover:text-white font-bold text-2xl">-5</button>
+                <button onclick="toggleTimer()" id="timerBtn" class="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center text-3xl pl-1 hover:scale-110 transition shadow-[0_0_40px_rgba(255,255,255,0.3)]">▶</button>
+                <button onclick="adjustTimer(5)" class="text-zinc-600 hover:text-white font-bold text-2xl">+5</button>
             </div>
 
-            <div class="space-y-3">
-                <p class="text-[9px] font-bold uppercase text-zinc-500 tracking-widest mb-2">Synchronisation Appareils</p>
-                <button onclick="copyDataToClipboard()" class="w-full bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/50 py-3 rounded-xl text-[10px] font-bold text-blue-200 transition-colors flex items-center justify-center gap-2">📤 COPIER MA DATA</button>
-                <button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors flex items-center justify-center gap-2">📥 IMPORTER / COLLER</button>
-                <p class="text-[9px] text-zinc-600 italic mt-2">Copiez le code sur l'appareil A, envoyez-le, puis collez-le sur l'appareil B.</p>
+            <div class="grid grid-cols-3 gap-4 mt-12 bg-white/5 p-2 rounded-2xl">
+                <button onclick="toggleNoise(this, 'rain')" class="p-4 rounded-xl hover:bg-white/10 text-2xl transition opacity-50">🌧️</button>
+                <button onclick="toggleNoise(this, 'cafe')" class="p-4 rounded-xl hover:bg-white/10 text-2xl transition opacity-50">☕</button>
+                <button onclick="toggleNoise(this, 'white')" class="p-4 rounded-xl hover:bg-white/10 text-2xl transition opacity-50">🌊</button>
             </div>
+            <p class="text-xs text-zinc-500 mt-4 font-mono">Ne brisez pas le flow.</p>
         </div>
     </div>
 
     <script>
-        // INIT
-        let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
-        // Repair
-        Object.keys(db).forEach(key => { if (Array.isArray(db[key])) { db[key] = db[key].map(t => { if (!t.fullText) t.fullText = t.text || "Tâche"; if (!t.shortText) t.shortText = t.text || "Tâche"; if (!t.time) t.time = "09:00"; return t; }); } });
-        let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
-        let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v70_manual_meals') || "{}");
-        let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
-        const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]; let selectedDay = todayNum;
-        let editingTaskId = null;
+        /* --- CORE DATA & STATE --- */
+        let db = JSON.parse(localStorage.getItem('lifeos_v75_db') || "{}");
+        let health = JSON.parse(localStorage.getItem('lifeos_v75_health') || '{"water":0}');
+        let profile = { weight: 80, height: 180, age: 30, sex: 'male' }; // Simplified for addictive demo
+        
+        const now = new Date();
+        const todayNum = now.getDate();
+        let selectedDay = todayNum;
+        let isRecording = false;
 
-        // DATASETS
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}, {l:"Salutation Soleil", q:"sun salutation"}, {l:"Activation Fessiers", q:"glute activation"}], e: [{l:"Automassage", q:"foam rolling"}, {l:"Étirements Psoas", q:"psoas stretch"}, {l:"Yoga Récup", q:"yoga recovery"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}, {l:"Cohérence Cardiaque", q:"coherence cardiaque"}, {l:"Visualisation", q:"visualization"}], e: [{l:"Lecture Papier", q:"reading"}, {l:"Gratitude", q:"gratitude journaling"}, {l:"Étirements Cou", q:"neck relief"}] } };
-        ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk", "90s Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Coffee Shop", "Acoustic Chill"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
+        /* --- CONTENT DATABASES --- */
+        const QUOTES = [
+            "Ce que tu ne fais pas détermine ce que tu es.",
+            "La douleur de la discipline ou la douleur du regret.",
+            "Sois l'architecte, pas la victime.",
+            "Concentre-toi sur l'étape, pas sur le sommet.",
+            "Le confort est l'ennemi du progrès."
+        ];
+        
+        const MEALS = {
+            sport: ["Pâtes Bolo Protéinées", "Riz & Steak Haché 5%", "Poulet Curry Coco", "Omelette 4 oeufs + Toast"],
+            focus: ["Saumon & Quinoa", "Salade César Light", "Wok Légumes Tofu", "Maquereau & Patates"],
+            diet: ["Blanc de Poulet & Brocolis", "Salade Composée Thon", "Soupe Maison", "Cabillaud Vapeur"]
+        };
 
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines"; }
+        const PLAYLISTS = {
+            sport: "https://www.youtube.com/results?search_query=gym+phonk",
+            focus: "https://www.youtube.com/results?search_query=deep+focus+binaural",
+            chill: "https://www.youtube.com/results?search_query=lofi+girl"
+        };
 
-        // --- V70: ESSENCE EXTRACTOR (KEYWORDS) ---
-        function parseInput(text) {
-            let startMin = 540; let duration = 0;
-            const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
-            let durValue = -1; if (durMatch) { durValue = parseInt(durMatch[1]); duration = durValue * 60; }
-            const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
-            const startMatch = text.match(startRegex);
-            if (startMatch) { let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; startMin = h * 60 + m; } 
-            else { const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)]; for (const m of allNums) { const val = parseInt(m[1]); if (durValue !== -1 && val === durValue) continue; let mVal = m[2] ? parseInt(m[2]) : 0; startMin = val * 60 + mVal; break; } }
-            if (text.match(/\bmidi\b/i)) startMin = 720; if (text.match(/\bminuit\b/i)) startMin = 1439; if (text.match(/\bsoiree\b|\bsoir\b/i) && !startMatch) startMin = 1140; 
-            return { startMin, duration };
+        /* --- INIT --- */
+        document.getElementById('quoteBox').innerText = `"${QUOTES[selectedDay % QUOTES.length]}"`;
+        renderAll();
+
+        /* --- LOGIC: RENDER --- */
+        function renderAll() {
+            renderCalendar();
+            renderTimeline();
+            updateWaterUI();
+            updateLifeScore();
         }
 
-        function cleanTaskText(text) {
-            const lower = text.toLowerCase();
-            // 1. Dictionary Priority
-            const dict = { "sport":"Sport", "crossfit":"CrossFit", "foot":"Foot", "tennis":"Tennis", "gym":"Gym", "réunion":"Réunion", "meeting":"Meeting", "point":"Point", "dentiste":"Dentiste", "médecin":"Médecin", "docteur":"Médecin", "déjeuner":"Déjeuner", "dîner":"Dîner", "repas":"Repas", "apéro":"Apéro", "courses":"Courses", "shopping":"Shopping", "anniversaire":"Anniv", "fête":"Fête", "lessive":"Lessive", "ménage":"Ménage" };
-            for(let k in dict) { if(lower.includes(k)) return dict[k]; }
-            // 2. Terminator Cleaning
-            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
-            const junk = ["midi", "minuit", "matin", "soir", "demain", "aujourd'hui", "après-demain", "durée", "pendant", "de", "à partir", "heures", "heure", "grosse", "match", "séance", "rendez-vous", "rdv", "le", "la", "les", "un", "une", "du", "au", "à", "pour", "avec", "chez", "vers", "j'ai", "il faut", "je dois", "aller", "faire", "voir", "prendre", "récupérer", "manger", "déjeuner", "et", "ou"];
-            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
-            // 3. Keep Capitalized Word if possible
-            if(words.length === 0) return "Tâche";
-            return words[0].charAt(0).toUpperCase() + words[0].slice(1);
+        function renderCalendar() {
+            const c = document.getElementById('calendar'); c.innerHTML = '';
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            
+            for(let i = Math.max(1, todayNum - 2); i <= Math.min(daysInMonth, todayNum + 4); i++) {
+                const isSel = i === selectedDay;
+                const isTod = i === todayNum;
+                const hasData = db[i] && db[i].length > 0;
+                
+                const div = document.createElement('div');
+                div.className = `p-2 rounded-lg cursor-pointer transition text-xs font-bold flex flex-col items-center justify-center h-14 border ${isSel ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'bg-white/5 border-white/5 hover:bg-white/10 text-zinc-400'}`;
+                div.onclick = () => { selectedDay = i; renderAll(); };
+                div.innerHTML = `<span>${i}</span>${hasData ? '<span class="w-1 h-1 rounded-full bg-blue-500 mt-1"></span>' : ''}`;
+                c.appendChild(div);
+            }
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('masterTimeline');
+            const tasks = db[selectedDay] || [];
+            
+            // Auto-detect Context
+            let mode = 'diet';
+            if(tasks.some(t => t.text.match(/sport|gym|crossfit|foot|muscu/i))) mode = 'sport';
+            else if(tasks.some(t => t.text.match(/code|projet|étude|réunion/i))) mode = 'focus';
+            
+            // Update HUD styling based on context
+            const ctxCard = document.getElementById('contextCard');
+            const musicLbl = document.getElementById('musicLabel');
+            const styles = {
+                sport: { t: "Athlète", c: "border-l-orange-500", i: "🔥", m: "Gym Phonk" },
+                focus: { t: "Deep Focus", c: "border-l-purple-500", i: "🧠", m: "Binaural Beats" },
+                diet: { t: "Récupération", c: "border-l-green-500", i: "🌿", m: "Lofi Chill" }
+            };
+            
+            ctxCard.className = `glass-card p-4 flex items-center gap-4 border-l-4 ${styles[mode].c} transition-all duration-500`;
+            ctxCard.querySelector('div').innerText = styles[mode].i;
+            document.getElementById('contextTitle').innerText = styles[mode].t;
+            musicLbl.innerText = styles[mode].m;
+            musicLbl.dataset.link = PLAYLISTS[mode];
+
+            // Build Timeline Items
+            let items = [];
+            
+            // 1. Core Meals (Auto-generated if empty)
+            const rot = (selectedDay) % 4;
+            items.push({ type: 'meal', time: '12:30', text: MEALS[mode][rot], sub: 'Déjeuner' });
+            items.push({ type: 'meal', time: '20:00', text: MEALS['diet'][rot], sub: 'Dîner' });
+            
+            // 2. User Tasks
+            tasks.forEach((t, idx) => {
+                items.push({ type: 'task', time: t.time, text: t.text, done: t.done, id: idx, mode: mode });
+            });
+
+            // Sort by time
+            items.sort((a, b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+
+            // HTML Generation
+            const currentMin = now.getHours() * 60 + now.getMinutes();
+            let html = '';
+
+            items.forEach(item => {
+                const [h, m] = item.time.split(':').map(Number);
+                const itemMin = h * 60 + m;
+                const isPast = (selectedDay === todayNum && itemMin < currentMin);
+                
+                let content = '';
+                let colorClass = 'text-white';
+                
+                if (item.type === 'meal') {
+                    colorClass = 'text-emerald-400';
+                    content = `<div class="flex justify-between items-center opacity-80 hover:opacity-100"><div class="flex flex-col"><span class="text-[9px] font-bold uppercase ${colorClass} tracking-widest">Repas</span><span class="font-medium text-lg">${item.text}</span></div><button class="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20">🍳</button></div>`;
+                } else {
+                    colorClass = item.mode === 'sport' ? 'text-orange-400' : 'text-blue-400';
+                    content = `
+                        <div class="flex items-center gap-4 group" onclick="toggleTask(${item.id})">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} class="w-6 h-6 rounded-md border-2 border-white/20 bg-transparent checked:bg-green-500 checked:border-green-500 appearance-none cursor-pointer checkbox-anim transition-all">
+                            <span class="text-lg font-bold ${item.done ? 'task-done' : ''}">${item.text}</span>
+                            <button onclick="event.stopPropagation(); deleteTask(${item.id})" class="ml-auto opacity-0 group-hover:opacity-100 text-red-500 hover:bg-red-500/10 p-2 rounded transition">🗑️</button>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="timeline-container mb-6 ${isPast && !item.done ? 'opacity-50' : ''}">
+                        <div class="timeline-time">${item.time}</div>
+                        <div class="status-dot" style="color: ${item.done ? '#10b981' : (item.type === 'meal' ? '#10b981' : '#3b82f6')}"></div>
+                        <div class="timeline-line"></div>
+                        <div class="glass-card p-5 ml-[85px] hover:scale-[1.01] transition-transform ${item.done ? 'bg-green-500/5 border-green-500/20' : ''}">
+                            ${content}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html || '<p class="text-center text-zinc-600 italic py-10">Aucune mission planifiée.</p>';
+        }
+
+        /* --- LOGIC: ACTIONS --- */
+        function toggleTask(id) {
+            db[selectedDay][id].done = !db[selectedDay][id].done;
+            if(db[selectedDay][id].done) triggerConfetti();
+            save();
+            renderAll();
+        }
+
+        function deleteTask(id) {
+            if(confirm('Supprimer cette tâche ?')) {
+                db[selectedDay].splice(id, 1);
+                save();
+                renderAll();
+            }
+        }
+
+        function addWater(amount) {
+            health.water += amount;
+            save();
+            updateWaterUI();
+            updateLifeScore();
+        }
+
+        function updateWaterUI() {
+            const target = 2.5;
+            const pct = Math.min(100, (health.water / target) * 100);
+            document.getElementById('waterText').innerText = `${health.water.toFixed(2)}L`;
+            document.getElementById('waterBar').style.width = `${pct}%`;
         }
 
         function traiterBatch() {
-            const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
-            const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3);
-            tasks.forEach(taskStr => injectTaskSmartly(taskStr));
-            save(); document.getElementById('userInput').value = ''; renderHUD();
-        }
+            const txt = document.getElementById('userInput').value;
+            if(!txt.trim()) return;
 
-        function injectTaskSmartly(text) {
-            const lower = text.toLowerCase();
-            let d = selectedDay;
-            const daysMap = { "dimanche": 0, "lundi": 1, "mardi": 2, "mercredi": 3, "jeudi": 4, "vendredi": 5, "samedi": 6 };
-            let targetDayOfWeek = -1;
-            for (const [dayName, dayIndex] of Object.entries(daysMap)) { if (lower.includes(dayName)) { targetDayOfWeek = dayIndex; break; } }
-            if (targetDayOfWeek !== -1) { const currentDayOfWeek = now.getDay(); let diff = targetDayOfWeek - currentDayOfWeek; if (diff < 0) diff += 7; d = todayNum + diff; } 
-            else { if (lower.includes('demain')) d = todayNum + 1; if (lower.includes('après-demain')) d = todayNum + 2; }
-            const parsed = parseInput(text); const cl = cleanTaskText(text); 
-            // CONFLICT ALERT
-            if(d === selectedDay) {
-                let dinnerMin = 20 * 60; let dinnerEnd = 21 * 60;
-                let tStart = parsed.startMin; let tEnd = tStart + (parsed.duration || 60);
-                if (tStart < dinnerEnd && tEnd > dinnerMin) { document.getElementById('conflictMsg').innerText = `Dîner déplacé car occupé par "${cl}".`; document.getElementById('conflictAlertBox').classList.remove('hidden'); }
-            }
-            const h = Math.floor(parsed.startMin/60) % 24; const m = parsed.startMin % 60;
-            const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-            db[d] = [...(db[d]||[]), { shortText: cl, fullText: text, time: timeStr, duration: parsed.duration || 0, done: false }];
-        }
+            // Simple NLP parser
+            const lines = txt.split(/[\n,]+/);
+            if (!db[selectedDay]) db[selectedDay] = [];
 
-        function closeAlert() { document.getElementById('conflictAlertBox').classList.add('hidden'); }
+            lines.forEach(line => {
+                const timeMatch = line.match(/(\d{1,2})[h:](\d{2})?/);
+                let time = "09:00";
+                if(timeMatch) {
+                    time = `${timeMatch[1].padStart(2,'0')}:${(timeMatch[2]||'00')}`;
+                } else {
+                    // Smart auto-scheduling (finds next empty slot)
+                    // Simplified for demo: adds to end or defaults
+                }
+                
+                const cleanText = line.replace(/(\d{1,2})[h:](\d{2})?/g, "").replace(/\b(à|vers|pour)\b/g, "").trim();
+                
+                if(cleanText) {
+                    db[selectedDay].push({ time: time, text: cleanText.charAt(0).toUpperCase() + cleanText.slice(1), done: false });
+                }
+            });
 
-        function renderHUD() {
-            try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-                const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime = null; let importantEventTime = null; let occupiedSlots = [];
-                tasks.forEach(t => {
-                    const fl = (t.fullText||"").toLowerCase();
-                    if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe|entrainement/)) { mode = 'sport'; sportTaskTime = t.time; }
-                    if (fl.match(/important|grosse|réunion|entretien|examen|final|urgent/)) { importantEventTime = t.time; }
-                    if (t.time) { const [h, m] = t.time.split(':').map(Number); const startMin = h*60 + m; const dur = t.duration || 60; occupiedSlots.push({start: startMin, end: startMin + dur}); }
-                });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|projet|travail/i))) mode = 'focus';
-                if(tasks.length <= 2) document.getElementById('knowledgeHub').classList.remove('hidden'); else document.getElementById('knowledgeHub').classList.add('hidden');
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥", b:"sonic-sport"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠", b:"sonic-focus"}, diet: {t:"Vitalité & Diet", c:"text-green-500", i:"🌿", b:"sonic-chill"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicTrigger').className = `sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][(selectedDay - 1) % MUSIC_DB[mode].length]}`;
-                let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-                let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
-                document.getElementById('calTarget').innerText = `${tdee} kcal`;
-                document.getElementById('hudSupplements').innerText = suppsDB[mode];
-                const rot = (selectedDay - 1) % 15; const rIndex = (selectedDay - 1) % 3; 
-                let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : (mealsDB[mode].lunch[rot] || mealsDB[mode].lunch[0]);
-                let d = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : (mealsDB[mode].dinner[rot] || mealsDB[mode].dinner[0]);
-                const rM = ROUTINES[mode].m[rIndex]; const rE = ROUTINES[mode].e[rIndex];
-                let lunchMin = 12 * 60 + 30; let dinnerMin = 20 * 60; const mealDur = 45; let injectedItems = []; let dinnerSubtitle = `✨ ${getVits(d)}`;
-                occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + mealDur) && slot.end > dinnerMin) { dinnerMin = slot.end + 15; dinnerSubtitle = "⚠️ <b>Décalé (Conflit Agenda)</b>"; if(dinnerMin >= 24*60) dinnerMin -= 24*60; } });
-                const lunchTime = `${Math.floor(lunchMin/60).toString().padStart(2,'0')}:${(lunchMin%60).toString().padStart(2,'0')}`;
-                const dinnerTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-                if (mode === 'sport' && sportTaskTime) { const [h, m] = sportTaskTime.split(':').map(Number); if (h >= 18) { let snackH = h - 3; injectedItems.push({ type: 'snack', time: `${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`, content: "Collation Pré-Match", sub: "Banane, Miel, Amandes", color: 'dot-snack', accent: 'accent-snack' }); } }
-                if (importantEventTime) { const [h, m] = importantEventTime.split(':').map(Number); let prepMin = m - 30; let prepH = h; if(prepMin < 0) { prepMin += 60; prepH -= 1; } injectedItems.push({ type: 'routine', time: `${prepH.toString().padStart(2,'0')}:${prepMin.toString().padStart(2,'0')}`, content: "Mise en Condition", query: "box breathing", icon: "🧠", accent: "accent-prep", dot: "dot-prep" }); if (h >= 13 && h <= 18) { l = mealsDB['focus'].lunch[rot]; } }
-                let stream = [];
-                stream.push({ type: 'routine', time: '07:30', content: rM.l, query: rM.q, icon: '☀️', accent: 'accent-routine', dot: 'dot-routine' });
-                stream.push({ type: 'meal', time: lunchTime, content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), accent: 'accent-meal', dot: 'dot-meal', id: 'lunch' });
-                stream.push(...injectedItems);
-                stream.push({ type: 'meal', time: dinnerTime, content: d, sub: dinnerSubtitle, kcal: Math.round(tdee*0.35), accent: 'accent-meal', dot: 'dot-meal', id: 'dinner' });
-                stream.push({ type: 'routine', time: '22:30', content: rE.l, query: rE.q, icon: '🌙', accent: 'accent-routine', dot: 'dot-routine' });
-                tasks.forEach((t, i) => {
-                    let fl = (t.fullText||"").toLowerCase(); let isSportTask = fl.match(/sport|gym|crossfit|foot|match|muscu/i); let isUrgent = fl.match(/important|grosse|réunion|entretien|examen|final|urgent/); let accent = 'accent-task'; let dot = 'dot-task';
-                    if(isSportTask) { accent='accent-sport'; dot='dot-sport'; } if(isUrgent) { accent='accent-important'; dot='dot-important'; }
-                    let displayContent = t.shortText; if(t.duration > 0) { const [h, m] = t.time.split(':').map(Number); const endMin = h*60 + m + t.duration; const endH = Math.floor(endMin/60) % 24; const endM = endMin % 60; displayContent += ` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`; }
-                    stream.push({ type: 'task', time: t.time, content: displayContent, full: t.fullText, accent: accent, dot: dot, id: i, done: t.done });
-                });
-                stream.sort((a,b) => { const [hA, mA] = a.time.split(':').map(Number); const [hB, mB] = b.time.split(':').map(Number); return (hA * 60 + mA) - (hB * 60 + mB); });
-                const container = document.getElementById('masterTimeline');
-                const currentHour = now.getHours(); const currentMin = now.getMinutes(); const currentTimeVal = currentHour * 60 + currentMin; const currentTimeStr = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}`; let liveLineInserted = false;
-                container.innerHTML = stream.map(item => {
-                    const [h, m] = item.time.split(':').map(Number); const itemTimeVal = h * 60 + m;
-                    let html = '';
-                    if(isToday && !liveLineInserted && itemTimeVal > currentTimeVal) { html += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveLineInserted = true; }
-                    let cardContent = '';
-                    if (item.type === 'routine') { cardContent = `<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`; }
-                    else if (item.type === 'meal') { cardContent = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`; }
-                    else if (item.type === 'snack') { cardContent = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`; }
-                    else if (item.type === 'task') { cardContent = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`; }
-                    return `${html}<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${cardContent}</div></div>`;
-                }).join('');
-                if(isToday && !liveLineInserted) container.innerHTML += `<div class="live-marker"><div class="live-time-label">${currentTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                updateWaterUI(mode);
-            } catch (e) { console.error("Render error", e); document.getElementById('masterTimeline').innerHTML = `<p class="text-red-500 p-4">Erreur.</p>`; }
-        }
-
-        // Helpers...
-        function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
-        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function addWater(n){health.water+=n; save();}
-        function updateWaterUI(m){let t=(profile.weight*0.03)+(m==='sport'?1:0); t=Math.round(t*10)/10; document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterTarget').innerText=`/ ${t}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/t)*100)}%`;}
-        function renderCal(){const c=document.getElementById('calendar');c.innerHTML='';const m=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let i=1;i<=m;i++){const d=document.createElement('div');let cls="day";if(i===todayNum)cls+=" day-today";if(i===selectedDay)cls+=" day-selected";if(db[i]&&db[i].length)cls+=" has-event";d.className=cls;d.innerText=i;d.onclick=()=>{selectedDay=i;renderCal();renderHUD();};c.appendChild(d);}}
-        function toggleTask(d,i){db[d][i].done=!db[d][i].done;save();}
-        function delTask(d,i){db[d].splice(i,1);save();}
-        function save(){localStorage.setItem('lifeos_v70_db',JSON.stringify(db)); localStorage.setItem('lifeos_v70_profile',JSON.stringify(profile)); localStorage.setItem('lifeos_v70_health',JSON.stringify(health)); localStorage.setItem('lifeos_music',musicProvider); renderCal(); renderHUD(); checkHabits();}
-        function checkHabits() { try { let last=0; for(let i=1;i<=todayNum;i++){if(((db[i]||[]).map(t=>(t.fullText||"")).join(' ')).match(/sport|gym|crossfit/i))last=i;} if(last>0 && (todayNum-last)>4) document.getElementById('coachAlertBox').classList.remove('hidden'); else document.getElementById('coachAlertBox').classList.add('hidden'); } catch(e){}}
-        function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
-        
-        // --- NEW SYNC & PROFILE FEATURES ---
-        function openProfile(){
-            document.getElementById('inputWeight').value = profile.weight;
-            document.getElementById('inputHeight').value = profile.height;
-            document.getElementById('inputAge').value = profile.age;
-            document.getElementById('inputSex').value = profile.sex;
-            document.getElementById('profileModal').classList.remove('hidden');
-        }
-
-        function saveProfile(){
-            profile.weight=document.getElementById('inputWeight').value||80; 
-            profile.height=document.getElementById('inputHeight').value||180; 
-            profile.age=document.getElementById('inputAge').value||30; 
-            profile.sex=document.getElementById('inputSex').value; 
+            document.getElementById('userInput').value = '';
             save();
-            alert("Profil sauvegardé ! Les calories cibles ont été mises à jour.");
+            renderAll();
+            triggerConfetti();
         }
 
-        function copyDataToClipboard() {
-            const syncData = { db, profile, health, manualMeals, musicProvider };
-            const str = JSON.stringify(syncData);
-            if(navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(str).then(() => alert("✅ Données copiées !\nEnvoyez-les maintenant sur votre autre appareil.")).catch(() => prompt("Copiez ce texte manuellement :", str));
+        /* --- LOGIC: GAMIFICATION & UX --- */
+        function updateLifeScore() {
+            // Formula: (Tasks Done % * 0.6) + (Water % * 0.4)
+            const tasks = db[todayNum] || [];
+            const taskScore = tasks.length ? (tasks.filter(t => t.done).length / tasks.length) * 100 : 0;
+            const waterScore = Math.min(100, (health.water / 2.5) * 100);
+            
+            const totalScore = Math.round((taskScore * 0.6) + (waterScore * 0.4));
+            
+            // Update Ring
+            const circle = document.getElementById('scoreRing');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (totalScore / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            document.getElementById('scoreText').innerText = `${totalScore}%`;
+            
+            // Color change based on score
+            if(totalScore > 80) circle.classList.replace('text-blue-500', 'text-green-500');
+            else if(totalScore > 50) circle.classList.replace('text-red-500', 'text-blue-500');
+            else circle.classList.add('text-blue-500');
+        }
+
+        function triggerConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#3b82f6', '#10b981', '#ffffff']
+            });
+        }
+
+        function playMusic() {
+            const link = document.getElementById('musicLabel').dataset.link;
+            window.open(link, '_blank');
+        }
+
+        function goToToday() {
+            selectedDay = todayNum;
+            renderAll();
+        }
+
+        /* --- LOGIC: ZEN MODE --- */
+        let zenInterval;
+        let zenTime = 25 * 60;
+        let isZenRunning = false;
+
+        function toggleZenMode() {
+            const el = document.getElementById('zenMode');
+            el.classList.toggle('active');
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timerBtn');
+            if(isZenRunning) {
+                clearInterval(zenInterval);
+                isZenRunning = false;
+                btn.innerText = "▶";
             } else {
-                prompt("Copiez ce texte manuellement (Ctrl+A, Ctrl+C) :", str);
+                isZenRunning = true;
+                btn.innerText = "⏸";
+                zenInterval = setInterval(() => {
+                    zenTime--;
+                    updateTimerDisplay();
+                    if(zenTime <= 0) {
+                        clearInterval(zenInterval);
+                        new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg').play();
+                        alert("Session terminée !");
+                        isZenRunning = false;
+                    }
+                }, 1000);
             }
         }
 
-        function importDataFromClipboard() {
-            const str = prompt("Collez le code de synchronisation ici :");
-            if(str) {
-                try {
-                    const data = JSON.parse(str);
-                    if(!data.db || !data.profile) throw new Error("Format invalide");
-                    db = data.db; profile = data.profile; health = data.health || {water:0}; manualMeals = data.manualMeals || {}; musicProvider = data.musicProvider || 'spotify';
-                    localStorage.setItem('lifeos_v70_db', JSON.stringify(db));
-                    localStorage.setItem('lifeos_v70_profile', JSON.stringify(profile));
-                    localStorage.setItem('lifeos_v70_health', JSON.stringify(health));
-                    localStorage.setItem('lifeos_v70_manual_meals', JSON.stringify(manualMeals));
-                    localStorage.setItem('lifeos_music', musicProvider);
-                    alert("✅ Synchronisation réussie !");
-                    location.reload();
-                } catch(e) { alert("❌ Erreur : Code invalide."); }
-            }
+        function updateTimerDisplay() {
+            const m = Math.floor(zenTime / 60).toString().padStart(2,'0');
+            const s = (zenTime % 60).toString().padStart(2,'0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
         }
 
-        function openTaskModal(id){editingTaskId=id;const t=db[selectedDay][id];document.getElementById('modalTime').value=t.time;document.getElementById('modalShort').value=t.shortText;document.getElementById('modalFull').value=t.fullText;document.getElementById('taskModal').classList.remove('hidden');}
-        function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
-        function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
-        function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
+        function adjustTimer(min) {
+            zenTime += min * 60;
+            if(zenTime < 60) zenTime = 60;
+            updateTimerDisplay();
+        }
 
-        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
-        renderCal(); renderHUD(); checkHabits();
+        // Fake Noise Generator for Demo (In real app, use Audio objects)
+        function toggleNoise(btn, type) {
+            btn.style.opacity = btn.style.opacity === '1' ? '0.5' : '1';
+        }
+
+        /* --- LOGIC: VOICE INPUT (Web Speech API) --- */
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Votre navigateur ne supporte pas la reconnaissance vocale.");
+                return;
+            }
+
+            if(isRecording) return; // Simple debounce
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'fr-FR';
+            recognition.start();
+            isRecording = true;
+            document.getElementById('micBtn').classList.add('btn-record', 'text-red-500', 'bg-white');
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById('userInput');
+                input.value = transcript + (input.value ? '\n' + input.value : '');
+                traiterBatch(); // Auto-submit
+            };
+
+            recognition.onend = function() {
+                isRecording = false;
+                document.getElementById('micBtn').classList.remove('btn-record', 'text-red-500', 'bg-white');
+            };
+        }
+
+        function save() {
+            localStorage.setItem('lifeos_v75_db', JSON.stringify(db));
+            localStorage.setItem('lifeos_v75_health', JSON.stringify(health));
+        }
     </script>
 </body>
 </html>
