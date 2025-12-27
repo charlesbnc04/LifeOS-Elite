@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Sovereign V72 - Ultimate Stable</title>
+    <title>LifeOS Sovereign V200 - Cognitive Prime</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
-        /* === CORE THEME === */
+        /* === SYSTEME GRAPHIQUE (GLASS DARK) === */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         
@@ -38,7 +38,7 @@
         .dot-meal { background: #10b981; } .accent-meal { border-left: 3px solid #10b981; }
         .dot-task { background: #3b82f6; } .accent-task { border-left: 3px solid #3b82f6; }
         .dot-sport { background: #f97316; } .accent-sport { border-left: 3px solid #f97316; }
-        .dot-snack { background: #ec4899; } .accent-snack { border-left: 3px solid #ec4899; }
+        .dot-ai { background: #8b5cf6; box-shadow: 0 0 15px #8b5cf6; } .accent-ai { border-left: 3px solid #8b5cf6; background: linear-gradient(90deg, rgba(139,92,246,0.1), transparent); }
         
         .news-card { background: #151516; border-radius: 1.2rem; overflow: hidden; position: relative; aspect-ratio: 4/3; transition: transform 0.3s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         .news-card:hover { transform: scale(1.02); z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -50,7 +50,8 @@
         .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
+        .chat-bubble-ai { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 10px; border-radius: 10px; margin-top: 10px; font-size: 0.75rem; color: #93c5fd; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="p-4 md:p-6 h-screen flex flex-col md:flex-row gap-6 overflow-hidden">
@@ -69,17 +70,20 @@
         <div id="view-dashboard" class="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-y-auto pb-20 pr-2">
             
             <aside class="lg:col-span-3 flex flex-col gap-6">
-                <div class="glass-base p-6 space-y-6">
+                <div class="glass-base p-6 space-y-6 flex flex-col h-full">
                     <div>
                         <div class="flex justify-between items-end mb-3 px-1"><p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Calendrier</p><p id="calMonthName" class="text-sm font-bold text-white capitalize">Mois</p></div>
                         <div id="calendar" class="calendar-grid"></div>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Assistant IA (V72)</p>
-                        <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-24" placeholder="Ex: 'Tennis demain 18h'&#10;Ex: 'Réunion 14h30 pendant 1h'"></textarea>
-                        <button onclick="traiterBatch()" class="w-full bg-blue-600 hover:bg-blue-500 text-white mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition">Ajouter</button>
+                    <div class="flex-1 flex flex-col">
+                        <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mb-2">IA Cognitive</p>
+                        <div class="relative flex-1">
+                            <textarea id="userInput" class="w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-xs outline-none resize-none focus:border-blue-500/50 transition-colors h-full" placeholder="Exemples:&#10;- 'Crossfit demain 18h'&#10;- 'Optimise ma journée'&#10;- 'Que manger ce midi ?'&#10;- 'Trouve moi une pause'"></textarea>
+                            <div id="aiResponseArea"></div>
+                        </div>
+                        <button onclick="processCommand()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white mt-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition shadow-lg shadow-blue-900/20">Envoyer à l'IA</button>
                     </div>
-                    <div class="pt-4 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-xl font-black">0L</span><span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="h-full bg-blue-500 w-0 transition-all duration-500"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold">+ Gourde</button></div></div>
+                    <div class="pt-4 border-t border-white/5"><div class="flex justify-between items-end mb-2"><span class="text-[10px] font-bold uppercase text-blue-400">Eau</span><div><span id="waterText" class="text-xl font-black">0L</span><span id="waterTarget" class="text-[10px] opacity-50">/ 2.5L</span></div></div><div class="h-2 w-full bg-black/40 rounded-full overflow-hidden mb-3"><div id="waterBar" class="h-full bg-blue-500 w-0 transition-all duration-500"></div></div><div class="grid grid-cols-2 gap-2"><button onclick="addWater(0.25)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-white/10">+ Verre</button><button onclick="addWater(0.5)" class="py-2 bg-white/5 rounded-lg text-[10px] font-bold hover:bg-white/10">+ Gourde</button></div></div>
                 </div>
             </aside>
 
@@ -94,7 +98,7 @@
                         <div class="flex gap-8 text-right bg-black/20 p-4 rounded-2xl border border-white/5 h-fit"><div><p class="text-[9px] font-bold uppercase text-zinc-500 mb-1">Cible</p><p id="calTarget" class="text-xl font-mono font-medium text-white">--</p></div></div>
                     </div>
 
-                    <div id="conflictAlertBox" class="hidden mb-6 rounded-2xl p-4 flex items-center justify-between bg-red-900/40 border border-red-500"><div class="flex items-center gap-4"><div class="text-2xl">🚨</div><div><p class="text-[10px] font-bold uppercase text-red-400">Conflit</p><p id="conflictMsg" class="text-sm font-bold text-white">...</p></div></div><button onclick="document.getElementById('conflictAlertBox').classList.add('hidden')" class="text-white hover:text-red-300">✕</button></div>
+                    <div id="aiSuggestionBox" class="hidden mb-6 flow-card border border-purple-500/30 bg-purple-900/10 flex items-center justify-between py-3 px-4"><div class="flex items-center gap-4"><div class="text-xl">🤖</div><div><p class="text-[10px] font-bold uppercase text-purple-400">Suggestion IA</p><p class="text-xs text-white" id="aiSuggestionText">...</p></div></div><button onclick="acceptSuggestion()" class="bg-purple-500 text-white px-3 py-1 rounded text-[10px] font-bold hover:bg-purple-400">Ajouter</button></div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div id="sonicTrigger" onclick="playContextMusic()" class="flow-card flex justify-between items-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 cursor-pointer py-4"><div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center animate-pulse">🎵</div><div><p class="text-[9px] font-black uppercase tracking-widest opacity-60">Ambiance</p><p id="sonicLabel" class="text-xs font-bold">Chargement...</p></div></div><div class="text-xs">▶</div></div>
@@ -133,7 +137,7 @@
     <div id="profileModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"><div class="glass-base p-8 max-w-sm w-full rounded-[2rem] text-center relative"><button onclick="document.getElementById('profileModal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button><h2 class="text-xl font-bold mb-6">Profil & Sauvegarde</h2><div class="space-y-3 mb-6 border-b border-white/10 pb-6"><input type="number" id="inputWeight" class="w-full bg-black/20 p-3 rounded-xl text-center text-white outline-none border border-white/10 text-sm" placeholder="Poids (kg)"><button onclick="saveProfile()" class="w-full bg-white/10 py-3 rounded-xl font-bold uppercase text-[10px] hover:bg-white/20">Enregistrer</button></div><div class="space-y-2"><button onclick="copyDataToClipboard()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl text-[10px] font-bold text-white transition-colors">📤 COPIER DATA</button><button onclick="importDataFromClipboard()" class="w-full bg-white/5 hover:bg-white/10 py-3 rounded-xl text-[10px] font-bold text-zinc-400 transition-colors">📥 IMPORTER</button></div></div></div>
 
     <script>
-        // === CORE INIT ===
+        // === 1. CORE & DATA ===
         let db = JSON.parse(localStorage.getItem('lifeos_v70_db') || "{}");
         let profile = JSON.parse(localStorage.getItem('lifeos_v70_profile') || '{"weight":80, "height":180, "age":30, "sex":"male"}');
         let health = JSON.parse(localStorage.getItem('lifeos_v70_health') || '{"water":0}');
@@ -141,18 +145,274 @@
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         const now = new Date(); const todayNum = now.getDate(); const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; 
         let selectedDay = todayNum;
+        let pendingSuggestion = null;
         let editingTaskId = null;
 
-        // === NEWS ENGINE (FIXED URLS) ===
+        // === 2. DATASETS (ENRICHED) ===
+        // Expanded lists for variety
+        const MEALS = {
+            sport: { 
+                lunch: ["Pâtes Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Quinoa Poulet Curry", "Sandwich Thon Complet", "Bowl Saumon Avocat", "Patate Douce & Oeufs", "Taboulé Poulet"], 
+                dinner: ["Omelette Pommes de Terre", "Cabillaud Rôti & Purée", "Wok Nouilles Poulet", "Sardines & Riz", "Pizza Blanche Maison", "Hachis Parmentier Light", "Salade Composée Thon", "Curry Lentilles", "Wrap Dinde", "Poisson Vapeur"] 
+            },
+            focus: { 
+                lunch: ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi", "Tartare Saumon", "Salade Niçoise", "Wok Légumes Cajou", "Poke Bowl Saumon"], 
+                dinner: ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes", "Velouté Asperges", "Colin Papillote", "Soupe Miso & Tofu", "Salade Grecque", "Ratatouille & Oeuf", "Fondue Poireaux", "Gaspacho"] 
+            }
+        };
+        // Diet defaults to Focus for simplification unless sport
+        MEALS.diet = MEALS.focus;
+
+        const ROUTINES = { sport: { m: [{l:"Mobilité Articulaire", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation Focus", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
+        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] }; const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
+
+        // === 3. INTELLIGENCE ENGINE (THE BRAIN) ===
+        
+        function processCommand() {
+            const raw = document.getElementById('userInput').value.trim();
+            if(!raw) return;
+            const lower = raw.toLowerCase();
+            const responseArea = document.getElementById('aiResponseArea');
+            responseArea.innerHTML = '';
+
+            // --- A. COMMANDS (OPTIMIZATION / CLEANING) ---
+            if (lower.includes("optimis") || lower.includes("trie") || lower.includes("range")) {
+                optimizeSchedule();
+                aiReply("✅ Planning optimisé : Tâches triées et pauses insérées.");
+                return;
+            }
+            if (lower.includes("nettoie") || lower.includes("supprime fini")) {
+                cleanSchedule();
+                aiReply("🧹 Tâches terminées archivées.");
+                return;
+            }
+
+            // --- B. QUESTIONS (QUERY) ---
+            if (lower.includes("manger") || lower.includes("repas")) {
+                const mode = getDailyMode();
+                const meal = MEALS[mode].lunch[selectedDay % MEALS[mode].lunch.length];
+                aiReply(`🍽️ Recommandation (${mode}) : **${meal}**`);
+                return;
+            }
+            if (lower.includes("objectif") || lower.includes("calor")) {
+                const tdee = Math.round((10*profile.weight + 6.25*profile.height - 5*profile.age + 5)*1.4);
+                aiReply(`🎯 Objectif journalier : **${tdee} kcal** & 2.5L d'eau.`);
+                return;
+            }
+            if (lower.includes("pause") || lower.includes("fatigu")) {
+                suggestBreak();
+                aiReply("🧘 Je vous propose une pause 'Cohérence Cardiaque'. Cliquez sur 'Ajouter' ci-dessus.");
+                return;
+            }
+
+            // --- C. SCHEDULING (DEFAULT) ---
+            // "Tennis demain 18h"
+            const p = parseDateAndTime(raw);
+            const cl = cleanTaskText(raw);
+            const h = Math.floor(p.startMin/60)%24; const m = p.startMin%60;
+            const ts = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+            
+            addTask(p.d, {shortText:cl, fullText:raw, time:ts, duration:p.dur, done:false});
+            aiReply(`✅ Ajouté : ${cl} à ${ts}`);
+            document.getElementById('userInput').value = '';
+        }
+
+        function aiReply(text) {
+            const area = document.getElementById('aiResponseArea');
+            area.innerHTML = `<div class="chat-bubble-ai">${text}</div>`;
+            setTimeout(() => area.innerHTML = '', 5000);
+        }
+
+        function optimizeSchedule() {
+            if(!db[selectedDay]) return;
+            // 1. Sort
+            db[selectedDay].sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+            
+            // 2. Gap Detection (Intelligence)
+            const newTasks = [];
+            for(let i=0; i<db[selectedDay].length - 1; i++) {
+                newTasks.push(db[selectedDay][i]);
+                const current = db[selectedDay][i];
+                const next = db[selectedDay][i+1];
+                
+                const [h1,m1] = current.time.split(':').map(Number);
+                const end1 = h1*60 + m1 + (current.duration || 60);
+                const [h2,m2] = next.time.split(':').map(Number);
+                const start2 = h2*60 + m2;
+
+                // If gap > 2h, insert Deep Work
+                if ((start2 - end1) > 120) {
+                    const insStart = end1 + 30; // 30 min break then work
+                    const insH = Math.floor(insStart/60); const insM = insStart%60;
+                    const timeStr = `${insH.toString().padStart(2,'0')}:${insM.toString().padStart(2,'0')}`;
+                    newTasks.push({shortText: "🧠 Deep Work", fullText: "Session Focus Auto-générée", time: timeStr, duration: 60, done:false, ai:true});
+                }
+            }
+            newTasks.push(db[selectedDay][db[selectedDay].length-1]);
+            db[selectedDay] = newTasks;
+            save();
+        }
+
+        function cleanSchedule() {
+            if(db[selectedDay]) {
+                db[selectedDay] = db[selectedDay].filter(t => !t.done);
+                save();
+            }
+        }
+
+        function suggestBreak() {
+            const h = now.getHours();
+            const m = now.getMinutes() + 15; // In 15 mins
+            const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+            
+            pendingSuggestion = {shortText: "🧘 Pause Respi", fullText: "Cohérence Cardiaque (5min)", time: timeStr, duration: 15, done:false, ai:true};
+            
+            document.getElementById('aiSuggestionText').innerText = "Pause Respiration (15 min) ?";
+            document.getElementById('aiSuggestionBox').classList.remove('hidden');
+        }
+
+        function acceptSuggestion() {
+            if(pendingSuggestion) {
+                addTask(selectedDay, pendingSuggestion);
+                document.getElementById('aiSuggestionBox').classList.add('hidden');
+                pendingSuggestion = null;
+            }
+        }
+
+        function getDailyMode() {
+            const tasks = db[selectedDay] || [];
+            if(tasks.some(t => t.fullText.match(/sport|gym|crossfit|foot|courir/i))) return 'sport';
+            if(tasks.some(t => t.fullText.match(/réunion|bureau|travail|projet/i))) return 'focus';
+            return 'diet';
+        }
+
+        function parseDateAndTime(text) {
+            let d = selectedDay;
+            let startMin = 540; // 09:00 default
+            let dur = 60;
+
+            const lower = text.toLowerCase();
+            
+            // Date
+            if(lower.includes('demain')) d = todayNum + 1;
+            if(lower.includes('après-demain')) d = todayNum + 2;
+            
+            // Time
+            const timeMatch = text.match(/(\d{1,2})(?:[h:](\d{2})?)?/);
+            if(timeMatch) {
+                const h = parseInt(timeMatch[1]);
+                if(h < 24) startMin = h*60 + (parseInt(timeMatch[2]||0));
+            }
+            if(lower.includes('midi')) startMin = 720;
+            if(lower.includes('soir')) startMin = 1140;
+
+            return {d, startMin, dur};
+        }
+
+        function cleanTaskText(t){ 
+            let clean = t.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
+            const junk = ["demain", "midi", "soir", "le", "la", "à", "vers"];
+            let words = clean.split(/\s+/).filter(w => !junk.includes(w.toLowerCase()));
+            return words.length > 0 ? words.join(' ') : "Tâche";
+        }
+
+        function addTask(day, taskObj) {
+            if(!db[day]) db[day] = [];
+            db[day].push(taskObj);
+            save();
+        }
+
+        // === 4. RENDERING & UI ===
+
+        function renderHUD() {
+            try {
+                const isToday = (selectedDay === todayNum);
+                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
+                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
+                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
+                
+                // CALENDAR
+                const cal = document.getElementById('calendar'); cal.innerHTML='';
+                document.getElementById('calMonthName').innerText = monthNames[now.getMonth()];
+                const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+                for(let i=1; i<=daysInMonth; i++) {
+                    const d=document.createElement('div');
+                    let cls="cal-day"; if(i===todayNum)cls+=" today"; if(i===selectedDay)cls+=" selected"; if(db[i]&&db[i].length)cls+=" has-event";
+                    d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i;renderHUD();}; cal.appendChild(d);
+                }
+
+                // MODE & CONTEXT
+                const mode = getDailyMode();
+                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿"} };
+                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
+                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
+                document.getElementById('hudSupplements').innerText = suppsDB[mode];
+                let tdee = Math.round((10*profile.weight + 6.25*profile.height - 5*profile.age + 5)*1.4);
+                document.getElementById('calTarget').innerText = `${tdee}`;
+
+                // MEALS (ROTATION)
+                // Use day number to rotate index so it's different every day
+                const rIndex = (selectedDay - 1) % MEALS[mode].lunch.length;
+                const l = (manualMeals[selectedDay]?.lunch) || MEALS[mode].lunch[rIndex];
+                const d = (manualMeals[selectedDay]?.dinner) || MEALS[mode].dinner[rIndex];
+
+                // TIMELINE CONSTRUCTION
+                let stream = [];
+                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', dot: 'dot-routine', accent: 'accent-routine' });
+                stream.push({ type: 'meal', time: '12:30', content: l, sub: "Déjeuner Recommandé", kcal: Math.round(tdee*0.4), dot: 'dot-meal', accent: 'accent-meal', id: 'lunch' });
+                stream.push({ type: 'meal', time: '20:00', content: d, sub: "Dîner Recommandé", kcal: Math.round(tdee*0.35), dot: 'dot-meal', accent: 'accent-meal', id: 'dinner' });
+
+                const tasks = db[selectedDay] || [];
+                tasks.forEach((t, i) => {
+                    let isSport = t.fullText.match(/sport|gym/i);
+                    let isAI = t.ai === true;
+                    let dot = isSport ? 'dot-sport' : (isAI ? 'dot-ai' : 'dot-task');
+                    let accent = isSport ? 'accent-sport' : (isAI ? 'accent-ai' : 'accent-task');
+                    stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, dot: dot, accent: accent, id: i, done: t.done });
+                });
+
+                stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
+                const container = document.getElementById('masterTimeline');
+                
+                const curTime = now.getHours()*60+now.getMinutes();
+                const curTimeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+                let liveInserted = false;
+
+                container.innerHTML = stream.map(item => {
+                    const [h,m] = item.time.split(':').map(Number);
+                    let html = '';
+                    if(isToday && !liveInserted && (h*60+m) > curTime) { html += `<div class="live-marker"><div class="live-time-label">${curTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`; liveInserted = true; }
+                    return html + generateCard(item);
+                }).join('');
+                
+                updateWaterUI(mode);
+            } catch (e) { console.error(e); }
+        }
+
+        function generateCard(item) {
+            let c = '';
+            if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
+            else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
+            else if (item.type === 'task') {
+                c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})">
+                        <label class="task-checkbox-wrapper" onclick="event.stopPropagation()">
+                            <input type="checkbox" class="task-checkbox-input" ${item.done?'checked':''} onchange="toggleTask(${selectedDay}, ${item.id})">
+                            <span class="task-checkbox-box"></span>
+                        </label>
+                        <span class="task-text font-bold text-lg ${item.done?'completed':''}">${item.content}</span>
+                        <button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition">✕</button>
+                     </div>`;
+            }
+            return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
+        }
+
+        // === 5. NEWS (FIXED BFM RSS) ===
         async function fetchRealNews(category) {
             const grid = document.getElementById('news-grid'); const loader = document.getElementById('news-loading');
             grid.innerHTML = ''; loader.classList.remove('hidden');
-
             let rssUrl = 'https://www.lemonde.fr/rss/une.xml';
             if(category === 'tech') rssUrl = 'https://www.frandroid.com/feed';
-            // FIX: Nouveau lien stable pour l'économie
-            if(category === 'eco') rssUrl = 'https://www.bfmtv.com/rss/economie/';
-
+            if(category === 'eco') rssUrl = 'https://www.bfmtv.com/rss/economie/'; 
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
                 const data = await res.json();
@@ -167,217 +427,13 @@
             } catch (e) { loader.classList.add('hidden'); grid.innerHTML = '<p class="text-zinc-500">Erreur flux.</p>'; }
         }
 
-        // === VIEW CONTROL ===
+        // === HELPERS & INIT ===
         function switchView(viewName) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${viewName}`).classList.add('active');
             if(viewName === 'dashboard') { document.getElementById('view-dashboard').classList.remove('hidden'); document.getElementById('view-news').classList.add('hidden'); }
             else { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-news').classList.remove('hidden'); fetchRealNews('general'); }
         }
-
-        // === DATASETS ===
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light", "Risotto Champignons", "Tagliatelles Carbonara Light", "Burrito Bowl Boeuf", "Club Sandwich Poulet", "Purée & Saucisse Volaille", "Quinoa Crevettes", "Riz Cantonais Maison", "Pâtes Saumon Crème", "Rumsteak & Patate Douce", "Grand Taboulé Poulet"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles", "Sardines Vapeur", "Toast Avocat Oeuf", "Soupe Minestrone", "Hachis Canard", "Pizza Blanche Chèvre", "Curry Pois Chiches", "Pavé Saumon Riz", "Tarte Fine Thon", "Oeufs Cocotte", "Salade Riz Niçoise"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf", "Sushi Sashimi (12pc)", "Tartare Saumon Avocat", "Salade Niçoise Thon", "Wok Poulet Cajou", "Ceviche Daurade", "Omelette Epinards", "Bowl Libanais Falafel", "Salade Grecque Feta", "Rouleaux Printemps", "Poêlée Crevettes", "Filet Mignon"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote", "Salade Grecque", "Ratatouille Riz", "Papillote Cabillaud", "Poêlée Champignons", "Gaspacho Andalou", "Faisselle Fruits", "Bouillon Volaille", "Fondue Poireaux", "Oeufs Brouillés", "Salade Verte Tomates"];
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { sport: { m: [{l:"Mobilité", q:"mobility routine"}], e: [{l:"Automassage", q:"foam rolling"}] }, focus: { m: [{l:"Méditation", q:"meditation focus"}], e: [{l:"Lecture", q:"reading"}] } }; ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk"], focus: ["Deep Focus"], diet: ["Lofi Chill"] }; const suppsDB = { sport: "⚡ Magnésium, Whey", focus: "🧠 Omega-3, Vit D3", diet: "🌿 Multivitamines" };
-
-        function getVits(m) { if((m||"").includes("Saumon"))return "Omega-3"; if((m||"").includes("Pâtes"))return "Glucides"; return "Vitamines"; }
-        
-        // === V72 PARSER LOGIC (THE "PERFECT" ONE) ===
-        function parseInput(text) { 
-            let startMin=540; let dur=0; let d=selectedDay; 
-            
-            // 1. Detect Day
-            const daysMap = { "dimanche": 0, "lundi": 1, "mardi": 2, "mercredi": 3, "jeudi": 4, "vendredi": 5, "samedi": 6 };
-            const lower = text.toLowerCase();
-            if(lower.includes('demain')) d = todayNum + 1;
-            else if(lower.includes('après-demain')) d = todayNum + 2;
-            else {
-                for (const [dayName, dayIndex] of Object.entries(daysMap)) { 
-                    if (lower.includes(dayName)) { 
-                        const currentDayOfWeek = now.getDay(); 
-                        let diff = dayIndex - currentDayOfWeek; 
-                        if (diff <= 0) diff += 7; // Prochain jour
-                        d = todayNum + diff; 
-                        break; 
-                    } 
-                }
-            }
-
-            // 2. Detect Duration
-            const durMatch = text.match(/(?:durée|pendant)\s*(?:de\s*)?(\d{1,2})\s*[hH]/i);
-            let durValue = -1;
-            if(durMatch) { durValue = parseInt(durMatch[1]); dur = durValue * 60; }
-
-            // 3. Detect Time
-            const startRegex = /(?:à|vers|partir de|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
-            const startMatch = text.match(startRegex);
-            if (startMatch) { 
-                let h = parseInt(startMatch[1]); let m = startMatch[2] ? parseInt(startMatch[2]) : 0; 
-                startMin = h * 60 + m; 
-            } else {
-                // Fallback: look for standalone time
-                const allNums = [...text.matchAll(/(\d{1,2})(?:[h:](\d{2})?)?/g)];
-                for (const m of allNums) {
-                    const val = parseInt(m[1]);
-                    if (durValue !== -1 && val === durValue) continue; // Skip if it matches duration
-                    if (val > 24) continue; // Skip likely non-hours
-                    let mVal = m[2] ? parseInt(m[2]) : 0;
-                    startMin = val * 60 + mVal;
-                    break;
-                }
-            }
-            if (text.match(/\bmidi\b/i)) startMin = 720; 
-            if (text.match(/\bsoir\b/i) && !startMatch) startMin = 1140;
-
-            return {d, startMin, dur}; 
-        }
-
-        function cleanTaskText(t){ 
-            let clean = t.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim(); 
-            const junk = ["midi", "minuit", "matin", "soir", "demain", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche", "pendant", "durée", "vers", "à", "le", "la", "les", "un", "une"];
-            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase())); 
-            if(words.length === 0) return "Tâche"; 
-            return words[0].charAt(0).toUpperCase() + words[0].slice(1); 
-        }
-
-        function traiterBatch() { 
-            const raw=document.getElementById('userInput').value; if(!raw.trim())return; 
-            const rawTasks = raw.split('\n');
-            
-            rawTasks.forEach(line => {
-                if(line.trim().length < 3) return;
-                const p=parseInput(line); const cl=cleanTaskText(line); 
-                const h=Math.floor(p.startMin/60)%24; const m=p.startMin%60; 
-                const ts=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; 
-                
-                // CONFLICT CHECK
-                if(p.d === selectedDay) {
-                     // Check dinner conflict (20h-21h)
-                     if(p.startMin < (21*60) && (p.startMin + (p.dur||60)) > (20*60)) {
-                         document.getElementById('conflictMsg').innerText = `Dîner déplacé pour "${cl}"`;
-                         document.getElementById('conflictAlertBox').classList.remove('hidden');
-                     }
-                }
-
-                db[p.d]=[...(db[p.d]||[]), {shortText:cl, fullText:line, time:ts, duration:p.dur, done:false}]; 
-            });
-            save(); document.getElementById('userInput').value=''; 
-        }
-        
-        function renderHUD() {
-            try {
-                const isToday = (selectedDay === todayNum);
-                document.getElementById('hudStatus').innerText = isToday ? "LIVE" : "PLANNING";
-                document.getElementById('dayIndicator').className = isToday ? "w-2 h-2 rounded-full bg-green-500 animate-pulse" : "w-2 h-2 rounded-full bg-blue-500";
-                document.getElementById('hudDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-                
-                // CALENDAR RENDER
-                const cal = document.getElementById('calendar'); cal.innerHTML='';
-                document.getElementById('calMonthName').innerText = monthNames[now.getMonth()];
-                const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-                for(let i=1; i<=daysInMonth; i++) {
-                    const d=document.createElement('div');
-                    let cls="cal-day"; if(i===todayNum)cls+=" today"; if(i===selectedDay)cls+=" selected"; if(db[i]&&db[i].length)cls+=" has-event";
-                    d.className=cls; d.innerText=i; d.onclick=()=>{selectedDay=i;renderHUD();}; cal.appendChild(d);
-                }
-
-                const tasks = db[selectedDay] || [];
-                let mode = 'diet'; let sportTaskTime=null; 
-                tasks.forEach(t=>{ if(t.fullText.match(/sport|gym|crossfit/i)){mode='sport';sportTaskTime=t.time;} });
-                if (mode === 'diet' && tasks.some(t => t.fullText.match(/réunion|bureau|travail/i))) mode = 'focus';
-                
-                const styles = { sport: {t:"Haute Énergie", c:"text-orange-500", i:"🔥"}, focus: {t:"Deep Focus", c:"text-purple-500", i:"🧠"}, diet: {t:"Vitalité", c:"text-green-500", i:"🌿"} };
-                document.getElementById('contextTitle').innerText = styles[mode].t; document.getElementById('contextTitle').className = `text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText = styles[mode].i;
-                document.getElementById('sonicLabel').innerText = `Playlist: ${MUSIC_DB[mode][0]}`;
-                let tdee = Math.round(((10*profile.weight) + (6.25*profile.height) - (5*profile.age) + 5)*(mode==='sport'?1.7:1.3));
-                document.getElementById('calTarget').innerText = `${tdee}`; document.getElementById('hudSupplements').innerText = suppsDB[mode];
-                
-                // ROTATION REPAREE (Based on Day Number)
-                const rotIndex = (selectedDay - 1) % 15;
-                let l = (manualMeals[selectedDay]?.lunch) || mealsDB[mode].lunch[rotIndex] || mealsDB[mode].lunch[0];
-                let d = (manualMeals[selectedDay]?.dinner) || mealsDB[mode].dinner[rotIndex] || mealsDB[mode].dinner[0];
-                
-                // CONFLICT HANDLING (Dîner)
-                let dinnerTimeVal = 20 * 60;
-                let dinnerSub = getVits(d);
-                // Simple conflict check against tasks
-                tasks.forEach(t => {
-                    const [h,m] = t.time.split(':').map(Number);
-                    const tStart = h*60+m;
-                    const tEnd = tStart + (t.duration||60);
-                    // If task overlaps 20:00-20:45
-                    if(tStart < (20*60+45) && tEnd > (20*60)) {
-                        dinnerTimeVal = tEnd + 15; // Push dinner
-                        dinnerSub = "⚠️ Décalé (Conflit)";
-                    }
-                });
-                const dinnerTimeStr = `${Math.floor(dinnerTimeVal/60)}:${(dinnerTimeVal%60).toString().padStart(2,'0')}`;
-
-                let stream = [];
-                // Routine Matin
-                stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m[0].l, icon: '☀️', dot: 'dot-routine', accent: 'accent-routine' });
-                // Repas Midi
-                stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), kcal: Math.round(tdee*0.4), dot: 'dot-meal', accent: 'accent-meal', id: 'lunch' });
-                // Collation (Si Sport le soir)
-                if (mode === 'sport' && sportTaskTime) {
-                    const [h,m] = sportTaskTime.split(':').map(Number);
-                    if(h >= 18) {
-                        const sH = h-2;
-                        stream.push({ type: 'snack', time: `${sH}:00`, content: "Collation Pré-Training", sub: "Banane & Miel", dot: 'dot-snack', accent: 'accent-snack' });
-                    }
-                }
-                // Repas Soir
-                stream.push({ type: 'meal', time: dinnerTimeStr, content: d, sub: dinnerSub, kcal: Math.round(tdee*0.35), dot: 'dot-meal', accent: 'accent-meal', id: 'dinner' });
-
-                tasks.forEach((t, i) => {
-                    let isSport = t.fullText.match(/sport/i);
-                    stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, dot: isSport?'dot-sport':'dot-task', accent: isSport?'accent-sport':'accent-task', id: i, done: t.done });
-                });
-
-                stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
-                const container = document.getElementById('masterTimeline');
-                
-                const curTime = now.getHours()*60+now.getMinutes();
-                const curTimeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-                let liveInserted = false;
-
-                container.innerHTML = stream.map(item => {
-                    const [h,m] = item.time.split(':').map(Number);
-                    let html = '';
-                    if(isToday && !liveInserted && (h*60+m) > curTime) {
-                         html += `<div class="live-marker"><div class="live-time-label">${curTimeStr}</div><div class="live-dot"></div><div class="live-line"></div></div>`;
-                         liveInserted = true;
-                    }
-                    return html + generateCard(item);
-                }).join('');
-                
-                updateWaterUI(mode);
-            } catch (e) { console.error(e); }
-        }
-
-        function generateCard(item) {
-            let c = '';
-            if (item.type === 'routine') c = `<div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div>`;
-            else if (item.type === 'meal') c = `<div class="flex flex-col" onclick="editItem('meal', '${item.id}')"><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div>`;
-            else if (item.type === 'snack') c = `<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p><p class="text-[10px] text-zinc-400">${item.sub}</p></div></div>`;
-            else if (item.type === 'task') {
-                c = `<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})">
-                        <label class="task-checkbox-wrapper" onclick="event.stopPropagation()">
-                            <input type="checkbox" class="task-checkbox-input" ${item.done?'checked':''} onchange="toggleTask(${selectedDay}, ${item.id})">
-                            <span class="task-checkbox-box"></span>
-                        </label>
-                        <span class="task-text font-bold text-lg ${item.done?'completed':''}">${item.content}</span>
-                        <button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition">✕</button>
-                     </div>`;
-            }
-            return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done ? 'opacity-40' : ''}">${c}</div></div>`;
-        }
-
-        // HELPERS
         function editItem(type, id) { if(type==='meal'){const n=prompt("Modifier repas:","");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][id]=n;localStorage.setItem('lifeos_v70_manual_meals',JSON.stringify(manualMeals));renderHUD();}} }
         function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ',''); window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
         function addWater(n){health.water+=n; save();}
@@ -393,7 +449,7 @@
         function saveTaskModal(){if(editingTaskId===null)return;const t=db[selectedDay][editingTaskId];t.time=document.getElementById('modalTime').value;t.shortText=document.getElementById('modalShort').value;t.fullText=document.getElementById('modalFull').value;save();closeTaskModal();}
         function deleteTaskModal(){if(editingTaskId===null)return;delTask(selectedDay,editingTaskId);closeTaskModal();}
         function closeTaskModal(){document.getElementById('taskModal').classList.add('hidden');editingTaskId=null;}
-        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')traiterBatch()});
+        document.getElementById('userInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')processCommand()});
         
         renderHUD();
     </script>
