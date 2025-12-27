@@ -2,391 +2,445 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#050505">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>LifeOS Sovereign V73 - Fusion</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>LifeOS Singularity V80</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        :root { --glass: rgba(10, 10, 10, 0.7); --border: rgba(255, 255, 255, 0.08); --accent: #3b82f6; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; color: #e5e5e5; min-height: 100vh; padding-bottom: 100px;
+               background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #000 60%); }
         
-        :root { --glass-bg: rgba(20, 20, 20, 0.6); --glass-border: rgba(255, 255, 255, 0.08); }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #e5e5e5; min-height: 100vh; padding-bottom: 80px; 
-               background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(225,39%,15%,1) 0, transparent 50%); }
+        /* SYSTEME BENTO AVANCÉ */
+        .glass { background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--border); }
+        .card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 1.25rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); overflow: hidden; position: relative; }
+        .card:active { transform: scale(0.98); }
+        
+        /* LOGIC VISUALIZATION */
+        .ai-pulse { animation: pulse-blue 2s infinite; }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
 
-        /* BENTO UI SYSTEM */
-        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; }
-        .bento-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 1.25rem; transition: all 0.2s; position: relative; overflow: hidden; }
-        .bento-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
+        /* TIMELINE FLUIDE */
+        .timeline-node { position: relative; padding-left: 3rem; padding-bottom: 2rem; border-left: 2px solid rgba(255,255,255,0.05); margin-left: 1rem; }
+        .node-dot { position: absolute; left: -9px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #111; border: 2px solid #555; z-index: 10; transition: all 0.3s; }
+        .node-time { position: absolute; left: -60px; top: -2px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; opacity: 0.5; width: 45px; text-align: right; }
         
-        /* TIMELINE STYLES */
-        .timeline-row { display: flex; gap: 1rem; position: relative; padding-bottom: 1.5rem; }
-        .timeline-line { position: absolute; left: 56px; top: 15px; bottom: -15px; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-        .timeline-time { width: 45px; text-align: right; font-family: monospace; font-size: 0.75rem; font-weight: 700; opacity: 0.6; padding-top: 1rem; }
-        .timeline-dot { position: absolute; left: 50px; top: 22px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #050505; z-index: 10; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        /* INPUT IA */
+        .ai-input-wrapper { position: relative; overflow: hidden; border-radius: 1rem; }
+        .ai-glow { position: absolute; inset: -1px; background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6); background-size: 200% 100%; animation: moveGradient 3s linear infinite; opacity: 0; transition: opacity 0.3s; z-index: 0; }
+        .ai-glow.active { opacity: 1; }
+        @keyframes moveGradient { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
         
-        /* CONTEXT COLORS */
-        .ctx-sport { border-left: 3px solid #f97316; } .dot-sport { background: #f97316; }
-        .ctx-focus { border-left: 3px solid #8b5cf6; } .dot-focus { background: #8b5cf6; }
-        .ctx-meal { border-left: 3px solid #10b981; } .dot-meal { background: #10b981; }
-        .ctx-alert { border-left: 3px solid #ef4444; background: rgba(239,68,68,0.1); }
-        
-        /* UI ELEMENTS */
-        .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; font-weight: 700; border-radius: 0.75rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
-        .day-pill { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 0.75rem; font-size: 0.75rem; background: rgba(255,255,255,0.03); cursor: pointer; }
-        .day-pill.active { background: #fff; color: #000; font-weight: 800; }
-        .day-pill.has-event { border-bottom: 2px solid #8b5cf6; }
-        
-        /* ANIMATIONS */
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .animate-pop { animation: pop 0.3s ease-out; }
+        /* UTILS */
+        .hidden { display: none !important; }
+        input[type="range"] { -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: white; border-radius: 50%; }
     </style>
 </head>
-<body class="p-4 md:p-8 max-w-[1600px] mx-auto">
+<body class="p-4 md:p-6 max-w-[1200px] mx-auto selection:bg-blue-500/30">
 
-    <header class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-xl font-bold tracking-tight">Life<span class="text-blue-500 italic">OS</span> <span class="text-[10px] opacity-50 uppercase tracking-widest ml-2">Sovereign V73</span></h1>
-        </div>
-        <div class="flex gap-3">
-            <div id="streakBadge" class="hidden md:flex items-center gap-2 bg-white/5 px-3 rounded-full border border-white/5">
-                <span class="text-orange-500">🔥</span><span id="streakCount" class="text-xs font-bold">0 Jours</span>
+    <header class="flex justify-between items-center mb-8 sticky top-4 z-50 glass p-4 rounded-2xl shadow-2xl">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-900/50">V80</div>
+            <div>
+                <h1 class="text-sm font-bold tracking-tight text-white leading-none">Singularity</h1>
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-50 font-mono">AI ONLINE</span>
+                </div>
             </div>
-            <button onclick="openProfile()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-xs">⚙️</button>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="System.wipe()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-red-500/20 text-xs transition flex items-center justify-center">⚠</button>
+            <button onclick="UI.toggleProfile()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center">👤</button>
         </div>
     </header>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <aside class="lg:col-span-4 space-y-6">
-            
-            <div class="glass-panel p-5 space-y-4">
-                <div class="flex justify-between items-end">
-                    <h2 id="mainDate" class="text-2xl font-black">Date</h2>
-                    <div id="contextBadge" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400">Loading</div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <aside class="space-y-6">
+            <div class="card p-6 border-blue-500/30 bg-blue-900/5">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 class="text-xs font-bold uppercase text-blue-400 tracking-widest mb-1">Cerveau Temporel</h2>
+                        <p id="aiStatus" class="text-xl font-bold">En attente...</p>
+                    </div>
+                    <div class="text-2xl">🧠</div>
                 </div>
-                <div id="calendar" class="grid grid-cols-7 gap-2"></div>
                 
-                <div class="relative">
-                    <textarea id="userInput" class="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-sm h-24 outline-none focus:border-blue-500 transition" placeholder="Ex: 'Gym à 18h', 'Réunion 10h'"></textarea>
-                    <button onclick="traiterBatch()" class="absolute bottom-3 right-3 btn-primary px-3 py-1 text-[10px] uppercase">Planifier</button>
+                <div class="ai-input-wrapper bg-black/40">
+                    <div id="aiGlow" class="ai-glow"></div>
+                    <textarea id="neuralInput" class="relative z-10 w-full bg-transparent border-none text-sm p-4 h-24 outline-none resize-none placeholder-white/20" 
+                    placeholder="Ex: 'Muscu bras 1h', 'Deep Work', 'Lire 30min'. L'IA trouvera le meilleur créneau."></textarea>
+                </div>
+                
+                <div class="flex justify-between items-center mt-3">
+                    <span id="tokenCount" class="text-[9px] font-mono opacity-30">Ready</span>
+                    <button onclick="AI.processBatch()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg shadow-blue-600/20 transition transform hover:-translate-y-1">Optimiser</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-                <div class="bento-card group" onclick="addWater(0.25)">
-                    <div class="flex justify-between items-start mb-2"><span class="text-xl">💧</span><span id="waterText" class="font-bold">0L</span></div>
-                    <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden"><div id="waterBar" class="bg-blue-500 h-full w-0 transition-all"></div></div>
-                    <p class="text-[9px] text-zinc-500 mt-2 text-center group-hover:text-blue-400">Tap to Hydrate</p>
-                </div>
-                <div class="bento-card">
-                    <div class="flex justify-between items-start mb-2"><span class="text-xl">🔥</span><span id="calTarget" class="font-bold text-sm">--</span></div>
-                    <p class="text-[10px] text-zinc-500">Cible Journalière</p>
-                    <p id="calContext" class="text-[9px] text-zinc-600 mt-1">Maintenance</p>
-                </div>
-                <div class="bento-card col-span-2 flex items-center justify-between cursor-pointer" onclick="playContextMusic()">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">🎵</div>
-                        <div>
-                            <p class="text-[9px] font-bold uppercase text-zinc-500">Ambiance</p>
-                            <p id="sonicLabel" class="text-xs font-bold">Chargement...</p>
-                        </div>
+                <div class="card p-4 flex flex-col justify-between h-32" onclick="Data.addWater(0.25)">
+                    <div class="flex justify-between"><span class="text-xl">💧</span><span id="waterVal" class="font-mono font-bold">0.0L</span></div>
+                    <div>
+                        <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden mb-2"><div id="waterBar" class="bg-cyan-400 h-full w-0 transition-all duration-500"></div></div>
+                        <p class="text-[10px] opacity-50 uppercase">Hydratation</p>
                     </div>
-                    <div class="text-xs">▶</div>
                 </div>
-                <div class="bento-card col-span-2 border-green-500/10 bg-green-900/5">
-                    <p class="text-[9px] font-bold uppercase text-green-500 mb-1">💊 Bio-Stack</p>
-                    <p id="hudSupplements" class="text-xs font-medium">--</p>
-                </div>
-            </div>
-
-            <div id="coachAlertBox" class="hidden bento-card border-orange-500/30 bg-orange-900/10 flex items-center justify-between">
-                <div><p class="text-[9px] font-bold uppercase text-orange-400">Coach</p><p class="text-xs font-bold">Pause trop longue.</p></div>
-                <button onclick="injectSport()" class="text-[10px] bg-orange-500 text-black px-2 py-1 rounded font-bold">Bouger</button>
-            </div>
-            
-            <div id="knowledgeHub" class="hidden bento-card border-blue-500/30 bg-blue-900/10">
-                <div class="flex justify-between items-center mb-2">
-                    <p class="text-[9px] font-bold uppercase text-blue-400">Temps Libre détecté</p>
-                    <span class="text-lg">📚</span>
-                </div>
-                <p class="text-xs font-bold mb-3">On s'instruit ? Finance ou Culture.</p>
-                <div class="flex gap-2">
-                    <button onclick="learn('finance')" class="flex-1 bg-white/10 py-1.5 rounded text-[10px] font-bold hover:bg-white/20">Finance</button>
-                    <button onclick="learn('culture')" class="flex-1 bg-white/10 py-1.5 rounded text-[10px] font-bold hover:bg-white/20">Culture</button>
+                <div class="card p-4 flex flex-col justify-between h-32">
+                    <div class="flex justify-between"><span class="text-xl">⚡</span><span id="energyScore" class="font-mono font-bold">100%</span></div>
+                    <div>
+                         <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden mb-2"><div id="energyBar" class="bg-yellow-400 h-full w-full transition-all duration-500"></div></div>
+                        <p class="text-[10px] opacity-50 uppercase">Charge Mentale</p>
+                    </div>
                 </div>
             </div>
 
+            <div class="card p-5">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 id="currentDateDisplay" class="text-lg font-bold">--</h3>
+                </div>
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1 text-center text-xs font-mono"></div>
+            </div>
         </aside>
 
-        <main class="lg:col-span-8">
-            <div class="glass-panel p-6 md:p-8 min-h-[80vh]">
-                <h3 class="text-sm font-bold uppercase opacity-40 tracking-widest mb-8 pl-12">Flux Chronologique</h3>
-                
-                <div id="conflictAlertBox" class="hidden mb-6 ml-12 p-4 rounded-xl bg-red-900/20 border border-red-500/50 flex items-center gap-4">
-                    <span class="text-2xl">🚨</span>
-                    <div><p class="text-[10px] font-bold text-red-400 uppercase">Conflit</p><p id="conflictMsg" class="text-sm font-bold">Message</p></div>
-                    <button onclick="document.getElementById('conflictAlertBox').classList.add('hidden')" class="ml-auto">✕</button>
+        <main class="lg:col-span-2 space-y-6">
+            <div class="glass rounded-3xl p-6 min-h-[600px]">
+                <div class="flex justify-between items-center mb-8 pl-4">
+                    <h2 class="text-xs font-bold uppercase tracking-[0.2em] opacity-40">Flux de la journée</h2>
+                    <div id="contextBadge" class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/10 font-mono">MODE: NEUTRE</div>
                 </div>
 
-                <div id="masterTimeline">
+                <div id="timelineContainer" class="space-y-0">
                     </div>
+                
+                <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 opacity-30">
+                    <div class="text-4xl mb-2">🌑</div>
+                    <p class="text-sm font-mono">Aucune donnée temporelle.</p>
+                </div>
             </div>
         </main>
     </div>
 
-    <div id="profileModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur">
-        <div class="glass-panel p-8 max-w-sm w-full text-center">
-            <h2 class="text-xl font-bold mb-6">Profil & Setup</h2>
-            <div class="space-y-3">
-                <input type="number" id="inputWeight" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Poids (kg)">
-                <input type="number" id="inputHeight" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Taille (cm)">
-                <div class="flex gap-2">
-                    <input type="number" id="inputAge" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none" placeholder="Âge">
-                    <select id="inputSex" class="w-full bg-white/5 p-3 rounded-xl text-center border border-white/10 outline-none"><option value="male">Homme</option><option value="female">Femme</option></select>
-                </div>
-                <button onclick="saveProfile()" class="btn-primary w-full py-3 text-xs font-bold uppercase">Sauvegarder</button>
+    <div id="profileModal" class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center">
+        <div class="glass p-8 max-w-sm w-full rounded-2xl text-center space-y-4 border border-white/10">
+            <h2 class="text-xl font-bold">Configuration Système</h2>
+            <p class="text-xs opacity-50">Paramétrez votre avatar physique pour le calcul métabolique.</p>
+            <input id="inputName" type="text" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center outline-none focus:border-blue-500" placeholder="Nom de code">
+            <div class="flex gap-2">
+                <input id="inputWeight" type="number" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center outline-none" placeholder="Poids (kg)">
+                <input id="inputHeight" type="number" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center outline-none" placeholder="Taille (cm)">
             </div>
+            <button onclick="Data.saveProfile()" class="w-full bg-white text-black font-bold py-3 rounded-xl hover:scale-[1.02] transition">INITIALISER</button>
         </div>
     </div>
 
     <script>
-        // --- 1. DATABASES & CONFIG (Restored from V71) ---
-        let db = JSON.parse(localStorage.getItem('lifeos_v73_db') || "{}");
-        let profile = JSON.parse(localStorage.getItem('lifeos_v73_profile') || "null");
-        let health = JSON.parse(localStorage.getItem('lifeos_v73_health') || '{"water":0}');
-        let manualMeals = JSON.parse(localStorage.getItem('lifeos_v73_manual_meals') || "{}");
-        
-        const now = new Date();
-        let selectedDay = now.getDate();
-        const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
-
-        // COMPLEX DATASETS (Restored)
-        const M_SPORT_L = ["Penne Complètes Bolognaise", "Riz Basmati & Steak 5%", "Double Wrap Poulet", "Gnocchis Dinde Pesto", "Couscous Royal Light"];
-        const M_SPORT_D = ["Omelette 3 oeufs Pommes de Terre", "Cabillaud Rôti & Purée", "Bowl Quinoa Dinde", "Wok Nouilles Poulet", "Saucisse Lentilles"];
-        const M_FOCUS_L = ["Saumon Rôti Quinoa", "Salade César Poulet", "Buddha Bowl Tofu", "Maquereau Grillé", "Carpaccio Boeuf"];
-        const M_FOCUS_D = ["Velouté Potiron Coco", "Escalope Dinde Haricots", "Wok Légumes Cajou", "Velouté Asperges", "Colin Papillote"];
-        
-        const mealsDB = { sport: { lunch: M_SPORT_L, dinner: M_SPORT_D }, focus: { lunch: M_FOCUS_L, dinner: M_FOCUS_D }, diet: { lunch: M_FOCUS_L, dinner: M_FOCUS_D } };
-        const ROUTINES = { 
-            sport: { m: {l:"Mobilité Articulaire", q:"mobility routine"}, e: {l:"Automassage", q:"foam rolling"} }, 
-            focus: { m: {l:"Méditation Focus", q:"meditation focus"}, e: {l:"Lecture Papier", q:"reading"} } 
-        };
-        ROUTINES.diet = ROUTINES.focus;
-        const MUSIC_DB = { sport: ["Workout Phonk", "Hip Hop Gym"], focus: ["Deep Focus", "Lofi Girl"], diet: ["Acoustic Chill", "Jazz Vibes"] };
-        const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
-
-        // --- 2. LOGIC FUNCTIONS (Restored) ---
-        function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; if(m.includes("Légumes")||m.includes("Salade"))return "Fibres, Vit C"; return "Vitamines Essentielles"; }
-        
-        function parseInput(text) {
-            let startMin = 540; let duration = 60;
-            const durMatch = text.match(/(?:durée|pendant)\s*(\d{1,2})/i);
-            if (durMatch) duration = parseInt(durMatch[1]) * 60;
-            const startRegex = /(?:à|vers|début)\s*(\d{1,2})(?:[h:](\d{2})?)?/i;
-            const startMatch = text.match(startRegex);
-            if (startMatch) startMin = parseInt(startMatch[1]) * 60 + (startMatch[2] ? parseInt(startMatch[2]) : 0);
-            else { const simpleNum = text.match(/(\d{1,2})[h:](\d{2})?/); if(simpleNum) startMin = parseInt(simpleNum[1])*60 + (simpleNum[2]?parseInt(simpleNum[2]):0); }
-            if (text.match(/\bmidi\b/i)) startMin = 720; 
-            if (text.match(/\bsoir\b/i) && !startMatch) startMin = 1140;
-            return { startMin, duration };
-        }
-
-        function cleanTaskText(text) {
-            let clean = text.replace(/(\d{1,2})\s*[:hH]\s*(\d{2})?/gi, '').trim();
-            const junk = ["midi", "minuit", "matin", "soir", "demain", "vers", "à", "pour", "avec"];
-            let words = clean.split(/\s+/).filter(w => w.length > 2 && !junk.includes(w.toLowerCase()));
-            return words.length > 0 ? words[0].charAt(0).toUpperCase() + words[0].slice(1) : "Tâche";
-        }
-
-        function injectTaskSmartly(text) {
-            const lower = text.toLowerCase();
-            let d = selectedDay;
-            if (lower.includes('demain')) d = now.getDate() + 1;
-            
-            const parsed = parseInput(text);
-            const cl = cleanTaskText(text);
-            
-            // CONFLICT DETECTION
-            if(d === selectedDay) {
-                let dinnerTime = 20 * 60;
-                let tEnd = parsed.startMin + parsed.duration;
-                if (parsed.startMin < (dinnerTime + 60) && tEnd > dinnerTime) {
-                    document.getElementById('conflictMsg').innerText = `Dîner décalé par "${cl}".`;
-                    document.getElementById('conflictAlertBox').classList.remove('hidden');
+        /**
+         * LIFEOS V80 - ARCHITECTURE "SINGULARITY"
+         * Pattern: State -> Logic -> Render
+         * Cet objet global contient toute l'application.
+         */
+        const App = {
+            state: {
+                user: null, // { name, weight, height }
+                date: new Date(),
+                db: {}, // Structure: { "YYYY-MM-DD": [Tasks] }
+                health: { water: 0, energy: 100 },
+                config: {
+                    morningStart: 7, // 7h00
+                    nightStart: 23,  // 23h00
                 }
-            }
+            },
 
-            const h = Math.floor(parsed.startMin/60)%24; const m = parsed.startMin%60;
-            const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-            if(!db[d]) db[d] = [];
-            db[d].push({ shortText: cl, fullText: text, time: timeStr, duration: parsed.duration, done: false });
-        }
-
-        function traiterBatch() {
-            const raw = document.getElementById('userInput').value; if(!raw.trim()) return;
-            const tasks = raw.split(/[\.\n]+/).filter(t => t.trim().length > 3);
-            tasks.forEach(taskStr => injectTaskSmartly(taskStr));
-            save(); document.getElementById('userInput').value = ''; renderHUD();
-        }
-
-        // --- 3. RENDER CORE (Hybrid: Logic V71 + UI Bento) ---
-        function renderHUD() {
-            // INIT
-            if(!profile) { document.getElementById('profileModal').classList.remove('hidden'); return; }
-            document.getElementById('mainDate').innerText = `${selectedDay} ${monthNames[now.getMonth()]}`;
-            
-            const tasks = db[selectedDay] || [];
-            
-            // MODE DETECTION (INTELLIGENCE)
-            let mode = 'diet'; 
-            let sportTaskTime = null;
-            let occupiedSlots = [];
-            
-            tasks.forEach(t => {
-                const fl = (t.fullText||"").toLowerCase();
-                if (fl.match(/sport|crossfit|gym|muscu|foot|run|course|match|boxe/)) { mode = 'sport'; sportTaskTime = t.time; }
-                if (fl.match(/réunion|bureau|projet|travail|étude/i) && mode !== 'sport') mode = 'focus';
-                if (t.time) { 
-                    const [h, m] = t.time.split(':').map(Number); 
-                    occupiedSlots.push({start: h*60+m, end: h*60+m+(t.duration||60)}); 
-                }
-            });
-
-            // UPDATE STATS UI
-            const styles = { sport: {t:"Athlète", c:"text-orange-500", b:"border-orange-500"}, focus: {t:"Deep Work", c:"text-purple-500", b:"border-purple-500"}, diet: {t:"Équilibre", c:"text-green-500", b:"border-green-500"} };
-            const badge = document.getElementById('contextBadge');
-            badge.innerText = styles[mode].t; badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 ${styles[mode].c} border ${styles[mode].b}`;
-            
-            // Music & Supps
-            document.getElementById('sonicLabel').innerText = MUSIC_DB[mode][selectedDay % MUSIC_DB[mode].length];
-            document.getElementById('hudSupplements').innerText = suppsDB[mode];
-
-            // Calories Calculation
-            let bmr = (10*profile.weight) + (6.25*profile.height) - (5*profile.age) + (profile.sex==='male'?5:-161);
-            let tdee = Math.round(bmr*(mode==='sport'?1.7:1.3));
-            document.getElementById('calTarget').innerText = `${tdee} kcal`;
-            document.getElementById('calContext').innerText = mode==='sport' ? "Surplus (Activité)" : "Maintenance";
-
-            // Coach Logic (Check Habits)
-            const hasSportRecently = [0,1,2].some(d => (db[selectedDay-d]||[]).some(t=>t.fullText.match(/sport|gym/i)));
-            if(!hasSportRecently && selectedDay === now.getDate()) document.getElementById('coachAlertBox').classList.remove('hidden');
-            else document.getElementById('coachAlertBox').classList.add('hidden');
-
-            // Free Time Logic
-            if(tasks.length < 3) document.getElementById('knowledgeHub').classList.remove('hidden'); 
-            else document.getElementById('knowledgeHub').classList.add('hidden');
-
-            // --- BUILD TIMELINE STREAM ---
-            let stream = [];
-            const rot = selectedDay % 5;
-            
-            // 1. Routine Morning
-            stream.push({ type: 'routine', time: '07:30', content: ROUTINES[mode].m.l, query: ROUTINES[mode].m.q, icon: '☀️' });
-            
-            // 2. Lunch (Smart Selection)
-            let l = (manualMeals[selectedDay] && manualMeals[selectedDay].lunch) ? manualMeals[selectedDay].lunch : mealsDB[mode].lunch[rot];
-            stream.push({ type: 'meal', time: '12:30', content: l, sub: getVits(l), id: 'lunch' });
-
-            // 3. Dinner (With Conflict Logic)
-            let dinnerMin = 20 * 60;
-            let dContent = (manualMeals[selectedDay] && manualMeals[selectedDay].dinner) ? manualMeals[selectedDay].dinner : mealsDB[mode].dinner[rot];
-            occupiedSlots.forEach(slot => { if (slot.start < (dinnerMin + 45) && slot.end > dinnerMin) dinnerMin = slot.end + 15; });
-            const dTime = `${Math.floor(dinnerMin/60).toString().padStart(2,'0')}:${(dinnerMin%60).toString().padStart(2,'0')}`;
-            stream.push({ type: 'meal', time: dTime, content: dContent, sub: getVits(dContent), id: 'dinner' });
-
-            // 4. Injected Snacks (Sport)
-            if (mode === 'sport' && sportTaskTime) {
-                const [h, m] = sportTaskTime.split(':').map(Number);
-                if (h >= 17) stream.push({ type: 'snack', time: `${h-2}:00`, content: "Collation Pré-Workout", sub: "Banane & Amandes" });
-            }
-
-            // 5. User Tasks
-            tasks.forEach((t, i) => {
-                let style = 'dot-focus'; let accent = 'ctx-focus';
-                if(t.fullText.match(/sport|gym/i)) { style='dot-sport'; accent='ctx-sport'; }
-                stream.push({ type: 'task', time: t.time, content: t.shortText, full: t.fullText, style: style, accent: accent, id: i, done: t.done });
-            });
-
-            // Sort & Render
-            stream.sort((a,b) => parseInt(a.time.replace(':','')) - parseInt(b.time.replace(':','')));
-            
-            const container = document.getElementById('masterTimeline');
-            container.innerHTML = stream.map(item => {
-                let cardHTML = '';
+            // --- 1. CORE DATA LAYER ---
+            init() {
+                // Load Data
+                const saved = localStorage.getItem('lifeos_v80_db');
+                const user = localStorage.getItem('lifeos_v80_user');
+                const health = localStorage.getItem('lifeos_v80_health');
                 
-                if(item.type === 'task') {
-                    cardHTML = `
-                    <div class="bento-card ${item.accent} flex items-center gap-4 ${item.done ? 'opacity-40 grayscale' : ''}" onclick="toggleTask(${item.id})">
-                        <div class="w-5 h-5 rounded border border-white/20 flex items-center justify-center">${item.done ? '✓' : ''}</div>
-                        <div><p class="font-bold text-sm ${item.done ? 'line-through' : ''}">${item.content}</p></div>
-                        <button onclick="event.stopPropagation(); delTask(${item.id})" class="ml-auto text-red-500 opacity-50 text-xs">✕</button>
-                    </div>`;
-                } else if(item.type === 'meal') {
-                    cardHTML = `
-                    <div class="bento-card ctx-meal flex items-center gap-4" onclick="editMeal('${item.id}')">
-                        <div class="text-xl">🥗</div>
-                        <div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] text-green-400 font-mono">${item.sub}</p></div>
-                        <button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="ml-auto bg-white/10 p-1.5 rounded text-[9px]">COOK</button>
-                    </div>`;
-                } else if(item.type === 'routine' || item.type === 'snack') {
-                    cardHTML = `
-                    <div class="bento-card flex items-center gap-4 border-l border-white/20">
-                        <div class="text-xl">${item.type==='snack'?'🍌':item.icon}</div>
-                        <div><p class="font-bold text-sm">${item.content}</p><p class="text-[10px] opacity-50 font-mono">${item.sub || 'Routine'}</p></div>
-                    </div>`;
+                if (saved) this.state.db = JSON.parse(saved);
+                if (health) this.state.health = JSON.parse(health);
+                
+                if (!user) {
+                    UI.toggleProfile(true);
+                } else {
+                    this.state.user = JSON.parse(user);
+                    UI.render();
+                }
+                
+                // Clock Update
+                setInterval(() => UI.updateClock(), 60000);
+            },
+
+            save() {
+                localStorage.setItem('lifeos_v80_db', JSON.stringify(this.state.db));
+                localStorage.setItem('lifeos_v80_user', JSON.stringify(this.state.user));
+                localStorage.setItem('lifeos_v80_health', JSON.stringify(this.state.health));
+                UI.render();
+            }
+        };
+
+        /**
+         * --- 2. ARTIFICIAL INTELLIGENCE ENGINE ---
+         * Le cerveau qui comprend le temps et l'espace.
+         */
+        const AI = {
+            // Analyse le langage naturel et extrait les intentions
+            parseIntent(text) {
+                const lower = text.toLowerCase();
+                let duration = 60; // Défaut 1h
+                let time = null;
+                let type = 'neutral';
+                let context = 'generic';
+
+                // Détection Durée
+                const durMatch = text.match(/(\d+)\s*(min|h)/i);
+                if (durMatch) {
+                    duration = durMatch[2] === 'h' ? parseInt(durMatch[1]) * 60 : parseInt(durMatch[1]);
                 }
 
-                return `
-                <div class="timeline-row">
-                    <div class="timeline-time">${item.time}</div>
-                    <div class="timeline-line"></div>
-                    <div class="timeline-dot ${item.style || 'dot-meal'}" style="background-color: ${item.type==='meal'?'#10b981':''}"></div>
-                    <div class="flex-1">${cardHTML}</div>
-                </div>`;
-            }).join('');
-            
-            renderCal();
-            updateWaterUI();
-        }
+                // Détection Heure (ex: 18h30)
+                const timeMatch = text.match(/(\d{1,2})[h:](\d{2})?/i);
+                if (timeMatch) {
+                    time = parseInt(timeMatch[1]) * 60 + (timeMatch[2] ? parseInt(timeMatch[2]) : 0);
+                }
 
-        // --- 4. HELPERS ---
-        function renderCal() {
-            const c = document.getElementById('calendar'); c.innerHTML='';
-            const last = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-            // Show a scrolling view around selected day
-            let start = Math.max(1, selectedDay - 2); let end = Math.min(last, start+6);
-            if(end-start < 6) start = Math.max(1, end-6);
-            
-            for(let i=start; i<=end; i++){
-                const d = document.createElement('div');
-                d.className = `day-pill ${i===selectedDay?'active':''} ${db[i]&&db[i].length?'has-event':''}`;
-                d.innerHTML = `<span class="opacity-50 text-[9px]">${i===now.getDate()?'AUJ':'J'+i}</span><span class="font-bold">${i}</span>`;
-                d.onclick=()=>{selectedDay=i; renderHUD();};
-                c.appendChild(d);
+                // Détection Contexte (Tags sémantiques)
+                if (lower.match(/sport|muscu|gym|courir|crossfit/)) { type = 'sport'; context = 'high_energy'; }
+                else if (lower.match(/code|travail|deep|focus|étude|projet/)) { type = 'focus'; context = 'mental'; }
+                else if (lower.match(/repas|déj|dîner|manger/)) { type = 'meal'; context = 'recovery'; }
+                else if (lower.match(/lire|méditer|détente|nap/)) { type = 'chill'; context = 'low_energy'; }
+
+                return { title: text, duration, time, type, context };
+            },
+
+            // ALGORITHME D'OPTIMISATION TEMPORELLE
+            findBestSlot(duration, context, existingTasks) {
+                // Grille de la journée (en minutes, de 7h à 23h)
+                let startLimit = App.state.config.morningStart * 60; 
+                let endLimit = App.state.config.nightStart * 60;
+                
+                // Trier les tâches existantes
+                let occupied = existingTasks
+                    .filter(t => t.time !== null)
+                    .map(t => ({ start: t.time, end: t.time + t.duration }))
+                    .sort((a,b) => a.start - b.start);
+
+                // Chercher le premier trou ("gap") suffisant
+                let currentTime = startLimit;
+                
+                // Règle Contextuelle : Le Sport de préférence le soir, Focus le matin
+                if (context === 'high_energy') currentTime = Math.max(currentTime, 17 * 60); // 17h min pour sport
+                if (context === 'mental') endLimit = 13 * 60; // Essayer de caler le focus avant 13h si possible (simplifié)
+
+                for (let block of occupied) {
+                    if (block.start - currentTime >= duration) {
+                        return currentTime; // Trouvé avant la prochaine tâche
+                    }
+                    currentTime = Math.max(currentTime, block.end + 15); // +15min buffer
+                }
+
+                // Vérifier après la dernière tâche
+                if (endLimit - currentTime >= duration) return currentTime;
+
+                return null; // Pas de place
+            },
+
+            processBatch() {
+                const input = document.getElementById('neuralInput');
+                const raw = input.value;
+                if (!raw.trim()) return;
+
+                // Animation UI
+                document.getElementById('aiGlow').classList.add('active');
+                document.getElementById('aiStatus').innerText = "Analyse neurale...";
+
+                setTimeout(() => {
+                    const lines = raw.split('\n');
+                    const dayKey = Utils.getDateKey(App.state.date);
+                    if (!App.state.db[dayKey]) App.state.db[dayKey] = [];
+
+                    lines.forEach(line => {
+                        if (line.length < 3) return;
+                        const intent = this.parseIntent(line);
+                        
+                        // Si pas d'heure, l'IA décide
+                        if (intent.time === null) {
+                            const bestSlot = this.findBestSlot(intent.duration, intent.context, App.state.db[dayKey]);
+                            if (bestSlot) {
+                                intent.time = bestSlot;
+                                intent.title += " (🤖 Auto)";
+                            } else {
+                                intent.time = 20 * 60; // Fallback 20h
+                                intent.title += " (⚠️ Conflit)";
+                            }
+                        }
+                        
+                        App.state.db[dayKey].push({
+                            id: Date.now() + Math.random(),
+                            ...intent,
+                            done: false
+                        });
+                    });
+
+                    App.save();
+                    input.value = "";
+                    document.getElementById('aiGlow').classList.remove('active');
+                    document.getElementById('aiStatus').innerText = "Optimisation terminée.";
+                    setTimeout(() => document.getElementById('aiStatus').innerText = "En attente...", 2000);
+
+                }, 800); // Fake processing delay for UX
             }
-        }
+        };
 
-        function saveProfile() {
-            profile={weight:document.getElementById('inputWeight').value, height:document.getElementById('inputHeight').value, age:document.getElementById('inputAge').value, sex:document.getElementById('inputSex').value};
-            localStorage.setItem('lifeos_v73_profile', JSON.stringify(profile));
-            document.getElementById('profileModal').classList.add('hidden');
-            renderHUD();
-        }
-        function toggleTask(i){ db[selectedDay][i].done=!db[selectedDay][i].done; save(); }
-        function delTask(i){ db[selectedDay].splice(i,1); save(); }
-        function save(){ localStorage.setItem('lifeos_v73_db',JSON.stringify(db)); localStorage.setItem('lifeos_v73_health',JSON.stringify(health)); renderHUD(); }
-        function addWater(n){ health.water+=n; save(); document.getElementById('waterText').classList.add('animate-pop'); setTimeout(()=>document.getElementById('waterText').classList.remove('animate-pop'),300); }
-        function updateWaterUI(){ document.getElementById('waterText').innerText=`${health.water}L`; document.getElementById('waterBar').style.width=`${Math.min(100,(health.water/2.5)*100)}%`; }
-        function playContextMusic(){ let q=document.getElementById('sonicLabel').innerText; window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank'); }
-        function editMeal(id){ const n=prompt("Changer repas:"); if(n){ if(!manualMeals[selectedDay])manualMeals[selectedDay]={}; manualMeals[selectedDay][id]=n; localStorage.setItem('lifeos_v73_manual_meals',JSON.stringify(manualMeals)); renderHUD(); }}
-        function injectSport(){ injectTaskSmartly("Séance Reprise Sport 18h"); save(); renderHUD(); }
-        function learn(t){ window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(t==='finance'?"Mathieu Louvet Finary":"Arte Histoire")}`,'_blank'); }
-        function openProfile() { if(confirm('Reset tout?')) { localStorage.clear(); location.reload(); } }
+        /**
+         * --- 3. UI RENDERING SYSTEM ---
+         */
+        const UI = {
+            toggleProfile(force = false) {
+                const el = document.getElementById('profileModal');
+                if (force) el.classList.remove('hidden');
+                else el.classList.toggle('hidden');
+            },
 
-        // START
-        if(!profile) document.getElementById('profileModal').classList.remove('hidden');
-        renderHUD();
+            render() {
+                const key = Utils.getDateKey(App.state.date);
+                const tasks = App.state.db[key] || [];
+                
+                // 1. Mise à jour stats
+                document.getElementById('currentDateDisplay').innerText = App.state.date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                document.getElementById('waterVal').innerText = App.state.health.water + 'L';
+                document.getElementById('waterBar').style.width = Math.min(100, (App.state.health.water / 2.5) * 100) + '%';
+
+                // 2. Tri Chronologique
+                tasks.sort((a, b) => a.time - b.time);
+
+                // 3. Construction Timeline
+                const container = document.getElementById('timelineContainer');
+                container.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                } else {
+                    document.getElementById('emptyState').classList.add('hidden');
+                    
+                    // Détection du mode dominant
+                    const sports = tasks.filter(t => t.type === 'sport').length;
+                    const focus = tasks.filter(t => t.type === 'focus').length;
+                    const badge = document.getElementById('contextBadge');
+                    if(sports > focus) { badge.innerText = "MODE: ATHLÈTE"; badge.className = "text-[10px] px-2 py-1 bg-orange-500/20 text-orange-400 rounded border border-orange-500/50 font-mono"; }
+                    else if(focus > sports) { badge.innerText = "MODE: DEEP WORK"; badge.className = "text-[10px] px-2 py-1 bg-purple-500/20 text-purple-400 rounded border border-purple-500/50 font-mono"; }
+                    else { badge.innerText = "MODE: ÉQUILIBRE"; badge.className = "text-[10px] px-2 py-1 bg-green-500/20 text-green-400 rounded border border-green-500/50 font-mono"; }
+
+                    tasks.forEach(task => {
+                        const h = Math.floor(task.time / 60).toString().padStart(2, '0');
+                        const m = (task.time % 60).toString().padStart(2, '0');
+                        
+                        // Styles dynamiques
+                        let borderClass = 'border-white/10';
+                        let dotColor = '#555';
+                        if (task.type === 'sport') { borderClass = 'border-orange-500/50 bg-orange-500/5'; dotColor = '#f97316'; }
+                        if (task.type === 'focus') { borderClass = 'border-purple-500/50 bg-purple-500/5'; dotColor = '#8b5cf6'; }
+                        if (task.type === 'meal') { borderClass = 'border-green-500/50 bg-green-500/5'; dotColor = '#10b981'; }
+
+                        const html = `
+                        <div class="timeline-node">
+                            <div class="node-time text-mono">${h}:${m}</div>
+                            <div class="node-dot" style="background:${task.done ? dotColor : '#111'}; border-color:${dotColor}"></div>
+                            <div class="card p-3 flex items-center justify-between group ${borderClass} ${task.done ? 'opacity-40 grayscale' : ''}" onclick="Data.toggleTask(${task.id})">
+                                <div>
+                                    <p class="font-bold text-sm ${task.done ? 'line-through' : ''}">${task.title}</p>
+                                    <p class="text-[10px] opacity-50 font-mono uppercase">${task.duration} min • ${task.type}</p>
+                                </div>
+                                <button onclick="event.stopPropagation(); Data.deleteTask(${task.id})" class="opacity-0 group-hover:opacity-100 text-red-500 p-2">✕</button>
+                            </div>
+                        </div>`;
+                        container.innerHTML += html;
+                    });
+                }
+                
+                // Render Calendar Strip
+                this.renderCalendar();
+            },
+
+            renderCalendar() {
+                const grid = document.getElementById('calendarGrid');
+                grid.innerHTML = '';
+                const today = new Date();
+                for (let i = -2; i < 5; i++) {
+                    const d = new Date();
+                    d.setDate(today.getDate() + i);
+                    const k = Utils.getDateKey(d);
+                    const isSelected = k === Utils.getDateKey(App.state.date);
+                    const hasData = App.state.db[k] && App.state.db[k].length > 0;
+                    
+                    const el = document.createElement('div');
+                    el.className = `p-2 rounded-lg cursor-pointer transition ${isSelected ? 'bg-white text-black font-bold' : 'hover:bg-white/5'} ${hasData ? 'border-b-2 border-blue-500' : ''}`;
+                    el.innerHTML = `<div class="opacity-50 text-[8px]">${['DIM','LUN','MAR','MER','JEU','VEN','SAM'][d.getDay()]}</div><div>${d.getDate()}</div>`;
+                    el.onclick = () => { App.state.date = d; UI.render(); };
+                    grid.appendChild(el);
+                }
+            },
+            
+            updateClock() {
+                // Pourrait mettre à jour une barre de progression temps réel ici
+            }
+        };
+
+        /**
+         * --- 4. DATA HELPERS ---
+         */
+        const Data = {
+            saveProfile() {
+                const name = document.getElementById('inputName').value;
+                const w = document.getElementById('inputWeight').value;
+                const h = document.getElementById('inputHeight').value;
+                if(name && w && h) {
+                    App.state.user = { name, w, h };
+                    UI.toggleProfile();
+                    App.save();
+                }
+            },
+            addWater(qty) {
+                App.state.health.water = parseFloat((App.state.health.water + qty).toFixed(2));
+                App.save();
+            },
+            toggleTask(id) {
+                const key = Utils.getDateKey(App.state.date);
+                const t = App.state.db[key].find(x => x.id === id);
+                if(t) t.done = !t.done;
+                App.save();
+            },
+            deleteTask(id) {
+                const key = Utils.getDateKey(App.state.date);
+                App.state.db[key] = App.state.db[key].filter(x => x.id !== id);
+                App.save();
+            }
+        };
+
+        const Utils = {
+            getDateKey(date) {
+                return date.toISOString().split('T')[0];
+            }
+        };
+
+        const System = {
+            wipe() {
+                if(confirm("SYSTEM OVERRIDE: Réinitialisation complète ?")) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        };
+
+        // BOOT
+        App.init();
+
     </script>
 </body>
 </html>
