@@ -275,26 +275,25 @@
         });
         document.addEventListener("click", function (e) { if(e.target !== inp) list.classList.add('hidden'); });
 
-       function addToWatchlist(symbol, name) {
-    const pru = prompt(`Prix d'achat pour ${name} ?`, "0");
-    const objectif = prompt(`Objectif de vente pour ${name} ?`, "0");
+        function addToWatchlist(symbol, name) {
+            const pru = prompt(`Prix d'achat pour ${name} ?`, "0");
+            const objectif = prompt(`Objectif de vente pour ${name} ?`, "0");
 
-    if (pru !== null && objectif !== null) {
-        // Ajout sur l'interface du site
-        if(!watchlist.some(item => item.s === symbol)) {
-            watchlist.push({s: symbol, l: name});
-            localStorage.setItem('lifeos_watchlist', JSON.stringify(watchlist));
-            renderWatchlist();
-        }
+            if (pru !== null && objectif !== null) {
+                // Ajout sur l'interface du site
+                if(!watchlist.some(item => item.s === symbol)) {
+                    watchlist.push({s: symbol, l: name});
+                    localStorage.setItem('lifeos_watchlist', JSON.stringify(watchlist));
+                    renderWatchlist();
+                    loadActiveAsset(symbol); // Charge le graphique
+                }
 
-        // ENVOI AU GOOGLE SHEET (Remplace l'URL ci-dessous par la tienne)
-        const URL_GOOGLE = https://script.google.com/macros/s/AKfycbyDDxukS37I8IG-2D6NrlWtRPznNn-4U0jkyw3zFM_j7w4gcddzzt7lDpQqgW5oWxw-/exec;
-        
-        fetch(`${URL_GOOGLE}?ticker=${symbol}&pru=${pru}&obj=${objectif}`, { mode: 'no-cors' })
-        .then(() => alert("Synchronisé avec Google Sheet !"))
-        .catch(e => console.log(e));
-    }
-}
+                // --- IMPORTANT : METS TON LIEN GOOGLE ICI ENTRE GUILLEMETS ! ---
+                const URL_GOOGLE = "https://script.google.com/macros/s/AKfycbyDDxukS37I8IG-2D6NrlWtRPznNn-4U0jkyw3zFM_j7w4gcddzzt7lDpQqgW5oWxw-/exec";
+                
+                fetch(`${URL_GOOGLE}?ticker=${symbol}&pru=${pru}&obj=${objectif}`, { mode: 'no-cors' })
+                .then(() => alert("Synchronisé avec Google Sheet !"))
+                .catch(e => console.log(e));
             }
         }
 
@@ -313,7 +312,6 @@
             }
             
             watchlist.forEach(item => {
-                // V99: Utilisation du Single Ticker Widget pour un affichage "Live" propre sans complexité
                 const div = document.createElement('div');
                 div.className = "watchlist-item group";
                 div.onclick = () => loadActiveAsset(item.s);
@@ -334,7 +332,7 @@
                         "interval": "D",
                         "timezone": "Europe/Paris",
                         "theme": "dark",
-                        "style": "3", // Area style
+                        "style": "3",
                         "locale": "fr",
                         "toolbar_bg": "#f1f3f6",
                         "enable_publishing": false,
@@ -354,7 +352,7 @@
             document.getElementById('activeChartLabel').innerText = `Analyse : ${symbol}`;
         }
 
-        // --- INIT ---
+        // --- INIT & HELPERS ---
         function switchView(viewName) {
             const plan = document.getElementById('view-planning'); const market = document.getElementById('view-market'); const btnPlan = document.getElementById('nav-planning'); const btnMarket = document.getElementById('nav-market');
             if(viewName === 'planning') { plan.classList.remove('hidden'); market.classList.add('hidden'); btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active'); } 
@@ -365,9 +363,19 @@
             renderWatchlist();
         }
 
-        // --- AGENDA V70 ---
+        // --- AGENDA V70 & LOGIC ---
         async function traiterBatchIA() { const raw = document.getElementById('userInput').value; if (!raw.trim()) return; if (!apiKey) { alert("Clé API manquante"); openProfile(); return; } const btn = document.getElementById('aiBtn'); const originalText = btn.innerHTML; btn.innerHTML = "<span>🧠</span> Analyse..."; btn.classList.add('ai-loading'); btn.disabled = true; try { const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": `Tu es l'IA de LifeOS. Date: ${new Date().toLocaleDateString()}. JSON strict: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":60,"dayOffset":0}].` }, { "role": "user", "content": raw }] }) }); const data = await response.json(); const tasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim()); tasks.forEach(t => { let d = new Date(); d.setDate(now.getDate() + (t.dayOffset || 0)); const day = d.getDate(); if (!db[day]) db[day] = []; db[day].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false }); }); save(); renderHUD(); document.getElementById('userInput').value = ''; } catch (e) { alert(e); } finally { btn.classList.remove('ai-loading'); btn.disabled = false; btn.innerHTML = originalText; } }
+        
         function renderHUD() { try { const isToday=(selectedDay===todayNum); document.getElementById('hudStatus').innerText=isToday?"LIVE":"PLANNING"; document.getElementById('dayIndicator').className=isToday?"w-2 h-2 rounded-full bg-green-500 animate-pulse":"w-2 h-2 rounded-full bg-blue-500"; document.getElementById('hudDate').innerText=`${selectedDay} ${monthNames[now.getMonth()]}`; const tasks=db[selectedDay]||[]; let mode='diet'; let sportTaskTime=null; tasks.forEach(t=>{const fl=(t.fullText||"").toLowerCase(); if(fl.match(/sport|crossfit|gym|muscu/)){mode='sport';sportTaskTime=t.time;}}); if(mode==='diet'&&tasks.some(t=>t.fullText.match(/réunion|bureau/i)))mode='focus'; const styles={sport:{t:"Haute Énergie",c:"text-orange-500",i:"🔥",b:"sonic-sport"},focus:{t:"Deep Focus",c:"text-purple-500",i:"🧠",b:"sonic-focus"},diet:{t:"Vitalité & Diet",c:"text-green-500",i:"🌿",b:"sonic-chill"}}; document.getElementById('contextTitle').innerText=styles[mode].t; document.getElementById('contextTitle').className=`text-lg font-bold ${styles[mode].c}`; document.querySelector('#contextBanner span').innerText=styles[mode].i; document.getElementById('sonicTrigger').className=`sonic-bar p-4 rounded-2xl flex justify-between items-center mb-6 shadow-xl ${styles[mode].b}`; document.getElementById('sonicLabel').innerText=`Playlist: ${MUSIC_DB[mode][(selectedDay-1)%MUSIC_DB[mode].length]}`; let bmr=(10*profile.weight)+(6.25*profile.height)-(5*profile.age)+(profile.sex==='male'?5:-161); let tdee=Math.round(bmr*(mode==='sport'?1.7:1.3)); document.getElementById('calTarget').innerText=`${tdee} kcal`; document.getElementById('hudSupplements').innerText=suppsDB[mode]; const rot=(selectedDay-1)%5; const rIndex=(selectedDay-1)%2; let l=(manualMeals[selectedDay]&&manualMeals[selectedDay].lunch)?manualMeals[selectedDay].lunch:(mealsDB[mode].lunch[rot]||mealsDB[mode].lunch[0]); let d=(manualMeals[selectedDay]&&manualMeals[selectedDay].dinner)?manualMeals[selectedDay].dinner:(mealsDB[mode].dinner[rot]||mealsDB[mode].dinner[0]); const rM=ROUTINES[mode].m[rIndex]; const rE=ROUTINES[mode].e[rIndex]; let lunchMin=12*60+30; let dinnerMin=20*60; let injectedItems=[]; if(mode==='sport'&&sportTaskTime){const [h,m]=sportTaskTime.split(':').map(Number); if(h>=18){let snackH=h-3; injectedItems.push({type:'snack',time:`${snackH.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`,content:"Collation Pré-Match",sub:"Banane, Miel, Amandes",color:'dot-snack',accent:'accent-snack'});}} let stream=[]; stream.push({type:'routine',time:'07:30',content:rM.l,query:rM.q,icon:'☀️',accent:'accent-routine',dot:'dot-routine'}); stream.push({type:'meal',time:"12:30",content:l,sub:getVits(l),kcal:Math.round(tdee*0.4),accent:'accent-meal',dot:'dot-meal',id:'lunch'}); stream.push(...injectedItems); stream.push({type:'meal',time:"20:00",content:d,sub:getVits(d),kcal:Math.round(tdee*0.35),accent:'accent-meal',dot:'dot-meal',id:'dinner'}); stream.push({type:'routine',time:'22:30',content:rE.l,query:rE.q,icon:'🌙',accent:'accent-routine',dot:'dot-routine'}); tasks.forEach((t,i)=>{let accent=t.fullText.match(/sport/i)?'accent-sport':'accent-task'; let dot=t.fullText.match(/sport/i)?'dot-sport':'dot-task'; let displayContent=t.shortText; if(t.duration>0){const [h,m]=t.time.split(':').map(Number); const endMin=h*60+m+t.duration; const endH=Math.floor(endMin/60)%24; const endM=endMin%60; displayContent+=` <span class="opacity-50 text-[10px] ml-2">(${t.time} ➔ ${endH}:${endM.toString().padStart(2,'0')})</span>`;} stream.push({type:'task',time:t.time,content:displayContent,full:t.fullText,accent:accent,dot:dot,id:i,done:t.done});}); stream.sort((a,b)=>{const [hA,mA]=a.time.split(':').map(Number); const [hB,mB]=b.time.split(':').map(Number); return (hA*60+mA)-(hB*60+mB);}); document.getElementById('masterTimeline').innerHTML=stream.map(item=>{const [h,m]=item.time.split(':').map(Number); let cardContent=''; if(item.type==='routine'){cardContent=`<div class="flex justify-between items-center"><div class="flex items-center gap-4"><div class="text-xl opacity-80">${item.icon}</div><div><p class="text-[9px] font-bold uppercase opacity-50">Routine</p><p class="font-bold text-lg">${item.content}</p></div></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}','_blank')" class="video-btn">▶ Vidéo</button></div>`;} else if(item.type==='meal'){cardContent=`<div class="flex flex-col md:flex-row md:items-center justify-between gap-4" onclick="editItem('meal', '${item.id}')"><div><div class="flex items-center gap-2 mb-1"><p class="text-[9px] font-bold uppercase opacity-50">Repas</p><span class="text-[9px] font-mono opacity-40 bg-white/10 px-2 rounded">${item.kcal} kcal</span></div><p class="font-bold text-lg leading-tight mb-1">${item.content}</p><p class="text-[10px] text-zinc-400 font-mono">${item.sub}</p></div><button onclick="event.stopPropagation(); window.open('https://www.youtube.com/results?search_query=recette+${encodeURIComponent(item.content)}','_blank')" class="cook-btn self-start md:self-center">▶ Cuisiner</button></div>`;} else if(item.type==='task'){cardContent=`<div class="flex items-center gap-4 group" onclick="openTaskModal(${item.id})"><input type="checkbox" ${item.done?'checked':''} onchange="event.stopPropagation(); toggleTask(${selectedDay}, ${item.id})" class="w-5 h-5 rounded border border-white/20 bg-transparent checked:bg-white appearance-none cursor-pointer transition-all"><span class="${item.done?'line-through opacity-30':'font-bold text-lg'}">${item.content}</span><button onclick="event.stopPropagation(); delTask(${selectedDay},${item.id})" class="ml-auto text-red-500 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button></div>`;} else if(item.type==='snack'){cardContent=`<div class="flex items-center gap-4"><div class="text-2xl">🍌</div><div><p class="text-[9px] font-bold uppercase opacity-50">Carburant</p><p class="font-bold text-lg">${item.content}</p></div></div>`;} return `<div class="timeline-row"><div class="timeline-time">${item.time}</div><div class="timeline-line"></div><div class="timeline-dot ${item.dot}"></div><div class="flex-1 flow-card ${item.accent} ${item.done?'opacity-40':''}">${cardContent}</div></div>`;}).join(''); updateWaterUI(mode); } catch (e) { console.error(e); }}
+
+        // --- MISSING FUNCTIONS FIXED ---
+        function updateWaterUI() {
+            const current = health.water || 0;
+            const target = 2.5;
+            const pct = Math.min((current / target) * 100, 100);
+            document.getElementById('waterBar').style.width = `${pct}%`;
+            document.getElementById('waterText').innerText = `${current}L`;
+        }
 
         function editItem(t,i){if(t==='meal'){const n=prompt("Repas:");if(n){if(!manualMeals[selectedDay])manualMeals[selectedDay]={};manualMeals[selectedDay][i]=n;save();renderHUD();}}}
         function playContextMusic(){let q=document.getElementById('sonicLabel').innerText.replace('Playlist: ','');window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,'_blank');}
