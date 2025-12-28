@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V85 - Platinum Edition</title>
+    <title>LifeOS V86 - Market Pulse</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -49,14 +49,18 @@
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- STYLES BOURSE V85 (PLATINUM) --- */
+        /* --- STYLES BOURSE V86 --- */
         .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
         .glass-panel { background: rgba(15, 15, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.6rem 1rem; border-radius: 0.5rem; transition: 0.3s; color: #71717a; border: 1px solid transparent; letter-spacing: 0.05em; }
-        .sub-nav-active { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); border-color: rgba(59, 130, 246, 0.5); }
+        .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.6rem 1rem; border-radius: 0.5rem; transition: 0.2s; color: #71717a; border: 1px solid transparent; }
+        .sub-nav-active { background: #3b82f6; color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
         .sub-nav-btn:hover:not(.sub-nav-active) { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.1); }
 
+        .news-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .news-item:hover { background: rgba(255,255,255,0.05); }
+        .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
+        
         .pro-search-container { position: relative; width: 100%; margin-bottom: 1rem; }
         .pro-search-input { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 16px 20px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; transition: 0.3s; }
         .pro-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); outline: none; background: rgba(0,0,0,0.6); }
@@ -66,25 +70,19 @@
         .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; }
         .isin-badge { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; font-weight: bold; }
 
-        /* PORTFOLIO TABS (NEW) */
+        /* PORTFOLIO & EXPERT */
         .pf-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.7rem; font-weight: 800; color: #52525b; border-bottom: 2px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
         .pf-tab:hover { color: white; background: rgba(255,255,255,0.02); }
         .pf-tab-active { color: white; border-bottom: 2px solid #3b82f6; background: linear-gradient(to top, rgba(59,130,246,0.1), transparent); }
 
-        /* EXPERT CARD (NEW) */
         .expert-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
         .expert-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
         .expert-avatar { width: 48px; height: 48px; border-radius: 50%; background-color: #27272a; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; border: 2px solid rgba(255,255,255,0.1); }
         .expert-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: inline-block; }
         
-        .expert-louvet .expert-avatar { border-color: #3b82f6; color: #3b82f6; }
-        .expert-louvet .expert-tag { background: rgba(59,130,246,0.2); color: #60a5fa; }
-        
-        .expert-baccino .expert-avatar { border-color: #f97316; color: #f97316; }
-        .expert-baccino .expert-tag { background: rgba(249,115,22,0.2); color: #fdba74; }
-        
-        .expert-finary .expert-avatar { border-color: #22c55e; color: #22c55e; }
-        .expert-finary .expert-tag { background: rgba(34,197,94,0.2); color: #86efac; }
+        .expert-louvet .expert-avatar { border-color: #3b82f6; color: #3b82f6; } .expert-louvet .expert-tag { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .expert-baccino .expert-avatar { border-color: #f97316; color: #f97316; } .expert-baccino .expert-tag { background: rgba(249,115,22,0.2); color: #fdba74; }
+        .expert-finary .expert-avatar { border-color: #22c55e; color: #22c55e; } .expert-finary .expert-tag { background: rgba(34,197,94,0.2); color: #86efac; }
 
         /* SAVINGS TABLE */
         .savings-tab-btn { flex: 1; padding: 12px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: #71717a; border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; text-align: center; }
@@ -166,113 +164,50 @@
                             <div onclick="setSubTab('CRYPTO')" id="stab-CRYPTO" class="pf-tab">CRYPTO</div>
                             <div onclick="setSubTab('METALS')" id="stab-METALS" class="pf-tab">MÉTAUX</div>
                         </div>
-                        
                         <div class="p-6 flex flex-col h-full">
                             <div class="bg-white/5 p-4 rounded-xl mb-4 border border-white/5 space-y-3 shadow-inner">
-                                <div class="flex justify-between text-xs opacity-70 mb-1">
-                                    <span class="uppercase tracking-wider font-bold">Nouvel Ordre</span>
-                                    <span id="order-symbol" class="font-mono font-bold text-blue-400">--</span>
-                                </div>
+                                <div class="flex justify-between text-xs opacity-70 mb-1"><span class="uppercase tracking-wider font-bold">Nouvel Ordre</span><span id="order-symbol" class="font-mono font-bold text-blue-400">--</span></div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div class="relative">
-                                        <input id="pf-price" type="number" placeholder="0.00" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition">
-                                        <span class="absolute right-2 top-2 text-[10px] text-zinc-500">EUR</span>
-                                    </div>
-                                    <div class="relative">
-                                        <input id="pf-qty" type="number" placeholder="0" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition">
-                                        <span class="absolute right-2 top-2 text-[10px] text-zinc-500">QTÉ</span>
-                                    </div>
+                                    <div class="relative"><input id="pf-price" type="number" placeholder="0.00" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition"><span class="absolute right-2 top-2 text-[10px] text-zinc-500">EUR</span></div>
+                                    <div class="relative"><input id="pf-qty" type="number" placeholder="0" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition"><span class="absolute right-2 top-2 text-[10px] text-zinc-500">QTÉ</span></div>
                                 </div>
-                                <button onclick="addToPortfolio()" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-xs font-bold py-2.5 rounded-lg uppercase tracking-wider transition shadow-lg text-white">Exécuter l'Ordre</button>
+                                <button onclick="addToPortfolio()" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-xs font-bold py-2.5 rounded-lg uppercase tracking-wider transition shadow-lg text-white">Exécuter</button>
                             </div>
-
-                            <div class="flex justify-between items-center mb-2 px-2">
-                                <span class="text-[10px] font-bold uppercase text-zinc-500">Actifs Détenus</span>
-                                <span class="text-[10px] font-bold uppercase text-zinc-500">Valorisation</span>
-                            </div>
-                            <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 pb-2">
-                                </div>
+                            <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 pb-2"></div>
                         </div>
                     </div>
 
                     <div class="glass-panel p-6 flex flex-col h-[400px] overflow-hidden bg-gradient-to-br from-[#0f172a] to-black">
-                        <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4 tracking-widest flex items-center gap-2">
-                            <span class="text-lg">🏛️</span> Conseil des Experts
-                        </h3>
+                        <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4 tracking-widest flex items-center gap-2"><span class="text-lg">🏛️</span> Conseil des Experts</h3>
                         <div class="space-y-3 flex-1 overflow-y-auto pr-2">
-                            
-                            <div class="expert-card expert-louvet" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')">
-                                <div class="expert-avatar">ML</div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <p class="font-bold text-sm">Matthieu Louvet</p>
-                                        <span class="text-xs opacity-50">↗</span>
-                                    </div>
-                                    <span class="expert-tag">Analyse Fondamentale</span>
-                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Stratégies PEA, ETF World, Dividendes.</p>
-                                </div>
-                            </div>
-
-                            <div class="expert-card expert-baccino" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')">
-                                <div class="expert-avatar">MB</div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <p class="font-bold text-sm">Mathias Baccino</p>
-                                        <span class="text-xs opacity-50">↗</span>
-                                    </div>
-                                    <span class="expert-tag">Trading & Macro</span>
-                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Analyse technique, Cycles, Crypto.</p>
-                                </div>
-                            </div>
-
-                            <div class="expert-card expert-finary" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')">
-                                <div class="expert-avatar">FY</div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <p class="font-bold text-sm">Finary (Mounir)</p>
-                                        <span class="text-xs opacity-50">↗</span>
-                                    </div>
-                                    <span class="expert-tag">Patrimoine 360</span>
-                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Immobilier, Fiscalité, Private Equity.</p>
-                                </div>
-                            </div>
-
+                            <div class="expert-card expert-louvet" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><div class="expert-avatar">ML</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Matthieu Louvet</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Analyse Fondamentale</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Stratégies PEA, ETF World.</p></div></div>
+                            <div class="expert-card expert-baccino" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')"><div class="expert-avatar">MB</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Mathias Baccino</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Trading & Macro</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Analyse technique, Cycles.</p></div></div>
+                            <div class="expert-card expert-finary" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')"><div class="expert-avatar">FY</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Finary (Mounir)</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Patrimoine 360</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Fiscalité, Private Equity.</p></div></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-0 h-[400px] flex flex-col overflow-hidden bg-[#0a0a0f]">
-                        <div class="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Invest</h3>
-                            <div class="flex gap-1">
-                                <button onclick="setSavingsTab('safe')" id="sav-safe" class="savings-tab-btn savings-tab-active">SÉCURITÉ</button>
-                                <button onclick="setSavingsTab('yield')" id="sav-yield" class="savings-tab-btn">RENDEMENT</button>
-                                <button onclick="setSavingsTab('dynamic')" id="sav-dynamic" class="savings-tab-btn">DYNAMIQUE</button>
-                            </div>
-                        </div>
-                        <div class="savings-header">
-                            <div>Placement</div>
-                            <div class="text-right">Taux (Est.)</div>
-                            <div class="text-right">Fiscalité</div>
-                            <div class="text-right">Plafond</div>
-                        </div>
-                        <div class="flex-1 overflow-y-auto" id="savings-list">
-                            </div>
+                    <div class="glass-panel p-2 h-[350px] flex flex-col">
+                        <div class="p-3 border-b border-white/5"><h3 class="text-xs font-bold uppercase text-red-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> SIGNAL TECHNIQUE (DÉCISION)</h3></div>
+                        <div class="flex-1 tradingview-widget-container" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
+                    </div>
+
+                    <div class="glass-panel p-2 h-[350px] flex flex-col">
+                        <div class="p-3 border-b border-white/5"><h3 class="text-xs font-bold uppercase text-yellow-400 tracking-widest">⚡ PALMARÈS SEMAINE (VOLATILITÉ)</h3></div>
+                        <div class="flex-1 tradingview-widget-container" style="height:100%;width:100%"><div id="tv_hotlist" style="height:100%;width:100%"></div></div>
+                    </div>
+
+                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden bg-[#0a0a0f]">
+                        <div class="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between"><h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne</h3><div class="flex gap-1"><button onclick="setSavingsTab('safe')" id="sav-safe" class="savings-tab-btn savings-tab-active">SÉCURITÉ</button><button onclick="setSavingsTab('yield')" id="sav-yield" class="savings-tab-btn">RENDEMENT</button><button onclick="setSavingsTab('dynamic')" id="sav-dynamic" class="savings-tab-btn">DYNAMIQUE</button></div></div>
+                        <div class="savings-header"><div>Placement</div><div class="text-right">Taux (Est.)</div><div class="text-right">Fiscalité</div><div class="text-right">Plafond</div></div>
+                        <div class="flex-1 overflow-y-auto" id="savings-list"></div>
                     </div>
 
                     <div class="glass-panel p-6 flex flex-col h-[300px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black col-span-1 lg:col-span-2">
                         <div class="flex justify-between items-center mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center text-sm">🤖</div>
-                                <div>
-                                    <h3 class="text-sm font-bold uppercase text-white tracking-widest">Stratège IA (CIO)</h3>
-                                    <p class="text-[10px] text-zinc-500">Analyse de risque globale</p>
-                                </div>
-                            </div>
+                            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center text-sm">🤖</div><div><h3 class="text-sm font-bold uppercase text-white tracking-widest">Stratège IA (CIO)</h3><p class="text-[10px] text-zinc-500">Analyse de risque globale</p></div></div>
                             <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg font-bold transition shadow-lg shadow-purple-500/20">LANCER L'AUDIT COMPLET</button>
                         </div>
-                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono bg-black/20 p-4 rounded-xl border border-white/5">
-                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">📊</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
-                        </div>
+                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono bg-black/20 p-4 rounded-xl border border-white/5"><div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">📊</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div></div>
                     </div>
 
                 </div>
@@ -341,12 +276,13 @@
                 { name: "LEP (Populaire)", rate: "2.70%", tag: "NET", limit: "10 000€" },
                 { name: "Livret A / LDDS", rate: "1.70%", tag: "NET", limit: "22 950€" },
                 { name: "Trade Republic", rate: "3.25%", tag: "BRUT", limit: "50 000€" },
-                { name: "Fonds Euro (Top)", rate: "~3.50%", tag: "BRUT", limit: "Illimité" }
+                { name: "Fonds Euro (Top)", rate: "~3.50%", tag: "BRUT", limit: "Illimité" },
+                { name: "CAT (Terme) 12M", rate: "~3.00%", tag: "BRUT", limit: "Variable" }
             ],
             yield: [
-                { name: "CAT (Terme) 12M", rate: "~3.10%", tag: "BRUT", limit: "Variable" },
                 { name: "SCPI (Moyenne)", rate: "~4.50%", tag: "BRUT", limit: "Illimité" },
-                { name: "Obligations Corp", rate: "~4.00%", tag: "BRUT", limit: "ETF/Fonds" }
+                { name: "Obligations Corp", rate: "~4.00%", tag: "BRUT", limit: "ETF/Fonds" },
+                { name: "Crowdfunding Immo", rate: "~9.00%", tag: "BRUT", limit: "Projet" }
             ],
             dynamic: [
                 { name: "PEA (Actions EU)", rate: "Variable", tag: "NET 5a", limit: "150 000€" },
@@ -410,6 +346,7 @@
 
         function refreshMarketWidgets() {
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
+            createWidget('tv_gauge', 'gauge', currentChartSymbol); // UPDATE GAUGE
             document.getElementById('activeChartLabel').innerText = `Analyse Active : ${currentChartSymbol}`;
         }
 
@@ -424,6 +361,21 @@
                 new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "toolbar_bg": "#f1f3f6", "enable_publishing": false, "container_id": containerId }); 
                 return; 
             }
+            if(type === 'gauge') { 
+                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js"; 
+                config = { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": symbol, "showIntervalTabs": false, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }; 
+            }
+            if(type === 'hotlist') {
+                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js";
+                config = { "colorTheme": "dark", "dateRange": "12M", "exchange": "US", "showChart": false, "locale": "fr", "largeChartUrl": "", "isTransparent": true, "showSymbolLogo": true, "showFloatingTooltip": false, "width": "100%", "height": "100%" };
+            }
+            
+            const script = document.createElement('script'); 
+            script.type = 'text/javascript'; 
+            script.src = scriptSrc; 
+            script.async = true; 
+            script.innerHTML = JSON.stringify(config);
+            container.appendChild(script);
         }
 
         // --- AUTOCOMPLETE ---
@@ -485,7 +437,7 @@
             const container = document.getElementById('auditContent'); container.innerHTML = '<p class="animate-pulse">Analyse Analyste Senior...</p>';
             const prompt = `Agis comme un Analyste Senior Wall Street. Analyse ce portefeuille global : ${summary}. Donne une critique constructive (risques, secteurs, volatilité). Format HTML simple (pas de markdown), style télégraphique.`;
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V85" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V86" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
                 const data = await response.json(); container.innerHTML = data.choices[0].message.content;
             } catch(e) { container.innerHTML = "Erreur analyse."; }
         }
@@ -496,7 +448,11 @@
             if(viewName === 'planning') { plan.classList.remove('hidden'); market.classList.add('hidden'); btnPlan.classList.add('nav-active'); btnMarket.classList.remove('nav-active'); } 
             else { plan.classList.add('hidden'); market.classList.remove('hidden'); btnPlan.classList.remove('nav-active'); btnMarket.classList.add('nav-active'); initMarket(); }
         }
-        function initMarket() { setMarketTab('ACTIONS'); renderSavings(); }
+        function initMarket() { 
+            setMarketTab('ACTIONS'); 
+            renderSavings(); 
+            createWidget('tv_hotlist', 'hotlist', '');
+        }
 
         // --- AGENDA V70 ---
         async function traiterBatchIA() { const raw = document.getElementById('userInput').value; if (!raw.trim()) return; if (!apiKey) { alert("Clé API manquante"); openProfile(); return; } const btn = document.getElementById('aiBtn'); const originalText = btn.innerHTML; btn.innerHTML = "<span>🧠</span> Analyse..."; btn.classList.add('ai-loading'); btn.disabled = true; try { const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": `Tu es l'IA de LifeOS. Date: ${new Date().toLocaleDateString()}. JSON strict: [{"shortText":"Titre","fullText":"Origine","time":"HH:MM","duration":60,"dayOffset":0}].` }, { "role": "user", "content": raw }] }) }); const data = await response.json(); const tasks = JSON.parse(data.choices[0].message.content.replace(/```json|```/g, '').trim()); tasks.forEach(t => { let d = new Date(); d.setDate(now.getDate() + (t.dayOffset || 0)); const day = d.getDate(); if (!db[day]) db[day] = []; db[day].push({ shortText: t.shortText, fullText: t.fullText, time: t.time, duration: t.duration, done: false }); }); save(); renderHUD(); document.getElementById('userInput').value = ''; } catch (e) { alert(e); } finally { btn.classList.remove('ai-loading'); btn.disabled = false; btn.innerHTML = originalText; } }
