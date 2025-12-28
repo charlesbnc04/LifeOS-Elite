@@ -275,12 +275,26 @@
         });
         document.addEventListener("click", function (e) { if(e.target !== inp) list.classList.add('hidden'); });
 
-        function addToWatchlist(symbol, name) {
-            if(!watchlist.some(item => item.s === symbol)) {
-                watchlist.push({s: symbol, l: name});
-                localStorage.setItem('lifeos_watchlist', JSON.stringify(watchlist));
-                renderWatchlist();
-                loadActiveAsset(symbol);
+       function addToWatchlist(symbol, name) {
+    const pru = prompt(`Prix d'achat pour ${name} ?`, "0");
+    const objectif = prompt(`Objectif de vente pour ${name} ?`, "0");
+
+    if (pru !== null && objectif !== null) {
+        // Ajout sur l'interface du site
+        if(!watchlist.some(item => item.s === symbol)) {
+            watchlist.push({s: symbol, l: name});
+            localStorage.setItem('lifeos_watchlist', JSON.stringify(watchlist));
+            renderWatchlist();
+        }
+
+        // ENVOI AU GOOGLE SHEET (Remplace l'URL ci-dessous par la tienne)
+        const URL_GOOGLE = "COLLE_ICI_TON_URL_DE_L_ETAPE_3";
+        
+        fetch(`${URL_GOOGLE}?ticker=${symbol}&pru=${pru}&obj=${objectif}`, { mode: 'no-cors' })
+        .then(() => alert("Synchronisé avec Google Sheet !"))
+        .catch(e => console.log(e));
+    }
+}
             }
         }
 
