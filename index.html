@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V84 - Patrimoine 360</title>
+    <title>LifeOS V84 - Wolf Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-        /* --- V70 CORE (INTACT) --- */
+        /* --- V70 CORE DESIGN (INTACT) --- */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); color: #fff; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         .glass-base { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 2rem; }
         .flow-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1.5rem; cursor: pointer; }
@@ -70,7 +70,6 @@
         .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.2); }
         .isin-badge { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; font-weight: bold; }
 
-        /* TABLEAU EPARGNE V84 */
         .savings-tab-btn { flex: 1; padding: 10px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: #71717a; border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; }
         .savings-tab-active { color: #4ade80; border-bottom-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
         .savings-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 10px; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; color: #71717a; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -146,7 +145,6 @@
                             <h3 class="text-sm font-bold uppercase tracking-widest text-white">Ordre Immédiat</h3>
                             <div class="flex gap-2 text-[10px] font-bold"><span id="stab-PEA" class="text-blue-400">PEA</span>|<span id="stab-CTO" class="opacity-50">CTO</span>|<span id="stab-CRYPTO" class="opacity-50">CRYPTO</span></div>
                         </div>
-                        
                         <div class="bg-black/40 p-4 rounded-xl mb-4 border border-white/5 space-y-3">
                             <div class="flex justify-between text-xs opacity-70 mb-1"><span>Symbole Actif :</span><span id="order-symbol" class="font-mono font-bold text-white">--</span></div>
                             <div class="grid grid-cols-2 gap-2">
@@ -155,23 +153,33 @@
                             </div>
                             <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold py-3 rounded-lg uppercase tracking-wider transition shadow-lg">Confirmer l'Ordre</button>
                         </div>
-
                         <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 border-t border-white/5 pt-2"></div>
                     </div>
 
-                    <div class="glass-panel p-6 flex flex-col h-[350px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">Stratège Patrimonial (IA)</h3>
-                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
+                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
+                        <div class="p-3 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                            <h3 class="text-xs font-bold uppercase text-red-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> SIGNAL & OPPORTUNITÉS</h3>
                         </div>
-                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono">
-                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
+                        <div class="flex-1 grid grid-cols-2">
+                            <div class="border-r border-white/5 relative">
+                                <div class="absolute top-2 left-2 text-[9px] font-bold uppercase opacity-50">Signal Actif</div>
+                                <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute top-2 left-2 text-[9px] font-bold uppercase opacity-50 z-10">Top Movers (Semaine)</div>
+                                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                                    <div class="tradingview-widget-container__widget"></div>
+                                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
+                                    { "colorTheme": "dark", "dateRange": "12M", "exchange": "US", "showChart": false, "locale": "fr", "largeChartUrl": "", "isTransparent": true, "showSymbolLogo": true, "showFloatingTooltip": false, "width": "100%", "height": "100%" }
+                                    </script>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
                         <div class="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Invest (France)</h3>
+                            <h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Invest</h3>
                             <div class="flex gap-2">
                                 <button onclick="setSavingsTab('safe')" id="sav-safe" class="savings-tab-btn savings-tab-active">SÉCURITÉ</button>
                                 <button onclick="setSavingsTab('yield')" id="sav-yield" class="savings-tab-btn">RENDEMENT</button>
@@ -184,30 +192,27 @@
                             <div class="text-right">Type</div>
                             <div class="text-right">Plafond</div>
                         </div>
-                        <div class="flex-1 overflow-y-auto" id="savings-list">
-                            </div>
+                        <div class="flex-1 overflow-y-auto" id="savings-list"></div>
                     </div>
 
-                    <div class="glass-panel p-2 h-[350px] overflow-hidden">
+                    <div class="glass-panel p-6 flex flex-col h-[300px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">Stratège Patrimonial (IA)</h3>
+                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
+                        </div>
+                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono">
+                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-2 h-[300px] overflow-hidden">
                         <h3 class="text-xs font-bold uppercase text-red-400 m-3 mb-1 tracking-widest">Flux Économique Mondial</h3>
                         <div class="tradingview-widget-container" style="height:100%;width:100%">
                             <div class="tradingview-widget-container__widget"></div>
                             <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-                            {
-                            "feedMode": "all_symbols",
-                            "isTransparent": true,
-                            "displayMode": "regular",
-                            "width": "100%",
-                            "height": "100%",
-                            "colorTheme": "dark",
-                            "locale": "fr"
-                            }
+                            { "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular", "width": "100%", "height": "100%", "colorTheme": "dark", "locale": "fr" }
                             </script>
                         </div>
-                    </div>
-
-                    <div class="glass-panel p-2 h-[250px] col-span-1 lg:col-span-2">
-                         <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_profile" style="height:100%;width:100%"></div></div>
                     </div>
 
                 </div>
@@ -270,7 +275,7 @@
             { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" }
         ];
 
-        // --- SAVINGS DATA (V84 - COMPLET AVEC PEA/CTO) ---
+        // --- SAVINGS DATA (DEC 2025) ---
         const SAVINGS_DB = {
             safe: [
                 { name: "LEP (Populaire)", rate: "2.70%", tag: "NET", limit: "10 000€" },
@@ -345,7 +350,7 @@
 
         function refreshMarketWidgets() {
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
-            createWidget('tv_profile', 'profile', currentChartSymbol);
+            createWidget('tv_gauge', 'gauge', currentChartSymbol);
             document.getElementById('activeChartLabel').innerText = `Analyse Active : ${currentChartSymbol}`;
         }
 
@@ -360,9 +365,9 @@
                 new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "toolbar_bg": "#f1f3f6", "enable_publishing": false, "container_id": containerId }); 
                 return; 
             }
-            if(type === 'profile') { 
-                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js"; 
-                config = { "width": "100%", "height": "100%", "colorTheme": "dark", "isTransparent": true, "symbol": symbol, "locale": "fr" }; 
+            if(type === 'gauge') { 
+                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js"; 
+                config = { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": symbol, "showIntervalTabs": false, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }; 
             }
             
             const script = document.createElement('script'); 
