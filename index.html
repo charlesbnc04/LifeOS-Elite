@@ -288,7 +288,7 @@
         }
 
         // ENVOI AU GOOGLE SHEET (Remplace l'URL ci-dessous par la tienne)
-        const URL_GOOGLE = "COLLE_ICI_TON_URL_DE_L_ETAPE_3";
+        const URL_GOOGLE = https://script.google.com/macros/s/AKfycbyDDxukS37I8IG-2D6NrlWtRPznNn-4U0jkyw3zFM_j7w4gcddzzt7lDpQqgW5oWxw-/exec;
         
         fetch(`${URL_GOOGLE}?ticker=${symbol}&pru=${pru}&obj=${objectif}`, { mode: 'no-cors' })
         .then(() => alert("Synchronisé avec Google Sheet !"))
