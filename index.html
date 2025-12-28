@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V84 - Wolf Edition</title>
+    <title>LifeOS V85 - Platinum Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -49,36 +49,53 @@
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- STYLES BOURSE V84 --- */
-        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; }
+        /* --- STYLES BOURSE V85 (PLATINUM) --- */
+        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .glass-panel { background: rgba(15, 15, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.6rem 1rem; border-radius: 0.5rem; transition: 0.2s; color: #71717a; border: 1px solid transparent; }
-        .sub-nav-active { background: #3b82f6; color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .sub-nav-btn { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.6rem 1rem; border-radius: 0.5rem; transition: 0.3s; color: #71717a; border: 1px solid transparent; letter-spacing: 0.05em; }
+        .sub-nav-active { background: #3b82f6; color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); border-color: rgba(59, 130, 246, 0.5); }
         .sub-nav-btn:hover:not(.sub-nav-active) { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.1); }
 
-        .news-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
-        .news-item:hover { background: rgba(255,255,255,0.05); }
-        .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
-        
         .pro-search-container { position: relative; width: 100%; margin-bottom: 1rem; }
-        .pro-search-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 1rem; transition: 0.3s; }
-        .pro-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); outline: none; }
+        .pro-search-input { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 16px 20px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; transition: 0.3s; }
+        .pro-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); outline: none; background: rgba(0,0,0,0.6); }
         
-        .autocomplete-items { position: absolute; border: 1px solid #333; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #09090b; border-radius: 0 0 12px 12px; max-height: 300px; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
+        .autocomplete-items { position: absolute; border: 1px solid rgba(255,255,255,0.1); border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: #09090b; border-radius: 0 0 1rem 1rem; max-height: 300px; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
         .autocomplete-item { padding: 14px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-        .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.2); }
+        .autocomplete-item:hover { background-color: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; }
         .isin-badge { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.6rem; font-weight: bold; }
 
-        .savings-tab-btn { flex: 1; padding: 10px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: #71717a; border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; }
+        /* PORTFOLIO TABS (NEW) */
+        .pf-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.7rem; font-weight: 800; color: #52525b; border-bottom: 2px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
+        .pf-tab:hover { color: white; background: rgba(255,255,255,0.02); }
+        .pf-tab-active { color: white; border-bottom: 2px solid #3b82f6; background: linear-gradient(to top, rgba(59,130,246,0.1), transparent); }
+
+        /* EXPERT CARD (NEW) */
+        .expert-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .expert-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+        .expert-avatar { width: 48px; height: 48px; border-radius: 50%; background-color: #27272a; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; border: 2px solid rgba(255,255,255,0.1); }
+        .expert-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; margin-top: 4px; display: inline-block; }
+        
+        .expert-louvet .expert-avatar { border-color: #3b82f6; color: #3b82f6; }
+        .expert-louvet .expert-tag { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        
+        .expert-baccino .expert-avatar { border-color: #f97316; color: #f97316; }
+        .expert-baccino .expert-tag { background: rgba(249,115,22,0.2); color: #fdba74; }
+        
+        .expert-finary .expert-avatar { border-color: #22c55e; color: #22c55e; }
+        .expert-finary .expert-tag { background: rgba(34,197,94,0.2); color: #86efac; }
+
+        /* SAVINGS TABLE */
+        .savings-tab-btn { flex: 1; padding: 12px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: #71717a; border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; text-align: center; }
         .savings-tab-active { color: #4ade80; border-bottom-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
-        .savings-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 10px; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; color: #71717a; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .savings-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; transition: 0.2s; }
+        .savings-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; transition: 0.2s; }
         .savings-row:hover { background: rgba(255,255,255,0.05); }
         .savings-rate { font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #4ade80; font-size: 0.9rem; }
-        .tag-net { color: #4ade80; background: rgba(74, 222, 128, 0.1); padding: 2px 4px; border-radius: 4px; font-size: 0.6rem; border: 1px solid rgba(74, 222, 128, 0.2); font-weight: bold; }
-        .tag-brut { color: #facc15; background: rgba(250, 204, 21, 0.1); padding: 2px 4px; border-radius: 4px; font-size: 0.6rem; border: 1px solid rgba(250, 204, 21, 0.2); font-weight: bold; }
-        .tag-blue { color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 2px 4px; border-radius: 4px; font-size: 0.6rem; border: 1px solid rgba(59, 130, 246, 0.2); font-weight: bold; }
+        .risk-badge { font-size: 0.6rem; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em; }
+        .risk-low { background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.2); }
+        .risk-med { background: rgba(250, 204, 21, 0.1); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.2); }
+        .risk-high { background: rgba(248, 113, 113, 0.1); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.2); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -123,7 +140,7 @@
             <div id="view-market" class="hidden flex flex-col gap-6">
                 
                 <div class="pro-search-container">
-                    <input id="pf-symbol" type="text" class="pro-search-input" placeholder="COMMANDER > Nom, ISIN, Ticker (ex: Amundi World, FR0014..., BTC)..." autocomplete="off">
+                    <input id="pf-symbol" type="text" class="pro-search-input" placeholder="COMMANDER > Recherche Globale (Actions, ETF, Crypto, Forex)..." autocomplete="off">
                     <div id="autocomplete-list" class="autocomplete-items hidden"></div>
                 </div>
 
@@ -133,54 +150,100 @@
                     <button onclick="setMarketTab('METALS')" id="subnav-METALS" class="sub-nav-btn">MÉTAUX</button>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
-                    <div class="glass-panel p-1 h-[450px] border border-white/10 relative col-span-1 lg:col-span-2">
-                        <div class="absolute top-2 left-4 z-10 bg-black/50 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-blue-400" id="activeChartLabel">Analyse Active : CAC 40</div>
+                    <div class="glass-panel p-1 h-[480px] border border-white/10 relative col-span-1 lg:col-span-2 shadow-2xl">
+                        <div class="absolute top-3 left-4 z-10 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-blue-400 border border-white/10 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> <span id="activeChartLabel">Analyse Active : CAC 40</span>
+                        </div>
                         <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_main_chart" style="height:100%;width:100%"></div></div>
                     </div>
 
-                    <div class="glass-panel p-4 flex flex-col h-[350px] relative z-20 bg-blue-900/5">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">Ordre Immédiat</h3>
-                            <div class="flex gap-2 text-[10px] font-bold"><span id="stab-PEA" class="text-blue-400">PEA</span>|<span id="stab-CTO" class="opacity-50">CTO</span>|<span id="stab-CRYPTO" class="opacity-50">CRYPTO</span></div>
+                    <div class="glass-panel p-0 flex flex-col h-[400px] relative z-20 bg-[#0a0a0f]">
+                        <div class="flex border-b border-white/10">
+                            <div onclick="setSubTab('PEA')" id="stab-PEA" class="pf-tab pf-tab-active">PEA</div>
+                            <div onclick="setSubTab('CTO')" id="stab-CTO" class="pf-tab">CTO</div>
+                            <div onclick="setSubTab('CRYPTO')" id="stab-CRYPTO" class="pf-tab">CRYPTO</div>
+                            <div onclick="setSubTab('METALS')" id="stab-METALS" class="pf-tab">MÉTAUX</div>
                         </div>
-                        <div class="bg-black/40 p-4 rounded-xl mb-4 border border-white/5 space-y-3">
-                            <div class="flex justify-between text-xs opacity-70 mb-1"><span>Symbole Actif :</span><span id="order-symbol" class="font-mono font-bold text-white">--</span></div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input id="pf-price" type="number" placeholder="Prix Unitaire (€)" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
-                                <input id="pf-qty" type="number" placeholder="Quantité" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
+                        
+                        <div class="p-6 flex flex-col h-full">
+                            <div class="bg-white/5 p-4 rounded-xl mb-4 border border-white/5 space-y-3 shadow-inner">
+                                <div class="flex justify-between text-xs opacity-70 mb-1">
+                                    <span class="uppercase tracking-wider font-bold">Nouvel Ordre</span>
+                                    <span id="order-symbol" class="font-mono font-bold text-blue-400">--</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="relative">
+                                        <input id="pf-price" type="number" placeholder="0.00" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition">
+                                        <span class="absolute right-2 top-2 text-[10px] text-zinc-500">EUR</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input id="pf-qty" type="number" placeholder="0" class="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-blue-500 transition">
+                                        <span class="absolute right-2 top-2 text-[10px] text-zinc-500">QTÉ</span>
+                                    </div>
+                                </div>
+                                <button onclick="addToPortfolio()" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-xs font-bold py-2.5 rounded-lg uppercase tracking-wider transition shadow-lg text-white">Exécuter l'Ordre</button>
                             </div>
-                            <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold py-3 rounded-lg uppercase tracking-wider transition shadow-lg">Confirmer l'Ordre</button>
+
+                            <div class="flex justify-between items-center mb-2 px-2">
+                                <span class="text-[10px] font-bold uppercase text-zinc-500">Actifs Détenus</span>
+                                <span class="text-[10px] font-bold uppercase text-zinc-500">Valorisation</span>
+                            </div>
+                            <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 pb-2">
+                                </div>
                         </div>
-                        <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 border-t border-white/5 pt-2"></div>
                     </div>
 
-                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
-                        <div class="p-3 border-b border-white/5 bg-white/5 flex justify-between items-center">
-                            <h3 class="text-xs font-bold uppercase text-red-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> SIGNAL & OPPORTUNITÉS</h3>
-                        </div>
-                        <div class="flex-1 grid grid-cols-2">
-                            <div class="border-r border-white/5 relative">
-                                <div class="absolute top-2 left-2 text-[9px] font-bold uppercase opacity-50">Signal Actif</div>
-                                <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute top-2 left-2 text-[9px] font-bold uppercase opacity-50 z-10">Top Movers (Semaine)</div>
-                                <div class="tradingview-widget-container" style="height:100%;width:100%">
-                                    <div class="tradingview-widget-container__widget"></div>
-                                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
-                                    { "colorTheme": "dark", "dateRange": "12M", "exchange": "US", "showChart": false, "locale": "fr", "largeChartUrl": "", "isTransparent": true, "showSymbolLogo": true, "showFloatingTooltip": false, "width": "100%", "height": "100%" }
-                                    </script>
+                    <div class="glass-panel p-6 flex flex-col h-[400px] overflow-hidden bg-gradient-to-br from-[#0f172a] to-black">
+                        <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4 tracking-widest flex items-center gap-2">
+                            <span class="text-lg">🏛️</span> Conseil des Experts
+                        </h3>
+                        <div class="space-y-3 flex-1 overflow-y-auto pr-2">
+                            
+                            <div class="expert-card expert-louvet" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')">
+                                <div class="expert-avatar">ML</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-bold text-sm">Matthieu Louvet</p>
+                                        <span class="text-xs opacity-50">↗</span>
+                                    </div>
+                                    <span class="expert-tag">Analyse Fondamentale</span>
+                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Stratégies PEA, ETF World, Dividendes.</p>
                                 </div>
                             </div>
+
+                            <div class="expert-card expert-baccino" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')">
+                                <div class="expert-avatar">MB</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-bold text-sm">Mathias Baccino</p>
+                                        <span class="text-xs opacity-50">↗</span>
+                                    </div>
+                                    <span class="expert-tag">Trading & Macro</span>
+                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Analyse technique, Cycles, Crypto.</p>
+                                </div>
+                            </div>
+
+                            <div class="expert-card expert-finary" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')">
+                                <div class="expert-avatar">FY</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-bold text-sm">Finary (Mounir)</p>
+                                        <span class="text-xs opacity-50">↗</span>
+                                    </div>
+                                    <span class="expert-tag">Patrimoine 360</span>
+                                    <p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Immobilier, Fiscalité, Private Equity.</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
+                    <div class="glass-panel p-0 h-[400px] flex flex-col overflow-hidden bg-[#0a0a0f]">
                         <div class="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
                             <h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Invest</h3>
-                            <div class="flex gap-2">
+                            <div class="flex gap-1">
                                 <button onclick="setSavingsTab('safe')" id="sav-safe" class="savings-tab-btn savings-tab-active">SÉCURITÉ</button>
                                 <button onclick="setSavingsTab('yield')" id="sav-yield" class="savings-tab-btn">RENDEMENT</button>
                                 <button onclick="setSavingsTab('dynamic')" id="sav-dynamic" class="savings-tab-btn">DYNAMIQUE</button>
@@ -189,29 +252,26 @@
                         <div class="savings-header">
                             <div>Placement</div>
                             <div class="text-right">Taux (Est.)</div>
-                            <div class="text-right">Type</div>
+                            <div class="text-right">Fiscalité</div>
                             <div class="text-right">Plafond</div>
                         </div>
-                        <div class="flex-1 overflow-y-auto" id="savings-list"></div>
+                        <div class="flex-1 overflow-y-auto" id="savings-list">
+                            </div>
                     </div>
 
-                    <div class="glass-panel p-6 flex flex-col h-[300px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black">
+                    <div class="glass-panel p-6 flex flex-col h-[300px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black col-span-1 lg:col-span-2">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">Stratège Patrimonial (IA)</h3>
-                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center text-sm">🤖</div>
+                                <div>
+                                    <h3 class="text-sm font-bold uppercase text-white tracking-widest">Stratège IA (CIO)</h3>
+                                    <p class="text-[10px] text-zinc-500">Analyse de risque globale</p>
+                                </div>
+                            </div>
+                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg font-bold transition shadow-lg shadow-purple-500/20">LANCER L'AUDIT COMPLET</button>
                         </div>
-                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono">
-                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-2 h-[300px] overflow-hidden">
-                        <h3 class="text-xs font-bold uppercase text-red-400 m-3 mb-1 tracking-widest">Flux Économique Mondial</h3>
-                        <div class="tradingview-widget-container" style="height:100%;width:100%">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-                            { "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular", "width": "100%", "height": "100%", "colorTheme": "dark", "locale": "fr" }
-                            </script>
+                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono bg-black/20 p-4 rounded-xl border border-white/5">
+                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">📊</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
                         </div>
                     </div>
 
@@ -275,7 +335,7 @@
             { l: "Or (Gold)", s: "XAUUSD", i: "GOLD" }
         ];
 
-        // --- SAVINGS DATA (DEC 2025) ---
+        // --- SAVINGS DATA (DEC 2025 - CORRIGÉ) ---
         const SAVINGS_DB = {
             safe: [
                 { name: "LEP (Populaire)", rate: "2.70%", tag: "NET", limit: "10 000€" },
@@ -289,7 +349,7 @@
                 { name: "Obligations Corp", rate: "~4.00%", tag: "BRUT", limit: "ETF/Fonds" }
             ],
             dynamic: [
-                { name: "PEA (Actions EU)", rate: "Variable", tag: "NET 5ans", limit: "150 000€" },
+                { name: "PEA (Actions EU)", rate: "Variable", tag: "NET 5a", limit: "150 000€" },
                 { name: "CTO (Actions Monde)", rate: "Variable", tag: "BRUT 30%", limit: "Illimité" },
                 { name: "Crypto Staking", rate: "~3-5%", tag: "BRUT", limit: "Variable" },
                 { name: "Private Equity", rate: "~10%+", tag: "BRUT", limit: "Long Terme" }
@@ -298,7 +358,7 @@
 
         let currentSavingsTab = 'safe';
 
-        // --- SAVINGS LOGIC ---
+        // --- SAVINGS LOGIC (FIXED V85) ---
         function setSavingsTab(tab) {
             currentSavingsTab = tab;
             ['safe','yield','dynamic'].forEach(t => {
@@ -324,7 +384,7 @@
             }
         }
 
-        // --- MARKET LOGIC (FIXED) ---
+        // --- MARKET LOGIC (V85) ---
         function setMarketTab(tab) {
             activeMarketTab = tab;
             ['ACTIONS','CRYPTO','METALS'].forEach(t => document.getElementById('subnav-'+t).classList.remove('sub-nav-active'));
@@ -341,16 +401,15 @@
             activeSubTab = sub;
             ['PEA','CTO','CRYPTO','METALS'].forEach(t => {
                 const el = document.getElementById('stab-'+t);
-                if(el) { el.style.fontWeight = 'normal'; el.style.color = '#71717a'; }
+                if(el) el.className = 'pf-tab';
             });
             const activeEl = document.getElementById('stab-'+sub);
-            if(activeEl) { activeEl.style.fontWeight = 'bold'; activeEl.style.color = '#3b82f6'; }
+            if(activeEl) activeEl.className = 'pf-tab pf-tab-active';
             renderPortfolio();
         }
 
         function refreshMarketWidgets() {
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
-            createWidget('tv_gauge', 'gauge', currentChartSymbol);
             document.getElementById('activeChartLabel').innerText = `Analyse Active : ${currentChartSymbol}`;
         }
 
@@ -365,17 +424,6 @@
                 new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "toolbar_bg": "#f1f3f6", "enable_publishing": false, "container_id": containerId }); 
                 return; 
             }
-            if(type === 'gauge') { 
-                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js"; 
-                config = { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": symbol, "showIntervalTabs": false, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }; 
-            }
-            
-            const script = document.createElement('script'); 
-            script.type = 'text/javascript'; 
-            script.src = scriptSrc; 
-            script.async = true; 
-            script.innerHTML = JSON.stringify(config);
-            container.appendChild(script);
         }
 
         // --- AUTOCOMPLETE ---
@@ -420,11 +468,11 @@
         function renderPortfolio() {
             const list = document.getElementById('portfolioList'); list.innerHTML = '';
             const assets = portfolio[activeSubTab] || [];
-            if(assets.length === 0) { list.innerHTML = `<p class="text-center text-[10px] opacity-30 mt-4">Vide</p>`; return; }
+            if(assets.length === 0) { list.innerHTML = `<p class="text-center text-[10px] opacity-30 mt-10">Portefeuille vide.</p>`; return; }
             assets.forEach((a, i) => {
                 const total = (a.price * a.qty).toFixed(0);
-                const el = document.createElement('div'); el.className = 'flex justify-between items-center p-2 rounded hover:bg-white/5 border-b border-white/5 group cursor-pointer';
-                el.innerHTML = `<div class="flex items-center gap-2"><span class="text-[10px] font-bold bg-white/10 px-1 rounded text-blue-300 w-12 text-center truncate">${a.symbol}</span><div><p class="text-[10px] opacity-50">${a.qty} x ${a.price}</p></div></div><div class="flex items-center gap-2"><span class="text-xs font-mono font-bold">${total}€</span><button onclick="event.stopPropagation(); delAsset(${i})" class="text-red-500 text-[10px] opacity-0 group-hover:opacity-100">✕</button></div>`;
+                const el = document.createElement('div'); el.className = 'flex justify-between items-center p-3 rounded-lg hover:bg-white/5 border-b border-white/5 group cursor-pointer transition';
+                el.innerHTML = `<div class="flex items-center gap-3"><span class="text-[10px] font-bold bg-white/10 px-2 py-1 rounded text-blue-300 w-14 text-center truncate">${a.symbol}</span><div><p class="text-[10px] opacity-50">${a.qty} x ${a.price}€</p></div></div><div class="flex items-center gap-3"><span class="text-xs font-mono font-bold">${total}€</span><button onclick="event.stopPropagation(); delAsset(${i})" class="text-red-500 text-[10px] opacity-0 group-hover:opacity-100 transition">✕</button></div>`;
                 el.onclick = () => { loadActiveAsset(a.symbol, a.symbol); };
                 list.appendChild(el);
             });
@@ -437,7 +485,7 @@
             const container = document.getElementById('auditContent'); container.innerHTML = '<p class="animate-pulse">Analyse Analyste Senior...</p>';
             const prompt = `Agis comme un Analyste Senior Wall Street. Analyse ce portefeuille global : ${summary}. Donne une critique constructive (risques, secteurs, volatilité). Format HTML simple (pas de markdown), style télégraphique.`;
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V84" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V85" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
                 const data = await response.json(); container.innerHTML = data.choices[0].message.content;
             } catch(e) { container.innerHTML = "Erreur analyse."; }
         }
