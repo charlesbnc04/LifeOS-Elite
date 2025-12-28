@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS V89 - Ultimate Masterpiece</title>
+    <title>LifeOS V90 - Restauration & Fusion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
@@ -49,7 +49,7 @@
         .nav-active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
         .nav-btn { color: #9ca3af; } .nav-btn:hover { color: white; }
 
-        /* --- STYLES BOURSE V89 (MASTERPIECE) --- */
+        /* --- STYLES BOURSE V90 (RESTAURATION) --- */
         .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; }
         
@@ -57,10 +57,6 @@
         .sub-nav-active { background: #3b82f6; color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
         .sub-nav-btn:hover:not(.sub-nav-active) { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.1); }
 
-        .news-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
-        .news-item:hover { background: rgba(255,255,255,0.05); }
-        .news-tag { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,0.1); text-transform: uppercase; }
-        
         .pro-search-container { position: relative; width: 100%; margin-bottom: 1rem; }
         .pro-search-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; color: white; font-family: 'JetBrains Mono', monospace; font-size: 1rem; transition: 0.3s; }
         .pro-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); outline: none; }
@@ -73,7 +69,17 @@
         .pf-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.7rem; font-weight: 800; color: #52525b; border-bottom: 2px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
         .pf-tab-active { color: white; border-bottom: 2px solid #3b82f6; background: linear-gradient(to top, rgba(59,130,246,0.1), transparent); }
 
-        /* SAVINGS TABLE */
+        /* YOUTUBEURS */
+        .expert-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .expert-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+        .expert-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: #27272a; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; border: 2px solid rgba(255,255,255,0.1); }
+        .expert-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; display: inline-block; }
+        
+        .expert-louvet .expert-avatar { border-color: #3b82f6; color: #3b82f6; } .expert-louvet .expert-tag { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .expert-baccino .expert-avatar { border-color: #f97316; color: #f97316; } .expert-baccino .expert-tag { background: rgba(249,115,22,0.2); color: #fdba74; }
+        .expert-finary .expert-avatar { border-color: #22c55e; color: #22c55e; } .expert-finary .expert-tag { background: rgba(34,197,94,0.2); color: #86efac; }
+
+        /* EPARGNE RESTAURÉE */
         .savings-tab-btn { flex: 1; padding: 10px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: #71717a; border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; text-align: center; }
         .savings-tab-active { color: #4ade80; border-bottom-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
         .savings-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 10px; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; color: #71717a; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -83,7 +89,7 @@
         .tag-net { color: #4ade80; background: rgba(74, 222, 128, 0.1); padding: 2px 4px; border-radius: 4px; font-size: 0.6rem; border: 1px solid rgba(74, 222, 128, 0.2); font-weight: bold; }
         .tag-brut { color: #facc15; background: rgba(250, 204, 21, 0.1); padding: 2px 4px; border-radius: 4px; font-size: 0.6rem; border: 1px solid rgba(250, 204, 21, 0.2); font-weight: bold; }
 
-        /* WEALTH BAR */
+        /* WEALTH BAR (NEW ADDITION) */
         .wealth-bar { background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1)); border: 1px solid rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 1rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     </style>
 </head>
@@ -158,7 +164,7 @@
                     </div>
 
                     <div class="glass-panel p-0 flex flex-col h-[400px] relative z-20 bg-blue-900/5">
-                        <div class="flex border-b border-white/10">
+                         <div class="flex border-b border-white/10">
                             <div onclick="setSubTab('PEA')" id="stab-PEA" class="pf-tab pf-tab-active">PEA</div>
                             <div onclick="setSubTab('CTO')" id="stab-CTO" class="pf-tab">CTO</div>
                             <div onclick="setSubTab('CRYPTO')" id="stab-CRYPTO" class="pf-tab">CRYPTO</div>
@@ -166,28 +172,26 @@
                         </div>
                         <div class="p-6 flex flex-col h-full">
                             <div class="bg-black/40 p-4 rounded-xl mb-4 border border-white/5 space-y-3">
-                                <div class="flex justify-between text-xs opacity-70 mb-1"><span>Symbole Actif :</span><span id="order-symbol" class="font-mono font-bold text-white">--</span></div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input id="pf-price" type="number" placeholder="Prix Unitaire (€)" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
-                                    <input id="pf-qty" type="number" placeholder="Quantité" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono">
-                                </div>
-                                <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold py-2.5 rounded-lg uppercase tracking-wider transition shadow-lg">Confirmer l'Ordre</button>
+                                <div class="flex justify-between text-xs opacity-70 mb-1"><span>Symbole :</span><span id="order-symbol" class="font-mono font-bold text-white">--</span></div>
+                                <div class="grid grid-cols-2 gap-2"><input id="pf-price" type="number" placeholder="Prix" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono"><input id="pf-qty" type="number" placeholder="Qté" class="bg-transparent border-b border-white/10 text-xs py-2 outline-none text-white font-mono"></div>
+                                <button onclick="addToPortfolio()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold py-2.5 rounded-lg uppercase transition">Ajouter</button>
                             </div>
                             <div id="portfolioList" class="flex-1 overflow-y-auto space-y-1 pr-1 border-t border-white/5 pt-2"></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 flex flex-col h-[400px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">Stratège Patrimonial (IA)</h3>
-                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
-                        </div>
-                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono">
-                            <div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente de données...</p></div>
+                    <div class="glass-panel p-6 flex flex-col h-[400px] overflow-hidden bg-gradient-to-br from-[#0f172a] to-black">
+                        <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4 tracking-widest flex items-center gap-2">
+                            <span class="text-lg">🏛️</span> Conseil des Experts
+                        </h3>
+                        <div class="space-y-3 flex-1 overflow-y-auto pr-2">
+                            <div class="expert-card expert-louvet" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><div class="expert-avatar">ML</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Matthieu Louvet</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Analyse Fondamentale</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Stratégies PEA, ETF World.</p></div></div>
+                            <div class="expert-card expert-baccino" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')"><div class="expert-avatar">MB</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Mathias Baccino</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Trading & Macro</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Analyse technique, Cycles.</p></div></div>
+                            <div class="expert-card expert-finary" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')"><div class="expert-avatar">FY</div><div class="flex-1"><div class="flex justify-between items-center"><p class="font-bold text-sm">Finary (Mounir)</p><span class="text-xs opacity-50">↗</span></div><span class="expert-tag">Patrimoine 360</span><p class="text-[10px] text-zinc-400 mt-1 line-clamp-1">Fiscalité, Private Equity.</p></div></div>
                         </div>
                     </div>
 
-                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
+                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden bg-[#0a0a0f]">
                         <div class="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
                             <h3 class="text-xs font-bold uppercase text-green-400 tracking-widest">Top Épargne & Invest (France)</h3>
                             <div class="flex gap-1">
@@ -196,30 +200,30 @@
                                 <button onclick="setSavingsTab('dynamic')" id="sav-dynamic" class="savings-tab-btn">DYNAMIQUE</button>
                             </div>
                         </div>
-                        <div class="savings-header">
-                            <div>Placement</div>
-                            <div class="text-right">Taux (Est.)</div>
-                            <div class="text-right">Type</div>
-                            <div class="text-right">Plafond</div>
+                        <div class="savings-header"><div>Placement</div><div class="text-right">Taux (Est.)</div><div class="text-right">Fiscalité</div><div class="text-right">Plafond</div></div>
+                        <div class="flex-1 overflow-y-auto" id="savings-list"></div>
+                    </div>
+
+                    <div class="glass-panel p-2 h-[350px] overflow-hidden">
+                        <h3 class="text-xs font-bold uppercase text-red-400 m-3 mb-1 tracking-widest">Live News</h3>
+                        <div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>{ "feedMode": "all_symbols", "isTransparent": true, "displayMode": "regular", "width": "100%", "height": "100%", "colorTheme": "dark", "locale": "fr" }</script></div>
+                    </div>
+
+                    <div class="glass-panel p-0 h-[350px] flex flex-col overflow-hidden">
+                         <div class="p-3 border-b border-white/5 bg-white/5 flex justify-between items-center"><h3 class="text-xs font-bold uppercase text-yellow-400 tracking-widest">OPPORTUNITÉS</h3></div>
+                         <div class="grid grid-cols-2 h-full">
+                            <div class="border-r border-white/5"><div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_gauge" style="height:100%;width:100%"></div></div></div>
+                            <div><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>{ "colorTheme": "dark", "dateRange": "12M", "exchange": "US", "showChart": false, "locale": "fr", "largeChartUrl": "", "isTransparent": true, "showSymbolLogo": true, "width": "100%", "height": "100%" }</script></div></div>
+                         </div>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col h-[300px] relative overflow-hidden bg-gradient-to-br from-purple-900/10 to-black col-span-1 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold uppercase text-purple-400 tracking-widest">Stratège IA</h3>
+                            <button id="auditBtn" onclick="analyzePortfoliosIA()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500 text-purple-200 px-3 py-1.5 rounded-lg font-bold transition">LANCER AUDIT</button>
                         </div>
-                        <div class="flex-1 overflow-y-auto" id="savings-list">
-                            </div>
+                        <div id="auditContent" class="flex-1 overflow-y-auto text-xs leading-relaxed text-zinc-300 font-mono"><div class="flex flex-col items-center justify-center h-full opacity-30 gap-2"><span class="text-3xl">🏛️</span><p class="uppercase text-[10px] tracking-widest">En attente...</p></div></div>
                     </div>
-
-                    <div class="glass-panel p-4 h-[350px] overflow-y-auto">
-                        <h3 class="text-xs font-bold uppercase text-red-400 mb-4 tracking-widest">Briefing Stratégique</h3>
-                        <div class="space-y-2">
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Matthieu+Louvet+S%27investir', '_blank')"><span class="font-bold text-[10px]">Matthieu Louvet</span> <span class="news-tag text-blue-300">Fondamental</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Mathias+Baccino+bourse', '_blank')"><span class="font-bold text-[10px]">Mathias Baccino</span> <span class="news-tag text-orange-300">Technique</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=Finary+Mounir', '_blank')"><span class="font-bold text-[10px]">Finary Talk</span> <span class="news-tag text-green-300">Private Equity</span></div>
-                            <div class="news-item" onclick="window.open('https://www.youtube.com/results?search_query=ZoneBourse', '_blank')"><span class="font-bold text-[10px]">ZoneBourse</span> <span class="news-tag text-zinc-300">Newsflow</span></div>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-2 h-[250px] col-span-1 lg:col-span-2">
-                         <div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_profile" style="height:100%;width:100%"></div></div>
-                    </div>
-
                 </div>
             </div>
 
@@ -238,7 +242,7 @@
         let musicProvider = localStorage.getItem('lifeos_music') || 'spotify';
         let apiKey = localStorage.getItem('lifeos_apikey') || ""; 
         let portfolio = JSON.parse(localStorage.getItem('lifeos_portfolio_v4') || '{"PEA":[], "CTO":[], "CRYPTO":[], "METALS":[]}');
-        let wealthGoal = parseFloat(localStorage.getItem('lifeos_wealth_goal') || "100000"); // 100k par défaut
+        let wealthGoal = parseFloat(localStorage.getItem('lifeos_wealth_goal') || "100000");
         
         let activeMarketTab = 'ACTIONS'; 
         let activeSubTab = 'PEA';
@@ -259,7 +263,7 @@
         const suppsDB = { sport: "⚡ Magnésium, Whey, Créatine", focus: "🧠 Omega-3, Vit D3, Matcha", diet: "🌿 Multivitamines, Probiotiques" };
         function getVits(m) { if(m.includes("Saumon")||m.includes("Thon"))return "Omega-3, Vit D"; if(m.includes("Pâtes")||m.includes("Riz"))return "Glucides, Vit B"; return "Vitamines"; }
 
-        // --- DATABASE HUGE ---
+        // --- DATABASE HUGE (100+) ---
         const hugeStockDatabase = [
             { l: "Amundi MSCI World II (Dist)", s: "WLD", i: "FR001400U5Q4" }, { l: "Amundi MSCI World (Acc)", s: "CW8", i: "LU1681043599" }, { l: "S&P 500 ETF (BNP)", s: "ESE", i: "FR0011550185" }, { l: "NASDAQ 100 ETF (Amundi)", s: "PANX", i: "LU1681038243" }, { l: "CAC 40 ETF (Amundi)", s: "C40", i: "LU1681046931" },
             { l: "LVMH", s: "MC", i: "FR0000121014" }, { l: "TotalEnergies", s: "TTE", i: "FR0000120271" }, { l: "Air Liquide", s: "AI", i: "FR0000120073" }, { l: "L'Oréal", s: "OR", i: "FR0000120321" }, { l: "Hermès", s: "RMS", i: "FR0000052292" }, { l: "Sanofi", s: "SAN", i: "FR0000120578" }, { l: "BNP Paribas", s: "BNP", i: "FR0000131104" }, { l: "AXA", s: "CS", i: "FR0000120628" },
@@ -270,27 +274,26 @@
         // --- SAVINGS DATA (DEC 2025) ---
         const SAVINGS_DB = {
             safe: [
-                { name: "LEP (Populaire)", rate: "2.70%", tag: "NET", limit: "10 000€" },
-                { name: "Livret A / LDDS", rate: "1.70%", tag: "NET", limit: "22 950€" },
-                { name: "Trade Republic", rate: "3.25%", tag: "BRUT", limit: "50 000€" },
-                { name: "Fonds Euro (Top)", rate: "~3.50%", tag: "BRUT", limit: "Illimité" }
+                { name: "LEP (Populaire)", rate: "2.70%", tag: "NET", limit: "10k€" },
+                { name: "Livret A", rate: "1.70%", tag: "NET", limit: "22k€" },
+                { name: "Trade Republic", rate: "3.25%", tag: "BRUT", limit: "50k€" },
+                { name: "Fonds Euro", rate: "~3.50%", tag: "BRUT", limit: "∞" }
             ],
             yield: [
-                { name: "CAT (Terme) 12M", rate: "~3.10%", tag: "BRUT", limit: "Variable" },
-                { name: "SCPI (Moyenne)", rate: "~4.50%", tag: "BRUT", limit: "Illimité" },
-                { name: "Obligations Corp", rate: "~4.00%", tag: "BRUT", limit: "ETF/Fonds" }
+                { name: "CAT 12M", rate: "~3.00%", tag: "BRUT", limit: "Var" },
+                { name: "SCPI", rate: "~4.50%", tag: "BRUT", limit: "∞" },
+                { name: "Oblig Corp", rate: "~4.00%", tag: "BRUT", limit: "ETF" }
             ],
             dynamic: [
-                { name: "PEA (Actions EU)", rate: "Variable", tag: "NET 5a", limit: "150 000€" },
-                { name: "CTO (Actions Monde)", rate: "Variable", tag: "BRUT 30%", limit: "Illimité" },
-                { name: "Crypto Staking", rate: "~3-5%", tag: "BRUT", limit: "Variable" },
-                { name: "Private Equity", rate: "~10%+", tag: "BRUT", limit: "Long Terme" }
+                { name: "PEA", rate: "Variable", tag: "NET", limit: "150k€" },
+                { name: "Crypto Yield", rate: "~3-5%", tag: "BRUT", limit: "Var" },
+                { name: "P. Equity", rate: "~10%+", tag: "BRUT", limit: "Long" }
             ]
         };
 
         let currentSavingsTab = 'safe';
 
-        // --- CALCULATION LOGIC (V89) ---
+        // --- CALCULATION LOGIC ---
         function calculateTotalWealth() {
             let total = 0;
             for(const key in portfolio) {
@@ -367,7 +370,7 @@
 
         function refreshMarketWidgets() {
             createWidget('tv_main_chart', 'chart', currentChartSymbol);
-            createWidget('tv_profile', 'profile', currentChartSymbol);
+            createWidget('tv_gauge', 'gauge', currentChartSymbol);
             document.getElementById('activeChartLabel').innerText = `Analyse Active : ${currentChartSymbol}`;
         }
 
@@ -382,9 +385,13 @@
                 new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "D", "timezone": "Europe/Paris", "theme": "dark", "style": "1", "locale": "fr", "toolbar_bg": "#f1f3f6", "enable_publishing": false, "container_id": containerId }); 
                 return; 
             }
-            if(type === 'profile') { 
-                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js"; 
-                config = { "width": "100%", "height": "100%", "colorTheme": "dark", "isTransparent": true, "symbol": symbol, "locale": "fr" }; 
+            if(type === 'gauge') { 
+                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js"; 
+                config = { "interval": "1D", "width": "100%", "isTransparent": true, "height": "100%", "symbol": symbol, "showIntervalTabs": false, "displayMode": "single", "locale": "fr", "colorTheme": "dark" }; 
+            }
+            if(type === 'hotlist') {
+                scriptSrc = "https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js";
+                config = { "colorTheme": "dark", "dateRange": "12M", "exchange": "US", "showChart": false, "locale": "fr", "largeChartUrl": "", "isTransparent": true, "showSymbolLogo": true, "showFloatingTooltip": false, "width": "100%", "height": "100%" };
             }
             
             const script = document.createElement('script'); 
@@ -461,7 +468,7 @@
             const container = document.getElementById('auditContent'); container.innerHTML = '<p class="animate-pulse">Analyse Analyste Senior...</p>';
             const prompt = `Agis comme un Analyste Senior Wall Street. Analyse ce portefeuille global : ${summary}. Donne une critique constructive (risques, secteurs, volatilité). Format HTML simple (pas de markdown), style télégraphique.`;
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V89" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "LifeOS V87" }, body: JSON.stringify({ "model": "anthropic/claude-3.5-sonnet", "messages": [{ "role": "system", "content": prompt }] }) });
                 const data = await response.json(); container.innerHTML = data.choices[0].message.content;
             } catch(e) { container.innerHTML = "Erreur analyse."; }
         }
@@ -475,7 +482,8 @@
         function initMarket() { 
             setMarketTab('ACTIONS'); 
             renderSavings(); 
-            calculateTotalWealth(); // Init Calculation
+            createWidget('tv_hotlist', 'hotlist', '');
+            calculateTotalWealth();
             document.getElementById('wealthGoalText').innerText = wealthGoal.toLocaleString('fr-FR', { notation: "compact", compactDisplay: "short", currency: "EUR", style: "currency" });
         }
 
